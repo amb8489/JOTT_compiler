@@ -1,3 +1,7 @@
+
+
+
+
 # evERy char we expect to see with its class
 lut =    {        " ":0,
                   "#":1,
@@ -30,7 +34,7 @@ F = 0  # finsih
 ER = 21 # error state
 
 dfa = [#[0 ,1 ,2 , 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,ER]
-        [0 ,1 ,2 , F, F, F, F, 7,ER, 9, F, F,12,13,ER,15,F ,17,18,ER,ER,ER],     #0  start
+        [0 ,1 ,F , F, F, F, F, 7,ER, 9, F, F,12,13,ER,15,F ,17,18,ER,ER,ER],     #0  start
         [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,ER],     #1  # state
         [F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER],     #2  , state
         [F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER],     #3  ] state
@@ -78,10 +82,17 @@ def tokenize(text):
     for ch in text:
 
         next = dfa[next][classify(ch)]
-        token+=ch
+        
+        if next == 1:
+            token+=ch
+        elif ch != " ":
+            token+=ch
+        
 
         if next == F:
-            print("token:{",token,"}")
+            if token !="":
+                print("token:{",token,"}")
+
             token = ""
         
 if __name__ == "__main__":
@@ -90,8 +101,16 @@ if __name__ == "__main__":
     
     
     # text to tokinize
-    text =  "#hello comment\n;\"123string456\".34 = \"123string456\"   "
+    text =  "#hello comment\n;,\"123string456\".34 = != \"123string456\" *+-/   "
     
     
     # tokenizing
     tokenize(text)
+
+        
+        
+
+
+        
+        
+
