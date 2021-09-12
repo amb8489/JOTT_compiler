@@ -1,7 +1,3 @@
-
-
-
-
 # evERy char we expect to see with its class
 lut =    {        " ":0,
                   "#":1,
@@ -52,9 +48,9 @@ dfa = [#[0 ,1 ,2 , 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,ER]
         [F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,15,F ,15,F ,F ,F ,F ,F ,ER],     #15  lettER state
         [F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER],     #16  : state
         [ER,ER,ER,ER,ER,ER,ER,19,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER],     #17  ! state
-        [20,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,20,ER,20,ER,ER,ER,ER,ER,ER],     #18  " state
+        [20,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,20,ER,20,ER,ER,F,ER,ER,ER],     #18  " state
         [F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER],     #19  != state
-        [20 ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,20,F,20 ,F ,F ,19 ,F ,F ,ER],     #20  string
+        [20 ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,20,F,20 ,F ,F ,F ,F ,F ,ER],     #20  string
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],     #ER  ERror
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0]      #ER  end or complete token go back to start
 
@@ -74,33 +70,28 @@ def classify(ch):
     
     
 def tokenize(text):
-    token = ""
     next = 0
+    token = ""
+
+    
+        
     for ch in text:
 
         next = dfa[next][classify(ch)]
-        if next == F and token != "":
+        token+=ch
+
+        if next == F:
             print("token:{",token,"}")
             token = ""
-        if classify(ch) != 0:
-            token+=ch
-
+        
 if __name__ == "__main__":
     
     
     
     
     # text to tokinize
-    text =  "# hello world is this is a comment \n  ,  !=  .34!= 1.12 123abcs124 ;  :  {}[] . */+- \"123string456\"   "
+    text =  "#hello comment\n;\"123string456\".34 = \"123string456\"   "
     
     
     # tokenizing
     tokenize(text)
-
-        
-        
-
-
-        
-        
-
