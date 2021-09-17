@@ -4,7 +4,22 @@
  * @author 
  **/
 
+/**
+-----------------TODO----------------
+
+[ ] read a Jott file
+
+[ ] buld DFA. -- error on invalid token
+
+
+Syntax Error:
+<Message>
+<filename>:<line_number>
+
+ **/
+
 import java.util.ArrayList;
+
 
 public class JottTokenizer {
 
