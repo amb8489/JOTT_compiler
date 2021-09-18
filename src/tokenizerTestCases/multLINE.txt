@@ -1,0 +1,8 @@
+String foo =
+        concat[ "bar", "baz" ];
+
+String foo =
+        9;
+
+String foo =
+        .2;
