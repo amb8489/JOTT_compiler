@@ -127,6 +127,82 @@ public class JottTokenizerTester {
         filename = "src/tokenizerTestCases/phase1ErrorExample.jott";
         testCases.add(new TestCase("Phase1ErrorExampleTest", filename, null, true));
 
+
+
+        // = - =- =- =- =- =- =- = -= -= -= -= -= -= -= - =- =- =- =- =- =- =- =- =- =- = -=- =-= -= -= -
+        // = - =- =- =- =- =- =- = -= -= -= -= -= -MY TESTS -= -= -= =- =- =- =- =- =- =- = -=- =-= -= -=
+        // = - =- =- =- =- =- =- = -= -= -= -= -= -= -= - =- =- =- =- =- =- =- =- =- =- = -=- =-= -= -= -
+
+        //errors
+        filename = "src/tokenizerTestCases/decimal_to_letter_error.txt";
+        testCases.add(new TestCase(".A_test", filename, null, true));
+
+        filename = "src/tokenizerTestCases/incompletestringerror.txt";
+        testCases.add(new TestCase("incomplete string", filename, null, true));
+
+        filename = "src/tokenizerTestCases/incoplete_dec_error.txt";
+        testCases.add(new TestCase("incomplete decimal", filename, null, true));
+
+        filename = "src/tokenizerTestCases/incoplete_dec_error2.txt";
+        testCases.add(new TestCase("multi line error decimal", filename, null, true));
+
+        // non errors
+        ArrayList<Token> multilineTokens = new ArrayList<>();
+        filename = "src/tokenizerTestCases/multLINE.txt";
+
+        multilineTokens.add(new Token("String", filename, 1, TokenType.ID_KEYWORD));
+        multilineTokens.add(new Token("foo", filename, 1, TokenType.ID_KEYWORD));
+        multilineTokens.add(new Token("=", filename, 1, TokenType.ASSIGN));
+        multilineTokens.add(new Token("concat", filename, 2, TokenType.ID_KEYWORD));
+        multilineTokens.add(new Token("[", filename, 2, TokenType.L_BRACKET));
+        multilineTokens.add(new Token("\"bar\"", filename, 2, TokenType.STRING));
+        multilineTokens.add(new Token(",", filename, 2, TokenType.COMMA));
+        multilineTokens.add(new Token("\"baz\"", filename, 2, TokenType.STRING));
+        multilineTokens.add(new Token("]", filename, 2, TokenType.R_BRACKET));
+        multilineTokens.add(new Token(";", filename, 2, TokenType.SEMICOLON));
+        multilineTokens.add(new Token("String", filename, 4, TokenType.ID_KEYWORD));
+        multilineTokens.add(new Token("foo", filename, 4, TokenType.ID_KEYWORD));
+        multilineTokens.add(new Token("=", filename, 4, TokenType.ASSIGN));
+        multilineTokens.add(new Token("9", filename, 5, TokenType.NUMBER));
+        multilineTokens.add(new Token(";", filename, 5, TokenType.SEMICOLON));
+        multilineTokens.add(new Token("String", filename, 7, TokenType.ID_KEYWORD));
+        multilineTokens.add(new Token("foo", filename, 7, TokenType.ID_KEYWORD));
+        multilineTokens.add(new Token("=", filename, 7, TokenType.ASSIGN));
+        multilineTokens.add(new Token(".2", filename, 8, TokenType.NUMBER));
+        multilineTokens.add(new Token(";", filename, 8, TokenType.SEMICOLON));
+
+        testCases.add(new TestCase("multiline", filename, multilineTokens, false));
+
+
+
+        //=-=-=-=-=-=-=-=-=-=-=-==-==-=-///
+        filename = "src/tokenizerTestCases/mult_stat_on_line.txt";
+
+        ArrayList<Token> multiStatement = new ArrayList<>();
+        multiStatement.add(new Token("String", filename, 1, TokenType.ID_KEYWORD));
+        multiStatement.add(new Token("hello", filename, 1, TokenType.ID_KEYWORD));
+        multiStatement.add(new Token("=", filename, 1, TokenType.ASSIGN));
+        multiStatement.add(new Token("\"Hello\"", filename, 1, TokenType.STRING));
+        multiStatement.add(new Token(";", filename, 1, TokenType.SEMICOLON));
+        multiStatement.add(new Token("String", filename, 1, TokenType.ID_KEYWORD));
+        multiStatement.add(new Token("world", filename, 1, TokenType.ID_KEYWORD));
+        multiStatement.add(new Token("=", filename, 1, TokenType.ASSIGN));
+        multiStatement.add(new Token("\" World\"", filename, 1, TokenType.STRING));
+        multiStatement.add(new Token(";", filename, 1, TokenType.SEMICOLON));
+
+        multiStatement.add(new Token("String", filename, 2, TokenType.ID_KEYWORD));
+        multiStatement.add(new Token("hello", filename, 2, TokenType.ID_KEYWORD));
+        multiStatement.add(new Token("=", filename, 2, TokenType.ASSIGN));
+        multiStatement.add(new Token("\"Hello\"", filename, 2, TokenType.STRING));
+        multiStatement.add(new Token(";", filename, 2, TokenType.SEMICOLON));
+        multiStatement.add(new Token("String", filename, 2, TokenType.ID_KEYWORD));
+        multiStatement.add(new Token("world", filename, 2, TokenType.ID_KEYWORD));
+        multiStatement.add(new Token("=", filename, 2, TokenType.ASSIGN));
+        multiStatement.add(new Token("\" World\"", filename, 2, TokenType.STRING));
+        multiStatement.add(new Token(";", filename, 2, TokenType.SEMICOLON));
+        testCases.add(new TestCase("multiStatement", filename, multiStatement, false));
+
+
     }
 
     private String tokenToString(Token t){
