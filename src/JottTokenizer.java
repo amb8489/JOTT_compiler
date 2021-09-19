@@ -1,7 +1,7 @@
 /**
  * This class is responsible for tokenizing Jott code.
  *
- * @author
+ * @author Aaron Berghash
  **/
 
 
@@ -16,39 +16,26 @@ import java.util.stream.Stream;
 
 
 public class JottTokenizer {
-
+	
+	//error message string
 	private static String error_msg = "Syntax Error\nInvalid token \"";
 
-	private static int F =0;    // finish
+	private static int F = 0;    // finish state
 	private static int ER = 21; // error state
-	private static char space_char = ' ';
+	
+	private static char space_char = ' '; // for testing against
 
 
+	// a look up table to make symbol to state in the dfa
 	private static Map<String, Integer> lut = Stream.of(new Object[][] {
-			{" ", 0},
-			{"#", 1},
-			{",", 2},
-			{"]", 3},
-			{"[", 4},
-			{"{", 5},
-			{"}", 6},
-			{"=", 7},
-			{"<", 9},
-			{">", 9},
-			{"/", 10},
-			{"+", 10},
-			{"-", 10},
-			{"*", 10},
-			{";", 11},
-			{".", 12},
-			{"digit", 13},
-			{"letter", 15},
-			{":", 16},
-			{"!", 17},
-			{"\"", 18},
-			{"\n", 20}
+			{" ", 0},{"#", 1},{",", 2},{"]", 3},{"[", 4},{"{", 5},
+			{"}", 6},{"=", 7},{"<", 9},{">", 9},{"/", 10},{"+", 10},
+			{"-", 10},{"*", 10},{";", 11},{".", 12},{"digit", 13},
+			{"letter", 15},{":", 16},{"!", 17},{"\"", 18},{"\n", 20}
 	}).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
 
+	
+	// the DFA 
 	private static int[][] DFA = {
 			{0 ,1 ,2 ,3 ,4 ,5 ,6 ,7 ,ER,9 ,10,11,12,13,22,15,16,17,18,ER,0 ,ER},     //0  start
 			{1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,0 ,ER},     //1  # state
@@ -74,6 +61,7 @@ public class JottTokenizer {
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},     //ER  ERror
 			{F ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER,22,ER,ER,ER,ER,ER,ER,F ,ER} };   // 22 decimal number state
 
+	// classify given char from the look up table 
 	private static int classify_char(char ch){
 
 		if (Character.isDigit(ch)) {
@@ -86,7 +74,8 @@ public class JottTokenizer {
 			return lut.get(String.valueOf(ch));
 		}
 	}
-
+	
+	// classify a toekn into its token type given where it finished in the DFA
 	private static Token tokenClass( String token_str ,String file, int State_finished_at, int line_num){
 //		System.out.println("fin at:"+State_finished_at + "  |"+ token_str);
 		return switch (State_finished_at) {
@@ -139,57 +128,73 @@ public class JottTokenizer {
 				curr_state = 0;
 				prev = 0;
 				token = new StringBuilder();
-
+				
+				// adds new line to each line because new line char is removed in readLin()
 				line+="\n";
-				// for each char in string
+				
+				// for each char in line we start to tokenize 
 				for (int i = 0; i < line.length(); i++) {
+					
+					// the char to Proces
 					char ch = line.charAt(i);
 
-					//----Process char-----
+					//----Processing char-----
 
-					// remebering where we were
+					// remebering where we were in the dfa
 					prev = moving_to;
 
-					// updating state based on input ch
+					// updating state based on input ch (what col in the DFA to go to)
 					col = classify_char(ch);
 
 
 
 //					System.out.println(col+ " "+ ch );
-
-
+					
+					// moving to new state based on input
 					moving_to = DFA[curr_state][col];
+					// current state
 					curr_state = moving_to;
 
 					// moved into error state
-//					System.out.println(ch+" "+col+" "+curr_state);
-
 					if (moving_to == ER) {
 						System.out.println(error_msg + token + "\"");
 
 						System.out.println(filename + ":" + curr_line_number);
 						return null;
 					}
-
+					
+					// non error state 
 					if (moving_to != 1) {
 
-
+						// if token is finished
 						if (moving_to == F) {
+							// if token is not emppty at finish just to be sure
 							if (!token.toString().equals("")) {
+								
+								// add token to the list of found tokens
 								tokens.add(tokenClass(token.toString(),filename,prev,curr_line_number));
+								
+								// reset the token
 								token = new StringBuilder();
 
-								if (moving_to == F){
-									if (ch != space_char && col != 20) {
-										token.append(ch);
-										tokens.add(tokenClass(token.toString(),filename,col,curr_line_number));
-									}
-									token = new StringBuilder();
+								// if we finished with a char that we didnt need for the last token but need
+								// for the start of the new token (small edge case for single char tokens
+								// when tokens are up next to eachother with no space)
+								if (ch != space_char && col != 20) {
+									token.append(ch);
+									tokens.add(tokenClass(token.toString(),filename,col,curr_line_number));
 								}
+								
+								// reset token
+							        token = new StringBuilder();
+								
 							}
+						// case where token is not finished
 						} else {
+							// edge case for strings needing to allow space char
 							if (moving_to == 18) {
 								token.append(ch);
+							// dont want spaces if non string
 							} else if (ch != space_char) {
 								token.append(ch);
 							}
@@ -197,9 +202,11 @@ public class JottTokenizer {
 					}
 				}
 			}
-//			moving_to = DFA[moving_to][20];
 
-			// if we ended and the token is incomplete
+			// if we ended and the token is incomplete or has not landed in finsish but is an okay token
+			// basically EOF edge case we finish the token for it and test if finishing it at its current state would be okay or not
+			// ex: ID_words can end like: lastWordInLine(EOF) but a string like : "this is a string(EOF) would be incomplete stopping in its
+			// current state
 			moving_to = DFA[moving_to][0];
 
 			if (moving_to != 0) {
