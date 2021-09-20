@@ -47,7 +47,7 @@ public class JottTokenizer {
 			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER},     //7  = state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //8  == <= >= relitiveOp
 			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,0 ,ER},     //9  < > state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //10  /+-* state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,12 ,13 ,F ,F ,F ,F ,F ,F ,F ,ER},     //10  /+-* state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,0 ,ER},     //11  ; state
 			{ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,22,ER,ER,ER,ER,ER,ER,ER,ER},     //12  . state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,14,13,F ,F ,F ,F ,F ,F ,F ,ER},     //13  0123456789 state
