@@ -1,7 +1,7 @@
 /**
  * This class is responsible for tokenizing Jott code.
  *
- * @author
+ * @author aaron berghash
  **/
 
 
@@ -9,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,12 +16,17 @@ import java.util.stream.Stream;
 
 public class JottTokenizer {
 
-	private static String error_msg = "Syntax Error\nInvalid token \"";
 
-	private static int F =0;    // finish
+
+
+	// vars
+	private static int F =0;    // finish state
 	private static int ER = 21; // error state
 	private static char space_char = ' ';
+	private static String error_msg = "Syntax Error\nInvalid token \"";
 
+
+	//look up table to map chars to their respective class in the dfa
 
 	private static Map<String, Integer> lut = Stream.of(new Object[][] {
 			{" ", 0},
@@ -49,7 +53,9 @@ public class JottTokenizer {
 			{"\n", 20}
 	}).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
 
-	private static int[][] DFA = {
+
+	// the dfa with transition states
+	private static final int[][] DFA = {
 			{0 ,1 ,2 ,3 ,4 ,5 ,6 ,7 ,ER,9 ,10,11,12,13,22,15,16,17,18,ER,0 ,ER},     //0  start
 			{1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,0 ,ER},     //1  # state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //2  , state
@@ -60,7 +66,7 @@ public class JottTokenizer {
 			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER},     //7  = state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //8  == <= >= relitiveOp
 			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,0 ,ER},     //9  < > state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //10  /+-* state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,12,13,F ,F ,F ,F ,F ,F ,F ,ER},     //10  /+-* state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,0 ,ER},     //11  ; state
 			{ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,22,ER,ER,ER,ER,ER,ER,ER,ER},     //12  . state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,12,13,F ,F ,F ,F ,F ,F ,F ,ER},     //13  0123456789 state
@@ -74,21 +80,23 @@ public class JottTokenizer {
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},     //ER  ERror
 			{F ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER,22,ER,ER,ER,ER,ER,ER,F ,ER} };   // 22 decimal number state
 
+	// helper function to help classify chars
 	private static int classify_char(char ch){
-
 		if (Character.isDigit(ch)) {
 			return lut.get("digit");
 		}
 		if (Character.isLetter(ch)) {
 			return lut.get("letter");
 		}else {
-
 			return lut.get(String.valueOf(ch));
 		}
 	}
 
+	// classifies tokens based on where they finished in the DFA
+
 	private static Token tokenClass( String token_str ,String file, int State_finished_at, int line_num){
-		System.out.println("fin at:"+State_finished_at + "  |"+ token_str);
+//		System.out.println("fin at:"+State_finished_at + "  |"+ token_str);
+
 		return switch (State_finished_at) {
 			case 2 -> new Token(token_str, file, line_num, TokenType.COMMA);
 			case 3 -> new Token(token_str, file, line_num, TokenType.R_BRACKET);
@@ -102,7 +110,7 @@ public class JottTokenizer {
 			case 22, 12, 13 -> new Token(token_str, file, line_num, TokenType.NUMBER);
 			case 15 -> new Token(token_str, file, line_num, TokenType.ID_KEYWORD);
 			case 16 -> new Token(token_str, file, line_num, TokenType.COLON);
-			case 20, 18 -> new Token(token_str, file, line_num, TokenType.STRING);
+			case 0,20, 18 -> new Token(token_str, file, line_num, TokenType.STRING);
 			default -> null;
 		};
 	}
@@ -123,7 +131,7 @@ public class JottTokenizer {
 		// reading lines of file
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 
-			// stae machine vars
+			// state machine vars
 			String line;
 			StringBuilder token = new StringBuilder();
 			int curr_line_number = 0;
@@ -131,65 +139,76 @@ public class JottTokenizer {
 			int col;
 			int curr_state;
 
-
+			// for each line in file
 			while ((line = br.readLine()) != null) {
-				// init state machine for line
+
+				// init state machine for this line
 				curr_line_number++;
 				moving_to = 0;
 				curr_state = 0;
 				prev = 0;
+
+				// starting token
 				token = new StringBuilder();
 
+				// adding  new line char for help in the DFA
 				line+="\n";
+
 				// for each char in string
 				for (int i = 0; i < line.length(); i++) {
+
 					char ch = line.charAt(i);
 
-					//----Process char-----
-
-					// remebering where we were
+					// remembering where we were
 					prev = moving_to;
 
 					// updating state based on input ch
 					col = classify_char(ch);
 
-
-
-//					System.out.println(col+ " "+ ch );
-
-
+					// transition
 					moving_to = DFA[curr_state][col];
 					curr_state = moving_to;
 
 					// moved into error state
-//					System.out.println(ch+" "+col+" "+curr_state);
-
 					if (moving_to == ER) {
 						System.out.println(error_msg + token + "\"");
-
 						System.out.println(filename + ":" + curr_line_number);
 						return null;
 					}
 
+					// if not a comment
 					if (moving_to != 1) {
 
-
+						// if in finished state
 						if (moving_to == F) {
+
+							// if the token is not the empty token
 							if (!token.toString().equals("")) {
+
+								// classify and save the token
 								tokens.add(tokenClass(token.toString(),filename,prev,curr_line_number));
+								// reset the token
 								token = new StringBuilder();
 
-								if (moving_to == F){
-									if (ch != space_char && col != 20) {
+									// some edge cases on saving the next char
+									if (ch != space_char && col != 20 && col !=15) {
 										token.append(ch);
 										tokens.add(tokenClass(token.toString(),filename,col,curr_line_number));
+										token = new StringBuilder();
+									}else{
+
+										if (ch != space_char && col ==15) {
+											token.append(ch);
+										}
 									}
-									token = new StringBuilder();
-								}
 							}
+							// if we are still forming a token
 						} else {
+
+							// add a space if we are in a string state
 							if (moving_to == 18) {
 								token.append(ch);
+								// if not in string we want to ignore the spaces
 							} else if (ch != space_char) {
 								token.append(ch);
 							}
@@ -197,9 +216,8 @@ public class JottTokenizer {
 					}
 				}
 			}
-//			moving_to = DFA[moving_to][20];
 
-			// if we ended and the token is incomplete
+			// test for if we ended and the token is incomplete
 			moving_to = DFA[moving_to][0];
 
 			if (moving_to != 0) {
@@ -207,6 +225,7 @@ public class JottTokenizer {
 				System.out.println(filename + ":" + curr_line_number);
 				return null;
 			}
+			// if we ened and the token is good but didnt hit an end
 			if (!token.toString().equals("")) {
 				tokens.add(tokenClass(token.toString(),filename,prev,curr_line_number));
 			}
@@ -214,10 +233,10 @@ public class JottTokenizer {
 		// if file cant be read
 		catch (IOException e) {
 			System.out.println("COULD NOT FIND FILE "+filename);
-
 			return null;
 		}
 
+		// tokens list
 		return tokens;
 	}
 }
