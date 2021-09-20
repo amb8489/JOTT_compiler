@@ -16,9 +16,6 @@ import java.util.stream.Stream;
 
 public class JottTokenizer {
 
-
-
-
 	// vars
 	private static int F =0;    // finish state
 	private static int ER = 21; // error state
@@ -171,8 +168,8 @@ public class JottTokenizer {
 
 					// moved into error state
 					if (moving_to == ER) {
-						System.out.println(error_msg + token + "\"");
-						System.out.println(filename + ":" + curr_line_number);
+						System.err.println(error_msg + token + "\"");
+						System.err.println(filename + ":" + curr_line_number);
 						return null;
 					}
 
@@ -221,8 +218,8 @@ public class JottTokenizer {
 			moving_to = DFA[moving_to][0];
 
 			if (moving_to != 0) {
-				System.out.println(error_msg + token + "\"");
-				System.out.println(filename + ":" + curr_line_number);
+				System.err.println(error_msg + token + "\"");
+				System.err.println(filename + ":" + curr_line_number);
 				return null;
 			}
 			// if we ened and the token is good but didnt hit an end
@@ -232,7 +229,7 @@ public class JottTokenizer {
 		}
 		// if file cant be read
 		catch (IOException e) {
-			System.out.println("COULD NOT FIND FILE "+filename);
+			System.err.println("COULD NOT FIND OR READ FILE :"+filename);
 			return null;
 		}
 
