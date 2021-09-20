@@ -1,2 +1,0 @@
-String hello = "Hello";String world = " World";
-String hello = "Hello"; String world = " World";
