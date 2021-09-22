@@ -195,6 +195,6 @@ public class JottTokenizer {
 		}
 
 		// tokens list
-		return tokens;
+		 return tokens;
 	}
 }
