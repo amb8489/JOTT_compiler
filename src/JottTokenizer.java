@@ -63,7 +63,7 @@ public class JottTokenizer {
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //19  != state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //20  string
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F , 0},     //ER  ERror
-			{F ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER,22,ER,ER,ER,ER,ER,ER,F ,ER} };   // 22 decimal number state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,22,F ,F ,F ,F ,F ,F ,F , 0}};   // 22 decimal number state
 
 	// helper function to help classify chars
 	private static int classify_char(char ch){
