@@ -15,7 +15,6 @@ import java.util.stream.Stream;
 
 
 public class JottTokenizer {
-
 	// vars
 	private static int F =0;    // finish state
 	private static int ER = 21; // error state
@@ -63,7 +62,7 @@ public class JottTokenizer {
 			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER},     //7  = state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //8  == <= >= relitiveOp
 			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,0 ,ER},     //9  < > state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,12,13,F ,F ,F ,F ,F ,F ,F ,ER},     //10  /+-* state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //10  /+-* state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,0 ,ER},     //11  ; state
 			{ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,22,ER,ER,ER,ER,ER,ER,ER,ER},     //12  . state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,12,13,F ,F ,F ,F ,F ,F ,F ,ER},     //13  0123456789 state
@@ -92,7 +91,7 @@ public class JottTokenizer {
 	// classifies tokens based on where they finished in the DFA
 
 	private static Token tokenClass( String token_str ,String file, int State_finished_at, int line_num){
-//		System.out.println("fin at:"+State_finished_at + "  |"+ token_str);
+		System.out.println("fin at:"+State_finished_at + "  |"+ token_str);
 
 		return switch (State_finished_at) {
 			case 2 -> new Token(token_str, file, line_num, TokenType.COMMA);
@@ -161,70 +160,44 @@ public class JottTokenizer {
 
 					// updating state based on input ch
 					col = classify_char(ch);
-
-					// transition
 					moving_to = DFA[curr_state][col];
 					curr_state = moving_to;
 
-					// moved into error state
-					if (moving_to == ER) {
-						System.err.println(error_msg + token + "\"");
-						System.err.println(filename + ":" + curr_line_number);
-						return null;
-					}
-
 					// if not a comment
-					if (moving_to != 1) {
+					if (curr_state != 1) {
 
-						// if in finished state
-						if (moving_to == F) {
+						// moved into error state
+						if (curr_state == ER) {
+							System.err.println(error_msg + token + "\"");
+							System.err.println(filename + ":" + curr_line_number);
+							return null;
+						}
+						
+						// add a space if we are in a string state
+						if (curr_state == 18) {
+							token.append(ch);
+							// if not in string we want to ignore the spaces
+						} else if (ch != space_char) {
+							token.append(ch);
+						}
 
-							// if the token is not the empty token
-							if (!token.toString().equals("")) {
+						// lookign ahead at the next char
+						if (i + 1 < line.length()) {
+							char next_ch = line.charAt(i + 1);
+							int next = DFA[curr_state][classify_char(next_ch)];
 
-								// classify and save the token
-								tokens.add(tokenClass(token.toString(),filename,prev,curr_line_number));
-								// reset the token
-								token = new StringBuilder();
-
-									// some edge cases on saving the next char
-									if (ch != space_char && col != 20 && col !=15) {
-										token.append(ch);
-										tokens.add(tokenClass(token.toString(),filename,col,curr_line_number));
-										token = new StringBuilder();
-									}else{
-
-										if (ch != space_char && col ==15) {
-											token.append(ch);
-										}
-									}
-							}
-							// if we are still forming a token
-						} else {
-
-							// add a space if we are in a string state
-							if (moving_to == 18) {
-								token.append(ch);
-								// if not in string we want to ignore the spaces
-							} else if (ch != space_char) {
-								token.append(ch);
+							// if the next char will cause a finish
+							if (next == F) {
+								// if the token is not the empty token
+								if (!token.toString().equals("")) {
+									tokens.add(tokenClass(token.toString(), filename, curr_state, curr_line_number));
+									token = new StringBuilder();
+									curr_state = 0;
+								}
 							}
 						}
 					}
 				}
-			}
-
-			// test for if we ended and the token is incomplete
-			moving_to = DFA[moving_to][0];
-
-			if (moving_to != 0) {
-				System.err.println(error_msg + token + "\"");
-				System.err.println(filename + ":" + curr_line_number);
-				return null;
-			}
-			// if we ened and the token is good but didnt hit an end
-			if (!token.toString().equals("")) {
-				tokens.add(tokenClass(token.toString(),filename,prev,curr_line_number));
 			}
 		}
 		// if file cant be read
