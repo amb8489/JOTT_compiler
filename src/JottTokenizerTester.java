@@ -36,7 +36,7 @@ public class JottTokenizerTester {
     private void createTestCases(){
         this.testCases = new ArrayList<>();
         ArrayList<Token> numTestTokens = new ArrayList<>();
-        String filename = "src/tokenizerTestCases/number.jott";
+        String filename = "src/tokenizerTestCases/Phase1/number.jott";
         numTestTokens.add(new Token("5", filename, 1, TokenType.NUMBER));
         numTestTokens.add(new Token("5.5", filename, 1, TokenType.NUMBER));
         numTestTokens.add(new Token(".5", filename, 1, TokenType.NUMBER));
@@ -44,14 +44,14 @@ public class JottTokenizerTester {
 
         ArrayList<Token> mathOpTokens = new ArrayList<>();
         String mathOps = "+-*/";
-        filename = "src/tokenizerTestCases/mathOpsTest.jott";
+        filename = "src/tokenizerTestCases/Phase1/mathOpsTest.jott";
         for(char c: mathOps.toCharArray()){
             mathOpTokens.add(new Token("" + c, filename, 1, TokenType.MATH_OP));
         }
         testCases.add(new TestCase("MathOps", filename, mathOpTokens, false));
 
         ArrayList<Token> singleCharTokens = new ArrayList<>();
-        filename = "src/tokenizerTestCases/singleCharTokens.jott";
+        filename = "src/tokenizerTestCases/Phase1/singleCharTokens.jott";
         singleCharTokens.add(new Token(",", filename, 1, TokenType.COMMA));
         singleCharTokens.add(new Token("[", filename, 1, TokenType.L_BRACKET));
         singleCharTokens.add(new Token("]", filename, 1, TokenType.R_BRACKET));
@@ -63,7 +63,7 @@ public class JottTokenizerTester {
         testCases.add(new TestCase("SingleCharTokens", filename, singleCharTokens, false));
 
         ArrayList<Token> relOpsTokens = new ArrayList<>();
-        filename = "src/tokenizerTestCases/relOpsTokens.jott";
+        filename = "src/tokenizerTestCases/Phase1/relOpsTokens.jott";
         relOpsTokens.add(new Token("<", filename, 1, TokenType.REL_OP));
         relOpsTokens.add(new Token("<=", filename, 1, TokenType.REL_OP));
         relOpsTokens.add(new Token(">", filename, 1, TokenType.REL_OP));
@@ -73,7 +73,7 @@ public class JottTokenizerTester {
         testCases.add(new TestCase("RelOpTokens", filename, relOpsTokens, false));
 
         ArrayList<Token> idKeywordTokens = new ArrayList<>();
-        filename = "src/tokenizerTestCases/idKeywords.jott";
+        filename = "src/tokenizerTestCases/Phase1/idKeywords.jott";
         idKeywordTokens.add(new Token("hello", filename, 1, TokenType.ID_KEYWORD));
         idKeywordTokens.add(new Token("Hello", filename, 1, TokenType.ID_KEYWORD));
         idKeywordTokens.add(new Token("Integer", filename, 1, TokenType.ID_KEYWORD));
@@ -84,27 +84,27 @@ public class JottTokenizerTester {
         testCases.add(new TestCase("IdKeywordTokens", filename, idKeywordTokens, false));
 
         ArrayList<Token> stringTokens = new ArrayList<>();
-        filename = "src/tokenizerTestCases/strings.jott";
+        filename = "src/tokenizerTestCases/Phase1/strings.jott";
         stringTokens.add(new Token("\"foobar\"", filename, 1, TokenType.STRING));
         stringTokens.add(new Token("\"abc1\"", filename, 1, TokenType.STRING));
         stringTokens.add(new Token("\"Hello World\"", filename, 1, TokenType.STRING));
         stringTokens.add(new Token("\"123 abc\"", filename, 1, TokenType.STRING));
         testCases.add(new TestCase("StringTokens", filename, stringTokens, false));
 
-        filename = "src/tokenizerTestCases/errorTokens1.jott";
+        filename = "src/tokenizerTestCases/Phase1/errorTokens1.jott";
         testCases.add(new TestCase("ErrorTokens1", filename, null, true));
 
-        filename = "src/tokenizerTestCases/errorTokens2.jott";
+        filename = "src/tokenizerTestCases/Phase1/errorTokens2.jott";
         testCases.add(new TestCase("ErrorTokens2", filename, null, true));
 
-        filename = "src/tokenizerTestCases/errorTokens3.jott";
+        filename = "src/tokenizerTestCases/Phase1/errorTokens3.jott";
         testCases.add(new TestCase("ErrorTokens3", filename, null, true));
 
-        filename = "src/tokenizerTestCases/stringMissingClosing.jott";
+        filename = "src/tokenizerTestCases/Phase1/stringMissingClosing.jott";
         testCases.add(new TestCase("StringMissingClosing", filename, null, true));
 
         ArrayList<Token> phase1ExampleTokens = new ArrayList<>();
-        filename = "src/tokenizerTestCases/phase1Example.jott";
+        filename = "src/tokenizerTestCases/Phase1/phase1Example.jott";
         phase1ExampleTokens.add(new Token("main", filename, 2, TokenType.ID_KEYWORD));
         phase1ExampleTokens.add(new Token("[", filename, 2, TokenType.L_BRACKET));
         phase1ExampleTokens.add(new Token("]", filename, 2, TokenType.R_BRACKET));
@@ -124,7 +124,7 @@ public class JottTokenizerTester {
         phase1ExampleTokens.add(new Token("}", filename, 6, TokenType.R_BRACE));
         testCases.add(new TestCase("Phase1ExampleTest", filename, phase1ExampleTokens, false));
 
-        filename = "src/tokenizerTestCases/phase1ErrorExample.jott";
+        filename = "src/tokenizerTestCases/Phase1/phase1ErrorExample.jott";
         testCases.add(new TestCase("Phase1ErrorExampleTest", filename, null, true));
 
 
@@ -134,21 +134,21 @@ public class JottTokenizerTester {
         // = - =- =- =- =- =- =- = -= -= -= -= -= -= -= - =- =- =- =- =- =- =- =- =- =- = -=- =-= -= -= -
 
         //errors
-        filename = "src/tokenizerTestCases/decimal_to_letter_error.txt";
+        filename = "src/tokenizerTestCases/Phase1/decimal_to_letter_error.txt";
         testCases.add(new TestCase(".A_test", filename, null, true));
 
-        filename = "src/tokenizerTestCases/incompletestringerror.txt";
+        filename = "src/tokenizerTestCases/Phase1/incompletestringerror.txt";
         testCases.add(new TestCase("incomplete string", filename, null, true));
 
-        filename = "src/tokenizerTestCases/incoplete_dec_error.txt";
+        filename = "src/tokenizerTestCases/Phase1/incoplete_dec_error.txt";
         testCases.add(new TestCase("incomplete decimal", filename, null, true));
 
-        filename = "src/tokenizerTestCases/incoplete_dec_error2.txt";
+        filename = "src/tokenizerTestCases/Phase1/incoplete_dec_error2.txt";
         testCases.add(new TestCase("multi line error decimal", filename, null, true));
 
         // non errors
         ArrayList<Token> multilineTokens = new ArrayList<>();
-        filename = "src/tokenizerTestCases/multLINE.txt";
+        filename = "src/tokenizerTestCases/Phase1/multLINE.txt";
 
         multilineTokens.add(new Token("String", filename, 1, TokenType.ID_KEYWORD));
         multilineTokens.add(new Token("foo", filename, 1, TokenType.ID_KEYWORD));
@@ -176,7 +176,7 @@ public class JottTokenizerTester {
 
 
         //=-=-=-=-=-=-=-=-=-=-=-==-==-=-///
-        filename = "src/tokenizerTestCases/mult_stat_on_line.txt";
+        filename = "src/tokenizerTestCases/Phase1/mult_stat_on_line.txt";
 
         ArrayList<Token> multiStatement = new ArrayList<>();
         multiStatement.add(new Token("String", filename, 1, TokenType.ID_KEYWORD));
