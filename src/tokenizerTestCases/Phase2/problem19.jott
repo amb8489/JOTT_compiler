@@ -1,8 +1,0 @@
-#should fail phase 2
-#missing comma
-#Error: Expected <comma> or ] got <id>
-
-foo[x:Integer y:Double]:Double
-{
-    return x + y;
-}
