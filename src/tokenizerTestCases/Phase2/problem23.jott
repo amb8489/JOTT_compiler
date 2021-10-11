@@ -1,0 +1,9 @@
+#this should fail phase 2
+#there error is the second - since it is followed by a space
+#Error: <op> without leading <expr>
+
+main[]:Integer{
+    Integer x = -4;
+	Integer y = - 4;
+	return x + y;
+}

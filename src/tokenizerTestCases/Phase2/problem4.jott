@@ -1,0 +1,7 @@
+#this should fail phase 2
+#invalid id
+#Error: Expected <id> should start with lowercase letter
+
+main[X1:Integer]:Double{
+    return 5;
+}
