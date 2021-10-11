@@ -50,8 +50,4 @@ public class JottParser implements JottTree {
     public boolean validateTree() {
         return false;
     }
-
-    public static void main(String[] args) {
-
-    }
 }

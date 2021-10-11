@@ -80,7 +80,7 @@ public class JottTokenizer {
 	// classifies tokens based on where they finished in the DFA
 
 	private static Token tokenClass( String token_str ,String file, int State_finished_at, int line_num){
-		System.out.println("fin at:"+State_finished_at + "  |"+ token_str);
+//		System.out.println("fin at:"+State_finished_at + "  |"+ token_str);
 
 		return switch (State_finished_at) {
 			case 2 -> new Token(token_str, file, line_num, TokenType.COMMA);
