@@ -91,16 +91,16 @@ public class JottParser implements JottTree {
     private static JottTreeNode function_def(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.FUNCTION_DEF);
 
-        Token token = tokens.get(tokenIndex);
+        Token idToken = tokens.get(tokenIndex);
 
         JottTreeNode child1;
         JottTreeNode child2;
         JottTreeNode child3;
-        if (token.getTokenType() == TokenType.ID_KEYWORD) {
+        if (idToken.getTokenType() == TokenType.ID_KEYWORD) {
             // add id child
             System.out.println("id exists");
             child1 = new JottTreeNode(JottElement.ID);
-            jottTreeNode.addChild(id(child1, token));
+            jottTreeNode.addChild(id(child1, idToken));
 
             tokenIndex += 1;
             Token leftBracketToken = tokens.get(tokenIndex);
@@ -111,7 +111,16 @@ public class JottParser implements JottTree {
                 jottTreeNode.addChild(child2);
 
                 tokenIndex += 1;
-                jottTreeNode.addChild(function_def_params(jottTreeNode));
+                Token parameterToken = tokens.get(tokenIndex);
+                if (parameterToken.getTokenType() == TokenType.R_BRACKET) {
+                    System.out.println("] exists, no parameters");
+                    child3 = new JottTreeNode(parameterToken);
+                    jottTreeNode.addChild(child3);
+                } else {
+                    // handle this as a parameter
+                    jottTreeNode.addChild(function_def_params(jottTreeNode));
+                }
+
 
                 return jottTreeNode;
             } else {
@@ -129,6 +138,10 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode function_def_params(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.FUNC_DEF_PARAMS);
+
+
+
+
         return null;
     }
 
