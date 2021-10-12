@@ -56,6 +56,7 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode program(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.PROGRAM);
+
         JottTreeNode child1 = new JottTreeNode(JottElement.$$);
         JottTreeNode child2 = new JottTreeNode(JottElement.FUNCTION_LIST);
         jottTreeNode.addChild(child1);
@@ -258,7 +259,8 @@ public class JottParser implements JottTree {
 
         jottParser.tokens = tokens;
         jottParser.tokenIndex = 0;
-        jottParser.tree = program(jottParser.tree);
+        jottParser.tree = new JottTreeNode(JottElement.PROGRAM);
+        program(jottParser.tree);
 
         return new JottParser();
     }
