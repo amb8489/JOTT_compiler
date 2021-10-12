@@ -15,15 +15,15 @@ public class JottParser implements JottTree {
     private static ArrayList<Token> tokens;
 
     /**
-     * program -> function_list $$
-     * function_list -> function_def function_list
+     * program -> function_list $$                                              <-- DONE
+     * function_list -> function_def function_list                              <-- MOSTLY DONE, NEED TO ADD SUPPORT FOR MULTIPLE FUNCTIONS
      * function_list -> ε
-     * function_def -> id [ func_def_params ] : function_return { body }
-     * func_def_params -> id : type func_def_params_t|ε
-     * func_def_params_t -> , id : type func_def_params_t|ε
-     * body_stmt -> if_stmt|while_loop|stmt
-     * return_stmt -> return expr end_stmt
-     * body -> body_stmt body|return_stmt|ε
+     * function_def -> id [ func_def_params ] : function_return { body }        <-- DONE
+     * func_def_params -> id : type func_def_params_t|ε                         <-- DONE
+     * func_def_params_t -> , id : type func_def_params_t|ε                     <-- DONE
+     * body_stmt -> if_stmt|while_loop|stmt                                     <-- DONE
+     * return_stmt -> return expr end_stmt                                      <-- MOSTLY DONE, need to implement expr and end_stmt
+     * body -> body_stmt body|return_stmt|ε                                     <-- DONE (i think)
      * end_stmt -> ;
      * if_stmt -> if [ b_expr ] { body } elseif_lst|if [ b_expr ] { body } elseif_lst else { body }
      * elseif_lst -> elseif [ b_expr ] { body } elseif_lst|ε
@@ -418,6 +418,7 @@ public class JottParser implements JottTree {
             return null;
         }
 
+        // look for left bracket
         tokenIndex += 1;
         Token leftBracketToken = tokens.get(tokenIndex);
         if (leftBracketToken.getTokenType() == TokenType.L_BRACKET) {
@@ -450,6 +451,7 @@ public class JottParser implements JottTree {
             return null;
         }
 
+        // look for left bracket
         tokenIndex += 1;
         Token leftBracketToken = tokens.get(tokenIndex);
         if (leftBracketToken.getTokenType() == TokenType.L_BRACKET) {
