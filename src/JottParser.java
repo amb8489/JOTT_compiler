@@ -133,6 +133,7 @@ public class JottParser implements JottTree {
                         return null;
                     }
 
+                    // work on return value
                     tokenIndex += 1;
                     Token functionReturn = tokens.get(tokenIndex);
                     System.out.println(functionReturn.getTokenType());
@@ -155,22 +156,22 @@ public class JottParser implements JottTree {
                                 return null;
                             }
                         }
-
-
-
-
-
-
-
-
-
-
                     }
 
+                    tokenIndex += 1;
+                    Token leftCurlyBrace = tokens.get(tokenIndex);
+                    if (leftCurlyBrace.getTokenType() == TokenType.L_BRACE) {
+                        System.out.println("{ found");
+                        jottTreeNode.addChild(new JottTreeNode(leftCurlyBrace));
+                    } else {
+                        System.out.println("{ missing");
+                        return null;
+                    }
 
+                    // TODO: body
 
+                    // TODO: right curly brace
                 }
-
                 return jottTreeNode;
             } else {
                 System.out.println("missing [");
