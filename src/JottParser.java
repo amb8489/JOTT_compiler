@@ -94,11 +94,30 @@ public class JottParser implements JottTree {
         Token token = tokens.get(tokenIndex);
 
         JottTreeNode child1;
-
+        JottTreeNode child2;
+        JottTreeNode child3;
         if (token.getTokenType() == TokenType.ID_KEYWORD) {
+            // add id child
             System.out.println("id exists");
             child1 = new JottTreeNode(JottElement.ID);
             jottTreeNode.addChild(id(child1, token));
+
+            tokenIndex += 1;
+            Token leftBracketToken = tokens.get(tokenIndex);
+            if (leftBracketToken.getTokenType() == TokenType.L_BRACKET)
+            {
+                System.out.println("[ exists");
+                child2 = new JottTreeNode(leftBracketToken);
+                jottTreeNode.addChild(child2);
+
+                tokenIndex += 1;
+                jottTreeNode.addChild(function_def_params(jottTreeNode));
+
+                return jottTreeNode;
+            } else {
+                System.out.println("missing [");
+                return null;
+            }
         } else {
             System.out.println("missing id");
             return null;
@@ -106,7 +125,6 @@ public class JottParser implements JottTree {
 
         // TODO: Work in Progress
 
-        return null;
     }
 
     private static JottTreeNode function_def_params(JottTreeNode jottTreeNode) {
