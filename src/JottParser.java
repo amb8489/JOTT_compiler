@@ -93,90 +93,101 @@ public class JottParser implements JottTree {
 
         Token idToken = tokens.get(tokenIndex);
 
+        // look for id
         if (idToken.getTokenType() == TokenType.ID_KEYWORD) {
             // add id child
             System.out.println("id exists");
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), idToken));
+        } else {
+            System.out.println("missing id");
+            return null;
+        }
 
-            tokenIndex += 1;
-            Token leftBracketToken = tokens.get(tokenIndex);
-            if (leftBracketToken.getTokenType() == TokenType.L_BRACKET)
-            {
-                System.out.println("[ exists");
-                jottTreeNode.addChild(new JottTreeNode(leftBracketToken));
+        // look for [
+        tokenIndex += 1;
+        Token leftBracketToken = tokens.get(tokenIndex);
+        if (leftBracketToken.getTokenType() == TokenType.L_BRACKET)
+        {
+            System.out.println("[ exists");
+            jottTreeNode.addChild(new JottTreeNode(leftBracketToken));
+        } else {
+            System.out.println("missing [");
+            return null;
+        }
 
-                tokenIndex += 1;
-                Token parameterToken = tokens.get(tokenIndex);
-                if (parameterToken.getTokenType() == TokenType.R_BRACKET) {
-                    System.out.println("] exists, no parameters");
-                    jottTreeNode.addChild(new JottTreeNode(parameterToken));
-                } else {
-                    // handle this as a parameter
-                    jottTreeNode.addChild(function_def_params(jottTreeNode));
+        // look for func_def_params or ]
+        tokenIndex += 1;
+        Token parameterToken = tokens.get(tokenIndex);
+        if (parameterToken.getTokenType() == TokenType.R_BRACKET) {
+            System.out.println("] exists, no parameters");
+            jottTreeNode.addChild(new JottTreeNode(parameterToken));
+        } else {
+            // handle this as a parameter
+            jottTreeNode.addChild(function_def_params(jottTreeNode));
 
-                    Token rightBracketToken = tokens.get(tokenIndex);
-                    if (rightBracketToken.getTokenType() == TokenType.R_BRACKET) {
-                        System.out.println("] exists, has parameter(s)");
-                        jottTreeNode.addChild(new JottTreeNode(rightBracketToken));
-                    } else {
-                        System.out.println("missing ]");
-                        return null;
-                    }
+            Token rightBracketToken = tokens.get(tokenIndex);
+            if (rightBracketToken.getTokenType() == TokenType.R_BRACKET) {
+                System.out.println("] exists, has parameter(s)");
+                jottTreeNode.addChild(new JottTreeNode(rightBracketToken));
+            } else {
+                System.out.println("missing ]");
+                return null;
+            }
+        }
+
+        // look for :
+        tokenIndex += 1;
+        Token colon = tokens.get(tokenIndex);
+        if (colon.getTokenType() == TokenType.COLON) {
+            System.out.println(": exists");
+            jottTreeNode.addChild(new JottTreeNode(colon));
+        } else {
+            System.out.println("missing :");
+            return null;
+        }
+
+        // look for return value
+        tokenIndex += 1;
+        Token functionReturn = tokens.get(tokenIndex);
+        System.out.println(functionReturn.getTokenType());
+        if (functionReturn.getTokenType() == TokenType.ID_KEYWORD) {
+            JottTreeNode functionReturnNode = new JottTreeNode(JottElement.FUNCTION_RETURN);
+
+            if (functionReturn.getToken().equals("Void")) { // is this void?
+                System.out.println("function return found (Void)");
+                jottTreeNode.addChild(new JottTreeNode(JottElement.VOID));
+            } else {
+                JottTreeNode typeNode = type(jottTreeNode);
+
+                if (typeNode != null) { // this is a type
+                    System.out.println(String.format("function return found (%s type)", typeNode.getToken()));
+                    functionReturnNode.addChild(typeNode);
+                    jottTreeNode.addChild(functionReturnNode);
+                } else { // not a type, so no idea what this is
+                    System.out.println("function return missing");
+                    return null;
                 }
+            }
+        }
 
+        // left curly brace
+        tokenIndex += 1;
+        Token leftCurlyBrace = tokens.get(tokenIndex);
+        if (leftCurlyBrace.getTokenType() == TokenType.L_BRACE) {
+            System.out.println("{ found");
+            jottTreeNode.addChild(new JottTreeNode(leftCurlyBrace));
+        } else {
+            System.out.println("{ missing");
+            return null;
+        }
 
-                tokenIndex += 1;
-                    Token colon = tokens.get(tokenIndex);
-                    if (colon.getTokenType() == TokenType.COLON) {
-                        System.out.println(": exists");
-                        jottTreeNode.addChild(new JottTreeNode(colon));
-                    } else {
-                        System.out.println("missing :");
-                        return null;
-                    }
+        // body
+        tokenIndex += 1;
+        JottTreeNode bodyNode = new JottTreeNode(JottElement.BODY);
+        bodyNode = body(bodyNode);
+        jottTreeNode.addChild(bodyNode);
 
-                    // work on return value
-                    tokenIndex += 1;
-                    Token functionReturn = tokens.get(tokenIndex);
-                    System.out.println(functionReturn.getTokenType());
-                    if (functionReturn.getTokenType() == TokenType.ID_KEYWORD) {
-
-                        JottTreeNode functionReturnNode = new JottTreeNode(JottElement.FUNCTION_RETURN);
-
-                        if (functionReturn.getToken().equals("Void")) {
-                            System.out.println("function return found (Void)");
-                            jottTreeNode.addChild(new JottTreeNode(JottElement.VOID));
-                        } else {
-                            JottTreeNode typeNode = type(jottTreeNode);
-
-                            if (typeNode != null) {
-                                System.out.println(String.format("function return found (%s type)", typeNode.getToken()));
-                                functionReturnNode.addChild(typeNode);
-                                jottTreeNode.addChild(functionReturnNode);
-                            } else {
-                                System.out.println("function return missing");
-                                return null;
-                            }
-                        }
-                    }
-
-                    // left curly brace
-                    tokenIndex += 1;
-                    Token leftCurlyBrace = tokens.get(tokenIndex);
-                    if (leftCurlyBrace.getTokenType() == TokenType.L_BRACE) {
-                        System.out.println("{ found");
-                        jottTreeNode.addChild(new JottTreeNode(leftCurlyBrace));
-                    } else {
-                        System.out.println("{ missing");
-                        return null;
-                    }
-
-                    // body
-                    tokenIndex += 1;
-                    JottTreeNode bodyNode = new JottTreeNode(JottElement.BODY);
-                    bodyNode = body(bodyNode);
-                    jottTreeNode.addChild(bodyNode);
-
+        // look for right curly brace
 //                    tokenIndex += 1;
 //                    Token rightCurlyBrace = tokens.get(tokenIndex); // TODO: may will not need this
 //                    if (rightCurlyBrace.getTokenType() == TokenType.R_BRACE) {
@@ -187,16 +198,8 @@ public class JottParser implements JottTree {
 //                        return null;
 //                    }
 
-                    // TODO: right curly brace
-                return jottTreeNode;
-            } else {
-                System.out.println("missing [");
-                return null;
-            }
-        } else {
-            System.out.println("missing id");
-            return null;
-        }
+        return jottTreeNode;
+
 
         // TODO: Work in Progress
 
@@ -205,55 +208,54 @@ public class JottParser implements JottTree {
     private static JottTreeNode function_def_params(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.FUNC_DEF_PARAMS);
 
+        // look for the parameter
         Token parameter = tokens.get(tokenIndex);
-
         JottTreeNode newNode = new JottTreeNode(JottElement.FUNC_DEF_PARAMS);
         if (parameter.getTokenType() == TokenType.ID_KEYWORD) {
             System.out.println("id exists");
             newNode.addChild(id(new JottTreeNode(JottElement.ID), parameter));
-
-            tokenIndex += 1;
-            Token colon = tokens.get(tokenIndex);
-            if (colon.getTokenType() == TokenType.COLON) {
-                System.out.println("colon exists");
-                newNode.addChild(new JottTreeNode(colon));
-
-                // look if the next token is a parameter
-                tokenIndex += 1;
-                Token type = tokens.get(tokenIndex);
-                if (type.getTokenType() == TokenType.ID_KEYWORD) {
-                    JottTreeNode typeNode = type(jottTreeNode);
-                    if (typeNode != null) {
-                        newNode.addChild(typeNode);
-                    } else {
-                        System.out.println("not a type");
-                        return null;
-                    }
-                }
-
-                // look if the next token is another parameter
-                tokenIndex += 1;
-                Token parameter2 = tokens.get(tokenIndex);
-                if (parameter2.getTokenType() == TokenType.R_BRACKET) {
-                    System.out.println("] exists");
-                    newNode.addChild(new JottTreeNode(parameter2));
-                    return newNode;
-                } else {
-                    // apparently there may be more parameters or something else
-                    newNode.addChild(function_def_params_t(new JottTreeNode(JottElement.FUNC_DEF_PARAMS_T)));
-                }
-                return newNode;
-
-            } else {
-                System.out.println("missing colon");
-                return null;
-            }
-
-
         } else {
             System.out.println("missing id");
             return null;
         }
+
+        // look for the colon
+        tokenIndex += 1;
+        Token colon = tokens.get(tokenIndex);
+        if (colon.getTokenType() == TokenType.COLON) {
+            System.out.println("colon exists");
+            newNode.addChild(new JottTreeNode(colon));
+        } else {
+            System.out.println("missing colon");
+            return null;
+        }
+
+        // look for the type
+        tokenIndex += 1;
+        Token type = tokens.get(tokenIndex);
+        if (type.getTokenType() == TokenType.ID_KEYWORD) {
+            JottTreeNode typeNode = type(jottTreeNode);
+            if (typeNode != null) {
+                newNode.addChild(typeNode);
+            } else {
+                System.out.println("not a type");
+                return null;
+            }
+        }
+
+        // look if the next token is another parameter
+        tokenIndex += 1;
+        Token parameter2 = tokens.get(tokenIndex);
+        if (parameter2.getTokenType() == TokenType.R_BRACKET) {
+            // ] is here, no more parameters
+            System.out.println("] exists");
+            newNode.addChild(new JottTreeNode(parameter2));
+            return newNode;
+        } else {
+            // apparently there may be more parameters or something else
+            newNode.addChild(function_def_params_t(new JottTreeNode(JottElement.FUNC_DEF_PARAMS_T)));
+        }
+        return newNode;
 
         // TODO: loop with function_def_params_t until reach ]
 
@@ -308,19 +310,17 @@ public class JottParser implements JottTree {
             }
         }
 
+        // is this end (ex: ]) or look for more parameters?
         tokenIndex += 1;
         Token parameter2 = tokens.get(tokenIndex);
         if (parameter2.getTokenType() == TokenType.R_BRACKET) {
             System.out.println("] exists");
             jottTreeNode.addChild(new JottTreeNode(parameter2));
-            return jottTreeNode;
         } else {
             // apparently there may be more parameters or something else
             jottTreeNode.addChild(function_def_params_t(new JottTreeNode(JottElement.FUNC_DEF_PARAMS_T)));
         }
         return jottTreeNode;
-
-
     }
 
     private static JottTreeNode body_stmt(JottTreeNode jottTreeNode) {
