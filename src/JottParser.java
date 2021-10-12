@@ -326,18 +326,32 @@ public class JottParser implements JottTree {
     private static JottTreeNode body_stmt(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.BODY_STMT);
 
-        // try if
-        JottTreeNode ifStmtNode = new JottTreeNode(JottElement.IF_STMT);
-        if_stmt(ifStmtNode);
+        // try if statement
+        JottTreeNode ifStmtNode = if_stmt(new JottTreeNode(JottElement.IF_STMT));
+        if (ifStmtNode != null) {
+            jottTreeNode.addChild(ifStmtNode);
+            return jottTreeNode;
+        }
 
-        // try while
-//        JottTreeNode whileLoopNode = new JottTreeNode(JottElement.WHILE_LOOP);
-//        while_loop(whileLoopNode);
+        System.out.println("if statement not found; trying while loop");
 
-        // try stmt
-//        JottTreeNode stmtNode = new JottTreeNode(JottElement.STMT);
-//        stmt(stmtNode);
+        // try while loop statement
+        JottTreeNode whileLoopNode = while_loop(new JottTreeNode(JottElement.WHILE_LOOP));
+        if (whileLoopNode != null) {
+            jottTreeNode.addChild(whileLoopNode);
+            return jottTreeNode;
+        }
 
+        System.out.println("while loop not found; trying stmt");
+
+        // try statement statement
+        JottTreeNode stmtNode = stmt(new JottTreeNode(JottElement.STMT));
+        if (stmtNode != null) {
+            jottTreeNode.addChild(stmtNode);
+            return stmtNode;
+        }
+
+        System.out.println("this body_stmm is ultimately invalid");
         return null;
     }
 
@@ -393,9 +407,29 @@ public class JottParser implements JottTree {
     private static JottTreeNode if_stmt(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.IF_STMT);
 
+        Token ifToken = tokens.get(tokenIndex);
+        System.out.println("ifToken: " + ifToken.getTokenType() + " : " + ifToken.getToken());
+        if (ifToken.getTokenType() == TokenType.ID_KEYWORD && ifToken.getToken().equals("if"))
+        {
+            System.out.println("found if");
+            jottTreeNode.addChild(new JottTreeNode(ifToken));
+        } else {
+            System.out.println("if not found");
+            return null;
+        }
+
+        tokenIndex += 1;
+        Token leftBracketToken = tokens.get(tokenIndex);
+        if (leftBracketToken.getTokenType() == TokenType.L_BRACKET) {
+            System.out.println("found [");
+            jottTreeNode.addChild(new JottTreeNode(leftBracketToken));
+        } else {
+            System.out.println("[ is missing");
+            return null;
+        }
 
 
-        return null;
+        return jottTreeNode;
     }
 
     private static JottTreeNode elseif_lst(JottTreeNode jottTreeNode) {
@@ -405,6 +439,14 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode while_loop(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.WHILE_LOOP);
+
+        Token whileToken = tokens.get(tokenIndex);
+        if (whileToken.getTokenType() == TokenType.ID_KEYWORD && whileToken.getToken().equals("while"))
+        {
+            System.out.println("found while");
+            return jottTreeNode;
+        }
+
         return null;
     }
 
