@@ -81,7 +81,7 @@ public class JottParser implements JottTree {
         JottTreeNode child2 = new JottTreeNode(JottElement.FUNCTION_LIST);
 
         jottTreeNode.addChild(function_def(child1));
-//        jottTreeNode.addChild(function_list(child2)); // TODO: epsilon?
+//        jottTreeNode.addChild(function_list(child2)); // TODO: check if there are more functions
         return jottTreeNode;
     }
 
@@ -123,9 +123,33 @@ public class JottParser implements JottTree {
                         return null;
                     }
 
+                    tokenIndex += 1;
+                    Token colon = tokens.get(tokenIndex);
+                    if (colon.getTokenType() == TokenType.COLON) {
+                        System.out.println(": exists");
+                        jottTreeNode.addChild(new JottTreeNode(colon));
+                    } else {
+                        System.out.println("missing :");
+                        return null;
+                    }
+
+                    tokenIndex += 1;
+                    Token functionReturn = tokens.get(tokenIndex);
+                    System.out.println(functionReturn.getTokenType());
+                    if (functionReturn.getTokenType() == TokenType.ID_KEYWORD) {
+                        JottTreeNode typeNode = type(jottTreeNode);
+
+                        if (typeNode != null) {
+                            System.out.println("function return found");
+                        } else {
+                            System.out.println("function return missing");
+                            return null;
+                        }
+                    }
+
+
+
                 }
-
-
 
                 return jottTreeNode;
             } else {
