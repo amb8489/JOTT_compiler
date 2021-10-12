@@ -719,7 +719,7 @@ public class JottParser implements JottTree {
 
 
         System.out.println("******************\nPRINTING THE PARSE TREE OUT");
-//        printTree(jottParser.tree);
+        printTree(jottParser.tree);
         return jottParser;
     }
 
@@ -807,7 +807,7 @@ public class JottParser implements JottTree {
         ArrayList<Token> testResults = JottTokenizer.tokenize(filename);
         JottTree T = parse(testResults);
 
-
+        System.out.println("\n\nCONVERT BACK INTO JOTT AGAIN USING THE PARSE TREE:");
         System.out.println(T.convertToJott());
 //        for (Token t:testResults) {
 //            System.out.println(t.getToken()+"\t\t<- "+t.getTokenType());
