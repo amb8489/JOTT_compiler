@@ -1,6 +1,4 @@
 #this is an example
 main[]:Void{
-    if[print["foobar"]]{
-        print[x];
-    }
+    return -50;
 }
