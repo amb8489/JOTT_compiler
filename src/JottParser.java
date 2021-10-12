@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class JottParser implements JottTree {
     public JottTreeNode tree;
-    private int tokenIndex;
-    private ArrayList<Token> tokens;
+    private static int tokenIndex;
+    private static ArrayList<Token> tokens;
 
     /**
      * program -> function_list $$
@@ -56,26 +56,53 @@ public class JottParser implements JottTree {
      * s_expr -> str_literal|id|func_call
      */
 
+    /**
+     * program -> function_list $$
+     * **/
     private static JottTreeNode program(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.PROGRAM);
 
         JottTreeNode child1 = new JottTreeNode(JottElement.$$);
         JottTreeNode child2 = new JottTreeNode(JottElement.FUNCTION_LIST);
-        jottTreeNode.addChild(child1);
-        jottTreeNode.addChild(function_list(child2));
+
+        jottTreeNode.addChild(child1); // terminal
+        jottTreeNode.addChild(function_list(child2)); // non-terminal
         return jottTreeNode;
     }
 
+    /**
+     * function_list -> function_def function_list
+     * function_list -> ε
+     */
     private static JottTreeNode function_list(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.FUNCTION_LIST);
 
         JottTreeNode child1 = new JottTreeNode(JottElement.FUNCTION_DEF);
         JottTreeNode child2 = new JottTreeNode(JottElement.FUNCTION_LIST);
-        return null;
+
+        jottTreeNode.addChild(function_def(child1));
+//        jottTreeNode.addChild(function_list(child2)); // TODO: epsilon?
+        return jottTreeNode;
     }
 
+    /**
+     * function_def -> id [ func_def_params ] : function_return { body }
+     * **/
     private static JottTreeNode function_def(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.FUNCTION_DEF);
+
+        Token token = tokens.get(tokenIndex);
+
+        JottTreeNode child1;
+
+        if (token.getTokenType() == TokenType.ID_KEYWORD) {
+            child1 = new JottTreeNode(JottElement.ID);
+        } else {
+            return null;
+        }
+
+        // TODO: Work in Progress
+
         return null;
     }
 
@@ -254,15 +281,15 @@ public class JottParser implements JottTree {
 
     /**
      * Parses an ArrayList of Jotton tokens into a Jott Parse Tree.
-     * @param tokens the ArrayList of Jott tokens to parse
+     * @param _tokens the ArrayList of Jott tokens to parse
      * @return the root of the Jott Parse Tree represented by the tokens.
      *         or null upon an error in parsing.
      */
-    public static JottTree parse(ArrayList<Token> tokens){
+    public static JottTree parse(ArrayList<Token> _tokens){
         JottParser jottParser = new JottParser();
 
-        jottParser.tokens = tokens;
-        jottParser.tokenIndex = 0;
+        tokens = _tokens;
+        tokenIndex = 0;
         jottParser.tree = new JottTreeNode(JottElement.PROGRAM);
         program(jottParser.tree);
 
