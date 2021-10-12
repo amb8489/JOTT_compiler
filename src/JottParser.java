@@ -352,7 +352,18 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode _bool(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.BOOL);
-        return null;
+        Token token = tokens.get(tokenIndex);
+
+        switch (token.getToken()) {
+            case "True", "False" -> {
+                System.out.println(String.format("BOOL exists (%s)", token.getToken()));
+                return new JottTreeNode(token);
+            }
+            default -> {
+                System.out.println("missing BOOl");
+                return null;
+            }
+        }
     }
 
     private static JottTreeNode b_expr(JottTreeNode jottTreeNode) {
