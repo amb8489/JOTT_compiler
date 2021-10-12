@@ -400,8 +400,14 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode end_stmt(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.END_STMT);
-        return null;
+        Token token = tokens.get(tokenIndex);
+
+        if(token.getToken().equals(";")) {
+            System.out.println(String.format("; exists (%s)", token.getToken()));
+            return new JottTreeNode(token);
+        }
+                System.out.println("missing ;");
+                return null;
     }
 
     private static JottTreeNode if_stmt(JottTreeNode jottTreeNode) {
@@ -473,31 +479,6 @@ public class JottParser implements JottTree {
         return jottTreeNode;
     }
 
-    private static JottTreeNode _char(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.CHAR);
-        return null;
-    }
-
-    private static JottTreeNode l_char(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.L_CHAR);
-
-        return null;
-    }
-
-    private static JottTreeNode u_char(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.U_CHAR);
-        return null;
-    }
-
-    private static JottTreeNode digit(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.DIGIT);
-        return null;
-    }
-
-    private static JottTreeNode sign(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.SIGN);
-        return null;
-    }
 
     private static JottTreeNode id(JottTreeNode jottTreeNode, Token token) {
         System.out.println(JottElement.ID);
@@ -508,9 +489,6 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode stmt(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.STMT);
-
-
-
         return null;
     }
 
@@ -599,10 +577,6 @@ public class JottParser implements JottTree {
         return null;
     }
 
-    private static JottTreeNode dbl(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.DBL);
-        return null;
-    }
 
     private static JottTreeNode d_expr(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.D_EXPR);
@@ -627,11 +601,6 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode b_expr(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.B_EXPR);
-        return null;
-    }
-
-    private static JottTreeNode _int(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.INT);
         return null;
     }
 
