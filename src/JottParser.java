@@ -410,7 +410,6 @@ public class JottParser implements JottTree {
                 System.out.println("missing ;");
                 return null;
     }
-
     private static JottTreeNode if_stmt(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.IF_STMT);
 
@@ -449,6 +448,8 @@ public class JottParser implements JottTree {
 
         return jottTreeNode;
     }
+
+
 
     private static JottTreeNode elseif_lst(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.ELSEIF_LST);
@@ -680,13 +681,18 @@ public class JottParser implements JottTree {
     private static String jottstr = "";
 
     public String convert_to_jott(JottTreeNode curr){
-        if (curr.isTerminal()){
-            jottstr += curr.getToken().getToken();
-            return jottstr;
-        }
-            for (JottTreeNode child : curr.getChildren()) {
-                convert_to_jott(child);
+            if (curr.isTerminal()) {
+                jottstr += curr.getToken().getToken();
             }
+
+            if(curr.getJottElement() == JottElement.VOID){
+            jottstr += "Void";
+            }
+
+        for (JottTreeNode child : curr.getChildren()) {
+
+                convert_to_jott(child);
+        }
         return jottstr;
     }
     @Override
