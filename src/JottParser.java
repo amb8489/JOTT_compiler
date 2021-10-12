@@ -326,11 +326,36 @@ public class JottParser implements JottTree {
     private static JottTreeNode body_stmt(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.BODY_STMT);
 
+        // try if
+        JottTreeNode ifStmtNode = new JottTreeNode(JottElement.IF_STMT);
+        if_stmt(ifStmtNode);
+
+        // try while
+
+        // try stmt
+
         return null;
     }
 
     private static JottTreeNode return_stmt(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.RETURN_STMT);
+
+        // ensure return is there
+        Token returnToken = tokens.get(tokenIndex);
+        if (returnToken.getTokenType() == TokenType.ID_KEYWORD && returnToken.getToken().equals("return")) {
+            System.out.println("return found");
+            jottTreeNode.addChild(new JottTreeNode(returnToken));
+        } else {
+            System.out.println("return not found");
+            return null;
+        }
+
+        // look for expr
+        tokenIndex += 1;
+        JottTreeNode exprNode = expr(new JottTreeNode(JottElement.EXPR));
+
+        // TODO: look for end_stmt (;)
+
         return null;
     }
 
@@ -344,12 +369,17 @@ public class JottParser implements JottTree {
         if (token.getTokenType() == TokenType.R_BRACE) {
             System.out.println("found empty body");
             return bodyNode;
+        } else if (token.getTokenType() == TokenType.ID_KEYWORD && token.getToken().equals("return")) {
+            System.out.println("found return clause");
+            JottTreeNode returnStmtNode = new JottTreeNode(JottElement.RETURN_STMT);
+            return_stmt(returnStmtNode);
+            return returnStmtNode;
         } else {
-            System.out.println("has something in this body");
+            System.out.println("has something else in this body");
             JottTreeNode bodyStmtNode = new JottTreeNode(JottElement.BODY_STMT);
             body_stmt(bodyStmtNode);
 
-            return null;
+            return bodyStmtNode;
         }
     }
 

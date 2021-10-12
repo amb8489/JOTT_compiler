@@ -1,6 +1,4 @@
 #this is an example
-main[a:Integer, b:Boolean, c:String, d:Double]:Void{
-print[5];
-#this is a comment
-print[ "foo bar" ];
+main[a:Integer, a:Boolean]:Void{
+    return 5;
 }
