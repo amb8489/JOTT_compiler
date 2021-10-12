@@ -496,8 +496,39 @@ public class JottParser implements JottTree {
         return null;
     }
 
+    /** func_call -> id [ params ] **/
     private static JottTreeNode func_call(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.FUNC_CALL);
+        int originalTokenIndex = tokenIndex;
+
+        Token idToken = tokens.get(tokenIndex);
+
+        // find id
+        if (idToken.getTokenType() == TokenType.ID_KEYWORD) {
+            System.out.println("found id for func_call");
+            jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), idToken));
+        } else {
+            System.out.println("id missing for func_call");
+            tokenIndex = originalTokenIndex;
+            return null;
+        }
+
+        // find [
+        tokenIndex += 1;
+        Token leftBracketToken = tokens.get(tokenIndex);
+        if (leftBracketToken.getTokenType() == TokenType.L_BRACKET) {
+            System.out.println("found [ for func_call");
+            jottTreeNode.addChild(new JottTreeNode(leftBracketToken));
+        } else {
+            System.out.println("[ missing for func_call");
+            tokenIndex = originalTokenIndex;
+            return null;
+        }
+
+        tokenIndex += 1;
+        Token paramToken = tokens.get(tokenIndex);
+        System.out.println(String.format("getToken: %s; getTokenType: %s", paramToken.getToken(), paramToken.getTokenType()));
+
         return null;
     }
 
@@ -622,6 +653,21 @@ public class JottParser implements JottTree {
                 return jottTreeNode;
             } else {
                 System.out.println("found id");
+
+                JottTreeNode funcCallResult = func_call(new JottTreeNode(JottElement.FUNC_CALL));
+                System.out.println("funcCallResult: " + funcCallResult);
+
+                JottTreeNode iExprResult = i_expr(new JottTreeNode(JottElement.I_EXPR));
+                System.out.println("iExprResult: " + funcCallResult);
+                JottTreeNode dExprResult = d_expr(new JottTreeNode(JottElement.D_EXPR));
+                System.out.println("dExprResult: " + funcCallResult);
+                JottTreeNode sExprResult = s_expr(new JottTreeNode(JottElement.S_EXPR));
+                System.out.println("sExprResult: " + funcCallResult);
+//                JottTreeNode bExprResult = b_expr(new JottTreeNode(JottElement.B_EXPR));
+//                System.out.println("bExprResult: " + funcCallResult);
+
+                System.out.println("can't find anything, let's go with simple id");
+
                 jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
                 return jottTreeNode;
             }
