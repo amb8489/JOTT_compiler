@@ -241,6 +241,20 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode type(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.TYPE);
+
+        Token token = tokens.get(tokenIndex);
+
+        switch (token.getToken()) {
+            case "Integer", "Double", "String", "Boolean" -> {
+                System.out.println("Type exists");
+                jottTreeNode.addChild(new JottTreeNode(token));
+                tokenIndex += 1;
+            }
+            default -> {
+                System.out.println("missing Type");
+                return null;
+            }
+        }
         return null;
     }
 
