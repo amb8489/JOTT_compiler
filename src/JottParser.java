@@ -5,6 +5,8 @@
  * @author
  */
 
+import java.io.Console;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class JottParser implements JottTree {
@@ -66,6 +68,9 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode function_list(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.FUNCTION_LIST);
+
+        JottTreeNode child1 = new JottTreeNode(JottElement.FUNCTION_DEF);
+        JottTreeNode child2 = new JottTreeNode(JottElement.FUNCTION_LIST);
         return null;
     }
 
@@ -256,13 +261,15 @@ public class JottParser implements JottTree {
     public static JottTree parse(ArrayList<Token> tokens){
         JottParser jottParser = new JottParser();
 
-
         jottParser.tokens = tokens;
         jottParser.tokenIndex = 0;
         jottParser.tree = new JottTreeNode(JottElement.PROGRAM);
         program(jottParser.tree);
 
-        return new JottParser();
+
+        System.out.println("******************\nPRINTING THE PARSE TREE OUT");
+        printTree(jottParser.tree);
+        return jottParser;
     }
 
     @Override
@@ -294,12 +301,41 @@ public class JottParser implements JottTree {
         return false;
     }
 
+
+    /** remove me later, for testing purposes **/
+    public static void printTree(JottTreeNode jottTreeNode) {
+        System.out.print(String.format("******************\n%s", jottTreeNode.getJottElement()));
+
+        ArrayList<JottTreeNode> jottChildren = jottTreeNode.getChildren();
+        if (jottChildren.size() <= 0) {
+            System.out.println(" has no children");
+        } else {
+            System.out.println(" has children. those are:");
+            for (JottTreeNode jottChild : jottChildren) {
+                if (jottChild == null) {
+                    System.out.println("\tERROR: this child is null");
+                } else {
+                    System.out.println(String.format("\t%s", jottChild.getJottElement()));
+                }
+            }
+
+            for (JottTreeNode jottChild : jottChildren) {
+                if (jottChild != null) {
+                    printTree(jottChild);
+                }
+            }
+
+        }
+
+
+    }
+
+
+
     public static void main(String[] args) {
         String filename = "src/testCases/temp/test.jott";
         ArrayList<Token> testResults = JottTokenizer.tokenize(filename);
         parse(testResults);
-
-
 //        for (Token t:testResults) {
 //            System.out.println(t.getToken()+"\t\t<- "+t.getTokenType());
 //        }

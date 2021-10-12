@@ -10,9 +10,16 @@ public class JottTreeNode {
         jottChildren = new ArrayList<>();
     }
 
+    public JottElement getJottElement() {
+        return jottElement;
+    }
 
     public void addChild(JottTreeNode childNode) {
         jottChildren.add(childNode);
+    }
+
+    public ArrayList<JottTreeNode> getChildren() {
+        return jottChildren;
     }
 
 }
