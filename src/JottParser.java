@@ -726,19 +726,11 @@ public class JottParser implements JottTree {
 
     private static String jottstr = "";
 
-    public String convert_to_jott(JottTreeNode curr){
-            if (curr.isTerminal()) {
-                jottstr += curr.getToken().getToken();
-            }
+    public String convert_to_jott(JottTreeNode curr) {
+        if (curr.isTerminal()) { jottstr += curr.getToken().getToken(); }
+        if (curr.getJottElement() == JottElement.VOID) { jottstr += "Void"; }
 
-            if(curr.getJottElement() == JottElement.VOID){
-            jottstr += "Void";
-            }
-
-        for (JottTreeNode child : curr.getChildren()) {
-
-                convert_to_jott(child);
-        }
+        for (JottTreeNode child : curr.getChildren()) { convert_to_jott(child); }
         return jottstr;
     }
     @Override
