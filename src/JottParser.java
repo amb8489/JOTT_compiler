@@ -326,6 +326,17 @@ public class JottParser implements JottTree {
     // will need to ensure this works
     private static JottTreeNode rel_op(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.REL_OP);
+
+        Token token = tokens.get(tokenIndex);
+
+        if(token.getTokenType() == TokenType.REL_OP){
+            System.out.println("REL_OP exists");
+            jottTreeNode.addChild(new JottTreeNode(token));
+            tokenIndex += 1;
+            return jottTreeNode;
+        }else{
+            System.out.println("missing REL_OP");
+        }
         return null;
     }
 
