@@ -28,11 +28,11 @@ public class JottParser implements JottTree {
      * if_stmt -> if [ b_expr ] { body } elseif_lst|if [ b_expr ] { body } elseif_lst else { body }
      * elseif_lst -> elseif [ b_expr ] { body } elseif_lst|ε
      * while_loop -> while [ b_expr ] { body }
-     * char -> l_char|u_char|digit
-     * l_char -> a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z
-     * u_char -> A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z
-     * digit -> 0|1|2|3|4|5|6|7|8|9
-     * sign -> -|+|ε
+     * char -> l_char|u_char|digit                                              <-- removed
+     * l_char -> a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z            <-- removed
+     * u_char -> A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z            <-- removed
+     * digit -> 0|1|2|3|4|5|6|7|8|9                                             <-- removed
+     * sign -> -|+|ε                                                            <-- removed
      * id -> l_char char
      * stmt -> asmt|var_dec|func_call end_stmt
      * func_call -> id [ params ]
@@ -43,13 +43,13 @@ public class JottParser implements JottTree {
      * function_return -> type|Void
      * var_dec -> type id end_stmt
      * asmt -> Double id = d_expr end_stmt|Integer id = i_expr end_stmt|String id = s_expr end_stmt|Boolean id = b_expr end_stmt|id = d_expr end_stmt|id = i_expr end_stmt|id = s_expr end_stmt|id = b_expr end_stmt
-     * op -> +|*|/|+|-
-     * rel_op -> >|>=|<|<=|==|!=
-     * dbl -> sign digit . digit digit
+     * op -> +|*|/|+|-                                                                          <-- DONE
+     * rel_op -> >|>=|<|<=|==|!=                                                                <-- DONE
+     * dbl -> sign digit . digit digit                                                          <-- removed
      * d_expr -> id|dbl|dbl op dbl|dbl op d_expr|d_expr op dbl|d_expr op d_expr|func_call
-     * bool -> True|False
+     * bool -> True|False                                                                       <-- DONE
      * b_expr -> id|bool|i_expr rel_op i_expr|d_expr rel_op d_expr|s_expr rel_op s_expr|b_expr rel_op b_expr|func_call
-     * int -> sign digit digit
+     * int -> sign digit digit                                                                  <-- removed
      * i_expr -> id|int|int op int|int op i_expr|i_expr op int|i_expr op i_expr|func_call
      * str_literal -> " str "
      * str -> char str|space str|ε
