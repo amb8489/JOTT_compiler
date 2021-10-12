@@ -295,9 +295,11 @@ public class JottParser implements JottTree {
     public static void main(String[] args) {
         String filename = "src/testCases/temp/test.jott";
         ArrayList<Token> testResults = JottTokenizer.tokenize(filename);
+        parse(testResults);
 
-        for (Token t:testResults) {
-            System.out.println(t.getToken()+"\t\t<- "+t.getTokenType());
-        }
+
+//        for (Token t:testResults) {
+//            System.out.println(t.getToken()+"\t\t<- "+t.getTokenType());
+//        }
     }
 }
