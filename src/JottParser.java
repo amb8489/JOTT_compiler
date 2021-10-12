@@ -429,6 +429,14 @@ public class JottParser implements JottTree {
             return null;
         }
 
+        // look for b_expr
+        tokenIndex += 1;
+        JottTreeNode bExprNode = b_expr(new JottTreeNode(JottElement.B_EXPR));
+        if (bExprNode != null) {
+            System.out.println("b_expr found");
+        } else {
+            System.out.println("missing b_expr");
+        }
 
         return jottTreeNode;
     }
