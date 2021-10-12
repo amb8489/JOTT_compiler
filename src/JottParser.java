@@ -115,6 +115,7 @@ public class JottParser implements JottTree {
                     jottTreeNode.addChild(function_def_params(jottTreeNode));
                 }
 
+
                 return jottTreeNode;
             } else {
                 System.out.println("missing [");
@@ -134,10 +135,10 @@ public class JottParser implements JottTree {
 
         Token parameter = tokens.get(tokenIndex);
 
-        JottTreeNode newNode;
+        JottTreeNode newNode = new JottTreeNode(JottElement.FUNC_DEF_PARAMS);
         if (parameter.getTokenType() == TokenType.ID_KEYWORD) {
             System.out.println("id exists");
-            newNode = id(new JottTreeNode(JottElement.ID), parameter);
+            newNode.addChild(id(new JottTreeNode(JottElement.ID), parameter));
 
             tokenIndex += 1;
             Token colon = tokens.get(tokenIndex);
@@ -145,12 +146,13 @@ public class JottParser implements JottTree {
                 System.out.println("colon exists");
                 newNode.addChild(new JottTreeNode(colon));
 
+                // look if the next token is a parameter
                 tokenIndex += 1;
                 Token type = tokens.get(tokenIndex);
                 if (type.getTokenType() == TokenType.ID_KEYWORD) {
                     JottTreeNode typeNode = type(jottTreeNode);
 
-                    if (typeNode.isTerminal()) {
+                    if (typeNode != null) {
                         newNode.addChild(typeNode);
                     } else {
                         System.out.println("not a type");
@@ -158,10 +160,18 @@ public class JottParser implements JottTree {
                     }
                 }
 
+                // look if the next token is another parameter
+                tokenIndex += 1;
+                Token parameter2 = tokens.get(tokenIndex);
+                if (parameter2.getTokenType() == TokenType.R_BRACKET) {
+//                    System.out.println("] exists");
+//                    newNode.addChild(new JottTreeNode(parameter2));
+                    return newNode;
+                } else {
+                    // apparently there may be more parameters or something else
+                    newNode.addChild(function_def_params_t(newNode));
+                }
                 return newNode;
-
-
-
 
             } else {
                 System.out.println("missing colon");
@@ -176,6 +186,11 @@ public class JottParser implements JottTree {
 
         // TODO: loop with function_def_params_t until reach ]
 
+    }
+
+    private static JottTreeNode function_def_params_t(JottTreeNode jottTreeNode) {
+        System.out.println(JottElement.FUNC_DEF_PARAMS_T);
+        return null;
     }
 
     private static JottTreeNode body_stmt(JottTreeNode jottTreeNode) {
@@ -459,7 +474,6 @@ public class JottParser implements JottTree {
 
             for (JottTreeNode jottChild : jottChildren) {
                 if (jottChild != null && !jottChild.isTerminal()) {
-                    System.out.println("RECURSION <- " + jottChild.getJottElement());
                     printTree(jottChild);
                 }
             }
