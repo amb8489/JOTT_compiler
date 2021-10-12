@@ -137,14 +137,34 @@ public class JottParser implements JottTree {
                     Token functionReturn = tokens.get(tokenIndex);
                     System.out.println(functionReturn.getTokenType());
                     if (functionReturn.getTokenType() == TokenType.ID_KEYWORD) {
-                        JottTreeNode typeNode = type(jottTreeNode);
 
-                        if (typeNode != null) {
-                            System.out.println("function return found");
+                        JottTreeNode functionReturnNode = new JottTreeNode(JottElement.FUNCTION_RETURN);
+
+                        if (functionReturn.getToken().equals("Void")) {
+                            System.out.println("function return found (Void)");
+                            jottTreeNode.addChild(new JottTreeNode(JottElement.VOID));
                         } else {
-                            System.out.println("function return missing");
-                            return null;
+                            JottTreeNode typeNode = type(jottTreeNode);
+
+                            if (typeNode != null) {
+                                System.out.println(String.format("function return found (%s type)", typeNode.getToken()));
+                                functionReturnNode.addChild(typeNode);
+                                jottTreeNode.addChild(functionReturnNode);
+                            } else {
+                                System.out.println("function return missing");
+                                return null;
+                            }
                         }
+
+
+
+
+
+
+
+
+
+
                     }
 
 
@@ -337,18 +357,15 @@ public class JottParser implements JottTree {
         switch (token.getToken()) {
             case "Integer", "Double", "String", "Boolean" -> {
                 System.out.println(String.format("Type exists (%s)", token.getToken()));
-                return new JottTreeNode(token);
+                JottTreeNode typeNode = new JottTreeNode(JottElement.TYPE);
+                typeNode.addChild(new JottTreeNode(token));
+                return typeNode;
             }
             default -> {
                 System.out.println("missing Type");
                 return null;
             }
         }
-    }
-
-    private static JottTreeNode function_return(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.FUNCTION_RETURN);
-        return null;
     }
 
     private static JottTreeNode var_dec(JottTreeNode jottTreeNode) {

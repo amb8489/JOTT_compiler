@@ -37,5 +37,6 @@ public enum JottElement {
     I_EXPR,
     STR_LITERAL,
     STR,
-    S_EXPR
+    S_EXPR,
+    VOID
 }
