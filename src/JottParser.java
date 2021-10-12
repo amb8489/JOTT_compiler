@@ -559,9 +559,8 @@ public class JottParser implements JottTree {
             jottTreeNode.addChild(new JottTreeNode(token));
             tokenIndex += 1;
             return jottTreeNode;
-        } else {
-            System.out.println("missing op");
         }
+        System.out.println("missing op");
         return null;
     }
 
@@ -576,9 +575,8 @@ public class JottParser implements JottTree {
             jottTreeNode.addChild(new JottTreeNode(token));
             tokenIndex += 1;
             return jottTreeNode;
-        } else {
-            System.out.println("missing REL_OP");
         }
+        System.out.println("missing REL_OP");
         return null;
     }
 
@@ -636,10 +634,23 @@ public class JottParser implements JottTree {
         return null;
     }
 
+    /**     str_literal -> " str "
+            str -> char str|space str|ε  */
     private static JottTreeNode str_literal(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.STR_LITERAL);
+        Token token = tokens.get(tokenIndex);
+
+        if (token.getTokenType() == TokenType.STRING) {
+            System.out.println("String lit exists");
+            jottTreeNode.addChild(new JottTreeNode(token));
+            tokenIndex += 1;
+            return jottTreeNode;
+        }
+        System.out.println("missing String lit");
         return null;
-    }
+        }
+
+
 
     private static JottTreeNode str(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.STR);
