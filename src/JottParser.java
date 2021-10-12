@@ -505,8 +505,6 @@ public class JottParser implements JottTree {
         return null;
     }
 
-
-
     private static JottTreeNode params_t(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.PARAMS_T);
         return null;
@@ -597,6 +595,24 @@ public class JottParser implements JottTree {
         System.out.println(token.getToken());
         System.out.println(token.getTokenType());
 
+
+        // assuming the token is an ID
+        // before deciding the token is just an id, we need to look at the second token
+
+            // if second token is a rel_op, it could be
+            // i_expr rel_op i_expr
+            // d_expr rel_op d_expr
+            // s_expr rel_op s_expr
+            // b_expr rel_op b_expr
+
+            // if second token is a [
+            // it's a func_call     FORMAT: id [ params]
+
+//        Token secondToken = tokens.get(tokenIndex + 1);
+//        JottTreeNode relOpNode = rel_op(new JottTreeNode(JottElement.REL_OP));
+
+
+
         if (token.getTokenType() == TokenType.ID_KEYWORD) {
             if (token.getToken().equals("True") || token.getToken().equals("False")) {
                 System.out.println(String.format("Found a Bool (%s)", token.getToken()));
@@ -606,7 +622,9 @@ public class JottParser implements JottTree {
                 jottTreeNode.addChild(boolNode);
                 return jottTreeNode;
             } else {
-                System.out.println("found id");`
+                System.out.println("found id");
+                jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
+                return jottTreeNode;
             }
         }
 
