@@ -1,6 +1,6 @@
 #this is an example
 main[]:Void{
-    if[x==5]{
+    if[is]{
         print[x];
     }
 }

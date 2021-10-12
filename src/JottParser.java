@@ -5,6 +5,7 @@
  * @author
  */
 
+import javax.lang.model.element.Element;
 import java.io.Console;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
@@ -434,8 +435,10 @@ public class JottParser implements JottTree {
         JottTreeNode bExprNode = b_expr(new JottTreeNode(JottElement.B_EXPR));
         if (bExprNode != null) {
             System.out.println("b_expr found");
+            jottTreeNode.addChild(bExprNode);
         } else {
             System.out.println("missing b_expr");
+            return null;
         }
 
         return jottTreeNode;
@@ -609,24 +612,26 @@ public class JottParser implements JottTree {
         return null;
     }
 
-    private static JottTreeNode _bool(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.BOOL);
-        Token token = tokens.get(tokenIndex);
-
-        switch (token.getToken()) {
-            case "True", "False" -> {
-                System.out.println(String.format("BOOL exists (%s)", token.getToken()));
-                return new JottTreeNode(token);
-            }
-            default -> {
-                System.out.println("missing BOOl");
-                return null;
-            }
-        }
-    }
-
     private static JottTreeNode b_expr(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.B_EXPR);
+        Token token = tokens.get(tokenIndex);
+
+        System.out.println(token.getToken());
+        System.out.println(token.getTokenType());
+
+        if (token.getTokenType() == TokenType.ID_KEYWORD) {
+            if (token.getToken().equals("True") || token.getToken().equals("False")) {
+                System.out.println(String.format("Found a Bool (%s)", token.getToken()));
+                JottTreeNode boolValueNode = new JottTreeNode(token);
+                JottTreeNode boolNode = new JottTreeNode(JottElement.BOOL);
+                boolNode.addChild(boolValueNode);
+                jottTreeNode.addChild(boolNode);
+                return jottTreeNode;
+            } else {
+                System.out.println("found id");`
+            }
+        }
+
         return null;
     }
 
