@@ -25,7 +25,7 @@ public class JottParser implements JottTree {
      * body_stmt -> if_stmt|while_loop|stmt                                                     <-- DONE
      * return_stmt -> return expr end_stmt                                                      <-- MOSTLY DONE, need to implement expr and end_stmt
      * body -> body_stmt body|return_stmt|ε                                                     <-- DONE (i think)
-     * end_stmt -> ;
+     * end_stmt -> ;                                                                            <-- DONE
      * if_stmt -> if [ b_expr ] { body } elseif_lst|if [ b_expr ] { body } elseif_lst else { body } <-- WORK IN PROGRESS
      * elseif_lst -> elseif [ b_expr ] { body } elseif_lst|ε
      * while_loop -> while [ b_expr ] { body }                                                  <--- WORK IN PROGRESS
@@ -701,7 +701,6 @@ public class JottParser implements JottTree {
     private static JottTreeNode str_literal(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.STR_LITERAL);
         Token token = tokens.get(tokenIndex);
-
         if (token.getTokenType() == TokenType.STRING) {
             System.out.println("String lit exists");
             jottTreeNode.addChild(new JottTreeNode(token));
