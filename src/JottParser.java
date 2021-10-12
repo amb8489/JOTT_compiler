@@ -331,8 +331,12 @@ public class JottParser implements JottTree {
         if_stmt(ifStmtNode);
 
         // try while
+//        JottTreeNode whileLoopNode = new JottTreeNode(JottElement.WHILE_LOOP);
+//        while_loop(whileLoopNode);
 
         // try stmt
+//        JottTreeNode stmtNode = new JottTreeNode(JottElement.STMT);
+//        stmt(stmtNode);
 
         return null;
     }
@@ -353,7 +357,6 @@ public class JottParser implements JottTree {
         // look for expr
         tokenIndex += 1;
         JottTreeNode exprNode = expr(new JottTreeNode(JottElement.EXPR));
-
         // TODO: look for end_stmt (;)
 
         return null;
@@ -378,7 +381,6 @@ public class JottParser implements JottTree {
             System.out.println("has something else in this body");
             JottTreeNode bodyStmtNode = new JottTreeNode(JottElement.BODY_STMT);
             body_stmt(bodyStmtNode);
-
             return bodyStmtNode;
         }
     }
@@ -390,6 +392,8 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode if_stmt(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.IF_STMT);
+
+
 
         return null;
     }
@@ -439,6 +443,9 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode stmt(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.STMT);
+
+
+
         return null;
     }
 
@@ -459,6 +466,7 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode expr(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.EXPR);
+        // TODO: i_expr|d_expr|s_expr|b_expr|id|func_call
         return null;
     }
 

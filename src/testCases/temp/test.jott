@@ -1,4 +1,6 @@
 #this is an example
-main[a:Integer, a:Boolean]:Void{
-    return 5;
+main[x:Integer]:Void{
+    if[x==5]{
+        print[x];
+    }
 }
