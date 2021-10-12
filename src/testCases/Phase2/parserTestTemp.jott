@@ -1,4 +1,0 @@
-foo[x:Integer]:Void{
-    Integer while = 5;
-    print[while];
-}

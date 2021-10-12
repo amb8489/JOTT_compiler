@@ -1,5 +1,5 @@
 #this is an example
-main[x:Integer]:Void{
+main[a:Integer, b:Boolean, c:String, d:Double]:Void{
 print[5];
 #this is a comment
 print[ "foo bar" ];
