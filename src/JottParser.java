@@ -170,7 +170,7 @@ public class JottParser implements JottTree {
             }
         }
 
-        // left curly brace
+        // look for left curly brace
         tokenIndex += 1;
         Token leftCurlyBrace = tokens.get(tokenIndex);
         if (leftCurlyBrace.getTokenType() == TokenType.L_BRACE) {
@@ -181,7 +181,7 @@ public class JottParser implements JottTree {
             return null;
         }
 
-        // body
+        // look for body
         tokenIndex += 1;
         JottTreeNode bodyNode = new JottTreeNode(JottElement.BODY);
         bodyNode = body(bodyNode);
@@ -338,9 +338,19 @@ public class JottParser implements JottTree {
         System.out.println(JottElement.BODY);
 
         JottTreeNode bodyNode = jottTreeNode;
-        System.out.println(bodyNode);
 
-        return bodyNode;
+        // look for body_stmt
+        Token token = tokens.get(tokenIndex);
+        if (token.getTokenType() == TokenType.R_BRACE) {
+            System.out.println("found empty body");
+            return bodyNode;
+        } else {
+            System.out.println("has something in this body");
+            JottTreeNode bodyStmtNode = new JottTreeNode(JottElement.BODY_STMT);
+            body_stmt(bodyStmtNode);
+
+            return null;
+        }
     }
 
     private static JottTreeNode end_stmt(JottTreeNode jottTreeNode) {
