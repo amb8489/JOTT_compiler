@@ -62,7 +62,7 @@ public class JottParser implements JottTree {
     private static JottTreeNode program(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.PROGRAM);
 
-        JottTreeNode child1 = new JottTreeNode(JottElement.$$);
+        JottTreeNode child1 = new JottTreeNode(JottElement.$$); // TODO: do we really need this?
         JottTreeNode child2 = new JottTreeNode(JottElement.FUNCTION_LIST);
 
         jottTreeNode.addChild(child1); // terminal
@@ -96,8 +96,11 @@ public class JottParser implements JottTree {
         JottTreeNode child1;
 
         if (token.getTokenType() == TokenType.ID_KEYWORD) {
+            System.out.println("id exists");
             child1 = new JottTreeNode(JottElement.ID);
+            jottTreeNode.addChild(id(child1, token));
         } else {
+            System.out.println("missing id");
             return null;
         }
 
@@ -155,6 +158,7 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode l_char(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.L_CHAR);
+
         return null;
     }
 
@@ -173,9 +177,11 @@ public class JottParser implements JottTree {
         return null;
     }
 
-    private static JottTreeNode id(JottTreeNode jottTreeNode) {
+    private static JottTreeNode id(JottTreeNode jottTreeNode, Token token) {
         System.out.println(JottElement.ID);
-        return null;
+        JottTreeNode child = new JottTreeNode(token);
+        jottTreeNode.addChild(child);
+        return jottTreeNode;
     }
 
     private static JottTreeNode stmt(JottTreeNode jottTreeNode) {
@@ -342,7 +348,11 @@ public class JottParser implements JottTree {
                 if (jottChild == null) {
                     System.out.println("\tERROR: this child is null");
                 } else {
-                    System.out.println(String.format("\t%s", jottChild.getJottElement()));
+                    if (jottChild.isTerminal()) {
+                        System.out.println(String.format("\t%s (terminal)", jottChild.getToken().getToken()));
+                    } else {
+                        System.out.println(String.format("\t%s (non-terminal)", jottChild.getJottElement()));
+                    }
                 }
             }
 
