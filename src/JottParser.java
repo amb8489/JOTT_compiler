@@ -54,8 +54,8 @@ public class JottParser implements JottTree {
      * i_expr -> id|int|int op int|int op i_expr|i_expr op int|i_expr op i_expr|func_call
      * str_literal -> " str "                                                                   <-- DONE
      * str -> char str|space str|ε                                                              <-- REMOVED
-     * s_expr -> str_literal|id|func_call
-     */
+     * s_expr -> str_literal|id|func_call                                                       <-- DONE but should be tested
+     * */
 
     /**
      * program -> function_list $$
@@ -713,12 +713,26 @@ public class JottParser implements JottTree {
     }
 
 
+    /**   s_expr -> str_literal | id | func_call */
     private static JottTreeNode s_expr(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.S_EXPR);
-        return null;
 
+        Token token = tokens.get(tokenIndex);
+
+        // checking for string
+        if (str_literal(jottTreeNode) == null) {
+            tokenIndex += 1;
+            Token parameter = tokens.get(tokenIndex);
+            if (parameter.getTokenType() == TokenType.ID_KEYWORD) {
+                System.out.println("id found");
+                jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), parameter));
+            }
+            else if(func_call(jottTreeNode) == null){
+                return null;
+            }
+        }
+        return jottTreeNode;
     }
-
     /**
      * Parses an ArrayList of Jotton tokens into a Jott Parse Tree.
      * @param _tokens the ArrayList of Jott tokens to parse
