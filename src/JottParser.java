@@ -52,8 +52,8 @@ public class JottParser implements JottTree {
      * b_expr -> id|bool|i_expr rel_op i_expr|d_expr rel_op d_expr|s_expr rel_op s_expr|b_expr rel_op b_expr|func_call
      * int -> sign digit digit                                                                  <-- removed
      * i_expr -> id|int|int op int|int op i_expr|i_expr op int|i_expr op i_expr|func_call
-     * str_literal -> " str "
-     * str -> char str|space str|ε
+     * str_literal -> " str "                                                                   <-- DONE
+     * str -> char str|space str|ε                                                              <-- removed
      * s_expr -> str_literal|id|func_call
      */
 
@@ -634,8 +634,7 @@ public class JottParser implements JottTree {
         return null;
     }
 
-    /**     str_literal -> " str "
-            str -> char str|space str|ε  */
+    /**     str_literal -> " str "  */
     private static JottTreeNode str_literal(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.STR_LITERAL);
         Token token = tokens.get(tokenIndex);
@@ -648,14 +647,8 @@ public class JottParser implements JottTree {
         }
         System.out.println("missing String lit");
         return null;
-        }
-
-
-
-    private static JottTreeNode str(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.STR);
-        return null;
     }
+
 
     private static JottTreeNode s_expr(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.S_EXPR);
