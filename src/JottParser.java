@@ -113,7 +113,18 @@ public class JottParser implements JottTree {
                 } else {
                     // handle this as a parameter
                     jottTreeNode.addChild(function_def_params(jottTreeNode));
+
+                    Token rightBracketToken = tokens.get(tokenIndex);
+                    if (rightBracketToken.getTokenType() == TokenType.R_BRACKET) {
+                        System.out.println("] exists, has parameter(s)");
+                        jottTreeNode.addChild(new JottTreeNode(rightBracketToken));
+                    } else {
+                        System.out.println("missing ]");
+                        return null;
+                    }
+
                 }
+
 
 
                 return jottTreeNode;
@@ -190,6 +201,11 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode function_def_params_t(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.FUNC_DEF_PARAMS_T);
+
+        Token parameter = tokens.get(tokenIndex);
+
+
+
         return null;
     }
 
