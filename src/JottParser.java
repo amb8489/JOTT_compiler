@@ -122,6 +122,7 @@ public class JottParser implements JottTree {
                 }
 
 
+
                 return jottTreeNode;
             } else {
                 System.out.println("missing [");
@@ -138,9 +139,7 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode function_def_params(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.FUNC_DEF_PARAMS);
-
-
-
+        // TODO: loop with function_def_params_t until reach ]
 
         return null;
     }
@@ -374,7 +373,7 @@ public class JottParser implements JottTree {
         if (jottChildren.size() <= 0) {
             System.out.println(" has no children");
         } else {
-            System.out.println(" has children. those are:");
+            System.out.println(String.format(" has %d %s:", jottChildren.size(), jottChildren.size() <= 1 ? "child. that is" : "children. those are"));
             for (JottTreeNode jottChild : jottChildren) {
                 if (jottChild == null) {
                     System.out.println("\tERROR: this child is null");
@@ -388,7 +387,7 @@ public class JottParser implements JottTree {
             }
 
             for (JottTreeNode jottChild : jottChildren) {
-                if (jottChild != null) {
+                if (jottChild != null && !jottChild.isTerminal()) {
                     printTree(jottChild);
                 }
             }
