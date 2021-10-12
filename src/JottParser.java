@@ -134,23 +134,35 @@ public class JottParser implements JottTree {
 
         Token parameter = tokens.get(tokenIndex);
 
+        JottTreeNode newNode;
         if (parameter.getTokenType() == TokenType.ID_KEYWORD) {
             System.out.println("id exists");
-            jottTreeNode.addChild(id( new JottTreeNode(JottElement.ID), parameter));
+            newNode = id(new JottTreeNode(JottElement.ID), parameter);
 
             tokenIndex += 1;
             Token colon = tokens.get(tokenIndex);
             if (colon.getTokenType() == TokenType.COLON) {
                 System.out.println("colon exists");
-                jottTreeNode.addChild(new JottTreeNode(colon));
+                newNode.addChild(new JottTreeNode(colon));
 
                 tokenIndex += 1;
                 Token type = tokens.get(tokenIndex);
                 if (type.getTokenType() == TokenType.ID_KEYWORD) {
-                    jottTreeNode.addChild(type(jottTreeNode));
+                    JottTreeNode typeNode = type(jottTreeNode);
+
+                    if (typeNode.isTerminal()) {
+                        newNode.addChild(typeNode);
+                    } else {
+                        System.out.println("not a type");
+                        return null;
+                    }
                 }
 
-                return jottTreeNode;
+                return newNode;
+
+
+
+
             } else {
                 System.out.println("missing colon");
                 return null;
@@ -261,6 +273,7 @@ public class JottParser implements JottTree {
         return null;
     }
 
+    // modified
     private static JottTreeNode type(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.TYPE);
 
@@ -269,8 +282,7 @@ public class JottParser implements JottTree {
         switch (token.getToken()) {
             case "Integer", "Double", "String", "Boolean" -> {
                 System.out.println(String.format("Type exists (%s)", token.getToken()));
-                jottTreeNode.addChild(new JottTreeNode(token));
-                return jottTreeNode;
+                return new JottTreeNode(token);
             }
             default -> {
                 System.out.println("missing Type");
@@ -294,6 +306,7 @@ public class JottParser implements JottTree {
         return null;
     }
 
+    // will need to ensure this works
     private static JottTreeNode op(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.OP);
 
@@ -310,6 +323,7 @@ public class JottParser implements JottTree {
         return null;
     }
 
+    // will need to ensure this works
     private static JottTreeNode rel_op(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.REL_OP);
         return null;
@@ -434,6 +448,7 @@ public class JottParser implements JottTree {
 
             for (JottTreeNode jottChild : jottChildren) {
                 if (jottChild != null && !jottChild.isTerminal()) {
+                    System.out.println("RECURSION <- " + jottChild.getJottElement());
                     printTree(jottChild);
                 }
             }
