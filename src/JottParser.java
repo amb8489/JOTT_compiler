@@ -672,13 +672,26 @@ public class JottParser implements JottTree {
 
 
         System.out.println("******************\nPRINTING THE PARSE TREE OUT");
-        printTree(jottParser.tree);
+//        printTree(jottParser.tree);
         return jottParser;
     }
 
+
+    private static String jottstr = "";
+
+    public String convert_to_jott(JottTreeNode curr){
+        if (curr.isTerminal()){
+            jottstr += curr.getToken().getToken();
+            return jottstr;
+        }
+            for (JottTreeNode child : curr.getChildren()) {
+                convert_to_jott(child);
+            }
+        return jottstr;
+    }
     @Override
     public String convertToJott() {
-        return null;
+        return convert_to_jott(this.tree);
     }
 
     /** don't implement this yet **/
@@ -740,7 +753,10 @@ public class JottParser implements JottTree {
     public static void main(String[] args) {
         String filename = "src/testCases/temp/test.jott";
         ArrayList<Token> testResults = JottTokenizer.tokenize(filename);
-        parse(testResults);
+        JottTree T = parse(testResults);
+
+
+        System.out.println(T.convertToJott());
 //        for (Token t:testResults) {
 //            System.out.println(t.getToken()+"\t\t<- "+t.getTokenType());
 //        }
