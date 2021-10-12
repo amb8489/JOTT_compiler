@@ -1,6 +1,6 @@
 #this is an example
-main[x:Integer]:Void{
-    if[x==5]{
+main[]:Void{
+    while[x==5]{
         print[x];
     }
 }

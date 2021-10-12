@@ -444,10 +444,23 @@ public class JottParser implements JottTree {
         if (whileToken.getTokenType() == TokenType.ID_KEYWORD && whileToken.getToken().equals("while"))
         {
             System.out.println("found while");
-            return jottTreeNode;
+            jottTreeNode.addChild(new JottTreeNode(whileToken));
+        } else {
+            System.out.println("while not found");
+            return null;
         }
 
-        return null;
+        tokenIndex += 1;
+        Token leftBracketToken = tokens.get(tokenIndex);
+        if (leftBracketToken.getTokenType() == TokenType.L_BRACKET) {
+            System.out.println("found [");
+            jottTreeNode.addChild(new JottTreeNode(leftBracketToken));
+        } else {
+            System.out.println("[ is missing");
+            return null;
+        }
+
+        return jottTreeNode;
     }
 
     private static JottTreeNode _char(JottTreeNode jottTreeNode) {
