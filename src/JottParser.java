@@ -296,6 +296,17 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode op(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.OP);
+
+        Token token = tokens.get(tokenIndex);
+
+        if(token.getTokenType() == TokenType.MATH_OP){
+            System.out.println("op exists");
+            jottTreeNode.addChild(new JottTreeNode(token));
+            tokenIndex += 1;
+            return jottTreeNode;
+        }else{
+            System.out.println("missing op");
+        }
         return null;
     }
 
@@ -426,10 +437,7 @@ public class JottParser implements JottTree {
                     printTree(jottChild);
                 }
             }
-
         }
-
-
     }
 
 
