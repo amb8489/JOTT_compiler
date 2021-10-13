@@ -33,7 +33,7 @@ public class JottParser implements JottTree {
      * expr -> i_expr|d_expr|s_expr|b_expr|id|func_call                                                                 <-- Done
      * type -> Double|Integer|String|Boolean                                                                            <-- DONE
      * function_return -> type|Void                                                                                     <-- DONE
-     * var_dec -> type id end_stmt                                                                                      TODO
+     * var_dec -> type id end_stmt                                                                                      DONE
      * asmt ->        Double id = d_expr end_stmt                                                                       TODO
      *               |Integer id = i_expr end_stmt
      *               |String id = s_expr end_stmt
@@ -620,7 +620,6 @@ public class JottParser implements JottTree {
         return jottTreeNode;
     }
 
-
     private static JottTreeNode id(JottTreeNode jottTreeNode, Token token) {
         System.out.println(JottElement.ID);
         JottTreeNode child = new JottTreeNode(token);
@@ -635,7 +634,6 @@ public class JottParser implements JottTree {
         return null;
     }
 
-    /** func_call -> id [ params ] **/
     private static JottTreeNode func_call(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.FUNC_CALL);
         int originalTokenIndex = tokenIndex;
@@ -726,8 +724,6 @@ public class JottParser implements JottTree {
         return null;
     }
 
-
-
     private static JottTreeNode expr(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.EXPR);
 
@@ -775,7 +771,6 @@ public class JottParser implements JottTree {
         return null;
     }
 
-    // modified
     private static JottTreeNode type(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.TYPE);
 
@@ -795,14 +790,41 @@ public class JottParser implements JottTree {
         }
     }
 
-    // declare variable
+     // * var_dec -> type id end_stmt                                                                                      TODO
     private static JottTreeNode var_dec(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.VAR_DEC);
 
-        // type id end_stmt
-        //TODO ------------------------------------------------------------------------------ TODO
+        // look for type
+        if (type(jottTreeNode)==null) {
+            return null;
+        }
 
-        return null;
+        Token token = tokens.get(tokenIndex);
+
+        if (token.getTokenType() == TokenType.ID_KEYWORD) {
+            // add id child
+            System.out.println("id exists");
+            jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
+            tokenIndex+=1;
+
+        } else {
+            System.out.println("missing id");
+            return null;
+        }
+
+         token = tokens.get(tokenIndex);
+        if (token.getToken().equals(";")) {
+            // add id child
+            System.out.println("; exists");
+            jottTreeNode.addChild(new JottTreeNode(token));
+            tokenIndex+=1;
+
+        } else {
+            System.out.println("missing ;");
+            return null;
+        }
+
+        return jottTreeNode;
     }
 
     //
