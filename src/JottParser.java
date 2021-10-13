@@ -573,7 +573,11 @@ public class JottParser implements JottTree {
             return null;
         }
 
-        //TODO ------------------------------------------------------------------------------body is not null
+        if(body(jottTreeNode)== null){
+            System.out.println("BODY ERROR IN IFELSE_LST");
+            return null;
+        }
+        tokenIndex+=1;
 
         // looking for }
         Token rightcurly = tokens.get(tokenIndex);

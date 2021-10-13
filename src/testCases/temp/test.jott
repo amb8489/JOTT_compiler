@@ -1,3 +1,5 @@
 main[x:Double]:Integer{
-    print[thisParameter, thatParameter, thoseParameters];
+    while[true]{
+        Double x = 1;
+    }
 }
