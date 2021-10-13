@@ -649,7 +649,6 @@ public class JottParser implements JottTree {
             System.out.println("found {");
             jottTreeNode.addChild(new JottTreeNode(leftcurly));
             tokenIndex+=1;
-
         } else {
             System.out.println("{ is missing");
             return null;
@@ -922,9 +921,15 @@ public class JottParser implements JottTree {
         }
     }
 
+
     private static JottTreeNode var_dec(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.VAR_DEC);
 
+        Token testToken = tokens.get(tokenIndex);
+        System.out.println(testToken.getToken());
+        System.out.println(testToken.getTokenType());
+
+        tokenIndex-=1;
         // look for type
         if (type(jottTreeNode)==null) {
             return null;
