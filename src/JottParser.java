@@ -770,19 +770,69 @@ public class JottParser implements JottTree {
     }
     // (id) | (bool)| (i_expr rel_op i_expr) | (d_expr rel_op d_expr)| (s_expr rel_op s_expr)|(b_expr rel_op b_expr)|(func_call)
     private static JottTreeNode b_expr(JottTreeNode jottTreeNode) {
-//        Token token = tokens.get(tokenIndex);
-//        if (token.getTokenType() == TokenType.ID_KEYWORD){
-//            System.out.println("ID exists");
-//            jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
-//            tokenIndex += 1;
-//            return jottTreeNode;
-//        }else if(token.getToken().equals("True") || token.getToken().equals("False")){
-//
-//            jottTreeNode.addChild(new JottTreeNode(token));
-//            tokenIndex += 1;
-//            return jottTreeNode;
-//
-        return null;
+        Token token = tokens.get(tokenIndex);
+        if (token.getTokenType() == TokenType.ID_KEYWORD){
+            System.out.println("ID exists");
+            jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
+            tokenIndex += 1;
+            return jottTreeNode;
+        }else if(token.getToken().equals("True") || token.getToken().equals("False")) {
+            jottTreeNode.addChild(new JottTreeNode(token));
+            tokenIndex += 1;
+            return jottTreeNode;
+        }else {
+
+
+            if (i_expr(jottTreeNode) != null) {
+                tokenIndex += 1;
+                if (rel_op(jottTreeNode) != null && i_expr(jottTreeNode) != null) {
+                        // tokenIndex += 1;          <----------------------------------???????????
+                        return jottTreeNode;
+                }
+                System.out.println("i_expr relOP i_expr Failure");
+                return null;
+            }else
+
+
+            if (d_expr(jottTreeNode) != null) {
+                tokenIndex += 1;
+                if (rel_op(jottTreeNode) != null && d_expr(jottTreeNode) != null) {
+                    // tokenIndex += 1;          <----------------------------------???????????
+                    return jottTreeNode;
+                }
+                System.out.println("d_expr relOP d_expr Failure");
+                return null;
+            }else
+
+                if (s_expr(jottTreeNode) != null) {
+                tokenIndex += 1;
+                if (rel_op(jottTreeNode) != null && s_expr(jottTreeNode) != null) {
+                    // tokenIndex += 1;          <----------------------------------???????????
+                    return jottTreeNode;
+                }
+                System.out.println("s_expr relOP s_expr Failure");
+                return null;
+            }else
+
+                if (b_expr(jottTreeNode) != null) {
+                    tokenIndex += 1;
+                    if (rel_op(jottTreeNode) != null && b_expr(jottTreeNode) != null) {
+                        // tokenIndex += 1;          <----------------------------------???????????
+                        return jottTreeNode;
+                    }
+                    System.out.println("b_expr relOP b_expr Failure");
+                    return null;
+                }else
+
+                    if(func_call(jottTreeNode)!=null){
+                        // tokenIndex += 1;          <----------------------------------???????????
+                        return jottTreeNode;
+                    }
+                    else{
+                        System.out.println("function call Failure");
+                        return null;
+                    }
+        }
     }
 
     // |int
