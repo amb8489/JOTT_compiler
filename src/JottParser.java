@@ -189,14 +189,16 @@ public class JottParser implements JottTree {
         jottTreeNode.addChild(bodyNode);
 
         // look for right curly brace
-//        if (bodyNode.getChildren().size() > 0) { tokenIndex += 1; } // unless the body is empty, move the token right by one
-//
-//        Token rightCurlyBrace = tokens.get(tokenIndex); // TODO: may will not need this
-//        if (rightCurlyBrace.getTokenType() == TokenType.R_BRACE) {
-//            jottTreeNode.addChild(new JottTreeNode(rightCurlyBrace));
-//        } else {
-//            System.out.println("} missing");
-//        }
+        System.out.println("children" + bodyNode.getChildren().size());
+
+
+        if (bodyNode.getChildren().size() > 0) { tokenIndex += 1; }
+        Token rightCurlyBrace = tokens.get(tokenIndex); // TODO: may will not need this
+        if (rightCurlyBrace.getTokenType() == TokenType.R_BRACE) {
+            jottTreeNode.addChild(new JottTreeNode(rightCurlyBrace));
+        } else {
+            System.out.println("} missing");
+        }
 
         return jottTreeNode;
 
@@ -974,8 +976,6 @@ public class JottParser implements JottTree {
             }
         }
     }
-
-
 
     public static void main(String[] args) {
         String filename = "src/testCases/temp/test.jott";
