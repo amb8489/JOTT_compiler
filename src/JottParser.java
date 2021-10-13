@@ -707,15 +707,55 @@ public class JottParser implements JottTree {
     private static JottTreeNode d_expr(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.D_EXPR);
 
-        // id
-        // dbl
-        // dbl op dbl
-        // dbl op d_expr
-        // d_expr op dbl
-        // d_expr op d_expr
-        // func_call
+        JottTreeNode first_token = null;
+        // token id or int
+        Token token = tokens.get(tokenIndex);
+        if (token.getTokenType() == TokenType.ID_KEYWORD && tokens.get(tokenIndex+1).getTokenType() != TokenType.L_BRACKET) {// hmmmmmmm ???
+            System.out.println("id exists");
+            first_token = id(new JottTreeNode(JottElement.ID), token);
+        }else if(token.getTokenType() == TokenType.NUMBER){
+            first_token = new JottTreeNode(token);
+        }else if(func_call(jottTreeNode) != null){
+            i_expr(jottTreeNode); // hmmmmmmm ???
+        }else {
+            System.out.println("ERROR NOT ID OR INT OR FUNCTION CALL");
+            return null;
+        }
 
-        return null;
+        tokenIndex += 1;
+
+        token = tokens.get(tokenIndex);
+
+        // check for op
+        if (token.getTokenType() == TokenType.MATH_OP) {
+
+            JottTreeNode op_token = new JottTreeNode(tokens.get(tokenIndex));
+
+            tokenIndex += 1;
+            //check for int op int meaning no stay op
+            token = tokens.get(tokenIndex);
+            if (token.getTokenType() == TokenType.NUMBER || token.getTokenType() == TokenType.ID_KEYWORD) {
+                System.out.println("FOUND OP");
+
+                jottTreeNode.addChild(first_token);
+                jottTreeNode.addChild(op_token);
+                i_expr(jottTreeNode);
+                return jottTreeNode;
+            }else {
+                jottTreeNode.addChild(first_token);
+                jottTreeNode.addChild(op_token);
+                if(func_call(jottTreeNode) != null){
+                    i_expr(jottTreeNode);
+                    return jottTreeNode;
+                }
+                System.out.println("REPORT ERROR stray op");
+                return null;
+            }
+        }
+
+        System.out.println("FOUND LONE OP|dbl");
+        jottTreeNode.addChild(first_token);
+        return jottTreeNode;
     }
 
     private static JottTreeNode b_expr(JottTreeNode jottTreeNode) {
