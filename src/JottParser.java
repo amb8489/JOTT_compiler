@@ -197,11 +197,16 @@ public class JottParser implements JottTree {
         tokenIndex += 1;
         JottTreeNode bodyNode = new JottTreeNode(JottElement.BODY);
         bodyNode = body(bodyNode);
-        jottTreeNode.addChild(bodyNode);
+        if (bodyNode != null) {
+            System.out.println("found body");
+            jottTreeNode.addChild(bodyNode);
+        } else {
+            System.out.println("missing body");
+            return null;
+        }
 
         // look for right curly brace
         System.out.println("children" + bodyNode.getChildren().size());
-
 
         if (bodyNode.getChildren().size() > 0) { tokenIndex += 1; }
         Token rightCurlyBrace = tokens.get(tokenIndex); // TODO: may will not need this
@@ -616,6 +621,16 @@ public class JottParser implements JottTree {
             System.out.println("} is missing");
             return null;
         }
+
+//        // look for b_expr
+//        JottTreeNode bExprNode = b_expr(jottTreeNode);
+//        if (bExprNode != null) {
+//            System.out.println("found b_expr for while");
+//            jottTreeNode.addChild(new JottTreeNode()bExprNode);
+//        } else {
+//            System.out.println("invalid b_expr");
+//            return null;
+//        }
 
         return jottTreeNode;
     }

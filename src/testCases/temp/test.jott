@@ -1,4 +1,3 @@
-#this is an example
-main[a:Double,b:String,c:Integer]:Void{
-return -1000 * x + 5 * zzzz;
+main[]:Integer{
+    return b == b;
 }
