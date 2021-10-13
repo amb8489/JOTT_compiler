@@ -1,8 +1,1 @@
-main[x:Double]:Integer{
-
-        while[true]{
-        while[true]{
-            Double x = 9;
-            }
-        }
-}
+main[x:Double]:Integer{}
