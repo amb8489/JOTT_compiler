@@ -1318,7 +1318,7 @@ public class JottParser implements JottTree {
         Token token = tokens.get(tokenIndex);
 
         // checking for string
-        JottTreeNode strLiteralNode = str_literal(jottTreeNode);
+        JottTreeNode strLiteralNode = str_literal(new JottTreeNode(JottElement.STR_LITERAL));
         if (strLiteralNode == null) {
             tokenIndex += 1;
             Token parameter = tokens.get(tokenIndex);
