@@ -674,32 +674,65 @@ public class JottParser implements JottTree {
     private static JottTreeNode stmt(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.STMT);
 
-        int start_idx = tokenIndex;
-        if(asmt(jottTreeNode)!=null){
-            return jottTreeNode;
-        }
-        tokenIndex = start_idx;
-        if(var_dec(jottTreeNode) != null){
-            return jottTreeNode;
-        }
+        int originalTokenIndex = tokenIndex;
 
-        tokenIndex = start_idx;
-        if(func_call(jottTreeNode) != null) {
+        System.out.println("stmt - trying asmt");
+        JottTreeNode asmtNode = asmt(new JottTreeNode(JottElement.ASMT));
+        if (asmtNode != null) {
+            System.out.println("found asmt");
+            jottTreeNode.addChild(asmtNode);
 
-            tokenIndex += 1;                  ///------- do we need ?
-            Token token = tokens.get(tokenIndex);
-
-            if (token.getToken().equals(";")) {
-                // add id child
-                System.out.println("; exists");
-                jottTreeNode.addChild(new JottTreeNode(token));
+            tokenIndex += 1;
+            Token endStmtNode = tokens.get(tokenIndex);
+            if (endStmtNode.getTokenType() == TokenType.SEMICOLON) {
+                jottTreeNode.addChild(new JottTreeNode(endStmtNode));
                 return jottTreeNode;
-            }else {
-                System.out.println("FAILURE to find ; in stmt");
+            } else {
+                System.out.println("missing end_stmt");
+                tokenIndex = originalTokenIndex;
+                return null;
             }
         }
-        System.out.println("Failure in statment");
 
+        System.out.println("stmt - asmt didn't work, trying var_dec");
+
+        JottTreeNode varDecNode = var_dec(new JottTreeNode(JottElement.VAR_DEC));
+        if (varDecNode != null) {
+            System.out.println("found var_dec");
+            jottTreeNode.addChild(varDecNode);
+
+            tokenIndex += 1;
+            Token endStmtNode = tokens.get(tokenIndex);
+            if (endStmtNode.getTokenType() == TokenType.SEMICOLON) {
+                jottTreeNode.addChild(new JottTreeNode(endStmtNode));
+                return jottTreeNode;
+            } else {
+                System.out.println("missing end_stmt");
+                tokenIndex = originalTokenIndex;
+                return null;
+            }
+        }
+
+        System.out.println("stmt - var_dec didn't work, trying func_call");
+
+        JottTreeNode funcCallNode = func_call(new JottTreeNode(JottElement.FUNC_CALL));
+        if (funcCallNode != null) {
+            System.out.println("found func_call");
+            jottTreeNode.addChild(funcCallNode);
+
+            tokenIndex += 1;
+            Token endStmtNode = tokens.get(tokenIndex);
+            if (endStmtNode.getTokenType() == TokenType.SEMICOLON) {
+                jottTreeNode.addChild(new JottTreeNode(endStmtNode));
+                return jottTreeNode;
+            } else {
+                System.out.println("missing end_stmt");
+                tokenIndex = originalTokenIndex;
+                return null;
+            }
+        }
+
+        System.out.println("stmt - func_call didn't work. ran out of options. error!");
         return null;
     }
 
