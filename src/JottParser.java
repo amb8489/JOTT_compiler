@@ -28,8 +28,8 @@ public class JottParser implements JottTree {
      * id -> l_char char                                                                                                <-- DONE
      * stmt -> asmt|var_dec|func_call end_stmt                                                                          <-- DONE
      * func_call -> id [ params ]                                                                                       <-- DONE
-     * params -> expr params_t|ε                                                                                        <-- WORK IN PROGRESS ( NEED TO SUPPORT RECURSE)
-     * params_t -> , expr params_t|ε                                                                                    <-- WORK IN PROGRESS
+     * params -> expr params_t|ε                                                                                        <-- DONE
+     * params_t -> , expr params_t|ε                                                                                    <-- DONE
      * expr -> i_expr|d_expr|s_expr|b_expr|id|func_call                                                                 <-- DONE
      * type -> Double|Integer|String|Boolean                                                                            <-- DONE
      * function_return -> type|Void                                                                                     <-- DONE
@@ -361,7 +361,7 @@ public class JottParser implements JottTree {
         JottTreeNode stmtNode = stmt(new JottTreeNode(JottElement.STMT));
         if (stmtNode != null) {
             jottTreeNode.addChild(stmtNode);
-            return stmtNode;
+            return jottTreeNode;
         }
 
         System.out.println("this body_stmm is ultimately invalid");
@@ -433,8 +433,23 @@ public class JottParser implements JottTree {
         } else { // body_stmt body
             System.out.println("has something more in this body; need to parse further");
 
+            // look for body_stmt
             JottTreeNode bodyStmtNode = body_stmt(new JottTreeNode(JottElement.BODY_STMT));
-            jottTreeNode.addChild(bodyStmtNode);
+            if (bodyStmtNode != null) {
+                jottTreeNode.addChild(bodyStmtNode);
+            } else {
+                System.out.println("could not find body_stmt");
+                return null;
+            }
+
+            // look for body
+//            JottTreeNode bodyNode = body(new JottTreeNode(JottElement.BODY));
+//            if (bodyNode != null) {
+//                System.out.println("found one more body!");
+//                jottTreeNode.addChild(bodyNode);
+//            } else {
+//                System.out.println("could not find more body");
+//            }
 
             return jottTreeNode;
         }
