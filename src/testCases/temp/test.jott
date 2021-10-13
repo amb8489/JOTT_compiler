@@ -1,3 +1,4 @@
 main[]:Integer{
+    x = 5 ;
     return x < x;
 }

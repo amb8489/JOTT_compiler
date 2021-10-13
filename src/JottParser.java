@@ -795,8 +795,6 @@ public class JottParser implements JottTree {
         System.out.println(JottElement.EXPR);
 
 
-
-
         // i_expr|d_expr|s_expr|b_expr|id|func_call
 
         JottTreeNode funcCall = func_call(new JottTreeNode(JottElement.FUNC_CALL));
@@ -992,14 +990,14 @@ public class JottParser implements JottTree {
         token = tokens.get(tokenIndex);
 
         if (token.getTokenType() == TokenType.ID_KEYWORD){
-            System.out.println("found id for asmt");
+            System.out.println("found (id) for ID = expr");
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
             tokenIndex+=1;
             token = tokens.get(tokenIndex);
 
             // looking for =
             if (token.getToken().equals("=") ){
-                System.out.println("found = in type id = IN func asmt");
+                System.out.println("found (=) for ID = expr func asmt");
                 int tokenstart = tokenIndex;
 
                 // looking for d_expr
@@ -1058,7 +1056,7 @@ public class JottParser implements JottTree {
                     }
                 }
 
-                System.out.println("FAILURE FOR type id = expr for asmt");
+                System.out.println("FAILURE FOR  id = expr for asmt");
                 return null;
 
             }else {
