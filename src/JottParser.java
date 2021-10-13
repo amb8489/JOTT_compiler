@@ -26,7 +26,7 @@ public class JottParser implements JottTree {
      * elseif_lst -> elseif [ b_expr ] { body } elseif_lst|ε                                                            < --- nearly DONE TODO
      * while_loop -> while [ b_expr ] { body }                                                                          <--- nearly DONE TODO
      * id -> l_char char                                                                                                <-- DONE
-     * stmt -> asmt|var_dec|func_call end_stmt                                                                          TODO
+     * stmt -> asmt|var_dec|func_call end_stmt                                                                          <-- done
      * func_call -> id [ params ]                                                                                       <-- DONE
      * params -> expr params_t|ε                                                                                        <-- Done
      * params_t -> , expr params_t|ε                                                                                    <-- WORK IN PROGRESS
@@ -629,7 +629,32 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode stmt(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.STMT);
-        //TODO ------------------------------------------------------------------------------ TODO
+
+        int start_idx = tokenIndex;
+        if(asmt(jottTreeNode)!=null){
+            return jottTreeNode;
+        }
+        tokenIndex = start_idx;
+        if(var_dec(jottTreeNode) != null){
+            return jottTreeNode;
+        }
+
+        tokenIndex = start_idx;
+        if(func_call(jottTreeNode) != null) {
+
+            tokenIndex += 1;                  ///------- do we need ?
+            Token token = tokens.get(tokenIndex);
+
+            if (token.getToken().equals(";")) {
+                // add id child
+                System.out.println("; exists");
+                jottTreeNode.addChild(new JottTreeNode(token));
+                return jottTreeNode;
+            }else {
+                System.out.println("FAILURE to find ; in stmt");
+            }
+        }
+        System.out.println("Failure in statment");
 
         return null;
     }
@@ -790,7 +815,6 @@ public class JottParser implements JottTree {
         }
     }
 
-     // * var_dec -> type id end_stmt                                                                                      TODO
     private static JottTreeNode var_dec(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.VAR_DEC);
 
