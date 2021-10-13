@@ -654,20 +654,19 @@ public class JottParser implements JottTree {
             return null;
         }
 
-        //TODO ------------------------------------------------------------------------------body is not null
-        if(body(jottTreeNode)==null){
+        if(body(jottTreeNode) == null){
             System.out.println("BODY ERROR IN WHILE LOOP");
         }
         System.out.println("found body");
-
         // looking for }
         Token rightcurly = tokens.get(tokenIndex);
-        if (rightcurly.getTokenType() == TokenType.L_BRACE) {
+        if (rightcurly.getTokenType() == TokenType.R_BRACE) {
             System.out.println("found }");
             jottTreeNode.addChild(new JottTreeNode(rightcurly));
             tokenIndex+=1;
 
         } else {
+
             System.out.println("} is missing");
             return null;
         }
