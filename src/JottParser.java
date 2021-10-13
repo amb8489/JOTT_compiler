@@ -622,7 +622,7 @@ public class JottParser implements JottTree {
             System.out.println("[ is missing");
             return null;
         }
-
+        tokenIndex += 1;
         ////////////------ checking for bool expr
 
         if(b_expr(jottTreeNode)== null){
@@ -1160,15 +1160,13 @@ public class JottParser implements JottTree {
         int originalTokenIndex = tokenIndex;
 
         // is this an id
-        if (token.getTokenType() == TokenType.ID_KEYWORD){
+        System.out.println(token.getToken()+"---------------------------------");
+        if (token.getTokenType() == TokenType.ID_KEYWORD || token.getToken().equals("True") || token.getToken().equals("False")){
             System.out.println("ID exists");
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
             tokenIndex += 1;
             return jottTreeNode;
-        }else if(token.getToken().equals("True") || token.getToken().equals("False")) {
-            jottTreeNode.addChild(new JottTreeNode(token));
-            tokenIndex += 1;
-            return jottTreeNode;
+
         }else {
 
 

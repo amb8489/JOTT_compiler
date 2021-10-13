@@ -1,3 +1,5 @@
 main[]:Integer{
-    Double peanutButterJellyTime;
+    while[True]{
+        String s;
+    }
 }
