@@ -891,16 +891,17 @@ public class JottParser implements JottTree {
     private static JottTreeNode var_dec(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.VAR_DEC);
 
+        tokenIndex-=1;
         // look for type
         if (type(jottTreeNode)==null) {
             return null;
         }
-
+        tokenIndex+=1;
         Token token = tokens.get(tokenIndex);
 
         if (token.getTokenType() == TokenType.ID_KEYWORD) {
             // add id child
-            System.out.println("id exists");
+            System.out.println("(id) exists");
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
             tokenIndex+=1;
 
@@ -909,10 +910,11 @@ public class JottParser implements JottTree {
             return null;
         }
 
+
          token = tokens.get(tokenIndex);
         if (token.getToken().equals(";")) {
             // add id child
-            System.out.println("; exists");
+            System.out.println("(;) exists");
             jottTreeNode.addChild(new JottTreeNode(token));
             tokenIndex+=1;
 
