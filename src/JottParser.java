@@ -15,7 +15,7 @@ public class JottParser implements JottTree {
     /**
      * program -> function_list $$                                                              <-- DONE
      * function_list -> function_def function_list                                              <-- MOSTLY DONE, NEED TO ADD SUPPORT FOR MULTIPLE FUNCTIONS
-     * function_list -> ε
+     * function_list -> ε                                                                       <-- ??????
      * function_def -> id [ func_def_params ] : function_return { body }                        <-- DONE
      * func_def_params -> id : type func_def_params_t|ε                                         <-- DONE
      * func_def_params_t -> , id : type func_def_params_t|ε                                     <-- DONE
@@ -39,15 +39,24 @@ public class JottParser implements JottTree {
      * type -> Double|Integer|String|Boolean                                                    <-- DONE
      * function_return -> type|Void                                                             <-- DONE
      * var_dec -> type id end_stmt
-     * asmt -> Double id = d_expr end_stmt|Integer id = i_expr end_stmt|String id = s_expr end_stmt|Boolean id = b_expr end_stmt|id = d_expr end_stmt|id = i_expr end_stmt|id = s_expr end_stmt|id = b_expr end_stmt
+     *
+     * asmt ->        Double id = d_expr end_stmt
+     *               |Integer id = i_expr end_stmt
+     *               |String id = s_expr end_stmt
+     *               |Boolean id = b_expr end_stmt
+     *               |id = d_expr end_stmt
+     *               |id = i_expr end_stmt
+     *               |id = s_expr end_stmt
+     *               |id = b_expr end_stmt
+     *
      * op -> +|*|/|+|-                                                                          <-- DONE
      * rel_op -> >|>=|<|<=|==|!=                                                                <-- DONE
      * dbl -> sign digit . digit digit                                                          <-- REMOVED
-     * d_expr -> id|dbl|dbl op dbl|dbl op d_expr|d_expr op dbl|d_expr op d_expr|func_call
+     * d_expr -> id|dbl|dbl op dbl|dbl op d_expr|d_expr op dbl|d_expr op d_expr|func_call       <-- DONE (ERRORS: FUNCTION CALL??, NEG NUMBERS)
      * bool -> True|False                                                                       <-- DONE
      * b_expr -> id|bool|i_expr rel_op i_expr|d_expr rel_op d_expr|s_expr rel_op s_expr|b_expr rel_op b_expr|func_call <-- WORK IN PROGRESS
      * int -> sign digit digit                                                                  <-- REMOVED
-     * i_expr -> id|int|int op int|int op i_expr|i_expr op int|i_expr op i_expr|func_call
+     * i_expr -> id|int|int op int|int op i_expr|i_expr op int|i_expr op i_expr|func_call       <-- DONE (ERRORS: FUNCTION CALL??, NEG NUMBERS)
      * str_literal -> " str "                                                                   <-- DONE
      * str -> char str|space str|ε                                                              <-- REMOVED
      * s_expr -> str_literal|id|func_call                                                       <-- DONE but should be tested
