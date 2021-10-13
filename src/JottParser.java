@@ -440,7 +440,8 @@ public class JottParser implements JottTree {
                 jottTreeNode.addChild(bodyStmtNode);
             } else {
                 System.out.println("could not find body_stmt");
-                return null;
+                jottTreeNode.addChild(bodyStmtNode);
+                return jottTreeNode;
             }
 
 
@@ -451,7 +452,7 @@ public class JottParser implements JottTree {
 
                 } else {
                     System.out.println("could not find more body");
-                    tokenIndex -= 1;
+//                    tokenIndex -= 1;
                 }
             return jottTreeNode;
         }

@@ -1,4 +1,8 @@
 main[x:Double]:Integer{
-    print[x];
-    print[x];
+
+        while[true]{
+        while[true]{
+            Double x = 9;
+            }
+        }
 }
