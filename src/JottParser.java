@@ -34,7 +34,7 @@ public class JottParser implements JottTree {
      * type -> Double|Integer|String|Boolean                                                                            <-- DONE
      * function_return -> type|Void                                                                                     <-- DONE
      * var_dec -> type id end_stmt                                                                                      DONE
-     * asmt ->        Double id = d_expr end_stmt                                                                       TODO
+     * asmt ->        Double id = d_expr end_stmt                                                                       DONE
      *               |Integer id = i_expr end_stmt
      *               |String id = s_expr end_stmt`
      *               |Boolean id = b_expr end_stmt
@@ -794,6 +794,9 @@ public class JottParser implements JottTree {
     private static JottTreeNode expr(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.EXPR);
 
+
+
+
         // i_expr|d_expr|s_expr|b_expr|id|func_call
 
         JottTreeNode funcCall = func_call(new JottTreeNode(JottElement.FUNC_CALL));
@@ -805,18 +808,23 @@ public class JottParser implements JottTree {
 
         System.out.println("can't be func_call, trying i_expr");
 
-        JottTreeNode iExprNode = i_expr(new JottTreeNode(JottElement.I_EXPR));
-        if (iExprNode != null) {
-            System.out.println("found i_expr");
-            jottTreeNode.addChild(iExprNode);
-            return jottTreeNode;
-        }
+        // test for second token being +-*/
+        Token token = tokens.get(tokenIndex+1);
+        if (token.getTokenType() == TokenType.MATH_OP) {
 
-        JottTreeNode dExprNode = d_expr(new JottTreeNode(JottElement.D_EXPR));
-        if (dExprNode != null) {
-            System.out.println("found d_expr");
-            jottTreeNode.addChild(dExprNode);
-            return jottTreeNode;
+            JottTreeNode iExprNode = i_expr(new JottTreeNode(JottElement.I_EXPR));
+            if (iExprNode != null) {
+                System.out.println("found i_expr");
+                jottTreeNode.addChild(iExprNode);
+                return jottTreeNode;
+            }
+
+            JottTreeNode dExprNode = d_expr(new JottTreeNode(JottElement.D_EXPR));
+            if (dExprNode != null) {
+                System.out.println("found d_expr");
+                jottTreeNode.addChild(dExprNode);
+                return jottTreeNode;
+            }
         }
 
         JottTreeNode sExprNode = s_expr(new JottTreeNode(JottElement.S_EXPR));
@@ -893,16 +901,6 @@ public class JottParser implements JottTree {
         return jottTreeNode;
     }
 
-    /*
-     * asmt ->        Double id = d_expr end_stmt                                                                       TODO
-     *               |Integer id = i_expr end_stmt
-     *               |String id = s_expr end_stmt
-     *               |Boolean id = b_expr end_stmt
-     *               |id = d_expr end_stmt
-     *               |id = i_expr end_stmt
-     *               |id = s_expr end_stmt
-     *               |id = b_expr end_stmt
-            */
     private static JottTreeNode asmt(JottTreeNode jottTreeNode) {
         Token token;
         System.out.println(JottElement.ASMT);
@@ -1104,7 +1102,6 @@ public class JottParser implements JottTree {
         return null;
     }
 
-
     private static JottTreeNode d_expr(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.D_EXPR);
 
@@ -1291,7 +1288,7 @@ public class JottParser implements JottTree {
             }
         }
 
-        System.out.println("FOUND LONE OP|int");
+        System.out.println("FOUND LONE int");
         jottTreeNode.addChild(first_token);
         return jottTreeNode;
 
