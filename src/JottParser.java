@@ -541,7 +541,13 @@ public class JottParser implements JottTree {
             return null;
         }
 
-        //TODO ------------------------------------------------------------------------------b_expr is not null
+
+        if(b_expr(jottTreeNode)== null){
+            System.out.println("b expr FAILED");
+            return null;
+        }
+        System.out.println("b expr found");
+
 
 
         Token rightbracket = tokens.get(tokenIndex);
@@ -908,7 +914,6 @@ public class JottParser implements JottTree {
     private static JottTreeNode var_dec(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.VAR_DEC);
 
-        tokenIndex-=1;
         // look for type
         if (type(jottTreeNode)==null) {
             return null;
