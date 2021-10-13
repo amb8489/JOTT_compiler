@@ -866,22 +866,183 @@ public class JottParser implements JottTree {
         return jottTreeNode;
     }
 
-    //
+    /*
+     * asmt ->        Double id = d_expr end_stmt                                                                       TODO
+     *               |Integer id = i_expr end_stmt
+     *               |String id = s_expr end_stmt
+     *               |Boolean id = b_expr end_stmt
+     *               |id = d_expr end_stmt
+     *               |id = i_expr end_stmt
+     *               |id = s_expr end_stmt
+     *               |id = b_expr end_stmt
+            */
     private static JottTreeNode asmt(JottTreeNode jottTreeNode) {
-        //TODO ------------------------------------------------------------------------------ TODO
-
+        Token token;
         System.out.println(JottElement.ASMT);
+        // we have a type
+        if(type(jottTreeNode)!=null){
+            token = tokens.get(tokenIndex);
 
-        // Double id = d_expr end_stmt
-        // Integer id = i_expr end_stmt
-        // String id = s_expr end_stmt
-        // Boolean id = b_expr end_stmt
-        // id = d_expr end_stmt
-        // id = i_expr end_stmt
-        // id = s_expr end_stmt
-        // id = b_expr end_stmt
+            // looking for id
+            if (token.getTokenType() == TokenType.ID_KEYWORD){
+                System.out.println("found id for asmt");
+                jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
+                tokenIndex+=1;
+                token = tokens.get(tokenIndex);
 
-        return null;
+                // looking for =
+                if (token.getToken().equals("=") ){
+                    System.out.println("found = in type id = IN func asmt");
+                    int tokenstart = tokenIndex;
+
+                    // looking for d_expr
+                    if (d_expr(jottTreeNode) != null){
+                        token = tokens.get(tokenIndex);
+                        if(token.getToken().equals(";")){
+                            jottTreeNode.addChild(new JottTreeNode(token));
+                            return jottTreeNode;
+                        }else {
+                            System.out.println("FAILURE FOR (;) in ttype id = expr; for asmt");
+
+                            return null;
+                        }
+                    }
+                    // looking for i expr
+
+                    tokenIndex = tokenstart;
+                    if (i_expr(jottTreeNode) != null){
+                        token = tokens.get(tokenIndex);
+                        if(token.getToken().equals(";")){
+                            jottTreeNode.addChild(new JottTreeNode(token));
+                            return jottTreeNode;
+                        }else {
+                            System.out.println("FAILURE FOR (;) in ttype id = expr; for asmt");
+
+                            return null;
+                        }
+
+                    }
+                    tokenIndex = tokenstart;
+                    // looking for s expr
+
+                    if (s_expr(jottTreeNode) != null){
+                        token = tokens.get(tokenIndex);
+                        if(token.getToken().equals(";")){
+                            jottTreeNode.addChild(new JottTreeNode(token));
+                            return jottTreeNode;
+                        }else {
+                            System.out.println("FAILURE FOR (;) in ttype id = expr; for asmt");
+
+                            return null;
+                        }
+
+                    }
+                    tokenIndex = tokenstart;
+                    // looking for b expr
+                    if (b_expr(jottTreeNode) != null){
+                        token = tokens.get(tokenIndex);
+                        if(token.getToken().equals(";")){
+                            jottTreeNode.addChild(new JottTreeNode(token));
+                            return jottTreeNode;
+                        }else {
+                            System.out.println("FAILURE FOR (;) in ttype id = expr; for asmt");
+
+                            return null;
+                        }
+                    }
+
+                    System.out.println("FAILURE FOR type id = expr for asmt");
+                    return null;
+
+                }else {
+                    return null;
+                }
+            }else {
+                System.out.println("FAILURE FOR type id = ...for asmt");
+                return null;
+            }
+
+        }
+        // looking for id = expr ;
+        token = tokens.get(tokenIndex);
+
+        if (token.getTokenType() == TokenType.ID_KEYWORD){
+            System.out.println("found id for asmt");
+            jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
+            tokenIndex+=1;
+            token = tokens.get(tokenIndex);
+
+            // looking for =
+            if (token.getToken().equals("=") ){
+                System.out.println("found = in type id = IN func asmt");
+                int tokenstart = tokenIndex;
+
+                // looking for d_expr
+                if (d_expr(jottTreeNode) != null){
+                    token = tokens.get(tokenIndex);
+                    if(token.getToken().equals(";")){
+                        jottTreeNode.addChild(new JottTreeNode(token));
+                        return jottTreeNode;
+                    }else {
+                        System.out.println("FAILURE FOR (;) in ttype id = expr; for asmt");
+
+                        return null;
+                    }
+                }
+                // looking for i expr
+
+                tokenIndex = tokenstart;
+                if (i_expr(jottTreeNode) != null){
+                    token = tokens.get(tokenIndex);
+                    if(token.getToken().equals(";")){
+                        jottTreeNode.addChild(new JottTreeNode(token));
+                        return jottTreeNode;
+                    }else {
+                        System.out.println("FAILURE FOR (;) in ttype id = expr; for asmt");
+
+                        return null;
+                    }
+
+                }
+                tokenIndex = tokenstart;
+                // looking for s expr
+
+                if (s_expr(jottTreeNode) != null){
+                    token = tokens.get(tokenIndex);
+                    if(token.getToken().equals(";")){
+                        jottTreeNode.addChild(new JottTreeNode(token));
+                        return jottTreeNode;
+                    }else {
+                        System.out.println("FAILURE FOR (;) in ttype id = expr; for asmt");
+
+                        return null;
+                    }
+
+                }
+                tokenIndex = tokenstart;
+                // looking for b expr
+                if (b_expr(jottTreeNode) != null){
+                    token = tokens.get(tokenIndex);
+                    if(token.getToken().equals(";")){
+                        jottTreeNode.addChild(new JottTreeNode(token));
+                        return jottTreeNode;
+                    }else {
+                        System.out.println("FAILURE FOR (;) in ttype id = expr; for asmt");
+
+                        return null;
+                    }
+                }
+
+                System.out.println("FAILURE FOR type id = expr for asmt");
+                return null;
+
+            }else {
+                return null;
+            }
+        }else {
+            System.out.println("FAILURE FOR type id = ...for asmt");
+            return null;
+        }
     }
 
     // will need to ensure this works
