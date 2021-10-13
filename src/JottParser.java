@@ -908,14 +908,14 @@ public class JottParser implements JottTree {
 
             // looking for id
             if (token.getTokenType() == TokenType.ID_KEYWORD){
-                System.out.println("found id for asmt");
+                System.out.println("found (id) for asmt");
                 jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
                 tokenIndex+=1;
                 token = tokens.get(tokenIndex);
 
                 // looking for =
                 if (token.getToken().equals("=") ){
-                    System.out.println("found = in type id = IN func asmt");
+                    System.out.println("found (=) for: type id = expr");
                     int tokenstart = tokenIndex;
 
                     // looking for d_expr
@@ -1000,36 +1000,40 @@ public class JottParser implements JottTree {
                 System.out.println("found (=) for ID = expr func asmt");
                 int tokenstart = tokenIndex;
 
-                // looking for d_expr
-                if (d_expr(jottTreeNode) != null){
-                    token = tokens.get(tokenIndex);
-                    if(token.getToken().equals(";")){
-                        jottTreeNode.addChild(new JottTreeNode(token));
-                        return jottTreeNode;
-                    }else {
-                        System.out.println("FAILURE FOR (;) in ttype id = expr; for asmt");
+                // test for second token being +-*/
+                Token look_ahead_token = tokens.get(tokenIndex+1);
+                if (look_ahead_token.getTokenType() == TokenType.MATH_OP) {
 
-                        return null;
+                    // looking for d_expr
+                    if (d_expr(jottTreeNode) != null) {
+                        token = tokens.get(tokenIndex);
+                        if (token.getToken().equals(";")) {
+                            jottTreeNode.addChild(new JottTreeNode(token));
+                            return jottTreeNode;
+                        } else {
+                            System.out.println("FAILURE FOR (;) in ttype id = expr; for asmt");
+
+                            return null;
+                        }
                     }
-                }
-                // looking for i expr
+                    // looking for i expr
 
-                tokenIndex = tokenstart;
-                if (i_expr(jottTreeNode) != null){
-                    token = tokens.get(tokenIndex);
-                    if(token.getToken().equals(";")){
-                        jottTreeNode.addChild(new JottTreeNode(token));
-                        return jottTreeNode;
-                    }else {
-                        System.out.println("FAILURE FOR (;) in ttype id = expr; for asmt");
+                    tokenIndex = tokenstart;
+                    if (i_expr(jottTreeNode) != null) {
+                        token = tokens.get(tokenIndex);
+                        if (token.getToken().equals(";")) {
+                            jottTreeNode.addChild(new JottTreeNode(token));
+                            return jottTreeNode;
+                        } else {
+                            System.out.println("FAILURE FOR (;) in ttype id = expr; for asmt");
 
-                        return null;
+                            return null;
+                        }
+
                     }
-
+                    tokenIndex = tokenstart;
+                    // looking for s expr
                 }
-                tokenIndex = tokenstart;
-                // looking for s expr
-
                 if (s_expr(jottTreeNode) != null){
                     token = tokens.get(tokenIndex);
                     if(token.getToken().equals(";")){
@@ -1056,14 +1060,14 @@ public class JottParser implements JottTree {
                     }
                 }
 
-                System.out.println("FAILURE FOR  id = expr for asmt");
+                System.out.println("FAILURE FOR  (id = expr) for asmt");
                 return null;
 
             }else {
                 return null;
             }
         }else {
-            System.out.println("FAILURE FOR type id = ...for asmt");
+            System.out.println("FAILURE FOR type id =expr)for asmt");
             return null;
         }
     }
