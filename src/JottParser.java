@@ -15,7 +15,7 @@ public class JottParser implements JottTree {
     /**
      * program -> function_list $$                                                              <-- DONE
      * function_list -> function_def function_list                                              <-- MOSTLY DONE, NEED TO ADD SUPPORT FOR MULTIPLE FUNCTIONS
-     * function_list -> ε                                                                       <-- ??????
+     * function_list -> ε                                                                       <-- DONE
      * function_def -> id [ func_def_params ] : function_return { body }                        <-- DONE
      * func_def_params -> id : type func_def_params_t|ε                                         <-- DONE
      * func_def_params_t -> , id : type func_def_params_t|ε                                     <-- DONE
@@ -25,11 +25,6 @@ public class JottParser implements JottTree {
      * if_stmt -> if [ b_expr ] { body } elseif_lst|if [ b_expr ] { body } elseif_lst else { body } <-- WORK IN PROGRESS
      * elseif_lst -> elseif [ b_expr ] { body } elseif_lst|ε
      * while_loop -> while [ b_expr ] { body }                                                  <--- WORK IN PROGRESS
-     * char -> l_char|u_char|digit                                                              <-- REMOVED
-     * l_char -> a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z                            <-- REMOVED
-     * u_char -> A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z                            <-- REMOVED
-     * digit -> 0|1|2|3|4|5|6|7|8|9                                                             <-- REMOVED
-     * sign -> -|+|ε                                                                            <-- REMOVED
      * id -> l_char char                                                                        <-- DONE
      * stmt -> asmt|var_dec|func_call end_stmt
      * func_call -> id [ params ]                                                               <-- WORK IN PROGRESS
@@ -39,7 +34,6 @@ public class JottParser implements JottTree {
      * type -> Double|Integer|String|Boolean                                                    <-- DONE
      * function_return -> type|Void                                                             <-- DONE
      * var_dec -> type id end_stmt
-     *
      * asmt ->        Double id = d_expr end_stmt
      *               |Integer id = i_expr end_stmt
      *               |String id = s_expr end_stmt
@@ -48,19 +42,32 @@ public class JottParser implements JottTree {
      *               |id = i_expr end_stmt
      *               |id = s_expr end_stmt
      *               |id = b_expr end_stmt
-     *
      * op -> +|*|/|+|-                                                                          <-- DONE
      * rel_op -> >|>=|<|<=|==|!=                                                                <-- DONE
-     * dbl -> sign digit . digit digit                                                          <-- REMOVED
-     * d_expr -> id|dbl|dbl op dbl|dbl op d_expr|d_expr op dbl|d_expr op d_expr|func_call       <-- DONE (ERRORS: FUNCTION CALL??, NEG NUMBERS)
+     * d_expr -> id|dbl|dbl op dbl|dbl op d_expr|d_expr op dbl|d_expr op d_expr|func_call       <-- DONE (ERRORS: FUNCTION CALL??)
      * bool -> True|False                                                                       <-- DONE
-     * b_expr -> id|bool|i_expr rel_op i_expr|d_expr rel_op d_expr|s_expr rel_op s_expr|b_expr rel_op b_expr|func_call <-- WORK IN PROGRESS
-     * int -> sign digit digit                                                                  <-- REMOVED
-     * i_expr -> id|int|int op int|int op i_expr|i_expr op int|i_expr op i_expr|func_call       <-- DONE (ERRORS: FUNCTION CALL??, NEG NUMBERS)
+     * b_expr -> id|                                                                            <-- WORK IN PROGRESS
+     *          bool|
+     *          i_expr rel_op i_expr|
+     *          d_expr rel_op d_expr|
+     *          s_expr rel_op s_expr|
+     *          b_expr rel_op b_expr|
+     *          func_call
+     * i_expr -> id|int|int op int|int op i_expr|i_expr op int|i_expr op i_expr|func_call       <-- DONE (ERRORS: FUNCTION CALL??)
      * str_literal -> " str "                                                                   <-- DONE
-     * str -> char str|space str|ε                                                              <-- REMOVED
      * s_expr -> str_literal|id|func_call                                                       <-- DONE but should be tested
      * */
+
+    /** removed, but here for future record
+     *  char -> l_char|u_char|digit                                                              <-- REMOVED
+     *  l_char -> a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z                            <-- REMOVED
+     *  u_char -> A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z                            <-- REMOVED
+     *  digit -> 0|1|2|3|4|5|6|7|8|9                                                             <-- REMOVED
+     *  sign -> -|+|ε                                                                            <-- REMOVED
+     *  dbl -> sign digit . digit digit                                                          <-- REMOVED
+     *  int -> sign digit digit                                                                  <-- REMOVED
+     *  str -> char str|space str|ε                                                              <-- REMOVED
+     */
 
     /**
      * program -> function_list $$
