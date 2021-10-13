@@ -259,8 +259,6 @@ public class JottParser implements JottTree {
         Token parameter2 = tokens.get(tokenIndex);
         if (parameter2.getTokenType() == TokenType.R_BRACKET) {
             // ] is here, no more parameters
-            System.out.println("] exists");
-            newNode.addChild(new JottTreeNode(parameter2));
             return newNode;
         } else {
             // apparently there may be more parameters or something else
@@ -324,10 +322,7 @@ public class JottParser implements JottTree {
         // is this end (ex: ]) or look for more parameters?
         tokenIndex += 1;
         Token parameter2 = tokens.get(tokenIndex);
-        if (parameter2.getTokenType() == TokenType.R_BRACKET) {
-            System.out.println("] exists");
-            jottTreeNode.addChild(new JottTreeNode(parameter2));
-        } else {
+        if (parameter2.getTokenType() != TokenType.R_BRACKET) {
             // apparently there may be more parameters or something else
             jottTreeNode.addChild(function_def_params_t(new JottTreeNode(JottElement.FUNC_DEF_PARAMS_T)));
         }
@@ -856,8 +851,6 @@ public class JottParser implements JottTree {
                 System.out.println("not formatted correctly");
                 return null;
             }
-
-
         } else {
             System.out.println("ERROR NOT ID OR INT OR FUNCTION CALL");
             return null;

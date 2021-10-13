@@ -1,4 +1,4 @@
 #this is an example
-main[]:Void{
-return -1;
+main[a:Double,b:String,c:Integer]:Void{
+return -1000 * x + 5 * zzzz;
 }
