@@ -656,30 +656,23 @@ public class JottParser implements JottTree {
 
         if(body(jottTreeNode) == null){
             System.out.println("BODY ERROR IN WHILE LOOP");
+            return null;
         }
         System.out.println("found body");
         // looking for }
+//        tokenIndex -= 1;
+
         Token rightcurly = tokens.get(tokenIndex);
         if (rightcurly.getTokenType() == TokenType.R_BRACE) {
             System.out.println("found }");
             jottTreeNode.addChild(new JottTreeNode(rightcurly));
-            tokenIndex+=1;
+
 
         } else {
 
             System.out.println("} is missing");
             return null;
         }
-
-//        // look for b_expr
-//        JottTreeNode bExprNode = b_expr(jottTreeNode);
-//        if (bExprNode != null) {
-//            System.out.println("found b_expr for while");
-//            jottTreeNode.addChild(new JottTreeNode()bExprNode);
-//        } else {
-//            System.out.println("invalid b_expr");
-//            return null;
-//        }
 
         return jottTreeNode;
     }
