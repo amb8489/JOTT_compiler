@@ -1,1 +1,3 @@
-main[x:Double]:Integer{}
+a[]:Void{}
+b[]:Void{}
+c[]:Void{}

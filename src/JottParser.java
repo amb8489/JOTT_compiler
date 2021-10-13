@@ -21,7 +21,7 @@ public class JottParser implements JottTree {
      * func_def_params_t -> , id : type func_def_params_t|ε                                                             <-- DONE
      * body_stmt -> if_stmt|while_loop|stmt                                                                             <-- DONE
      * return_stmt -> return expr end_stmt                                                                              <-- DONE
-     * body -> body_stmt body|return_stmt|ε                                                                             <-- ALMOST DONE (NEED TO SUPPORT RECURSE; MULTIPLE BODIES)
+     * body -> body_stmt body|return_stmt|ε                                                                             <-- DONE
      * if_stmt -> if [ b_expr ] { body } elseif_lst|if [ b_expr ] { body } elseif_lst else { body }                     <-- WORK IN PROGRESS
      * elseif_lst -> elseif [ b_expr ] { body } elseif_lst|ε                                                            <-- DONE
      * while_loop -> while [ b_expr ] { body }                                                                          <-- DONE
