@@ -38,5 +38,6 @@ public enum JottElement {
     STR_LITERAL,
     STR,
     S_EXPR,
-    VOID
+    VOID,
+    NEG_INT
 }

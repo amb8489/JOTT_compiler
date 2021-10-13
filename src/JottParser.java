@@ -77,6 +77,10 @@ public class JottParser implements JottTree {
         JottTreeNode child1 = new JottTreeNode(JottElement.FUNCTION_DEF);
         JottTreeNode child2 = new JottTreeNode(JottElement.FUNCTION_LIST);
 
+        if (tokenIndex >= tokens.size()) {
+            return new JottTreeNode(JottElement.FUNCTION_LIST);
+        }
+
         jottTreeNode.addChild(function_def(child1));
 //        jottTreeNode.addChild(function_list(child2)); // TODO: check if there are more functions
         return jottTreeNode;
@@ -185,15 +189,14 @@ public class JottParser implements JottTree {
         jottTreeNode.addChild(bodyNode);
 
         // look for right curly brace
-//                    tokenIndex += 1;
-//                    Token rightCurlyBrace = tokens.get(tokenIndex); // TODO: may will not need this
-//                    if (rightCurlyBrace.getTokenType() == TokenType.R_BRACE) {
-//                        System.out.println("} found");
-//                        jottTreeNode.addChild(new JottTreeNode(rightCurlyBrace));
-//                    } else {
-//                        System.out.println("} missing");
-//                        return null;
-//                    }
+//        if (bodyNode.getChildren().size() > 0) { tokenIndex += 1; } // unless the body is empty, move the token right by one
+//
+//        Token rightCurlyBrace = tokens.get(tokenIndex); // TODO: may will not need this
+//        if (rightCurlyBrace.getTokenType() == TokenType.R_BRACE) {
+//            jottTreeNode.addChild(new JottTreeNode(rightCurlyBrace));
+//        } else {
+//            System.out.println("} missing");
+//        }
 
         return jottTreeNode;
 
@@ -598,16 +601,22 @@ public class JottParser implements JottTree {
         JottTreeNode dExprNode = d_expr(new JottTreeNode(JottElement.D_EXPR));
         if (dExprNode != null) {
             System.out.println("found d_expr");
+            jottTreeNode.addChild(dExprNode);
+            return jottTreeNode;
         }
 
         JottTreeNode sExprNode = s_expr(new JottTreeNode(JottElement.S_EXPR));
         if (sExprNode != null) {
             System.out.println("found s_expr");
+            jottTreeNode.addChild(sExprNode);
+            return jottTreeNode;
         }
 
         JottTreeNode bExprNode = b_expr(new JottTreeNode(JottElement.B_EXPR));
         if (bExprNode != null) {
             System.out.println("found b_expr");
+            jottTreeNode.addChild(bExprNode);
+            return jottTreeNode;
         }
 
         // TODO: as a last resort, is this an ID?
@@ -894,10 +903,10 @@ public class JottParser implements JottTree {
     private String convertToJottRecursive(JottTreeNode curr) {
         if(curr != null){
             if (curr.isTerminal()) {
-                jottstr += curr.getToken().getToken();
+                jottstr += curr.getToken().getToken() + " ";
             }
             if (curr.getJottElement() == JottElement.VOID) {
-                jottstr += "Void";
+                jottstr += "Void ";
             }
 
             for (JottTreeNode child : curr.getChildren()) {
