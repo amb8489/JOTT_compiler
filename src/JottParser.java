@@ -1001,8 +1001,8 @@ public class JottParser implements JottTree {
                 int tokenstart = tokenIndex;
 
                 // test for second token being +-*/
-                Token look_ahead_token = tokens.get(tokenIndex+1);
-                if (look_ahead_token.getTokenType() == TokenType.MATH_OP) {
+
+
 
                     // looking for d_expr
                     if (d_expr(jottTreeNode) != null) {
@@ -1033,7 +1033,7 @@ public class JottParser implements JottTree {
                     }
                     tokenIndex = tokenstart;
                     // looking for s expr
-                }
+
                 if (s_expr(jottTreeNode) != null){
                     token = tokens.get(tokenIndex);
                     if(token.getToken().equals(";")){
