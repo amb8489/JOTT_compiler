@@ -623,7 +623,14 @@ public class JottParser implements JottTree {
             return null;
         }
 
-        //TODO --------------------------------------------------------------------------------------b_expr is not null
+        ////////////------ checking for bool expr
+
+        if(b_expr(jottTreeNode)== null){
+            System.out.println("b expr FAILED");
+            return null;
+        }
+        System.out.println("b expr found");
+        ////////////////////////////////
 
         Token rightbracket = tokens.get(tokenIndex);
         if (rightbracket.getTokenType() == TokenType.R_BRACKET) {
