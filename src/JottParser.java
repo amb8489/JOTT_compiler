@@ -737,6 +737,7 @@ public class JottParser implements JottTree {
         JottTreeNode paramsNode = params(new JottTreeNode(JottElement.PARAMS));
         if (paramsNode != null) {
             System.out.println("found parameter(s)");
+            jottTreeNode.addChild(paramsNode);
         } else {
             System.out.println("missing parameter(s)");
             tokenIndex = originalTokenIndex;
@@ -1224,7 +1225,13 @@ public class JottParser implements JottTree {
 
         int originalTokenIndex = tokenIndex;
 
-        /** id|int|int op int|int op i_expr|i_expr op int|i_expr op i_expr|func_call **/
+        /** id|
+         * int|
+         * int op int|
+         * int op i_expr|
+         * i_expr op int|
+         * i_expr op i_expr|
+         * func_call **/
 
         Token firstToken = tokens.get(tokenIndex);
         if (firstToken.getToken().equals("-") || firstToken.getToken().equals("+")) { // [+/- int] +30, -30, -50, +5, etc
@@ -1256,13 +1263,20 @@ public class JottParser implements JottTree {
                 System.out.println("not a function call");
                 jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), firstToken));
             }
-            return jottTreeNode;
         }
 
         tokenIndex += 1;
         Token opToken = tokens.get(tokenIndex);
         if (opToken.getTokenType() == TokenType.MATH_OP) {
             System.out.println("found op");
+
+            tokenIndex += 1;
+            Token secondToken = tokens.get(tokenIndex);
+
+
+            // TODO <----------------------------------------------------------------------------------------------------- BLAH
+            System.out.println(secondToken.getTokenType());
+
             return null;
         } else {
             // no op here
