@@ -442,14 +442,13 @@ public class JottParser implements JottTree {
                 return null;
             }
 
-            // look for body
-//            JottTreeNode bodyNode = body(new JottTreeNode(JottElement.BODY));
-//            if (bodyNode != null) {
-//                System.out.println("found one more body!");
-//                jottTreeNode.addChild(bodyNode);
-//            } else {
-//                System.out.println("could not find more body");
-//            }
+            JottTreeNode bodyNode = body(new JottTreeNode(JottElement.BODY));
+            if (bodyNode != null && bodyNode.getChildren().size() > 0) {
+                System.out.println("found one more body!");
+                jottTreeNode.addChild(bodyNode);
+            } else {
+                System.out.println("could not find more body");
+            }
 
             return jottTreeNode;
         }
@@ -719,6 +718,7 @@ public class JottParser implements JottTree {
             System.out.println(endStmtNode.getTokenType());
             if (endStmtNode.getTokenType() == TokenType.SEMICOLON) {
                 jottTreeNode.addChild(new JottTreeNode(endStmtNode));
+                tokenIndex += 1;
                 return jottTreeNode;
             } else {
                 System.out.println("missing end_stmt");
@@ -737,6 +737,7 @@ public class JottParser implements JottTree {
             Token endStmtNode = tokens.get(tokenIndex);
             if (endStmtNode.getTokenType() == TokenType.SEMICOLON) {
                 jottTreeNode.addChild(new JottTreeNode(endStmtNode));
+                tokenIndex += 1;
                 return jottTreeNode;
             } else {
                 System.out.println("missing end_stmt");
@@ -755,6 +756,7 @@ public class JottParser implements JottTree {
             Token endStmtNode = tokens.get(tokenIndex);
             if (endStmtNode.getTokenType() == TokenType.SEMICOLON) {
                 jottTreeNode.addChild(new JottTreeNode(endStmtNode));
+                tokenIndex += 1;
                 return jottTreeNode;
             } else {
                 System.out.println("missing end_stmt");
