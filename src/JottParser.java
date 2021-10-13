@@ -33,7 +33,7 @@ public class JottParser implements JottTree {
      * expr -> i_expr|d_expr|s_expr|b_expr|id|func_call                                                                 <-- DONE
      * type -> Double|Integer|String|Boolean                                                                            <-- DONE
      * function_return -> type|Void                                                                                     <-- DONE
-     * var_dec -> type id end_stmt                                                                                      <-- WORK IN PROGRESS
+     * var_dec -> type id end_stmt                                                                                      <-- DONE
      * asmt ->        Double id = d_expr end_stmt                                                                       <-- DONE
      *               |Integer id = i_expr end_stmt
      *               |String id = s_expr end_stmt`
