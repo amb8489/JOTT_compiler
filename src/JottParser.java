@@ -798,45 +798,56 @@ public class JottParser implements JottTree {
             first_token = new JottTreeNode(token);
         }else if(func_call(jottTreeNode) != null){
              i_expr(jottTreeNode); // hmmmmmmm ???
-        }else {
+        }else if(token.getToken().equals("-") || token.getToken().equals("+")) {
+            tokenIndex += 1;
+            Token second_token = tokens.get(tokenIndex);
+            if (second_token.getTokenType() == TokenType.NUMBER) {
+                first_token = new JottTreeNode(new Token(String.format(token.getToken().equals("-") ? "-%s" : "%s", second_token.getToken()), token.getFilename(), token.getLineNum(), token.getTokenType()));
+            } else {
+                System.out.println("not formatted correctly");
+                return null;
+            }
+
+
+        } else {
             System.out.println("ERROR NOT ID OR INT OR FUNCTION CALL");
             return null;
         }
 
         tokenIndex += 1;
 
+        token = tokens.get(tokenIndex);
+
+        // check for op
+        if (token.getTokenType() == TokenType.MATH_OP) {
+
+            JottTreeNode op_token = new JottTreeNode(tokens.get(tokenIndex));
+
+            tokenIndex += 1;
+            //check for int op int meaning no stay op
             token = tokens.get(tokenIndex);
+            if (token.getTokenType() == TokenType.NUMBER || token.getTokenType() == TokenType.ID_KEYWORD) {
+                System.out.println("FOUND OP");
 
-            // check for op
-            if (token.getTokenType() == TokenType.MATH_OP) {
-
-                JottTreeNode op_token = new JottTreeNode(tokens.get(tokenIndex));
-
-                tokenIndex += 1;
-                //check for int op int meaning no stay op
-                token = tokens.get(tokenIndex);
-                if (token.getTokenType() == TokenType.NUMBER || token.getTokenType() == TokenType.ID_KEYWORD) {
-                    System.out.println("FOUND OP");
-
+                jottTreeNode.addChild(first_token);
+                jottTreeNode.addChild(op_token);
+                i_expr(jottTreeNode);
+                return jottTreeNode;
+            }else {
                     jottTreeNode.addChild(first_token);
                     jottTreeNode.addChild(op_token);
+                if(func_call(jottTreeNode) != null){
                     i_expr(jottTreeNode);
                     return jottTreeNode;
-                }else {
-                        jottTreeNode.addChild(first_token);
-                        jottTreeNode.addChild(op_token);
-                    if(func_call(jottTreeNode) != null){
-                        i_expr(jottTreeNode);
-                        return jottTreeNode;
-                    }
-                    System.out.println("REPORT ERROR stray op");
-                    return null;
                 }
+                System.out.println("REPORT ERROR stray op");
+                return null;
             }
+        }
 
-            System.out.println("FOUND LONE OP|int");
-            jottTreeNode.addChild(first_token);
-            return jottTreeNode;
+        System.out.println("FOUND LONE OP|int");
+        jottTreeNode.addChild(first_token);
+        return jottTreeNode;
 
     }
 

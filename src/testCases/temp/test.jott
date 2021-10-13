@@ -1,2 +1,4 @@
 #this is an example
-main[]:Void{ return 10; }
+main[]:Void{
+return -1;
+}
