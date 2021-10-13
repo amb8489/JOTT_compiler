@@ -921,47 +921,48 @@ public class JottParser implements JottTree {
         }
     }
 
-
     private static JottTreeNode var_dec(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.VAR_DEC);
 
-        Token testToken = tokens.get(tokenIndex);
-        System.out.println(testToken.getToken());
-        System.out.println(testToken.getTokenType());
+        Token typeToken = tokens.get(tokenIndex);
+        System.out.println("VAR DEC");
+        System.out.println(typeToken.getToken());
+        System.out.println(typeToken.getTokenType());
 
-        tokenIndex-=1;
+        int originalTokenIndex = tokenIndex;
         // look for type
-        if (type(jottTreeNode)==null) {
-            return null;
-        }
-        tokenIndex+=1;
-        Token token = tokens.get(tokenIndex);
+        if (typeToken.getTokenType() == TokenType.ID_KEYWORD) {
 
-        if (token.getTokenType() == TokenType.ID_KEYWORD) {
-            // add id child
-            System.out.println("(id) exists");
-            jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
-            tokenIndex+=1;
+            // find var type
+            if (typeToken.getToken().equals("Double") ||
+                    typeToken.getToken().equals("Integer") ||
+                    typeToken.getToken().equals("String") ||
+                    typeToken.getToken().equals("Boolean")) {
+                jottTreeNode.addChild(new JottTreeNode(typeToken));
+                System.out.println(String.format("var_dec - type exists (%s)", typeToken.getToken()));
+            } else {
+                System.out.println("var_dec - missing type");
+                tokenIndex = originalTokenIndex;
+                return null;
+            }
 
+            // find var id
+            tokenIndex += 1;
+            Token idToken = tokens.get(tokenIndex);
+            if (typeToken.getTokenType() == TokenType.ID_KEYWORD) {
+                System.out.println(String.format("var_dec - found var id (%s)", idToken.getToken()));
+                jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), idToken));
+                return jottTreeNode;
+            } else {
+                System.out.println("var_dec - missing var id");
+                tokenIndex = originalTokenIndex;
+                return null;
+            }
         } else {
-            System.out.println("missing id");
+            System.out.println("not var dec");
+            tokenIndex = originalTokenIndex;
             return null;
         }
-
-
-         token = tokens.get(tokenIndex);
-        if (token.getToken().equals(";")) {
-            // add id child
-            System.out.println("(;) exists");
-            jottTreeNode.addChild(new JottTreeNode(token));
-            tokenIndex+=1;
-
-        } else {
-            System.out.println("missing ;");
-            return null;
-        }
-
-        return jottTreeNode;
     }
 
     private static JottTreeNode asmt(JottTreeNode jottTreeNode) {

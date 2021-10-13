@@ -1,5 +1,3 @@
 main[]:Integer{
-    while[ x < 4 ]{
-
-    }
+    Double peanutButterJellyTime;
 }
