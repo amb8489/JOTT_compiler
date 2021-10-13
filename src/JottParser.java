@@ -23,8 +23,8 @@ public class JottParser implements JottTree {
      * return_stmt -> return expr end_stmt                                                                              <-- DONE
      * body -> body_stmt body|return_stmt|ε                                                                             <-- ALMOST DONE (NEED TO SUPPORT RECURSE; MULTIPLE BODIES)
      * if_stmt -> if [ b_expr ] { body } elseif_lst|if [ b_expr ] { body } elseif_lst else { body }                     <-- WORK IN PROGRESS
-     * elseif_lst -> elseif [ b_expr ] { body } elseif_lst|ε                                                            <-- WORK IN PROGRESS
-     * while_loop -> while [ b_expr ] { body }                                                                          <-- WORK IN PROGRESS
+     * elseif_lst -> elseif [ b_expr ] { body } elseif_lst|ε                                                            <-- DONE
+     * while_loop -> while [ b_expr ] { body }                                                                          <-- DONE
      * id -> l_char char                                                                                                <-- DONE
      * stmt -> asmt|var_dec|func_call end_stmt                                                                          <-- DONE
      * func_call -> id [ params ]                                                                                       <-- DONE
@@ -550,7 +550,6 @@ public class JottParser implements JottTree {
             System.out.println("found [");
             jottTreeNode.addChild(new JottTreeNode(leftBracketToken));
             tokenIndex+=1;
-
         } else {
             System.out.println("[ is missing");
             return null;
@@ -607,7 +606,7 @@ public class JottParser implements JottTree {
 
 
         if (elseif_lst(jottTreeNode)!=null) {
-            System.out.println("found }");
+            System.out.println("found elseif_lst");
             tokenIndex+=1;
 
         } else {
