@@ -380,13 +380,13 @@ public class JottParser implements JottTree {
         }
 
         // look for ;
-        tokenIndex += 1;
         Token endStmtToken = tokens.get(tokenIndex);
         if (endStmtToken.getTokenType() == TokenType.SEMICOLON) {
             System.out.println("; found");
             jottTreeNode.addChild(new JottTreeNode(endStmtToken));
         } else {
             System.out.println("; missing");
+            return null;
         }
 
         return jottTreeNode;
