@@ -1,4 +1,9 @@
 main[x:Double]:Integer{
     Integer a;
     Integer b;
+    Integer c;
+        Integer a;
+        Integer b;
+        Integer c;
+
 }
