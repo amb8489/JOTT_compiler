@@ -789,13 +789,13 @@ public class JottParser implements JottTree {
         JottTreeNode first_token = null;
         // token id or int
         Token token = tokens.get(tokenIndex);
-        if (token.getTokenType() == TokenType.ID_KEYWORD) {
+        if (token.getTokenType() == TokenType.ID_KEYWORD && tokens.get(tokenIndex+1).getTokenType() != TokenType.L_BRACKET) {// hmmmmmmm ???
             System.out.println("id exists");
             first_token = id(new JottTreeNode(JottElement.ID), token);
         }else if(token.getTokenType() == TokenType.NUMBER){
             first_token = new JottTreeNode(token);
         }else if(func_call(jottTreeNode) != null){
-             i_expr(jottTreeNode); // hmmm ???
+             i_expr(jottTreeNode); // hmmmmmmm ???
         }else {
             System.out.println("ERROR NOT ID OR INT OR FUNCTION CALL");
             return null;
