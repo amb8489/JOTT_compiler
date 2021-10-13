@@ -21,20 +21,20 @@ public class JottParser implements JottTree {
      * func_def_params_t -> , id : type func_def_params_t|ε                                     <-- DONE
      * body_stmt -> if_stmt|while_loop|stmt                                                     <-- DONE
      * return_stmt -> return expr end_stmt                                                      <-- MOSTLY DONE, need to implement expr and end_stmt
-     * body -> body_stmt body|return_stmt|ε                                                     <-- DONE (i think)
-     * if_stmt -> if [ b_expr ] { body } elseif_lst|if [ b_expr ] { body } elseif_lst else { body } <-- WORK IN PROGRESS
-     * elseif_lst -> elseif [ b_expr ] { body } elseif_lst|ε
-     * while_loop -> while [ b_expr ] { body }                                                  <--- WORK IN PROGRESS
-     * id -> l_char char                                                                        <-- DONE
-     * stmt -> asmt|var_dec|func_call end_stmt
-     * func_call -> id [ params ]                                                               <-- WORK IN PROGRESS
-     * params -> expr params_t|ε                                                                <-- WORK IN PROGRESS
-     * params_t -> , expr params_t|ε                                                            <-- WORK IN PROGRESS
-     * expr -> i_expr|d_expr|s_expr|b_expr|id|func_call                                         <-- WORK IN PROGRESS
-     * type -> Double|Integer|String|Boolean                                                    <-- DONE
-     * function_return -> type|Void                                                             <-- DONE
-     * var_dec -> type id end_stmt
-     * asmt ->        Double id = d_expr end_stmt
+     * body -> body_stmt body|return_stmt|ε                                                                             <-- DONE (i think)
+     * if_stmt -> if [ b_expr ] { body } elseif_lst|if [ b_expr ] { body } elseif_lst else { body }                     TODO
+     * elseif_lst -> elseif [ b_expr ] { body } elseif_lst|ε                                                            < --- nearly DONE TODO
+     * while_loop -> while [ b_expr ] { body }                                                                          <--- nearly DONE TODO
+     * id -> l_char char                                                                                                <-- DONE
+     * stmt -> asmt|var_dec|func_call end_stmt                                                                          TODO
+     * func_call -> id [ params ]                                                                                       <-- DONE
+     * params -> expr params_t|ε                                                                                        <-- Done
+     * params_t -> , expr params_t|ε                                                                                    <-- WORK IN PROGRESS
+     * expr -> i_expr|d_expr|s_expr|b_expr|id|func_call                                                                 <-- Done
+     * type -> Double|Integer|String|Boolean                                                                            <-- DONE
+     * function_return -> type|Void                                                                                     <-- DONE
+     * var_dec -> type id end_stmt                                                                                      TODO
+     * asmt ->        Double id = d_expr end_stmt                                                                       TODO
      *               |Integer id = i_expr end_stmt
      *               |String id = s_expr end_stmt
      *               |Boolean id = b_expr end_stmt
@@ -42,20 +42,15 @@ public class JottParser implements JottTree {
      *               |id = i_expr end_stmt
      *               |id = s_expr end_stmt
      *               |id = b_expr end_stmt
-     * op -> +|*|/|+|-                                                                          <-- DONE
-     * rel_op -> >|>=|<|<=|==|!=                                                                <-- DONE
-     * d_expr -> id|dbl|dbl op dbl|dbl op d_expr|d_expr op dbl|d_expr op d_expr|func_call       <-- DONE (ERRORS: FUNCTION CALL??)
-     * bool -> True|False                                                                       <-- DONE
-     * b_expr -> id|                                                                            <-- WORK IN PROGRESS
-     *          bool|
-     *          i_expr rel_op i_expr|
-     *          d_expr rel_op d_expr|
-     *          s_expr rel_op s_expr|
-     *          b_expr rel_op b_expr|
-     *          func_call
-     * i_expr -> id|int|int op int|int op i_expr|i_expr op int|i_expr op i_expr|func_call       <-- DONE (ERRORS: FUNCTION CALL??)
-     * str_literal -> " str "                                                                   <-- DONE
-     * s_expr -> str_literal|id|func_call                                                       <-- DONE but should be tested
+     * op -> +|*|/|+|-                                                                                                  <-- DONE
+     * rel_op -> >|>=|<|<=|==|!=                                                                                        <-- DONE
+     * d_expr -> id|dbl|dbl op dbl|dbl op d_expr|d_expr op dbl|d_expr op d_expr|func_call                               <-- DONE (ERRORS: FUNCTION CALL??)
+     * bool -> True|False                                                                                               <-- DONE
+     * b_expr -> id|bool|i_expr rel_op i_expr|d_expr rel_op d_expr|s_expr rel_op s_expr|b_expr rel_op b_expr|func_call  <-- done (ERRORS: FUNCTION CALL?? / )
+     * i_expr -> id|int|int op int|int op i_expr|i_expr op int|i_expr op i_expr|func_call                               <-- DONE (ERRORS: FUNCTION CALL??)
+     * str_literal -> " str "                                                                                           <-- DONE
+     * s_expr -> str_literal|id|func_call                                                                               <-- DONE but should be tested
+     * --------------------------------------------------------------------------------------------------------------------------------
      * */
 
     /** removed, but here for future record
@@ -470,11 +465,93 @@ public class JottParser implements JottTree {
         return jottTreeNode;
     }
 
-
-
     private static JottTreeNode elseif_lst(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.ELSEIF_LST);
-        return null;
+        Token token = tokens.get(tokenIndex);
+
+        // find elseif
+        if (token.getToken().equals("elseif")) {
+            System.out.println("found elseif for elseif");
+            jottTreeNode.addChild(new JottTreeNode(token));
+            tokenIndex+=1;
+        } else {
+            System.out.println("ERROR missing elseif");
+            return null;
+        }
+
+
+        // find elseif
+        if (token.getToken().equals("elseif")) {
+            System.out.println("found elseif for elseif");
+            jottTreeNode.addChild(new JottTreeNode(token));
+            tokenIndex+=1;
+        } else {
+            System.out.println("ERROR missing elseif");
+            return null;
+        }
+
+        // looking for [
+        Token leftBracketToken = tokens.get(tokenIndex);
+        if (leftBracketToken.getTokenType() == TokenType.L_BRACKET) {
+            System.out.println("found [");
+            jottTreeNode.addChild(new JottTreeNode(leftBracketToken));
+            tokenIndex+=1;
+
+        } else {
+            System.out.println("[ is missing");
+            return null;
+        }
+
+        //TODO ------------------------------------------------------------------------------b_expr is not null
+
+
+        Token rightbracket = tokens.get(tokenIndex);
+        if (rightbracket.getTokenType() == TokenType.R_BRACKET) {
+            System.out.println("found ]");
+            jottTreeNode.addChild(new JottTreeNode(rightbracket));
+            tokenIndex+=1;
+        } else {
+            System.out.println("] is missing");
+            return null;
+        }
+
+        // looking for {
+        Token leftcurly = tokens.get(tokenIndex);
+        if (leftcurly.getTokenType() == TokenType.L_BRACE) {
+            System.out.println("found {");
+            jottTreeNode.addChild(new JottTreeNode(leftcurly));
+            tokenIndex+=1;
+
+        } else {
+            System.out.println("{ is missing");
+            return null;
+        }
+
+        //TODO ------------------------------------------------------------------------------body is not null
+
+        // looking for }
+        Token rightcurly = tokens.get(tokenIndex);
+        if (rightcurly.getTokenType() == TokenType.L_BRACE) {
+            System.out.println("found }");
+            jottTreeNode.addChild(new JottTreeNode(rightcurly));
+            tokenIndex+=1;
+
+        } else {
+            System.out.println("} is missing");
+            return null;
+        }
+
+
+        if (elseif_lst(jottTreeNode)!=null) {
+            System.out.println("found }");
+            tokenIndex+=1;
+
+        } else {
+            System.out.println("} is missing");
+            return null;
+        }
+        // epsilon
+        return jottTreeNode;
     }
 
     private static JottTreeNode while_loop(JottTreeNode jottTreeNode) {
@@ -501,6 +578,45 @@ public class JottParser implements JottTree {
             return null;
         }
 
+        //TODO --------------------------------------------------------------------------------------b_expr is not null
+
+        Token rightbracket = tokens.get(tokenIndex);
+        if (rightbracket.getTokenType() == TokenType.R_BRACKET) {
+            System.out.println("found ]");
+            jottTreeNode.addChild(new JottTreeNode(rightbracket));
+            tokenIndex+=1;
+        } else {
+            System.out.println("] is missing");
+            return null;
+        }
+
+
+        // looking for {
+        Token leftcurly = tokens.get(tokenIndex);
+        if (leftcurly.getTokenType() == TokenType.L_BRACE) {
+            System.out.println("found {");
+            jottTreeNode.addChild(new JottTreeNode(leftcurly));
+            tokenIndex+=1;
+
+        } else {
+            System.out.println("{ is missing");
+            return null;
+        }
+
+        //TODO ------------------------------------------------------------------------------body is not null
+
+        // looking for }
+        Token rightcurly = tokens.get(tokenIndex);
+        if (rightcurly.getTokenType() == TokenType.L_BRACE) {
+            System.out.println("found }");
+            jottTreeNode.addChild(new JottTreeNode(rightcurly));
+            tokenIndex+=1;
+
+        } else {
+            System.out.println("} is missing");
+            return null;
+        }
+
         return jottTreeNode;
     }
 
@@ -514,6 +630,8 @@ public class JottParser implements JottTree {
 
     private static JottTreeNode stmt(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.STMT);
+        //TODO ------------------------------------------------------------------------------ TODO
+
         return null;
     }
 
@@ -546,7 +664,6 @@ public class JottParser implements JottTree {
             return null;
         }
 
-        // TODO <--------------------------------------------------------------------------------------------------------- FIX EXPR
 
         // find parameters
         tokenIndex += 1;
@@ -559,7 +676,20 @@ public class JottParser implements JottTree {
             tokenIndex = originalTokenIndex;
             return null;
         }
-        return null;
+
+        // finding "]"
+        tokenIndex += 1;
+        Token rightBracketToken = tokens.get(tokenIndex);
+        if (rightBracketToken.getTokenType() == TokenType.R_BRACKET) {
+            System.out.println("found ] for func_call");
+            jottTreeNode.addChild(new JottTreeNode(rightBracketToken));
+        } else {
+            System.out.println("[ missing for func_call");
+            tokenIndex = originalTokenIndex;
+            return null;
+        }
+        //success
+        return jottTreeNode;
     }
 
     private static JottTreeNode params(JottTreeNode jottTreeNode) {
@@ -571,13 +701,18 @@ public class JottParser implements JottTree {
         if (exprNode != null) {
             System.out.println("an expression found!");
             jottTreeNode.addChild(exprNode);
-        } else {
-            //TODO: is something supposed to be here
-            return null;
+
+            //  tokenIDX +=1????????????
+            if(params_t(jottTreeNode)!=null){
+                tokenIndex+=1;  // ????????
+                return jottTreeNode;
+            }else {
+                System.out.println("Error finding params_t in params");
+                return null;
+            }
         }
-
-        // TODO: look for params_t
-
+        // epsilon or doesnt matter if we dont have anything
+        System.out.println("epsilon");
         return jottTreeNode;
     }
 
@@ -586,6 +721,7 @@ public class JottParser implements JottTree {
 
         // expr params_t
         // ε
+        //TODO ------------------------------------------------------------------------------ TODO
 
         return null;
     }
@@ -600,6 +736,8 @@ public class JottParser implements JottTree {
         JottTreeNode funcCall = func_call(new JottTreeNode(JottElement.FUNC_CALL));
         if (funcCall != null) {
             System.out.println("found func_call");
+            jottTreeNode.addChild(funcCall);
+            return jottTreeNode;
         }
 
         System.out.println("can't be func_call, trying i_expr");
@@ -662,12 +800,15 @@ public class JottParser implements JottTree {
         System.out.println(JottElement.VAR_DEC);
 
         // type id end_stmt
+        //TODO ------------------------------------------------------------------------------ TODO
 
         return null;
     }
 
     //
     private static JottTreeNode asmt(JottTreeNode jottTreeNode) {
+        //TODO ------------------------------------------------------------------------------ TODO
+
         System.out.println(JottElement.ASMT);
 
         // Double id = d_expr end_stmt
@@ -768,7 +909,7 @@ public class JottParser implements JottTree {
         jottTreeNode.addChild(first_token);
         return jottTreeNode;
     }
-    // (id) | (bool)| (i_expr rel_op i_expr) | (d_expr rel_op d_expr)| (s_expr rel_op s_expr)|(b_expr rel_op b_expr)|(func_call)
+
     private static JottTreeNode b_expr(JottTreeNode jottTreeNode) {
         Token token = tokens.get(tokenIndex);
         if (token.getTokenType() == TokenType.ID_KEYWORD){
@@ -791,7 +932,7 @@ public class JottParser implements JottTree {
                 }
                 System.out.println("i_expr relOP i_expr Failure");
                 return null;
-            }else
+            }else{
 
 
             if (d_expr(jottTreeNode) != null) {
@@ -802,9 +943,7 @@ public class JottParser implements JottTree {
                 }
                 System.out.println("d_expr relOP d_expr Failure");
                 return null;
-            }else
-
-                if (s_expr(jottTreeNode) != null) {
+            }else if (s_expr(jottTreeNode) != null) {
                 tokenIndex += 1;
                 if (rel_op(jottTreeNode) != null && s_expr(jottTreeNode) != null) {
                     // tokenIndex += 1;          <----------------------------------???????????
@@ -812,9 +951,7 @@ public class JottParser implements JottTree {
                 }
                 System.out.println("s_expr relOP s_expr Failure");
                 return null;
-            }else
-
-                if (b_expr(jottTreeNode) != null) {
+            }else if (b_expr(jottTreeNode) != null) {
                     tokenIndex += 1;
                     if (rel_op(jottTreeNode) != null && b_expr(jottTreeNode) != null) {
                         // tokenIndex += 1;          <----------------------------------???????????
@@ -822,9 +959,7 @@ public class JottParser implements JottTree {
                     }
                     System.out.println("b_expr relOP b_expr Failure");
                     return null;
-                }else
-
-                    if(func_call(jottTreeNode)!=null){
+                }else if(func_call(jottTreeNode)!=null){
                         // tokenIndex += 1;          <----------------------------------???????????
                         return jottTreeNode;
                     }
@@ -832,12 +967,8 @@ public class JottParser implements JottTree {
                         System.out.println("function call Failure");
                         return null;
                     }
-        }
+        }}
     }
-
-    // |int
-    // |int op int X
-    // |int op i_expr X
 
     private static JottTreeNode i_expr(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.I_EXPR);
@@ -903,10 +1034,6 @@ public class JottParser implements JottTree {
 
     }
 
-    // TODO: validate this works
-    /**     str_literal -> " str "  */
-
-
     private static JottTreeNode str_literal(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.STR_LITERAL);
         Token token = tokens.get(tokenIndex);
@@ -920,9 +1047,6 @@ public class JottParser implements JottTree {
         return null;
     }
 
-
-    // TODO: validate this works
-    /**   s_expr -> str_literal | id | func_call */
     private static JottTreeNode s_expr(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.S_EXPR);
 
