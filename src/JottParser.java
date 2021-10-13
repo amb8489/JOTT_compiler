@@ -591,6 +591,8 @@ public class JottParser implements JottTree {
         JottTreeNode iExprNode = i_expr(new JottTreeNode(JottElement.I_EXPR));
         if (iExprNode != null) {
             System.out.println("found i_expr");
+            jottTreeNode.addChild(iExprNode);
+            return jottTreeNode;
         }
 
         JottTreeNode dExprNode = d_expr(new JottTreeNode(JottElement.D_EXPR));
@@ -763,53 +765,74 @@ public class JottParser implements JottTree {
         return null;
     }
 
+    // id  X
 
+    // |int
+    // |int op int X
+    // |int op i_expr X
+
+    // |i_expr op int
+    // |i_expr op i_expr
+    // |func_call
     private static JottTreeNode i_expr(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.I_EXPR);
 
+        JottTreeNode first_token = null;
+        // token id or int
         Token token = tokens.get(tokenIndex);
+        if (token.getTokenType() == TokenType.ID_KEYWORD) {
+            System.out.println("id exists");
+            first_token = id(new JottTreeNode(JottElement.ID), token);
+        }else if(token.getTokenType() == TokenType.NUMBER){
+            first_token = new JottTreeNode(token);
+        }else if(func_call(jottTreeNode) != null){
+             i_expr(jottTreeNode); // hmmm ???
+        }else {
+            System.out.println("ERROR NOT ID OR INT OR FUNCTION CALL");
+            return null;
+        }
 
-        // TODO: you
+        tokenIndex += 1;
 
+            token = tokens.get(tokenIndex);
 
+            // check for op
+            if (token.getTokenType() == TokenType.MATH_OP) {
 
-//        System.out.println(String.format("\t\t\t%s & %s", token.getToken(), token.getTokenType()));
-//
-//        if (token.getTokenType() == TokenType.ID_KEYWORD) {
-//            System.out.println("found id");
-//            jottTreeNode.addChild(new JottTreeNode(token));
-//            return jottTreeNode;
-//        }
+                JottTreeNode op_token = new JottTreeNode(tokens.get(tokenIndex));
 
-        System.out.println("\t\t\t\t-->" + token.getTokenType());
+                tokenIndex += 1;
+                //check for int op int meaning no stay op
+                token = tokens.get(tokenIndex);
+                if (token.getTokenType() == TokenType.NUMBER || token.getTokenType() == TokenType.ID_KEYWORD) {
+                    System.out.println("FOUND OP");
 
+                    jottTreeNode.addChild(first_token);
+                    jottTreeNode.addChild(op_token);
+                    i_expr(jottTreeNode);
+                    return jottTreeNode;
+                }else {
+                        jottTreeNode.addChild(first_token);
+                        jottTreeNode.addChild(op_token);
+                    if(func_call(jottTreeNode) != null){
+                        i_expr(jottTreeNode);
+                        return jottTreeNode;
+                    }
+                    System.out.println("REPORT ERROR stray op");
+                    return null;
+                }
+            }
 
-        // need to validate
+            System.out.println("FOUND LONE OP|int");
+            jottTreeNode.addChild(first_token);
+            return jottTreeNode;
 
-
-
-//        if (token.getTokenType() == TokenType.NUMBER) {
-//            System.out.println("found number");
-//
-//            tokenIndex += 1;
-//            Token mysteryToken = tokens.get(tokenIndex);
-//            System.out.println(String.format("\t\t%s", mysteryToken.getToken()));
-//
-//        }
-
-        // id <-- done
-        // int
-        // int op int
-        // int op i_expr
-        // i_expr op int
-        // i_expr op i_expr
-        // func_call
-
-        return null;
     }
 
     // TODO: validate this works
     /**     str_literal -> " str "  */
+
+
     private static JottTreeNode str_literal(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.STR_LITERAL);
         Token token = tokens.get(tokenIndex);
@@ -869,10 +892,19 @@ public class JottParser implements JottTree {
     private static String jottstr = "";
 
     private String convertToJottRecursive(JottTreeNode curr) {
-        if (curr.isTerminal()) { jottstr += curr.getToken().getToken(); }
-        if (curr.getJottElement() == JottElement.VOID) { jottstr += "Void"; }
+        if(curr != null){
+            if (curr.isTerminal()) {
+                jottstr += curr.getToken().getToken();
+            }
+            if (curr.getJottElement() == JottElement.VOID) {
+                jottstr += "Void";
+            }
 
-        for (JottTreeNode child : curr.getChildren()) { convertToJottRecursive(child); }
+            for (JottTreeNode child : curr.getChildren()) {
+                convertToJottRecursive(child);
+            }
+        }
+
         return jottstr;
     }
     @Override

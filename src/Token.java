@@ -5,7 +5,7 @@
  */
 public class Token {
 
-    private final String token;
+    private String token;
     private final String filename;
     private final int lineNum;
     private final TokenType type;
@@ -30,6 +30,9 @@ public class Token {
      */
     public String getToken() {
         return token;
+    }
+    public void setToken(String newTokVal) {
+        this.token = newTokVal;
     }
 
     /**
