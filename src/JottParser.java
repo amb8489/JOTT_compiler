@@ -393,6 +393,7 @@ public class JottParser implements JottTree {
         }
 
         // look for ;
+        tokenIndex += 1;
         Token endStmtToken = tokens.get(tokenIndex);
         System.out.println(endStmtToken.getToken());
         if (endStmtToken.getTokenType() == TokenType.SEMICOLON) {
@@ -400,6 +401,7 @@ public class JottParser implements JottTree {
             jottTreeNode.addChild(new JottTreeNode(endStmtToken));
         } else {
             System.out.println("; missing");
+            System.out.println(endStmtToken.getToken());
             return null;
         }
 
@@ -732,7 +734,6 @@ public class JottParser implements JottTree {
 
         // find parameters
         tokenIndex += 1;
-        Token paramToken = tokens.get(tokenIndex);
         JottTreeNode paramsNode = params(new JottTreeNode(JottElement.PARAMS));
         if (paramsNode != null) {
             System.out.println("found parameter(s)");
@@ -760,25 +761,19 @@ public class JottParser implements JottTree {
     private static JottTreeNode params(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.PARAMS);
 
+        int originalTokenIndex = tokenIndex;
         // look for expr
-        Token token = tokens.get(tokenIndex);
         JottTreeNode exprNode = expr(new JottTreeNode(JottElement.EXPR));
         if (exprNode != null) {
             System.out.println("an expression found!");
             jottTreeNode.addChild(exprNode);
-
-            //  tokenIDX +=1????????????
-            if(params_t(jottTreeNode)!=null){
-                tokenIndex+=1;  // ????????
-                return jottTreeNode;
-            }else {
-                System.out.println("Error finding params_t in params");
-                return null;
-            }
+            return jottTreeNode;
         }
-        // epsilon or doesnt matter if we dont have anything
+
+        // TODO: add support for params_t here
+
         System.out.println("epsilon");
-        return jottTreeNode;
+        return null;
     }
 
     private static JottTreeNode params_t(JottTreeNode jottTreeNode) {
@@ -806,23 +801,19 @@ public class JottParser implements JottTree {
 
         System.out.println("can't be func_call, trying i_expr");
 
-        // test for second token being +-*/
-        Token token = tokens.get(tokenIndex+1);
-        if (token.getTokenType() == TokenType.MATH_OP) {
 
-            JottTreeNode iExprNode = i_expr(new JottTreeNode(JottElement.I_EXPR));
-            if (iExprNode != null) {
-                System.out.println("found i_expr");
-                jottTreeNode.addChild(iExprNode);
-                return jottTreeNode;
-            }
+        JottTreeNode iExprNode = i_expr(new JottTreeNode(JottElement.I_EXPR));
+        if (iExprNode != null) {
+            System.out.println("found i_expr");
+            jottTreeNode.addChild(iExprNode);
+            return jottTreeNode;
+        }
 
-            JottTreeNode dExprNode = d_expr(new JottTreeNode(JottElement.D_EXPR));
-            if (dExprNode != null) {
-                System.out.println("found d_expr");
-                jottTreeNode.addChild(dExprNode);
-                return jottTreeNode;
-            }
+        JottTreeNode dExprNode = d_expr(new JottTreeNode(JottElement.D_EXPR));
+        if (dExprNode != null) {
+            System.out.println("found d_expr");
+            jottTreeNode.addChild(dExprNode);
+            return jottTreeNode;
         }
 
         JottTreeNode sExprNode = s_expr(new JottTreeNode(JottElement.S_EXPR));
@@ -1230,69 +1221,118 @@ public class JottParser implements JottTree {
     private static JottTreeNode i_expr(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.I_EXPR);
 
+
         int originalTokenIndex = tokenIndex;
 
-        JottTreeNode first_token = null;
-        // token id or int
-        Token token = tokens.get(tokenIndex);
-        if (token.getTokenType() == TokenType.ID_KEYWORD && tokens.get(tokenIndex+1).getTokenType() != TokenType.L_BRACKET) {// hmmmmmmm ???
-            System.out.println("id exists");
-            first_token = id(new JottTreeNode(JottElement.ID), token);
-        }else if(token.getTokenType() == TokenType.NUMBER){
-            first_token = new JottTreeNode(token);
-        }else if(func_call(jottTreeNode) != null){
-             i_expr(jottTreeNode); // hmmmmmmm ???
-        }else if(token.getToken().equals("-") || token.getToken().equals("+")) {
+        /** id|int|int op int|int op i_expr|i_expr op int|i_expr op i_expr|func_call **/
+
+        Token firstToken = tokens.get(tokenIndex);
+        if (firstToken.getToken().equals("-") || firstToken.getToken().equals("+")) { // [+/- int] +30, -30, -50, +5, etc
             tokenIndex += 1;
-            Token second_token = tokens.get(tokenIndex);
-            if (second_token.getTokenType() == TokenType.NUMBER) {
-                first_token = new JottTreeNode(new Token(String.format(token.getToken().equals("-") ? "-%s" : "%s", second_token.getToken()), token.getFilename(), token.getLineNum(), token.getTokenType()));
+            Token secondToken = tokens.get(tokenIndex);
+            if (secondToken.getTokenType() == TokenType.NUMBER) {
+                System.out.println("[+/- int] found");
+                JottTreeNode intNode = new JottTreeNode(JottElement.INT);
+                intNode.addChild(new JottTreeNode(new Token(String.format(firstToken.getToken().equals("-") ? "-%s" : "%s", secondToken.getToken()), secondToken.getFilename(), secondToken.getLineNum(), secondToken.getTokenType())));
+                jottTreeNode.addChild(intNode);
             } else {
+                System.out.println("[+/- int] not formatted correctly");
                 tokenIndex = originalTokenIndex;
-                System.out.println("not formatted correctly");
                 return null;
             }
-        } else {
-            System.out.println("ERROR NOT ID OR INT OR FUNCTION CALL");
-            tokenIndex = originalTokenIndex;
-            return null;
+        } else if (firstToken.getTokenType() == TokenType.NUMBER) { // [int] 30, 50, 42, etc
+            System.out.println("[int] found");
+            JottTreeNode intNode = new JottTreeNode(JottElement.INT);
+            intNode.addChild(new JottTreeNode(firstToken));
+            jottTreeNode.addChild(intNode);
+        } else if (firstToken.getTokenType() == TokenType.ID_KEYWORD) {
+            System.out.println("[id] found");
+
+            JottTreeNode funcCallNode = func_call(new JottTreeNode(JottElement.FUNC_CALL));
+            if (funcCallNode != null) {
+                System.out.println("found a function call");
+                jottTreeNode.addChild(funcCallNode);
+            } else {
+                System.out.println("not a function call");
+                jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), firstToken));
+            }
+            return jottTreeNode;
         }
 
         tokenIndex += 1;
-
-        token = tokens.get(tokenIndex);
-
-        // check for op
-        if (token.getTokenType() == TokenType.MATH_OP) {
-
-            JottTreeNode op_token = new JottTreeNode(tokens.get(tokenIndex));
-
-            tokenIndex += 1;
-            //check for int op int meaning no stay op
-            token = tokens.get(tokenIndex);
-            if (token.getTokenType() == TokenType.NUMBER || token.getTokenType() == TokenType.ID_KEYWORD) {
-                System.out.println("FOUND OP");
-
-                jottTreeNode.addChild(first_token);
-                jottTreeNode.addChild(op_token);
-                i_expr(jottTreeNode);
-                return jottTreeNode;
-            }else {
-                    jottTreeNode.addChild(first_token);
-                    jottTreeNode.addChild(op_token);
-                if(func_call(jottTreeNode) != null){
-                    i_expr(jottTreeNode);
-                    return jottTreeNode;
-                }
-                System.out.println("REPORT ERROR stray op");
-                tokenIndex = originalTokenIndex;
-                return null;
-            }
+        Token opToken = tokens.get(tokenIndex);
+        if (opToken.getTokenType() == TokenType.MATH_OP) {
+            System.out.println("found op");
+            return null;
+        } else {
+            // no op here
+            System.out.println("no op here");
+            tokenIndex = originalTokenIndex;
+            return jottTreeNode;
         }
 
-        System.out.println("FOUND LONE int");
-        jottTreeNode.addChild(first_token);
-        return jottTreeNode;
+//        JottTreeNode first_token = null;
+//        // token id or int
+//        Token token = tokens.get(tokenIndex);
+//        if (token.getTokenType() == TokenType.ID_KEYWORD && tokens.get(tokenIndex+1).getTokenType() != TokenType.L_BRACKET) {// hmmmmmmm ???
+//            System.out.println("id exists");
+//            first_token = id(new JottTreeNode(JottElement.ID), token);
+//        }else if(token.getTokenType() == TokenType.NUMBER){
+//            first_token = new JottTreeNode(token);
+//        }else if(func_call(jottTreeNode) != null){
+//             i_expr(jottTreeNode); // hmmmmmmm ???
+//        }else if(token.getToken().equals("-") || token.getToken().equals("+")) {
+//            tokenIndex += 1;
+//            Token second_token = tokens.get(tokenIndex);
+//            if (second_token.getTokenType() == TokenType.NUMBER) {
+//                first_token = new JottTreeNode(new Token(String.format(token.getToken().equals("-") ? "-%s" : "%s", second_token.getToken()), token.getFilename(), token.getLineNum(), token.getTokenType()));
+//            } else {
+//                tokenIndex = originalTokenIndex;
+//                System.out.println("not formatted correctly");
+//                return null;
+//            }
+//        } else {
+//            System.out.println("ERROR NOT ID OR INT OR FUNCTION CALL");
+//            tokenIndex = originalTokenIndex;
+//            return null;
+//        }
+//
+//        tokenIndex += 1;
+//
+//        token = tokens.get(tokenIndex);
+//
+//        // check for op
+//        if (token.getTokenType() == TokenType.MATH_OP) {
+//
+//            JottTreeNode op_token = new JottTreeNode(tokens.get(tokenIndex));
+//
+//            tokenIndex += 1;
+//            //check for int op int meaning no stay op
+//            token = tokens.get(tokenIndex);
+//            if (token.getTokenType() == TokenType.NUMBER || token.getTokenType() == TokenType.ID_KEYWORD) {
+//                System.out.println("FOUND OP");
+//
+//                jottTreeNode.addChild(first_token);
+//                jottTreeNode.addChild(op_token);
+//                i_expr(jottTreeNode);
+//                return jottTreeNode;
+//            }else {
+//                    jottTreeNode.addChild(first_token);
+//                    jottTreeNode.addChild(op_token);
+//                if(func_call(jottTreeNode) != null){
+//                    i_expr(jottTreeNode);
+//                    return jottTreeNode;
+//                }
+//                System.out.println("REPORT ERROR stray op");
+//                tokenIndex = originalTokenIndex;
+//                return null;
+//            }
+//        }
+//
+//        System.out.println("FOUND LONE int");
+//        jottTreeNode.addChild(first_token);
+//        return jottTreeNode;
+
 
     }
 
