@@ -1,3 +1,6 @@
-a[]:Void{}
-b[]:Void{}
-c[]:Void{}
+foo[x:Integer]:Integer{
+    while[x]{
+        print[x];
+    }
+    return x;
+}

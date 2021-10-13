@@ -85,15 +85,20 @@ public class JottParser implements JottTree {
     private static JottTreeNode function_list(JottTreeNode jottTreeNode) {
         System.out.println(JottElement.FUNCTION_LIST);
 
-        JottTreeNode child1 = new JottTreeNode(JottElement.FUNCTION_DEF);
-        JottTreeNode child2 = new JottTreeNode(JottElement.FUNCTION_LIST);
 
-        if (tokenIndex >= tokens.size()) {
-            return new JottTreeNode(JottElement.FUNCTION_LIST);
-        }
+        // no children?
+        if (tokenIndex >= tokens.size()) { return new JottTreeNode(JottElement.FUNCTION_LIST); }
 
-        jottTreeNode.addChild(function_def(child1));
-//        jottTreeNode.addChild(function_list(child2)); // TODO: check if there are more functions
+        // find function_def
+        JottTreeNode functionDefNode = function_def(new JottTreeNode(JottElement.FUNCTION_DEF));
+        jottTreeNode.addChild(functionDefNode);
+
+
+        tokenIndex += 1;
+        System.out.println("DONE <------------------- looking for new function");
+        JottTreeNode functionListNode = function_list(new JottTreeNode(JottElement.FUNCTION_LIST));
+        jottTreeNode.addChild(functionListNode);
+
         return jottTreeNode;
     }
 
@@ -105,6 +110,7 @@ public class JottParser implements JottTree {
 
         Token idToken = tokens.get(tokenIndex);
 
+        System.out.println(idToken.getToken());
         // look for id
         if (idToken.getTokenType() == TokenType.ID_KEYWORD) {
             // add id child
@@ -428,6 +434,8 @@ public class JottParser implements JottTree {
                 System.out.println("return_stmt not found");
                 return null;
             }
+
+            tokenIndex += 1;
             return returnStmtNode;
         } else { // body_stmt body
             System.out.println("has something more in this body; need to parse further");
@@ -1560,6 +1568,7 @@ public class JottParser implements JottTree {
 
         System.out.println("\n\nCONVERT BACK INTO JOTT AGAIN USING THE PARSE TREE:");
         System.out.println(T.convertToJott());
+
 //        for (Token t:testResults) {
 //            System.out.println(t.getToken()+"\t\t<- "+t.getTokenType());
 //        }
