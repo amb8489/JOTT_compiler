@@ -6,8 +6,6 @@
  */
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 public class JottParser implements JottTree {
@@ -1622,8 +1620,10 @@ public class JottParser implements JottTree {
         ArrayList<Token> testResults = JottTokenizer.tokenize(filename);
         JottTree T = parse(testResults);
 
-        System.out.println("\n\nCONVERT BACK INTO JOTT AGAIN USING THE PARSE TREE:");
-        System.out.println(T.convertToJott());
+        if (Failed == 0) {
+            System.out.println("\n\nCONVERT BACK INTO JOTT AGAIN USING THE PARSE TREE:");
+            System.out.println(T.convertToJott());
+        }
 
 //        for (Token t:testResults) {
 //            System.out.println(t.getToken()+"\t\t<- "+t.getTokenType());
