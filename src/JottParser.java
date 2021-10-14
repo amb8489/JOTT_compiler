@@ -22,7 +22,8 @@ public class JottParser implements JottTree {
      * body_stmt -> if_stmt|while_loop|stmt                                                                             <-- DONE
      * return_stmt -> return expr end_stmt                                                                              <-- DONE
      * body -> body_stmt body|return_stmt|ε                                                                             <-- DONE
-     * if_stmt -> if [ b_expr ] { body } elseif_lst|if [ b_expr ] { body } elseif_lst else { body }                     <-- WORK IN PROGRESS
+     * if_stmt -> if [ b_expr ] { body } elseif_lst
+     *            |if [ b_expr ] { body } elseif_lst else { body }                     <-- WORK IN PROGRESS
      * elseif_lst -> elseif [ b_expr ] { body } elseif_lst|ε                                                            <-- DONE
      * while_loop -> while [ b_expr ] { body }                                                                          <-- DONE
      * id -> l_char char                                                                                                <-- DONE
@@ -521,6 +522,100 @@ public class JottParser implements JottTree {
         }
 
 
+        tokenIndex += 1;
+
+        // looking for body
+        if (body(jottTreeNode)==null){
+
+            return null;
+        }
+
+        // looking for }
+
+        Token rightCurlyBraceToken = tokens.get(tokenIndex);
+        if (rightCurlyBraceToken.getTokenType() == TokenType.R_BRACE) {
+            System.out.println("found }--------------");
+            jottTreeNode.addChild(new JottTreeNode(rightCurlyBraceToken));
+        } else {
+            System.out.println("} missing");
+            return null;
+        }
+
+        // look for left curly brace elseif_lst
+        tokenIndex += 1;
+        Token next = tokens.get(tokenIndex);
+
+
+
+        if(elseif_lst(jottTreeNode)!=null){
+            tokenIndex-=1;
+        }
+//            jottTreeNode.addChild(new JottTreeNode(next));
+//
+//            tokenIndex+=1;
+//            next = tokens.get(tokenIndex);
+//            if (next.getToken().equals("{")) {
+//                jottTreeNode.addChild(new JottTreeNode(next));
+//                tokenIndex+=1;
+//
+//                System.out.println(tokens.get(tokenIndex).getToken()+"--------------34-234-32-423-4-23-4");
+//
+//                elseif_lst(jottTreeNode);
+//
+//                next = tokens.get(tokenIndex);
+//                if ( next.getToken().equals("}")) {
+//                    jottTreeNode.addChild(new JottTreeNode(next));
+//                    tokenIndex+=1;
+//
+//                }else {
+//                    System.out.println("missing }");
+//                    return null;
+//                }
+//
+//
+//                }else {
+//                System.out.println("missing{");
+//                return null;
+//            }
+
+
+
+        next = tokens.get(tokenIndex);
+        System.out.println(next.getToken()+"------312312312312312321312312312312");
+
+        if (next.getToken().equals("else")) {
+            System.out.println("else");
+
+            jottTreeNode.addChild(new JottTreeNode(next));
+            tokenIndex+=1;
+            next = tokens.get(tokenIndex);
+            // looking for { body }
+            if (next.getToken().equals("{")){
+                jottTreeNode.addChild(new JottTreeNode(next));
+
+                tokenIndex+=1;
+
+                if(body(jottTreeNode)!=null){
+                    tokenIndex+=1;
+                    if (next.getToken().equals("}")) {
+                        return jottTreeNode;
+                    }else {
+                        System.out.println("missing }");
+                    }
+                }
+                else {
+                    System.out.println("body missing");
+                }
+            }else {
+                System.out.println("missing {");
+                return null;
+            }
+
+        } else {
+            return jottTreeNode;
+        }
+
+
 
 
         return jottTreeNode;
@@ -535,17 +630,7 @@ public class JottParser implements JottTree {
             System.out.println("found elseif for elseif");
             jottTreeNode.addChild(new JottTreeNode(token));
             tokenIndex+=1;
-        } else {
-            System.out.println("ERROR missing elseif");
-            return null;
-        }
 
-
-        // find elseif
-        if (token.getToken().equals("elseif")) {
-            System.out.println("found elseif for elseif");
-            jottTreeNode.addChild(new JottTreeNode(token));
-            tokenIndex+=1;
         } else {
             System.out.println("ERROR missing elseif");
             return null;
@@ -597,11 +682,12 @@ public class JottParser implements JottTree {
             System.out.println("BODY ERROR IN IFELSE_LST");
             return null;
         }
-        tokenIndex+=1;
+
+
 
         // looking for }
         Token rightcurly = tokens.get(tokenIndex);
-        if (rightcurly.getTokenType() == TokenType.L_BRACE) {
+        if (rightcurly.getTokenType() == TokenType.R_BRACE) {
             System.out.println("found }");
             jottTreeNode.addChild(new JottTreeNode(rightcurly));
             tokenIndex+=1;
@@ -611,14 +697,10 @@ public class JottParser implements JottTree {
             return null;
         }
 
-
         if (elseif_lst(jottTreeNode)!=null) {
             System.out.println("found elseif_lst");
             tokenIndex+=1;
 
-        } else {
-            System.out.println("} is missing");
-            return null;
         }
         // epsilon
         return jottTreeNode;
