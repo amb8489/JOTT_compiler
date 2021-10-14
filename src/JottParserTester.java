@@ -75,9 +75,22 @@ public class JottParserTester {
                 System.err.println("\t\tPlease verify your tokenizer is working properly");
                 return false;
             }
+
+
             System.out.println(tokenListString(tokens));
             ArrayList<Token> cpyTokens = new ArrayList<>(tokens);
             JottTree root = JottParser.parse(tokens);
+
+
+
+            // ------------4-345-435-345-34534-5-435-34-534-5-34-5-345-34-5-34
+
+
+
+
+
+
+
 
             if (!test.error && root == null) {
                 System.err.println("\tFailed Test: " + test.testName);

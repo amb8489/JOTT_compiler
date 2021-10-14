@@ -1,1 +1,0 @@
-main [ ] : Integer { print [ 5 ] ; print [ ] ; } main [ ] : Integer { print [ ] ; return 1 ; foo [ x : String ] : String { print [ x ] ; } 
