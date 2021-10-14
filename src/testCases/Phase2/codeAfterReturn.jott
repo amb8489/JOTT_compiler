@@ -1,8 +1,0 @@
-#this should fail phase 2
-#code after return
-#Error: Expected } got <id>
-
-main[]:Integer{
-    return 5;
-	print["foo"];
-}

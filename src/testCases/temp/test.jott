@@ -2,11 +2,9 @@ foo[]:Void{
     if[true]{
            Double test;
     }else{
+
                Double test;
 
     }
-
-    if[true]{
-               Double test;
-        }
+return 5;
 }
