@@ -391,6 +391,7 @@ public class JottParser implements JottTree {
 
         // look for expr
         tokenIndex += 1;
+        System.out.println(tokens.get(tokenIndex).getToken());
         JottTreeNode exprNode = expr(new JottTreeNode(JottElement.EXPR));
         if (exprNode != null) {
             System.out.println("expr found");
@@ -755,7 +756,7 @@ public class JottParser implements JottTree {
         System.out.println("stmt - var_dec didn't work, trying func_call");
         JottTreeNode funcCallNode = func_call(new JottTreeNode(JottElement.FUNC_CALL));
         if (funcCallNode != null) {
-            System.out.println("found func_call");
+            System.out.println("stmt - found func_call");
             jottTreeNode.addChild(funcCallNode);
 
             tokenIndex += 1;
@@ -781,6 +782,9 @@ public class JottParser implements JottTree {
 
         Token idToken = tokens.get(tokenIndex);
 
+
+
+
         // find id
         if (idToken.getTokenType() == TokenType.ID_KEYWORD) {
             System.out.println(String.format("found id for func_call (%s)", idToken.getToken()));
@@ -803,8 +807,18 @@ public class JottParser implements JottTree {
             return null;
         }
 
+
+
         // find parameters
         tokenIndex += 1;
+
+        Token tempToken = tokens.get(tokenIndex);
+        if (tempToken.getTokenType() == TokenType.R_BRACKET) {
+            jottTreeNode.addChild(new JottTreeNode(JottElement.PARAMS));
+            jottTreeNode.addChild(new JottTreeNode(tempToken));
+            return jottTreeNode;
+        }
+
         JottTreeNode paramsNode = params(new JottTreeNode(JottElement.PARAMS));
         if (paramsNode != null) {
             System.out.println("found parameter(s)");
@@ -907,8 +921,9 @@ public class JottParser implements JottTree {
         System.out.println("expr - trying func_call");
         JottTreeNode funcCall = func_call(new JottTreeNode(JottElement.FUNC_CALL));
         if (funcCall != null) {
-            System.out.println("found func_call");
+            System.out.println("expr - found func_call");
             jottTreeNode.addChild(funcCall);
+            tokenIndex+=1;
             return jottTreeNode;
         }
 
@@ -1299,6 +1314,7 @@ public class JottParser implements JottTree {
         System.out.println(firstToken.getToken());
         System.out.println(firstToken.getTokenType());
 
+        boolean specialInt = false;
         if (firstToken.getToken().equals("-") || firstToken.getToken().equals("+")) { // [+/- int] +30, -30, -50, +5, etc
             tokenIndex += 1;
             Token secondToken = tokens.get(tokenIndex);
@@ -1307,6 +1323,7 @@ public class JottParser implements JottTree {
                 JottTreeNode intNode = new JottTreeNode(JottElement.INT);
                 intNode.addChild(new JottTreeNode(new Token(String.format(firstToken.getToken().equals("-") ? "-%s" : "%s", secondToken.getToken()), secondToken.getFilename(), secondToken.getLineNum(), secondToken.getTokenType())));
                 jottTreeNode.addChild(intNode);
+                specialInt = true;
             } else {
                 System.out.println("[+/- int] not formatted correctly");
                 tokenIndex = originalTokenIndex;
@@ -1330,88 +1347,45 @@ public class JottParser implements JottTree {
             }
         }
 
+
         tokenIndex += 1;
         Token opToken = tokens.get(tokenIndex);
         if (opToken.getTokenType() == TokenType.MATH_OP) {
-            System.out.println("found op");
+            System.out.println(String.format("found op (%s)", opToken.getToken()));
+            jottTreeNode.addChild(new JottTreeNode(opToken));
 
             tokenIndex += 1;
-            Token secondToken = tokens.get(tokenIndex);
-
-
-            // TODO <----------------------------------------------------------------------------------------------------- BLAH NEED TO HANDLE RECURSIVE CASES
-            System.out.println(secondToken.getTokenType());
-
-            return null;
+            JottTreeNode recursiveIExprNode = i_expr(new JottTreeNode(JottElement.I_EXPR));
+            jottTreeNode.addChild(recursiveIExprNode);
+            return jottTreeNode;
         } else {
             // no op here
             System.out.println("no op here");
-            tokenIndex = originalTokenIndex + 1;
+            tokenIndex = originalTokenIndex + (specialInt ? 2 : 1);
             return jottTreeNode;
         }
 
-//        JottTreeNode first_token = null;
-//        // token id or int
-//        Token token = tokens.get(tokenIndex);
-//        if (token.getTokenType() == TokenType.ID_KEYWORD && tokens.get(tokenIndex+1).getTokenType() != TokenType.L_BRACKET) {// hmmmmmmm ???
-//            System.out.println("id exists");
-//            first_token = id(new JottTreeNode(JottElement.ID), token);
-//        }else if(token.getTokenType() == TokenType.NUMBER){
-//            first_token = new JottTreeNode(token);
-//        }else if(func_call(jottTreeNode) != null){
-//             i_expr(jottTreeNode); // hmmmmmmm ???
-//        }else if(token.getToken().equals("-") || token.getToken().equals("+")) {
+//        tokenIndex += 1;
+//        Token opToken = tokens.get(tokenIndex);
+//        if (opToken.getTokenType() == TokenType.MATH_OP) {
+//            System.out.println("found op");
+//            jottTreeNode.addChild(new JottTreeNode(opToken));
+//
 //            tokenIndex += 1;
-//            Token second_token = tokens.get(tokenIndex);
-//            if (second_token.getTokenType() == TokenType.NUMBER) {
-//                first_token = new JottTreeNode(new Token(String.format(token.getToken().equals("-") ? "-%s" : "%s", second_token.getToken()), token.getFilename(), token.getLineNum(), token.getTokenType()));
+//            JottTreeNode iExprNode = i_expr(new JottTreeNode(JottElement.I_EXPR));
+//            if (iExprNode != null) {
+//                jottTreeNode.addChild(iExprNode);
+//                tokenIndex += 1;
 //            } else {
 //                tokenIndex = originalTokenIndex;
-//                System.out.println("not formatted correctly");
 //                return null;
 //            }
 //        } else {
-//            System.out.println("ERROR NOT ID OR INT OR FUNCTION CALL");
-//            tokenIndex = originalTokenIndex;
-//            return null;
+//            // no op here
+//            System.out.println("no op here");
+//            tokenIndex = originalTokenIndex + 1;
+//            return jottTreeNode;
 //        }
-//
-//        tokenIndex += 1;
-//
-//        token = tokens.get(tokenIndex);
-//
-//        // check for op
-//        if (token.getTokenType() == TokenType.MATH_OP) {
-//
-//            JottTreeNode op_token = new JottTreeNode(tokens.get(tokenIndex));
-//
-//            tokenIndex += 1;
-//            //check for int op int meaning no stay op
-//            token = tokens.get(tokenIndex);
-//            if (token.getTokenType() == TokenType.NUMBER || token.getTokenType() == TokenType.ID_KEYWORD) {
-//                System.out.println("FOUND OP");
-//
-//                jottTreeNode.addChild(first_token);
-//                jottTreeNode.addChild(op_token);
-//                i_expr(jottTreeNode);
-//                return jottTreeNode;
-//            }else {
-//                    jottTreeNode.addChild(first_token);
-//                    jottTreeNode.addChild(op_token);
-//                if(func_call(jottTreeNode) != null){
-//                    i_expr(jottTreeNode);
-//                    return jottTreeNode;
-//                }
-//                System.out.println("REPORT ERROR stray op");
-//                tokenIndex = originalTokenIndex;
-//                return null;
-//            }
-//        }
-//
-//        System.out.println("FOUND LONE int");
-//        jottTreeNode.addChild(first_token);
-//        return jottTreeNode;
-
 
     }
 
@@ -1449,7 +1423,7 @@ public class JottParser implements JottTree {
             // look for func_call
             JottTreeNode funcCallNode = func_call(new JottTreeNode(JottElement.FUNC_CALL));
             if (funcCallNode != null) {
-                System.out.println("found func_call");
+                System.out.println("s_expr - found func_call");
                 jottTreeNode.addChild(funcCallNode);
                 return funcCallNode;
             }
