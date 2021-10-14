@@ -409,8 +409,7 @@ public class JottParser implements JottTree {
             System.out.println("; found");
             jottTreeNode.addChild(new JottTreeNode(endStmtToken));
         } else {
-            System.out.println("; missing");
-            System.out.println(endStmtToken.getToken());
+            System.out.println(String.format("; missing. found '%s' instead", endStmtToken.getToken()));
             tokenIndex = originalTokenIndex;
             return null;
         }
@@ -918,16 +917,8 @@ public class JottParser implements JottTree {
 
         // i_expr|d_expr|s_expr|b_expr|id|func_call
 
-        System.out.println("expr - trying func_call");
-        JottTreeNode funcCall = func_call(new JottTreeNode(JottElement.FUNC_CALL));
-        if (funcCall != null) {
-            System.out.println("expr - found func_call");
-            jottTreeNode.addChild(funcCall);
-            tokenIndex+=1;
-            return jottTreeNode;
-        }
 
-        System.out.println("expr - can't be func_call, trying i_expr");
+        System.out.println("expr - trying i_expr");
 
 
         JottTreeNode iExprNode = i_expr(new JottTreeNode(JottElement.I_EXPR));
@@ -969,6 +960,15 @@ public class JottParser implements JottTree {
         Token token = tokens.get(tokenIndex);
         if (token.getTokenType() == TokenType.ID_KEYWORD) {
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
+            return jottTreeNode;
+        }
+
+        System.out.println("expr - trying func_call");
+        JottTreeNode funcCall = func_call(new JottTreeNode(JottElement.FUNC_CALL));
+        if (funcCall != null) {
+            System.out.println("expr - found func_call");
+            jottTreeNode.addChild(funcCall);
+            tokenIndex+=1;
             return jottTreeNode;
         }
 
@@ -1361,7 +1361,6 @@ public class JottParser implements JottTree {
         } else {
             // no op here
             System.out.println("no op here");
-            tokenIndex = originalTokenIndex + (specialInt ? 2 : 1);
             return jottTreeNode;
         }
 
