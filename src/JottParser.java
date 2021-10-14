@@ -75,7 +75,7 @@ public class JottParser implements JottTree {
      * program -> function_list $$
      * **/
     private static JottTreeNode program(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.PROGRAM);
+        //System.out.println(JottElement.PROGRAM);
 
         JottTreeNode child1 = new JottTreeNode(JottElement.$$); // TODO: do we really need this?
         JottTreeNode child2 = new JottTreeNode(JottElement.FUNCTION_LIST);
@@ -90,7 +90,7 @@ public class JottParser implements JottTree {
      * function_list -> ε
      */
     private static JottTreeNode function_list(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.FUNCTION_LIST);
+        //System.out.println(JottElement.FUNCTION_LIST);
 
 
         // no children?
@@ -102,7 +102,7 @@ public class JottParser implements JottTree {
 
 
         tokenIndex += 1;
-        System.out.println("DONE <------------------- looking for new function");
+        //System.out.println("DONE <------------------- looking for new function");
         JottTreeNode functionListNode = function_list(new JottTreeNode(JottElement.FUNCTION_LIST));
         jottTreeNode.addChild(functionListNode);
 
@@ -113,24 +113,24 @@ public class JottParser implements JottTree {
      * function_def -> id [ func_def_params ] : function_return { body }
      * **/
     private static JottTreeNode function_def(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.FUNCTION_DEF);
+        //System.out.println(JottElement.FUNCTION_DEF);
 
         Token idToken = tokens.get(tokenIndex);
 
-        System.out.println(idToken.getToken());
+        //System.out.println(idToken.getToken());
         // look for id
         if (idToken.getTokenType() == TokenType.ID_KEYWORD) {
             // add id child
-            System.out.println("id exists");
+            //System.out.println("id exists");
 
             if (IdBanList.contains(idToken.getToken())) {
-                System.out.println("banned keyword");
+                //System.out.println("banned keyword");
                 Failed=1; return null;
             }
 
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), idToken));
         } else {
-            System.out.println("missing id");
+            //System.out.println("missing id");
             Failed=1; return null;
         }
 
@@ -139,10 +139,10 @@ public class JottParser implements JottTree {
         Token leftBracketToken = tokens.get(tokenIndex);
         if (leftBracketToken.getTokenType() == TokenType.L_BRACKET)
         {
-            System.out.println("[ exists");
+            //System.out.println("[ exists");
             jottTreeNode.addChild(new JottTreeNode(leftBracketToken));
         } else {
-            System.out.println("missing [");
+            //System.out.println("missing [");
             Failed=1; return null;
         }
 
@@ -150,7 +150,7 @@ public class JottParser implements JottTree {
         tokenIndex += 1;
         Token parameterToken = tokens.get(tokenIndex);
         if (parameterToken.getTokenType() == TokenType.R_BRACKET) {
-            System.out.println("] exists, no parameters");
+            //System.out.println("] exists, no parameters");
             jottTreeNode.addChild(new JottTreeNode(parameterToken));
         } else {
             // handle this as a parameter
@@ -158,10 +158,10 @@ public class JottParser implements JottTree {
 
             Token rightBracketToken = tokens.get(tokenIndex);
             if (rightBracketToken.getTokenType() == TokenType.R_BRACKET) {
-                System.out.println("] exists, has parameter(s)");
+                //System.out.println("] exists, has parameter(s)");
                 jottTreeNode.addChild(new JottTreeNode(rightBracketToken));
             } else {
-                System.out.println("missing ]");
+                //System.out.println("missing ]");
                 Failed=1; return null;
             }
         }
@@ -170,32 +170,32 @@ public class JottParser implements JottTree {
         tokenIndex += 1;
         Token colon = tokens.get(tokenIndex);
         if (colon.getTokenType() == TokenType.COLON) {
-            System.out.println(": exists");
+            //System.out.println(": exists");
             jottTreeNode.addChild(new JottTreeNode(colon));
         } else {
-            System.out.println("missing :");
+            //System.out.println("missing :");
             Failed=1; return null;
         }
 
         // look for return value
         tokenIndex += 1;
         Token functionReturn = tokens.get(tokenIndex);
-        System.out.println(functionReturn.getTokenType());
+        //System.out.println(functionReturn.getTokenType());
         if (functionReturn.getTokenType() == TokenType.ID_KEYWORD) {
             JottTreeNode functionReturnNode = new JottTreeNode(JottElement.FUNCTION_RETURN);
 
             if (functionReturn.getToken().equals("Void")) { // is this void?
-                System.out.println("function return found (Void)");
+                //System.out.println("function return found (Void)");
                 jottTreeNode.addChild(new JottTreeNode(JottElement.VOID));
             } else {
                 JottTreeNode typeNode = type(jottTreeNode);
 
                 if (typeNode != null) { // this is a type
-                    System.out.println(String.format("function return found (%s type)", typeNode.getToken()));
+                    //System.out.println(String.format("function return found (%s type)", typeNode.getToken()));
                     functionReturnNode.addChild(typeNode);
                     jottTreeNode.addChild(functionReturnNode);
                 } else { // not a type, so no idea what this is
-                    System.out.println("function return missing");
+                    //System.out.println("function return missing");
                     Failed=1; return null;
                 }
             }
@@ -205,10 +205,10 @@ public class JottParser implements JottTree {
         tokenIndex += 1;
         Token leftCurlyBrace = tokens.get(tokenIndex);
         if (leftCurlyBrace.getTokenType() == TokenType.L_BRACE) {
-            System.out.println("{ found");
+            //System.out.println("{ found");
             jottTreeNode.addChild(new JottTreeNode(leftCurlyBrace));
         } else {
-            System.out.println("{ missing");
+            //System.out.println("{ missing");
             Failed=1; return null;
         }
 
@@ -217,21 +217,20 @@ public class JottParser implements JottTree {
         JottTreeNode bodyNode = new JottTreeNode(JottElement.BODY);
         bodyNode = body(bodyNode);
         if (bodyNode != null) {
-            System.out.println("found body");
+            //System.out.println("found body");
             jottTreeNode.addChild(bodyNode);
         } else {
-            System.out.println("missing body");
             Failed=1; return null;
         }
 
         // look for right curly brace
-        System.out.println("children" + bodyNode.getChildren().size());
+        //System.out.println("children" + bodyNode.getChildren().size());
 
         Token rightCurlyBrace = tokens.get(tokenIndex);
         if (rightCurlyBrace.getTokenType() == TokenType.R_BRACE) {
             jottTreeNode.addChild(new JottTreeNode(rightCurlyBrace));
         } else {
-            System.out.println("} missing");
+            //System.out.println("} missing");
         }
 
         return jottTreeNode;
@@ -239,22 +238,22 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode function_def_params(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.FUNC_DEF_PARAMS);
+        //System.out.println(JottElement.FUNC_DEF_PARAMS);
 
         // look for the parameter
         Token parameter = tokens.get(tokenIndex);
         JottTreeNode newNode = new JottTreeNode(JottElement.FUNC_DEF_PARAMS);
         if (parameter.getTokenType() == TokenType.ID_KEYWORD) {
-            System.out.println("id exists");
+            //System.out.println("id exists");
 
             if (IdBanList.contains(parameter.getToken())) {
-                System.out.println("banned keyword");
+                //System.out.println("banned keyword");
                 Failed=1; return null;
             }
 
             newNode.addChild(id(new JottTreeNode(JottElement.ID), parameter));
         } else {
-            System.out.println("missing id");
+            //System.out.println("missing id");
             Failed=1; return null;
         }
 
@@ -262,10 +261,10 @@ public class JottParser implements JottTree {
         tokenIndex += 1;
         Token colon = tokens.get(tokenIndex);
         if (colon.getTokenType() == TokenType.COLON) {
-            System.out.println("colon exists");
+            //System.out.println("colon exists");
             newNode.addChild(new JottTreeNode(colon));
         } else {
-            System.out.println("missing colon");
+            //System.out.println("missing colon");
             Failed=1; return null;
         }
 
@@ -277,7 +276,7 @@ public class JottParser implements JottTree {
             if (typeNode != null) {
                 newNode.addChild(typeNode);
             } else {
-                System.out.println("not a type");
+                //System.out.println("not a type");
                 Failed=1; return null;
             }
         }
@@ -296,15 +295,15 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode function_def_params_t(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.FUNC_DEF_PARAMS_T);
+        //System.out.println(JottElement.FUNC_DEF_PARAMS_T);
 
         // find comma
         Token comma = tokens.get(tokenIndex);
         if (comma.getTokenType() == TokenType.COMMA) {
-            System.out.println("comma found");
+            //System.out.println("comma found");
             jottTreeNode.addChild(new JottTreeNode(comma));
         } else {
-            System.out.println("comma is missing");
+            //System.out.println("comma is missing");
             Failed=1; return null;
         }
 
@@ -312,16 +311,16 @@ public class JottParser implements JottTree {
         tokenIndex += 1;
         Token parameter = tokens.get(tokenIndex);
         if (parameter.getTokenType() == TokenType.ID_KEYWORD) {
-            System.out.println("id found");
+            //System.out.println("id found");
 
             if (IdBanList.contains(parameter.getToken())) {
-                System.out.println("banned keyword");
+                //System.out.println("banned keyword");
                 Failed=1; return null;
             }
 
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), parameter));
         } else {
-            System.out.println("id is missing");
+            //System.out.println("id is missing");
             Failed=1; return null;
         }
 
@@ -329,10 +328,10 @@ public class JottParser implements JottTree {
         tokenIndex += 1;
         Token colon = tokens.get(tokenIndex);
         if (colon.getTokenType() == TokenType.COLON) {
-            System.out.println("colon found");
+            //System.out.println("colon found");
             jottTreeNode.addChild(new JottTreeNode(colon));
         } else {
-            System.out.println("colon is missing");
+            //System.out.println("colon is missing");
             Failed=1; return null;
         }
 
@@ -345,7 +344,7 @@ public class JottParser implements JottTree {
             if (typeNode != null) {
                 jottTreeNode.addChild(typeNode);
             } else {
-                System.out.println("not a type");
+                //System.out.println("not a type");
                 Failed=1; return null;
             }
         }
@@ -361,7 +360,7 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode body_stmt(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.BODY_STMT);
+        //System.out.println(JottElement.BODY_STMT);
 
         // try if statement
         JottTreeNode ifStmtNode = if_stmt(new JottTreeNode(JottElement.IF_STMT));
@@ -370,7 +369,7 @@ public class JottParser implements JottTree {
             return jottTreeNode;
         }
 
-        System.out.println("if statement not found; trying while loop");
+        //System.out.println("if statement not found; trying while loop");
 
         // try while loop statement
         JottTreeNode whileLoopNode = while_loop(new JottTreeNode(JottElement.WHILE_LOOP));
@@ -379,7 +378,7 @@ public class JottParser implements JottTree {
             return jottTreeNode;
         }
 
-        System.out.println("while loop not found; trying stmt");
+        //System.out.println("while loop not found; trying stmt");
 
         // try statement statement
         JottTreeNode stmtNode = stmt(new JottTreeNode(JottElement.STMT));
@@ -388,35 +387,35 @@ public class JottParser implements JottTree {
             return jottTreeNode;
         }
 
-        System.out.println("this body_stmm is ultimately invalid");
+        //System.out.println("this body_stmm is ultimately invalid");
         Failed=1; return null;
     }
 
     private static JottTreeNode return_stmt(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.RETURN_STMT);
+        //System.out.println(JottElement.RETURN_STMT);
 
         int originalTokenIndex = tokenIndex;
 
         // ensure return is there
         Token returnToken = tokens.get(tokenIndex);
         if (returnToken.getTokenType() == TokenType.ID_KEYWORD && returnToken.getToken().equals("return")) {
-            System.out.println("return found");
+            //System.out.println("return found");
             jottTreeNode.addChild(new JottTreeNode(returnToken));
         } else {
-            System.out.println("return not found");
+            //System.out.println("return not found");
             tokenIndex = originalTokenIndex;
             Failed=1; return null;
         }
 
         // look for expr
         tokenIndex += 1;
-        System.out.println(tokens.get(tokenIndex).getToken());
+        //System.out.println(tokens.get(tokenIndex).getToken());
         JottTreeNode exprNode = expr(new JottTreeNode(JottElement.EXPR));
         if (exprNode != null) {
-            System.out.println("expr found");
+            //System.out.println("expr found");
             jottTreeNode.addChild(exprNode);
         } else {
-            System.out.println("expr not found");
+            //System.out.println("expr not found");
             tokenIndex = originalTokenIndex;
             Failed=1; return null;
         }
@@ -425,10 +424,10 @@ public class JottParser implements JottTree {
 
         Token endStmtToken = tokens.get(tokenIndex);
         if (endStmtToken.getTokenType() == TokenType.SEMICOLON) {
-            System.out.println("; found");
+            //System.out.println("; found");
             jottTreeNode.addChild(new JottTreeNode(endStmtToken));
         } else {
-            System.out.println(String.format("; missing. found '%s' instead", endStmtToken.getToken()));
+            //System.out.println(String.format("; missing. found '%s' instead", endStmtToken.getToken()));
             tokenIndex = originalTokenIndex;
             Failed=1; return null;
         }
@@ -437,43 +436,43 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode body(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.BODY);
+        ////System.out.println(JottElement.BODY);
 
 
         // look for body_stmt
         Token token = tokens.get(tokenIndex);
         if (token.getTokenType() == TokenType.R_BRACE) { // ε
-            System.out.println("found empty body");
+            ////System.out.println("found empty body");
             return jottTreeNode;
         } else if (token.getTokenType() == TokenType.ID_KEYWORD && token.getToken().equals("return")) { // return_stmt
-            System.out.println("found return clause");
+            ////System.out.println("found return clause");
 
             JottTreeNode returnStmtNode = return_stmt(new JottTreeNode(JottElement.RETURN_STMT));
             if (returnStmtNode == null) {
-                System.out.println("return_stmt not found");
+                ////System.out.println("return_stmt not found");
                 Failed=1; return null;
             }
 
             tokenIndex += 1;
             return returnStmtNode;
         } else { // body_stmt body
-            System.out.println("has something more in this body; need to parse further");
+            ////System.out.println("has something more in this body; need to parse further");
 
             // look for body_stmt
             JottTreeNode bodyStmtNode = body_stmt(new JottTreeNode(JottElement.BODY_STMT));
             if (bodyStmtNode != null) {
                 jottTreeNode.addChild(bodyStmtNode);
             } else {
-                System.out.println("could not find body_stmt");
+                ////System.out.println("could not find body_stmt");
                 Failed=1; return null;
             }
 
             JottTreeNode bodyNode = body(new JottTreeNode(JottElement.BODY));
             if (bodyNode != null && bodyNode.getChildren().size() > 0) {
-                System.out.println("found one more body!");
+                ////System.out.println("found one more body!");
                 jottTreeNode.addChild(bodyNode);
             } else {
-                System.out.println("could not find more body");
+                ////System.out.println("could not find more body");
             }
 
             return jottTreeNode;
@@ -481,17 +480,17 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode if_stmt(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.IF_STMT);
+        ////System.out.println(JottElement.IF_STMT);
 
         // find if
         Token ifToken = tokens.get(tokenIndex);
-        System.out.println("ifToken: " + ifToken.getTokenType() + " : " + ifToken.getToken());
+        ////System.out.println("ifToken: " + ifToken.getTokenType() + " : " + ifToken.getToken());
         if (ifToken.getTokenType() == TokenType.ID_KEYWORD && ifToken.getToken().equals("if"))
         {
-            System.out.println("found if");
+            ////System.out.println("found if");
             jottTreeNode.addChild(new JottTreeNode(ifToken));
         } else {
-            System.out.println("if not found");
+            ////System.out.println("if not found");
             Failed=1; return null;
         }
 
@@ -499,10 +498,10 @@ public class JottParser implements JottTree {
         tokenIndex += 1;
         Token leftBracketToken = tokens.get(tokenIndex);
         if (leftBracketToken.getTokenType() == TokenType.L_BRACKET) {
-            System.out.println("found [");
+            ////System.out.println("found [");
             jottTreeNode.addChild(new JottTreeNode(leftBracketToken));
         } else {
-            System.out.println("[ is missing");
+            ////System.out.println("[ is missing");
             Failed=1; return null;
         }
 
@@ -510,21 +509,21 @@ public class JottParser implements JottTree {
         tokenIndex += 1;
         JottTreeNode bExprNode = b_expr(new JottTreeNode(JottElement.B_EXPR));
         if (bExprNode != null) {
-            System.out.println("b_expr found");
+            ////System.out.println("b_expr found");
             jottTreeNode.addChild(bExprNode);
         } else {
-            System.out.println("missing b_expr");
+            ////System.out.println("missing b_expr");
             Failed=1; return null;
         }
 
         // look for right bracket ]
         Token rightBracketToken = tokens.get(tokenIndex);
-        System.out.println("rightBracketToken: " + rightBracketToken.getToken());
+        ////System.out.println("rightBracketToken: " + rightBracketToken.getToken());
         if (rightBracketToken.getTokenType() == TokenType.R_BRACKET) {
-            System.out.println("found ]");
+            ////System.out.println("found ]");
             jottTreeNode.addChild(new JottTreeNode(rightBracketToken));
         } else {
-            System.out.println("] missing");
+            ////System.out.println("] missing");
             Failed=1; return null;
         }
 
@@ -532,10 +531,10 @@ public class JottParser implements JottTree {
         tokenIndex += 1;
         Token leftCurlyBraceToken = tokens.get(tokenIndex);
         if (leftCurlyBraceToken.getTokenType() == TokenType.L_BRACE) {
-            System.out.println("found {");
+            ////System.out.println("found {");
             jottTreeNode.addChild(new JottTreeNode(leftCurlyBraceToken));
         } else {
-            System.out.println("{ missing");
+            ////System.out.println("{ missing");
             Failed=1; return null;
         }
 
@@ -552,10 +551,10 @@ public class JottParser implements JottTree {
 
         Token rightCurlyBraceToken = tokens.get(tokenIndex);
         if (rightCurlyBraceToken.getTokenType() == TokenType.R_BRACE) {
-            System.out.println("found }--------------");
+            ////System.out.println("found }--------------");
             jottTreeNode.addChild(new JottTreeNode(rightCurlyBraceToken));
         } else {
-            System.out.println("} missing");
+            ////System.out.println("} missing");
             Failed=1; return null;
         }
 
@@ -576,7 +575,7 @@ public class JottParser implements JottTree {
 //                jottTreeNode.addChild(new JottTreeNode(next));
 //                tokenIndex+=1;
 //
-//                System.out.println(tokens.get(tokenIndex).getToken()+"--------------34-234-32-423-4-23-4");
+//                ////System.out.println(tokens.get(tokenIndex).getToken()+"--------------34-234-32-423-4-23-4");
 //
 //                elseif_lst(jottTreeNode);
 //
@@ -586,23 +585,23 @@ public class JottParser implements JottTree {
 //                    tokenIndex+=1;
 //
 //                }else {
-//                    System.out.println("missing }");
+//                    ////System.out.println("missing }");
 //                    Failed=1; return null;
 //                }
 //
 //
 //                }else {
-//                System.out.println("missing{");
+//                ////System.out.println("missing{");
 //                Failed=1; return null;
 //            }
 
 
 
         next = tokens.get(tokenIndex);
-        System.out.println(next.getToken()+"------312312312312312321312312312312");
+        ////System.out.println(next.getToken()+"------312312312312312321312312312312");
 
         if (next.getToken().equals("else")) {
-            System.out.println("else");
+            ////System.out.println("else");
 
             jottTreeNode.addChild(new JottTreeNode(next));
             tokenIndex+=1;
@@ -619,18 +618,18 @@ public class JottParser implements JottTree {
 
                     if (next.getToken().equals("}")) {
                         jottTreeNode.addChild(new JottTreeNode(next));
-                        System.out.println(next.getToken()+"------fjlkshfdlskafjsdlkfjlkdsjf");
+                        ////System.out.println(next.getToken()+"------fjlkshfdlskafjsdlkfjlkdsjf");
                         tokenIndex+=1;
                         return jottTreeNode;
                     }else {
-                        System.out.println("missing }");
+                        ////System.out.println("missing }");
                     }
                 }
                 else {
-                    System.out.println("body missing");
+                    ////System.out.println("body missing");
                 }
             }else {
-                System.out.println("missing {");
+                ////System.out.println("missing {");
                 Failed=1; return null;
             }
 
@@ -646,64 +645,64 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode elseif_lst(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.ELSEIF_LST);
+        ////System.out.println(JottElement.ELSEIF_LST);
         Token token = tokens.get(tokenIndex);
 
         // find elseif
         if (token.getToken().equals("elseif")) {
-            System.out.println("found elseif for elseif");
+            ////System.out.println("found elseif for elseif");
             jottTreeNode.addChild(new JottTreeNode(token));
             tokenIndex+=1;
 
         } else {
-            System.out.println("ERROR missing elseif");
+            ////System.out.println("ERROR missing elseif");
             Failed=1; return null;
         }
 
         // looking for [
         Token leftBracketToken = tokens.get(tokenIndex);
         if (leftBracketToken.getTokenType() == TokenType.L_BRACKET) {
-            System.out.println("found [");
+            ////System.out.println("found [");
             jottTreeNode.addChild(new JottTreeNode(leftBracketToken));
             tokenIndex+=1;
         } else {
-            System.out.println("[ is missing");
+            ////System.out.println("[ is missing");
             Failed=1; return null;
         }
 
 
         if(b_expr(jottTreeNode)== null){
-            System.out.println("b expr FAILED");
+            ////System.out.println("b expr FAILED");
             Failed=1; return null;
         }
-        System.out.println("b expr found");
+        ////System.out.println("b expr found");
 
 
 
         Token rightbracket = tokens.get(tokenIndex);
         if (rightbracket.getTokenType() == TokenType.R_BRACKET) {
-            System.out.println("found ]");
+            ////System.out.println("found ]");
             jottTreeNode.addChild(new JottTreeNode(rightbracket));
             tokenIndex+=1;
         } else {
-            System.out.println("] is missing");
+            ////System.out.println("] is missing");
             Failed=1; return null;
         }
 
         // looking for {
         Token leftcurly = tokens.get(tokenIndex);
         if (leftcurly.getTokenType() == TokenType.L_BRACE) {
-            System.out.println("found {");
+            ////System.out.println("found {");
             jottTreeNode.addChild(new JottTreeNode(leftcurly));
             tokenIndex+=1;
 
         } else {
-            System.out.println("{ is missing");
+            ////System.out.println("{ is missing");
             Failed=1; return null;
         }
 
         if(body(jottTreeNode)== null){
-            System.out.println("BODY ERROR IN IFELSE_LST");
+            ////System.out.println("BODY ERROR IN IFELSE_LST");
             Failed=1; return null;
         }
 
@@ -712,17 +711,17 @@ public class JottParser implements JottTree {
         // looking for }
         Token rightcurly = tokens.get(tokenIndex);
         if (rightcurly.getTokenType() == TokenType.R_BRACE) {
-            System.out.println("found }");
+            ////System.out.println("found }");
             jottTreeNode.addChild(new JottTreeNode(rightcurly));
             tokenIndex+=1;
 
         } else {
-            System.out.println("} is missing");
+            ////System.out.println("} is missing");
             Failed=1; return null;
         }
 
         if (elseif_lst(jottTreeNode)!=null) {
-            System.out.println("found elseif_lst");
+            ////System.out.println("found elseif_lst");
             tokenIndex+=1;
 
         }
@@ -731,15 +730,15 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode while_loop(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.WHILE_LOOP);
+        ////System.out.println(JottElement.WHILE_LOOP);
 
         Token whileToken = tokens.get(tokenIndex);
         if (whileToken.getTokenType() == TokenType.ID_KEYWORD && whileToken.getToken().equals("while"))
         {
-            System.out.println("found while");
+            ////System.out.println("found while");
             jottTreeNode.addChild(new JottTreeNode(whileToken));
         } else {
-            System.out.println("while not found");
+            ////System.out.println("while not found");
             Failed=1; return null;
         }
 
@@ -747,29 +746,29 @@ public class JottParser implements JottTree {
         tokenIndex += 1;
         Token leftBracketToken = tokens.get(tokenIndex);
         if (leftBracketToken.getTokenType() == TokenType.L_BRACKET) {
-            System.out.println("found [");
+            ////System.out.println("found [");
             jottTreeNode.addChild(new JottTreeNode(leftBracketToken));
         } else {
-            System.out.println("[ is missing");
+            ////System.out.println("[ is missing");
             Failed=1; return null;
         }
         tokenIndex += 1;
         ////////////------ checking for bool expr
 
         if(b_expr(jottTreeNode)== null){
-            System.out.println("b expr FAILED");
+            ////System.out.println("b expr FAILED");
             Failed=1; return null;
         }
-        System.out.println("b expr found");
+        ////System.out.println("b expr found");
         ////////////////////////////////
 
         Token rightbracket = tokens.get(tokenIndex);
         if (rightbracket.getTokenType() == TokenType.R_BRACKET) {
-            System.out.println("found ]");
+            ////System.out.println("found ]");
             jottTreeNode.addChild(new JottTreeNode(rightbracket));
             tokenIndex+=1;
         } else {
-            System.out.println("] is missing");
+            ////System.out.println("] is missing");
             Failed=1; return null;
         }
 
@@ -777,31 +776,31 @@ public class JottParser implements JottTree {
         // looking for {
         Token leftcurly = tokens.get(tokenIndex);
         if (leftcurly.getTokenType() == TokenType.L_BRACE) {
-            System.out.println("found {");
+            ////System.out.println("found {");
             jottTreeNode.addChild(new JottTreeNode(leftcurly));
             tokenIndex+=1;
         } else {
-            System.out.println("{ is missing");
+            ////System.out.println("{ is missing");
             Failed=1; return null;
         }
 
         if(body(jottTreeNode) == null){
-            System.out.println("BODY ERROR IN WHILE LOOP");
+            ////System.out.println("BODY ERROR IN WHILE LOOP");
             Failed=1; return null;
         }
-        System.out.println("found body");
+        ////System.out.println("found body");
         // looking for }
 //        tokenIndex -= 1;
 
         Token rightcurly = tokens.get(tokenIndex);
         if (rightcurly.getTokenType() == TokenType.R_BRACE) {
-            System.out.println("found }");
+            ////System.out.println("found }");
             jottTreeNode.addChild(new JottTreeNode(rightcurly));
 
 
         } else {
 
-            System.out.println("} is missing");
+            ////System.out.println("} is missing");
             Failed=1; return null;
         }
 
@@ -809,40 +808,40 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode id(JottTreeNode jottTreeNode, Token token) {
-        System.out.println(JottElement.ID);
+        ////System.out.println(JottElement.ID);
         JottTreeNode child = new JottTreeNode(token);
         jottTreeNode.addChild(child);
         return jottTreeNode;
     }
 
     private static JottTreeNode stmt(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.STMT);
+        ////System.out.println(JottElement.STMT);
 
         int originalTokenIndex = tokenIndex;
 
-        System.out.println("stmt - trying asmt");
+        ////System.out.println("stmt - trying asmt");
         JottTreeNode asmtNode = asmt(new JottTreeNode(JottElement.ASMT));
         if (asmtNode != null) {
-            System.out.println("found asmt");
+            ////System.out.println("found asmt");
             jottTreeNode.addChild(asmtNode);
 
             Token endStmtNode = tokens.get(tokenIndex);
-            System.out.println(endStmtNode.getTokenType());
+            ////System.out.println(endStmtNode.getTokenType());
             if (endStmtNode.getTokenType() == TokenType.SEMICOLON) {
                 jottTreeNode.addChild(new JottTreeNode(endStmtNode));
                 tokenIndex += 1;
                 return jottTreeNode;
             } else {
-                System.out.println("missing end_stmt");
+                ////System.out.println("missing end_stmt");
                 tokenIndex = originalTokenIndex;
                 Failed=1; return null;
             }
         }
 
-        System.out.println("stmt - asmt didn't work, trying var_dec");
+        ////System.out.println("stmt - asmt didn't work, trying var_dec");
         JottTreeNode varDecNode = var_dec(new JottTreeNode(JottElement.VAR_DEC));
         if (varDecNode != null) {
-            System.out.println("found var_dec");
+            ////System.out.println("found var_dec");
             jottTreeNode.addChild(varDecNode);
 
             tokenIndex += 1;
@@ -852,16 +851,16 @@ public class JottParser implements JottTree {
                 tokenIndex += 1;
                 return jottTreeNode;
             } else {
-                System.out.println("missing end_stmt");
+                ////System.out.println("missing end_stmt");
                 tokenIndex = originalTokenIndex;
                 Failed=1; return null;
             }
         }
 
-        System.out.println("stmt - var_dec didn't work, trying func_call");
+        ////System.out.println("stmt - var_dec didn't work, trying func_call");
         JottTreeNode funcCallNode = func_call(new JottTreeNode(JottElement.FUNC_CALL));
         if (funcCallNode != null) {
-            System.out.println("stmt - found func_call");
+            ////System.out.println("stmt - found func_call");
             jottTreeNode.addChild(funcCallNode);
 
             tokenIndex += 1;
@@ -871,18 +870,18 @@ public class JottParser implements JottTree {
                 tokenIndex += 1;
                 return jottTreeNode;
             } else {
-                System.out.println("missing end_stmt");
+                ////System.out.println("missing end_stmt");
                 tokenIndex = originalTokenIndex;
                 Failed=1; return null;
             }
         }
 
-        System.out.println("stmt - func_call didn't work. ran out of options. error!");
+        ////System.out.println("stmt - func_call didn't work. ran out of options. error!");
         Failed=1; return null;
     }
 
     private static JottTreeNode func_call(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.FUNC_CALL);
+        ////System.out.println(JottElement.FUNC_CALL);
         int originalTokenIndex = tokenIndex;
 
         Token idToken = tokens.get(tokenIndex);
@@ -892,17 +891,17 @@ public class JottParser implements JottTree {
 
         // find id
         if (idToken.getTokenType() == TokenType.ID_KEYWORD) {
-            System.out.println(String.format("found id for func_call (%s)", idToken.getToken()));
+            ////System.out.println(String.format("found id for func_call (%s)", idToken.getToken()));
 
             if (IdBanList.contains(idToken.getToken())) {
-                System.out.println("banned keyword");
+                ////System.out.println("banned keyword");
                 tokenIndex = originalTokenIndex;
                 Failed=1; return null;
             }
 
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), idToken));
         } else {
-            System.out.println("id missing for func_call");
+            ////System.out.println("id missing for func_call");
             tokenIndex = originalTokenIndex;
             Failed=1; return null;
         }
@@ -911,10 +910,10 @@ public class JottParser implements JottTree {
         tokenIndex += 1;
         Token leftBracketToken = tokens.get(tokenIndex);
         if (leftBracketToken.getTokenType() == TokenType.L_BRACKET) {
-            System.out.println("found [ for func_call");
+            ////System.out.println("found [ for func_call");
             jottTreeNode.addChild(new JottTreeNode(leftBracketToken));
         } else {
-            System.out.println("[ missing for func_call");
+            ////System.out.println("[ missing for func_call");
             tokenIndex = originalTokenIndex;
             Failed=1; return null;
         }
@@ -933,10 +932,10 @@ public class JottParser implements JottTree {
 
         JottTreeNode paramsNode = params(new JottTreeNode(JottElement.PARAMS));
         if (paramsNode != null) {
-            System.out.println("found parameter(s)");
+            ////System.out.println("found parameter(s)");
             jottTreeNode.addChild(paramsNode);
         } else {
-            System.out.println("missing parameter(s)");
+            ////System.out.println("missing parameter(s)");
             tokenIndex = originalTokenIndex;
             Failed=1; return null;
         }
@@ -944,10 +943,10 @@ public class JottParser implements JottTree {
         // finding "]"
         Token rightBracketToken = tokens.get(tokenIndex);
         if (rightBracketToken.getTokenType() == TokenType.R_BRACKET) {
-            System.out.println("found ] for func_call");
+            ////System.out.println("found ] for func_call");
             jottTreeNode.addChild(new JottTreeNode(rightBracketToken));
         } else {
-            System.out.println("] missing for func_call");
+            ////System.out.println("] missing for func_call");
             tokenIndex = originalTokenIndex;
             Failed=1; return null;
         }
@@ -956,16 +955,16 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode params(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.PARAMS);
+        ////System.out.println(JottElement.PARAMS);
 
         int originalTokenIndex = tokenIndex;
         // look for expr
         JottTreeNode exprNode = expr(new JottTreeNode(JottElement.EXPR));
         if (exprNode != null) {
-            System.out.println("an expression found!");
+            ////System.out.println("an expression found!");
             jottTreeNode.addChild(exprNode);
         } else {
-            System.out.println("an expression not found!");
+            ////System.out.println("an expression not found!");
             tokenIndex = originalTokenIndex;
             Failed=1; return null;
         }
@@ -973,24 +972,24 @@ public class JottParser implements JottTree {
         // look for params_t
         JottTreeNode paramsTNode = params_t(new JottTreeNode(JottElement.PARAMS_T));
         if (paramsTNode != null) {
-            System.out.println("found paramsT");
+            ////System.out.println("found paramsT");
             jottTreeNode.addChild(paramsTNode);
         } else {
-            System.out.println("no more params");
+            ////System.out.println("no more params");
         }
 
         return jottTreeNode;
     }
 
     private static JottTreeNode params_t(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.PARAMS_T);
+        ////System.out.println(JottElement.PARAMS_T);
 
         int originalTokenIndex = tokenIndex;
 
         // find comma
         Token commaToken = tokens.get(tokenIndex);
         if (commaToken.getTokenType() == TokenType.COMMA) {
-            System.out.println("params_t - found more parameter");
+            ////System.out.println("params_t - found more parameter");
 
             jottTreeNode.addChild(new JottTreeNode(commaToken));
 
@@ -998,10 +997,10 @@ public class JottParser implements JottTree {
             tokenIndex += 1;
             JottTreeNode exprNode = expr(new JottTreeNode(JottElement.EXPR));
             if (exprNode != null) {
-                System.out.println("an expression found!");
+                ////System.out.println("an expression found!");
                 jottTreeNode.addChild(exprNode);
             } else {
-                System.out.println("an expression not found!");
+                ////System.out.println("an expression not found!");
                 tokenIndex = originalTokenIndex;
                 Failed=1; return null;
             }
@@ -1009,118 +1008,118 @@ public class JottParser implements JottTree {
             // find more params_t
             JottTreeNode paramsTNode = params_t(new JottTreeNode(JottElement.PARAMS_T));
             if (paramsTNode != null) {
-                System.out.println("found paramsT");
+                ////System.out.println("found paramsT");
                 jottTreeNode.addChild(paramsTNode);
             } else {
-                System.out.println("no more params");
+                ////System.out.println("no more params");
             }
 
             return jottTreeNode;
 
         } else {
-            System.out.println("params_t - no more parameter");
+            ////System.out.println("params_t - no more parameter");
             tokenIndex = originalTokenIndex;
             Failed=1; return null;
         }
     }
 
     private static JottTreeNode expr(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.EXPR);
+        ////System.out.println(JottElement.EXPR);
 
 
         // i_expr|d_expr|s_expr|b_expr|id|func_call
 
 
-        System.out.println("expr - trying i_expr");
+        ////System.out.println("expr - trying i_expr");
 
 
         JottTreeNode iExprNode = i_expr(new JottTreeNode(JottElement.I_EXPR));
         if (iExprNode != null) {
-            System.out.println("found i_expr");
+            ////System.out.println("found i_expr");
             jottTreeNode.addChild(iExprNode);
             return jottTreeNode;
         }
 
-        System.out.println("expr - i_expr didn't work, trying d_expr");
+        ////System.out.println("expr - i_expr didn't work, trying d_expr");
 
         JottTreeNode dExprNode = d_expr(new JottTreeNode(JottElement.D_EXPR));
         if (dExprNode != null) {
-            System.out.println("found d_expr");
+            ////System.out.println("found d_expr");
             jottTreeNode.addChild(dExprNode);
             return jottTreeNode;
         }
 
-        System.out.println("expr - d_expr didn't work, trying s_expr");
+        ////System.out.println("expr - d_expr didn't work, trying s_expr");
 
         JottTreeNode sExprNode = s_expr(new JottTreeNode(JottElement.S_EXPR));
         if (sExprNode != null) {
-            System.out.println("found s_expr");
+            ////System.out.println("found s_expr");
             jottTreeNode.addChild(sExprNode);
             return jottTreeNode;
         }
 
-        System.out.println("expr - s_expr didn't work, trying b_expr");
+        ////System.out.println("expr - s_expr didn't work, trying b_expr");
 
         JottTreeNode bExprNode = b_expr(new JottTreeNode(JottElement.B_EXPR));
         if (bExprNode != null) {
-            System.out.println("found b_expr");
+            ////System.out.println("found b_expr");
             jottTreeNode.addChild(bExprNode);
             return jottTreeNode;
         }
 
-        System.out.println("expr - b_expr didn't work, trying id keyword");
+        ////System.out.println("expr - b_expr didn't work, trying id keyword");
 
         Token token = tokens.get(tokenIndex);
         if (token.getTokenType() == TokenType.ID_KEYWORD) {
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
 
             if (IdBanList.contains(token.getToken())) {
-                System.out.println("banned keyword");
+                ////System.out.println("banned keyword");
                 Failed=1; return null;
             }
 
             return jottTreeNode;
         }
 
-        System.out.println("expr - trying func_call");
+        ////System.out.println("expr - trying func_call");
         JottTreeNode funcCall = func_call(new JottTreeNode(JottElement.FUNC_CALL));
         if (funcCall != null) {
-            System.out.println("expr - found func_call");
+            ////System.out.println("expr - found func_call");
             jottTreeNode.addChild(funcCall);
             tokenIndex+=1;
             return jottTreeNode;
         }
 
-        System.out.println("expr - all options don't work, no idea what to do now");
+        ////System.out.println("expr - all options don't work, no idea what to do now");
         Failed=1; return null;
     }
 
     private static JottTreeNode type(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.TYPE);
+        ////System.out.println(JottElement.TYPE);
 
         Token token = tokens.get(tokenIndex);
 
         switch (token.getToken()) {
             case "Integer", "Double", "String", "Boolean" -> {
-                System.out.println(String.format("Type exists (%s)", token.getToken()));
+                ////System.out.println(String.format("Type exists (%s)", token.getToken()));
                 JottTreeNode typeNode = new JottTreeNode(JottElement.TYPE);
                 typeNode.addChild(new JottTreeNode(token));
                 return typeNode;
             }
             default -> {
-                System.out.println("missing Type");
+                ////System.out.println("missing Type");
                 Failed=1; return null;
             }
         }
     }
 
     private static JottTreeNode var_dec(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.VAR_DEC);
+        ////System.out.println(JottElement.VAR_DEC);
 
         Token typeToken = tokens.get(tokenIndex);
-        System.out.println("VAR DEC");
-        System.out.println(typeToken.getToken());
-        System.out.println(typeToken.getTokenType());
+        ////System.out.println("VAR DEC");
+        ////System.out.println(typeToken.getToken());
+        ////System.out.println(typeToken.getTokenType());
 
         int originalTokenIndex = tokenIndex;
         // look for type
@@ -1132,9 +1131,9 @@ public class JottParser implements JottTree {
                     typeToken.getToken().equals("String") ||
                     typeToken.getToken().equals("Boolean")) {
                 jottTreeNode.addChild(new JottTreeNode(typeToken));
-//                System.out.println(String.format("var_dec - type exists (%s)", typeToken.getToken()));
+//                ////System.out.println(String.format("var_dec - type exists (%s)", typeToken.getToken()));
             } else {
-//                System.out.println("var_dec - missing type");
+//                ////System.out.println("var_dec - missing type");
                 tokenIndex = originalTokenIndex;
                 Failed=1; return null;
             }
@@ -1143,10 +1142,10 @@ public class JottParser implements JottTree {
             tokenIndex += 1;
             Token idToken = tokens.get(tokenIndex);
             if (typeToken.getTokenType() == TokenType.ID_KEYWORD) {
-//                System.out.println(String.format("var_dec - found var id (%s)", idToken.getToken()));
+//                ////System.out.println(String.format("var_dec - found var id (%s)", idToken.getToken()));
 
                 if (IdBanList.contains(idToken.getToken())) {
-//                    System.out.println("banned keyword");
+//                    ////System.out.println("banned keyword");
                     tokenIndex = originalTokenIndex;
                     Failed=1; return null;
                 }
@@ -1154,12 +1153,12 @@ public class JottParser implements JottTree {
                 jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), idToken));
                 return jottTreeNode;
             } else {
-//                System.out.println("var_dec - missing var id");
+//                ////System.out.println("var_dec - missing var id");
                 tokenIndex = originalTokenIndex;
                 Failed=1; return null;
             }
         } else {
-//            System.out.println("not var dec");
+//            ////System.out.println("not var dec");
             tokenIndex = originalTokenIndex;
             Failed=1; return null;
         }
@@ -1182,11 +1181,11 @@ public class JottParser implements JottTree {
          **/
 
         Token typeToken = tokens.get(tokenIndex);
-//        System.out.println(typeToken.getToken());
-//        System.out.println(typeToken.getTokenType());
+//        ////System.out.println(typeToken.getToken());
+//        ////System.out.println(typeToken.getTokenType());
 
         if (typeToken.getTokenType() == TokenType.ID_KEYWORD) {
-//            System.out.println("found id");
+//            ////System.out.println("found id");
 
             // look for var type
             if (typeToken.getToken().equals("Double") ||
@@ -1194,19 +1193,19 @@ public class JottParser implements JottTree {
                     typeToken.getToken().equals("String") ||
                     typeToken.getToken().equals("Boolean")) {
                 jottTreeNode.addChild(new JottTreeNode(typeToken));
-//                System.out.println(String.format("Type exists (%s)", typeToken.getToken()));
+//                ////System.out.println(String.format("Type exists (%s)", typeToken.getToken()));
                 tokenIndex += 1;
             } else {
-//                System.out.println("didn't find type");
+//                ////System.out.println("didn't find type");
             }
 
             // look for var name
             Token varIdToken = tokens.get(tokenIndex);
             if (varIdToken.getTokenType() == TokenType.ID_KEYWORD) {
-//                System.out.println(String.format("found var id (%s)", varIdToken.getToken()));
+//                ////System.out.println(String.format("found var id (%s)", varIdToken.getToken()));
                 jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), varIdToken));
             } else {
-//                System.out.println("did not find var id");
+//                ////System.out.println("did not find var id");
                 tokenIndex = originalTokenIndex;
                 Failed=1; return null;
             }
@@ -1215,54 +1214,54 @@ public class JottParser implements JottTree {
             tokenIndex += 1;
             Token equalSymbol = tokens.get(tokenIndex);
             if (equalSymbol.getTokenType() == TokenType.ASSIGN) {
-//                System.out.println("assign symbol found");
+//                ////System.out.println("assign symbol found");
                 jottTreeNode.addChild(new JottTreeNode(equalSymbol));
             } else {
-//                System.out.println("assign symbol not found");
+//                ////System.out.println("assign symbol not found");
                 tokenIndex = originalTokenIndex;
                 Failed=1; return null;
             }
 
-//            System.out.println("looking for an expression; starting with i_expr");
+//            ////System.out.println("looking for an expression; starting with i_expr");
             // look for expression
             tokenIndex += 1;
             JottTreeNode iExprNode = i_expr(new JottTreeNode(JottElement.I_EXPR));
             if (iExprNode != null) {
-//                System.out.println("found i_expr");
+//                ////System.out.println("found i_expr");
                 jottTreeNode.addChild(iExprNode);
                 return jottTreeNode;
             }
 
-//            System.out.println("i_expr failed; looking for d_expr");
+//            ////System.out.println("i_expr failed; looking for d_expr");
             JottTreeNode dExprNode = d_expr(new JottTreeNode(JottElement.D_EXPR));
             if (dExprNode != null) {
-//                System.out.println("found d_expr");
+//                ////System.out.println("found d_expr");
                 jottTreeNode.addChild(dExprNode);
                 return jottTreeNode;
             }
 
-//            System.out.println("d_expr failed; looking for s_expr");
+//            ////System.out.println("d_expr failed; looking for s_expr");
             JottTreeNode sExprNode = s_expr(new JottTreeNode(JottElement.S_EXPR));
             if (sExprNode != null) {
-//                System.out.println("found s_expr");
+//                ////System.out.println("found s_expr");
                 jottTreeNode.addChild(sExprNode);
                 return jottTreeNode;
             }
 
-//            System.out.println("s_expr failed; looking for b_expr");
+//            ////System.out.println("s_expr failed; looking for b_expr");
             JottTreeNode bExprNode = b_expr(new JottTreeNode(JottElement.B_EXPR));
             if (bExprNode != null) {
-//                System.out.println("found b_expr");
+//                ////System.out.println("found b_expr");
                 jottTreeNode.addChild(bExprNode);
                 return jottTreeNode;
             }
 
-//            System.out.println("ran out of options; no expressions found");
+//            ////System.out.println("ran out of options; no expressions found");
             tokenIndex = originalTokenIndex;
             Failed=1; return null;
 
         } else {
-//            System.out.println("not asmt");
+//            ////System.out.println("not asmt");
             tokenIndex = originalTokenIndex;
             Failed=1; return null;
         }
@@ -1271,33 +1270,33 @@ public class JottParser implements JottTree {
 
     // will need to ensure this works
     private static JottTreeNode op(JottTreeNode jottTreeNode) {
-//        System.out.println(JottElement.OP);
+//        ////System.out.println(JottElement.OP);
 
         Token token = tokens.get(tokenIndex);
 
         if (token.getTokenType() == TokenType.MATH_OP){
-//            System.out.println("op exists");
+//            ////System.out.println("op exists");
             jottTreeNode.addChild(new JottTreeNode(token));
             tokenIndex += 1;
             return jottTreeNode;
         }
-//        System.out.println("missing op");
+//        ////System.out.println("missing op");
         Failed=1; return null;
     }
 
     // will need to ensure this works
     private static JottTreeNode rel_op(JottTreeNode jottTreeNode) {
-//        System.out.println(JottElement.REL_OP);
+//        ////System.out.println(JottElement.REL_OP);
 
         Token token = tokens.get(tokenIndex);
 
         if (token.getTokenType() == TokenType.REL_OP) {
-//            System.out.println("REL_OP exists");
+//            ////System.out.println("REL_OP exists");
             jottTreeNode.addChild(new JottTreeNode(token));
             tokenIndex += 1;
             return jottTreeNode;
         }
-//        System.out.println("missing REL_OP");
+//        ////System.out.println("missing REL_OP");
         Failed=1; return null;
     }
 
@@ -1312,9 +1311,9 @@ public class JottParser implements JottTree {
         int originalTokenIndex = tokenIndex;
 
         // is this an id
-//        System.out.println(token.getToken()+"---------------------------------");
+//        ////System.out.println(token.getToken()+"---------------------------------");
         if (token.getTokenType() == TokenType.ID_KEYWORD || token.getToken().equals("True") || token.getToken().equals("False")){
-//            System.out.println("ID exists");
+//            ////System.out.println("ID exists");
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
             tokenIndex += 1;
             return jottTreeNode;
@@ -1328,7 +1327,7 @@ public class JottParser implements JottTree {
                         // tokenIndex += 1;          <----------------------------------???????????
                         return jottTreeNode;
                 }
-//                System.out.println("i_expr relOP i_expr Failure");
+//                ////System.out.println("i_expr relOP i_expr Failure");
                 tokenIndex = originalTokenIndex;
                 Failed=1; return null;
             }else{
@@ -1340,7 +1339,7 @@ public class JottParser implements JottTree {
                     // tokenIndex += 1;          <----------------------------------???????????
                     return jottTreeNode;
                 }
-//                System.out.println("d_expr relOP d_expr Failure");
+//                ////System.out.println("d_expr relOP d_expr Failure");
                 Failed=1; return null;
             }else if (s_expr(jottTreeNode) != null) {
                 tokenIndex += 1;
@@ -1348,7 +1347,7 @@ public class JottParser implements JottTree {
                     // tokenIndex += 1;          <----------------------------------???????????
                     return jottTreeNode;
                 }
-//                System.out.println("s_expr relOP s_expr Failure");
+//                ////System.out.println("s_expr relOP s_expr Failure");
                 Failed=1; return null;
             }else if (b_expr(jottTreeNode) != null) {
                     tokenIndex += 1;
@@ -1356,7 +1355,7 @@ public class JottParser implements JottTree {
                         // tokenIndex += 1;          <----------------------------------???????????
                         return jottTreeNode;
                     } else {
-//                        System.out.println("b_expr relOP b_expr Failure");
+//                        ////System.out.println("b_expr relOP b_expr Failure");
                         tokenIndex = originalTokenIndex;
                         Failed=1; return null;
                     }
@@ -1366,7 +1365,7 @@ public class JottParser implements JottTree {
                         return jottTreeNode;
                     }
                     else{
-//                        System.out.println("function call Failure");
+//                        ////System.out.println("function call Failure");
                         tokenIndex = originalTokenIndex;
                         Failed=1; return null;
                     }
@@ -1374,7 +1373,7 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode i_expr(JottTreeNode jottTreeNode) {
-//        System.out.println(JottElement.I_EXPR);
+//        ////System.out.println(JottElement.I_EXPR);
 
 
         int originalTokenIndex = tokenIndex;
@@ -1388,40 +1387,40 @@ public class JottParser implements JottTree {
          * func_call **/
 
         Token firstToken = tokens.get(tokenIndex);
-//        System.out.println(firstToken.getToken());
-//        System.out.println(firstToken.getTokenType());
+//        ////System.out.println(firstToken.getToken());
+//        ////System.out.println(firstToken.getTokenType());
 
         if (firstToken.getToken().equals("-") || firstToken.getToken().equals("+")) { // [+/- int] +30, -30, -50, +5, etc
             tokenIndex += 1;
             Token secondToken = tokens.get(tokenIndex);
             if (secondToken.getTokenType() == TokenType.NUMBER) {
-//                System.out.println("[+/- int] found");
+//                ////System.out.println("[+/- int] found");
                 JottTreeNode intNode = new JottTreeNode(JottElement.INT);
                 intNode.addChild(new JottTreeNode(new Token(String.format(firstToken.getToken().equals("-") ? "-%s" : "%s", secondToken.getToken()), secondToken.getFilename(), secondToken.getLineNum(), secondToken.getTokenType())));
                 jottTreeNode.addChild(intNode);
             } else {
-//                System.out.println("[+/- int] not formatted correctly");
+//                ////System.out.println("[+/- int] not formatted correctly");
                 tokenIndex = originalTokenIndex;
                 Failed=1; return null;
             }
         } else if (firstToken.getTokenType() == TokenType.NUMBER) { // [int] 30, 50, 42, etc
-//            System.out.println("[int] found");
+//            ////System.out.println("[int] found");
             JottTreeNode intNode = new JottTreeNode(JottElement.INT);
             intNode.addChild(new JottTreeNode(firstToken));
             jottTreeNode.addChild(intNode);
         } else if (firstToken.getTokenType() == TokenType.ID_KEYWORD) {
-//            System.out.println("[id] found");
+//            ////System.out.println("[id] found");
 
             JottTreeNode funcCallNode = func_call(new JottTreeNode(JottElement.FUNC_CALL));
             if (funcCallNode != null) {
-//                System.out.println("found a function call");
+//                ////System.out.println("found a function call");
                 jottTreeNode.addChild(funcCallNode);
             } else {
-//                System.out.println("not a function call");
+//                ////System.out.println("not a function call");
                 jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), firstToken));
             }
         } else {
-//            System.out.println("no idea what this is");
+//            ////System.out.println("no idea what this is");
             tokenIndex = originalTokenIndex;
             Failed=1; return null;
         }
@@ -1430,7 +1429,7 @@ public class JottParser implements JottTree {
         tokenIndex += 1;
         Token opToken = tokens.get(tokenIndex);
         if (opToken.getTokenType() == TokenType.MATH_OP) {
-//            System.out.println(String.format("found op (%s)", opToken.getToken()));
+//            ////System.out.println(String.format("found op (%s)", opToken.getToken()));
             jottTreeNode.addChild(new JottTreeNode(opToken));
 
             tokenIndex += 1;
@@ -1439,14 +1438,14 @@ public class JottParser implements JottTree {
             return jottTreeNode;
         } else {
             // no op here
-//            System.out.println("no op here");
+//            ////System.out.println("no op here");
             return jottTreeNode;
         }
 
 //        tokenIndex += 1;
 //        Token opToken = tokens.get(tokenIndex);
 //        if (opToken.getTokenType() == TokenType.MATH_OP) {
-//            System.out.println("found op");
+//            ////System.out.println("found op");
 //            jottTreeNode.addChild(new JottTreeNode(opToken));
 //
 //            tokenIndex += 1;
@@ -1460,7 +1459,7 @@ public class JottParser implements JottTree {
 //            }
 //        } else {
 //            // no op here
-//            System.out.println("no op here");
+//            ////System.out.println("no op here");
 //            tokenIndex = originalTokenIndex + 1;
 //            return jottTreeNode;
 //        }
@@ -1468,21 +1467,21 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode str_literal(JottTreeNode jottTreeNode) {
-//        System.out.println(JottElement.STR_LITERAL);
+//        ////System.out.println(JottElement.STR_LITERAL);
         Token token = tokens.get(tokenIndex);
         if (token.getTokenType() == TokenType.STRING) {
-//            System.out.println("String lit exists");
+//            ////System.out.println("String lit exists");
             jottTreeNode.addChild(new JottTreeNode(token));
             tokenIndex += 1;
             return jottTreeNode;
         } else {
-//            System.out.println("missing String lit");
+//            ////System.out.println("missing String lit");
             Failed=1; return null;
         }
     }
 
     private static JottTreeNode s_expr(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.S_EXPR);
+        ////System.out.println(JottElement.S_EXPR);
 
         int originalTokenIndex = tokenIndex;
 
@@ -1493,24 +1492,24 @@ public class JottParser implements JottTree {
             // look for func_call
             JottTreeNode funcCallNode = func_call(new JottTreeNode(JottElement.FUNC_CALL));
             if (funcCallNode != null) {
-//                System.out.println("s_expr - found func_call");
+//                ////System.out.println("s_expr - found func_call");
                 jottTreeNode.addChild(funcCallNode);
                 return funcCallNode;
             }
 
             Token parameter = tokens.get(tokenIndex);
             if (parameter.getTokenType() == TokenType.ID_KEYWORD) {
-//                System.out.println("id found");
+//                ////System.out.println("id found");
                 jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), parameter));
                 return jottTreeNode;
             }
 
-//            System.out.println("could not find anything");
+//            ////System.out.println("could not find anything");
             tokenIndex = originalTokenIndex;
 
             Failed=1; return null;
         } else {
-//            System.out.println("found str_literal");
+//            ////System.out.println("found str_literal");
             jottTreeNode.addChild(strLiteralNode);
             return jottTreeNode;
         }
@@ -1530,16 +1529,17 @@ public class JottParser implements JottTree {
         program(jottParser.tree);
 
 //
-//        System.out.println("******************\nPRINTING THE PARSE TREE OUT");
+//        ////System.out.println("******************\nPRINTING THE PARSE TREE OUT");
 //        printTree(jottParser.tree);
         if(jottParser.Failed == 1){
-            Failed=1; return null;
+            Failed=1;
+            return null;
         }
         return jottParser;
     }
 
 
-    private static String jottstr = "";
+    private static String jottstr = " ";
 
     private String convertToJottRecursive(JottTreeNode curr) {
         if(curr != null){
@@ -1592,17 +1592,17 @@ public class JottParser implements JottTree {
 
         ArrayList<JottTreeNode> jottChildren = jottTreeNode.getChildren();
         if (jottChildren.size() <= 0) {
-            System.out.println(" has no children");
+            ////System.out.println(" has no children");
         } else {
-            System.out.println(String.format(" has %d %s:", jottChildren.size(), jottChildren.size() <= 1 ? "child. that is" : "children. those are"));
+            ////System.out.println(String.format(" has %d %s:", jottChildren.size(), jottChildren.size() <= 1 ? "child. that is" : "children. those are"));
             for (JottTreeNode jottChild : jottChildren) {
                 if (jottChild == null) {
-                    System.out.println("\tERROR: this child is null");
+                    ////System.out.println("\tERROR: this child is null");
                 } else {
                     if (jottChild.isTerminal()) {
-                        System.out.println(String.format("\t%s (terminal)", jottChild.getToken().getToken()));
+                        ////System.out.println(String.format("\t%s (terminal)", jottChild.getToken().getToken()));
                     } else {
-                        System.out.println(String.format("\t%s (non-terminal)", jottChild.getJottElement()));
+                        ////System.out.println(String.format("\t%s (non-terminal)", jottChild.getJottElement()));
                     }
                 }
             }
@@ -1621,12 +1621,12 @@ public class JottParser implements JottTree {
         JottTree T = parse(testResults);
 
         if (Failed == 0) {
-            System.out.println("\n\nCONVERT BACK INTO JOTT AGAIN USING THE PARSE TREE:");
-            System.out.println(T.convertToJott());
+            ////System.out.println("\n\nCONVERT BACK INTO JOTT AGAIN USING THE PARSE TREE:");
+            ////System.out.println(T.convertToJott());
         }
 
 //        for (Token t:testResults) {
-//            System.out.println(t.getToken()+"\t\t<- "+t.getTokenType());
+//            ////System.out.println(t.getToken()+"\t\t<- "+t.getTokenType());
 //        }
     }
 }
