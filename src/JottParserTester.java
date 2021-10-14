@@ -82,9 +82,7 @@ public class JottParserTester {
             JottTree root = JottParser.parse(tokens);
 
 
-//            assert root != null;
-//            System.out.println("{{{{  "+root.convertToJott()+" }}}}");
-//            System.exit(0);
+
 
 
 
@@ -95,12 +93,14 @@ public class JottParserTester {
             if (!test.error && root == null) {
                 System.err.println("\tFailed Test: " + test.testName);
                 System.err.println("\t\tExpected a JottTree and got null");
+
                 return false;
             } else if (test.error && root == null) {
                 return true;
             } else if (test.error) {
                 System.err.println("\tFailed Test: " + test.testName);
                 System.err.println("\t\tExpected a null and got JottTree");
+                System.out.println("{{{{  "+root.convertToJott()+" }}}}");
                 return false;
             }
 

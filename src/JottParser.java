@@ -196,7 +196,7 @@ public class JottParser implements JottTree {
                     jottTreeNode.addChild(functionReturnNode);
                 } else { // not a type, so no idea what this is
                     //System.out.println("function return missing");
-                    Failed=1; return null;
+                     return null;
                 }
             }
         }
@@ -220,7 +220,7 @@ public class JottParser implements JottTree {
             //System.out.println("found body");
             jottTreeNode.addChild(bodyNode);
         } else {
-            Failed=1; return null;
+             return null;
         }
 
         // look for right curly brace
@@ -231,6 +231,7 @@ public class JottParser implements JottTree {
             jottTreeNode.addChild(new JottTreeNode(rightCurlyBrace));
         } else {
             //System.out.println("} missing");
+//            return null;
         }
 
         return jottTreeNode;
@@ -1535,11 +1536,15 @@ public class JottParser implements JottTree {
             Failed=1;
             return null;
         }
+        if(jottParser.convertToJott() == ""){
+            Failed=1;
+            return null;
+        }
         return jottParser;
     }
 
 
-    private static String jottstr = " ";
+    private static String jottstr = "";
 
     private String convertToJottRecursive(JottTreeNode curr) {
         if(curr != null){
