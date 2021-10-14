@@ -1,3 +1,12 @@
 foo[]:Void{
-    print[while];
+    if[true]{
+           Double test;
+    }else{
+               Double test;
+
+    }
+
+    if[true]{
+               Double test;
+        }
 }

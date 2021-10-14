@@ -615,8 +615,13 @@ public class JottParser implements JottTree {
                 tokenIndex+=1;
 
                 if(body(jottTreeNode)!=null){
-                    tokenIndex+=1;
+                    next = tokens.get(tokenIndex);
+
+
                     if (next.getToken().equals("}")) {
+                        jottTreeNode.addChild(new JottTreeNode(next));
+                        System.out.println(next.getToken()+"------fjlkshfdlskafjsdlkfjlkdsjf");
+                        tokenIndex+=1;
                         return jottTreeNode;
                     }else {
                         System.out.println("missing }");
@@ -631,6 +636,7 @@ public class JottParser implements JottTree {
             }
 
         } else {
+
             return jottTreeNode;
         }
 
