@@ -82,9 +82,9 @@ public class JottParserTester {
             JottTree root = JottParser.parse(tokens);
 
 
-
-            // ------------4-345-435-345-34534-5-435-34-534-5-34-5-345-34-5-34
-
+//            assert root != null;
+//            System.out.println("{{{{  "+root.convertToJott()+" }}}}");
+//            System.exit(0);
 
 
 

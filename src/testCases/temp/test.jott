@@ -1,3 +1,7 @@
-foo[]:Void{
-    return a;
+#this is an example
+foo[]:Integer{
+Integer x = 3;
+print[5];
+#this is a comment
+print[ "foo bar" ]
 }
