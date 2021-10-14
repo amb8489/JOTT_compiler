@@ -6,11 +6,18 @@
  */
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class JottParser implements JottTree {
     public JottTreeNode tree;
     private static int tokenIndex;
     private static ArrayList<Token> tokens;
+
+    private static Set<String> IdBanList = Set.of("while", "for", "True", "False", "if", "elseif", "else");
+    // TODO: add print, concat, Enter to this list in the future
+
 
     /**
      * program -> function_list $$                                                                                      <-- DONE
@@ -116,6 +123,12 @@ public class JottParser implements JottTree {
         if (idToken.getTokenType() == TokenType.ID_KEYWORD) {
             // add id child
             System.out.println("id exists");
+
+            if (IdBanList.contains(idToken.getToken())) {
+                System.out.println("banned keyword");
+                return null;
+            }
+
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), idToken));
         } else {
             System.out.println("missing id");
@@ -224,9 +237,6 @@ public class JottParser implements JottTree {
 
         return jottTreeNode;
 
-
-        // TODO: Work in Progress
-
     }
 
     private static JottTreeNode function_def_params(JottTreeNode jottTreeNode) {
@@ -237,6 +247,12 @@ public class JottParser implements JottTree {
         JottTreeNode newNode = new JottTreeNode(JottElement.FUNC_DEF_PARAMS);
         if (parameter.getTokenType() == TokenType.ID_KEYWORD) {
             System.out.println("id exists");
+
+            if (IdBanList.contains(parameter.getToken())) {
+                System.out.println("banned keyword");
+                return null;
+            }
+
             newNode.addChild(id(new JottTreeNode(JottElement.ID), parameter));
         } else {
             System.out.println("missing id");
@@ -278,9 +294,6 @@ public class JottParser implements JottTree {
             newNode.addChild(function_def_params_t(new JottTreeNode(JottElement.FUNC_DEF_PARAMS_T)));
         }
         return newNode;
-
-        // TODO: loop with function_def_params_t until reach ]
-
     }
 
     private static JottTreeNode function_def_params_t(JottTreeNode jottTreeNode) {
@@ -301,6 +314,12 @@ public class JottParser implements JottTree {
         Token parameter = tokens.get(tokenIndex);
         if (parameter.getTokenType() == TokenType.ID_KEYWORD) {
             System.out.println("id found");
+
+            if (IdBanList.contains(parameter.getToken())) {
+                System.out.println("banned keyword");
+                return null;
+            }
+
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), parameter));
         } else {
             System.out.println("id is missing");
@@ -869,6 +888,13 @@ public class JottParser implements JottTree {
         // find id
         if (idToken.getTokenType() == TokenType.ID_KEYWORD) {
             System.out.println(String.format("found id for func_call (%s)", idToken.getToken()));
+
+            if (IdBanList.contains(idToken.getToken())) {
+                System.out.println("banned keyword");
+                tokenIndex = originalTokenIndex;
+                return null;
+            }
+
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), idToken));
         } else {
             System.out.println("id missing for func_call");
@@ -1042,6 +1068,12 @@ public class JottParser implements JottTree {
         Token token = tokens.get(tokenIndex);
         if (token.getTokenType() == TokenType.ID_KEYWORD) {
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
+
+            if (IdBanList.contains(token.getToken())) {
+                System.out.println("banned keyword");
+                return null;
+            }
+
             return jottTreeNode;
         }
 
@@ -1107,6 +1139,13 @@ public class JottParser implements JottTree {
             Token idToken = tokens.get(tokenIndex);
             if (typeToken.getTokenType() == TokenType.ID_KEYWORD) {
                 System.out.println(String.format("var_dec - found var id (%s)", idToken.getToken()));
+
+                if (IdBanList.contains(idToken.getToken())) {
+                    System.out.println("banned keyword");
+                    tokenIndex = originalTokenIndex;
+                    return null;
+                }
+
                 jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), idToken));
                 return jottTreeNode;
             } else {
