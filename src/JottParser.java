@@ -44,10 +44,10 @@ public class JottParser implements JottTree {
      *               |id = b_expr end_stmt
      * op -> +|*|/|+|-                                                                                                  <-- DONE
      * rel_op -> >|>=|<|<=|==|!=                                                                                        <-- DONE
-     * d_expr -> id|dbl|dbl op dbl|dbl op d_expr|d_expr op dbl|d_expr op d_expr|func_call                               <-- WORK IN PROGRESS (REDO & IMPROVE)
+     * d_expr -> id|dbl|dbl op dbl|dbl op d_expr|d_expr op dbl|d_expr op d_expr|func_call                               <-- NOT NEEDED IN PHASE 2
      * bool -> True|False                                                                                               <-- DONE
      * b_expr -> id|bool|i_expr rel_op i_expr|d_expr rel_op d_expr|s_expr rel_op s_expr|b_expr rel_op b_expr|func_call  <-- WORK IN PROGRESS (REDO & IMPROVE)
-     * i_expr -> id|int|int op int|int op i_expr|i_expr op int|i_expr op i_expr|func_call                               <-- WORK IN PROGRESS
+     * i_expr -> id|int|int op int|int op i_expr|i_expr op int|i_expr op i_expr|func_call                               <-- DONE
      * str_literal -> " str "                                                                                           <-- DONE
      * s_expr -> str_literal|id|func_call                                                                               <-- WORK IN PROGRESS (REDO & IMPROVE)
      * --------------------------------------------------------------------------------------------------------------------------------
@@ -1176,57 +1176,8 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode d_expr(JottTreeNode jottTreeNode) {
-        System.out.println(JottElement.D_EXPR);
-
-        JottTreeNode first_token = null;
-        // token id or int
-        Token token = tokens.get(tokenIndex);
-        if (token.getTokenType() == TokenType.ID_KEYWORD && tokens.get(tokenIndex+1).getTokenType() != TokenType.L_BRACKET) {// hmmmmmmm ???
-            System.out.println("id exists");
-            first_token = id(new JottTreeNode(JottElement.ID), token);
-        }else if(token.getTokenType() == TokenType.NUMBER){
-            first_token = new JottTreeNode(token);
-        }else if(func_call(jottTreeNode) != null){
-            i_expr(jottTreeNode); // hmmmmmmm ???
-        }else {
-            System.out.println("ERROR NOT ID OR INT OR FUNCTION CALL");
-            return null;
-        }
-
-        tokenIndex += 1;
-
-        token = tokens.get(tokenIndex);
-
-        // check for op
-        if (token.getTokenType() == TokenType.MATH_OP) {
-
-            JottTreeNode op_token = new JottTreeNode(tokens.get(tokenIndex));
-
-            tokenIndex += 1;
-            //check for int op int meaning no stay op
-            token = tokens.get(tokenIndex);
-            if (token.getTokenType() == TokenType.NUMBER || token.getTokenType() == TokenType.ID_KEYWORD) {
-                System.out.println("FOUND OP");
-
-                jottTreeNode.addChild(first_token);
-                jottTreeNode.addChild(op_token);
-                i_expr(jottTreeNode);
-                return jottTreeNode;
-            }else {
-                jottTreeNode.addChild(first_token);
-                jottTreeNode.addChild(op_token);
-                if(func_call(jottTreeNode) != null){
-                    i_expr(jottTreeNode);
-                    return jottTreeNode;
-                }
-                System.out.println("REPORT ERROR stray op");
-                return null;
-            }
-        }
-
-        System.out.println("FOUND LONE OP|dbl");
-        jottTreeNode.addChild(first_token);
-        return jottTreeNode;
+        // not needed in phrase 2, will implement in phrase 3
+        return null;
     }
 
     private static JottTreeNode b_expr(JottTreeNode jottTreeNode) {
