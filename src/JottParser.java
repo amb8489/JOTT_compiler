@@ -30,7 +30,7 @@ public class JottParser implements JottTree {
      * return_stmt -> return expr end_stmt                                                                              <-- DONE
      * body -> body_stmt body|return_stmt|ε                                                                             <-- DONE
      * if_stmt -> if [ b_expr ] { body } elseif_lst
-     *            |if [ b_expr ] { body } elseif_lst else { body }                     <-- WORK IN PROGRESS
+     *            |if [ b_expr ] { body } elseif_lst else { body }                                                      <-- DONE
      * elseif_lst -> elseif [ b_expr ] { body } elseif_lst|ε                                                            <-- DONE
      * while_loop -> while [ b_expr ] { body }                                                                          <-- DONE
      * id -> l_char char                                                                                                <-- DONE

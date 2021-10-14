@@ -1,12 +1,6 @@
 foo[]:Void{
     if[true]{
            Double test;
-    }elseif[true]{
-
-               Double test;
-    }elseif[true]{
-
-               Double test;
     }else{
 
                Double test;
