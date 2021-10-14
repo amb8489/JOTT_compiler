@@ -14,7 +14,7 @@ public class JottParser implements JottTree {
 
     /**
      * program -> function_list $$                                                                                      <-- DONE
-     * function_list -> function_def function_list                                                                      <-- ALMOST DONE (NEED TO SUPPORT RECURSE; MULTIPLE FUNCTIONS)
+     * function_list -> function_def function_list                                                                      <-- DONE
      * function_list -> ε                                                                                               <-- DONE
      * function_def -> id [ func_def_params ] : function_return { body }                                                <-- DONE
      * func_def_params -> id : type func_def_params_t|ε                                                                 <-- DONE
@@ -49,7 +49,7 @@ public class JottParser implements JottTree {
      * b_expr -> id|bool|i_expr rel_op i_expr|d_expr rel_op d_expr|s_expr rel_op s_expr|b_expr rel_op b_expr|func_call  <-- WORK IN PROGRESS (REDO & IMPROVE)
      * i_expr -> id|int|int op int|int op i_expr|i_expr op int|i_expr op i_expr|func_call                               <-- DONE
      * str_literal -> " str "                                                                                           <-- DONE
-     * s_expr -> str_literal|id|func_call                                                                               <-- WORK IN PROGRESS (REDO & IMPROVE)
+     * s_expr -> str_literal|id|func_call                                                                               <-- DONE
      * --------------------------------------------------------------------------------------------------------------------------------
      * */
 
@@ -1294,6 +1294,10 @@ public class JottParser implements JottTree {
                 System.out.println("not a function call");
                 jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), firstToken));
             }
+        } else {
+            System.out.println("no idea what this is");
+            tokenIndex = originalTokenIndex;
+            return null;
         }
 
 
@@ -1355,25 +1359,24 @@ public class JottParser implements JottTree {
         System.out.println(JottElement.S_EXPR);
 
         int originalTokenIndex = tokenIndex;
-        Token token = tokens.get(tokenIndex);
 
         // checking for string
         JottTreeNode strLiteralNode = str_literal(new JottTreeNode(JottElement.STR_LITERAL));
         if (strLiteralNode == null) {
             tokenIndex += 1;
-            Token parameter = tokens.get(tokenIndex);
-            if (parameter.getTokenType() == TokenType.ID_KEYWORD) {
-                System.out.println("id found");
-                jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), parameter));
-                return jottTreeNode;
-            }
-
             // look for func_call
             JottTreeNode funcCallNode = func_call(new JottTreeNode(JottElement.FUNC_CALL));
             if (funcCallNode != null) {
                 System.out.println("s_expr - found func_call");
                 jottTreeNode.addChild(funcCallNode);
                 return funcCallNode;
+            }
+
+            Token parameter = tokens.get(tokenIndex);
+            if (parameter.getTokenType() == TokenType.ID_KEYWORD) {
+                System.out.println("id found");
+                jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), parameter));
+                return jottTreeNode;
             }
 
             System.out.println("could not find anything");
