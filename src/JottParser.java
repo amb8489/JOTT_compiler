@@ -1314,7 +1314,6 @@ public class JottParser implements JottTree {
         System.out.println(firstToken.getToken());
         System.out.println(firstToken.getTokenType());
 
-        boolean specialInt = false;
         if (firstToken.getToken().equals("-") || firstToken.getToken().equals("+")) { // [+/- int] +30, -30, -50, +5, etc
             tokenIndex += 1;
             Token secondToken = tokens.get(tokenIndex);
@@ -1323,7 +1322,6 @@ public class JottParser implements JottTree {
                 JottTreeNode intNode = new JottTreeNode(JottElement.INT);
                 intNode.addChild(new JottTreeNode(new Token(String.format(firstToken.getToken().equals("-") ? "-%s" : "%s", secondToken.getToken()), secondToken.getFilename(), secondToken.getLineNum(), secondToken.getTokenType())));
                 jottTreeNode.addChild(intNode);
-                specialInt = true;
             } else {
                 System.out.println("[+/- int] not formatted correctly");
                 tokenIndex = originalTokenIndex;
