@@ -1380,14 +1380,7 @@ public class JottParser implements JottTree {
         }
 
         if (firstToken.getTokenType() == TokenType.ID_KEYWORD) {
-            JottTreeNode funcCallNode = func_call(new JottTreeNode(JottElement.FUNC_CALL));
-            if (funcCallNode != null) {
-//                System.out.println("found a function call");
-                jottTreeNode.addChild(funcCallNode);
-            } else {
-//                System.out.println("not a function call");
-                jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), firstToken));
-            }
+            jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), firstToken));
             tokenIndex += 1;
             return jottTreeNode;
         }
