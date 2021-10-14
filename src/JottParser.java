@@ -196,7 +196,7 @@ public class JottParser implements JottTree {
                     jottTreeNode.addChild(functionReturnNode);
                 } else { // not a type, so no idea what this is
                     //System.out.println("function return missing");
-                     return null;
+                     Failed = 0;return null;
                 }
             }
         }
@@ -674,7 +674,7 @@ public class JottParser implements JottTree {
 
         if(b_expr(jottTreeNode)== null){
             ////System.out.println("b expr FAILED");
-            Failed=1; return null;
+            Failed=1;return null;
         }
         ////System.out.println("b expr found");
 
@@ -699,7 +699,7 @@ public class JottParser implements JottTree {
 
         } else {
             ////System.out.println("{ is missing");
-            Failed=1; return null;
+            Failed=1;return null;
         }
 
         if(body(jottTreeNode)== null){
@@ -758,7 +758,7 @@ public class JottParser implements JottTree {
 
         if(b_expr(jottTreeNode)== null){
             ////System.out.println("b expr FAILED");
-            Failed=1; return null;
+            Failed=1;  return null;
         }
         ////System.out.println("b expr found");
         ////////////////////////////////
@@ -1025,74 +1025,72 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode expr(JottTreeNode jottTreeNode) {
-        ////System.out.println(JottElement.EXPR);
+        System.out.println(JottElement.EXPR);
 
 
         // i_expr|d_expr|s_expr|b_expr|id|func_call
 
-
-        ////System.out.println("expr - trying i_expr");
-
-
-        JottTreeNode iExprNode = i_expr(new JottTreeNode(JottElement.I_EXPR));
-        if (iExprNode != null) {
-            ////System.out.println("found i_expr");
-            jottTreeNode.addChild(iExprNode);
-            return jottTreeNode;
-        }
-
-        ////System.out.println("expr - i_expr didn't work, trying d_expr");
-
-        JottTreeNode dExprNode = d_expr(new JottTreeNode(JottElement.D_EXPR));
-        if (dExprNode != null) {
-            ////System.out.println("found d_expr");
-            jottTreeNode.addChild(dExprNode);
-            return jottTreeNode;
-        }
-
-        ////System.out.println("expr - d_expr didn't work, trying s_expr");
-
-        JottTreeNode sExprNode = s_expr(new JottTreeNode(JottElement.S_EXPR));
-        if (sExprNode != null) {
-            ////System.out.println("found s_expr");
-            jottTreeNode.addChild(sExprNode);
-            return jottTreeNode;
-        }
-
-        ////System.out.println("expr - s_expr didn't work, trying b_expr");
+//        System.out.println("expr - trying b_expr");
 
         JottTreeNode bExprNode = b_expr(new JottTreeNode(JottElement.B_EXPR));
         if (bExprNode != null) {
-            ////System.out.println("found b_expr");
+//            System.out.println("found b_expr");
             jottTreeNode.addChild(bExprNode);
             return jottTreeNode;
         }
 
-        ////System.out.println("expr - b_expr didn't work, trying id keyword");
+//        System.out.println("expr - b_expr didn't work, trying i_expr");
+
+        JottTreeNode iExprNode = i_expr(new JottTreeNode(JottElement.I_EXPR));
+        if (iExprNode != null) {
+//            System.out.println("found i_expr");
+            jottTreeNode.addChild(iExprNode);
+            return jottTreeNode;
+        }
+
+//        System.out.println("expr - i_expr didn't work, trying d_expr");
+
+        JottTreeNode dExprNode = d_expr(new JottTreeNode(JottElement.D_EXPR));
+        if (dExprNode != null) {
+//            System.out.println("found d_expr");
+            jottTreeNode.addChild(dExprNode);
+            return jottTreeNode;
+        }
+
+//        System.out.println("expr - d_expr didn't work, trying s_expr");
+
+        JottTreeNode sExprNode = s_expr(new JottTreeNode(JottElement.S_EXPR));
+        if (sExprNode != null) {
+//            System.out.println("found s_expr");
+            jottTreeNode.addChild(sExprNode);
+            return jottTreeNode;
+        }
+
+//        System.out.println("expr - s_expr didn't work, trying id keyword");
 
         Token token = tokens.get(tokenIndex);
         if (token.getTokenType() == TokenType.ID_KEYWORD) {
             jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
 
             if (IdBanList.contains(token.getToken())) {
-                ////System.out.println("banned keyword");
-                Failed=1; return null;
+                System.out.println("banned keyword");
+                return null;
             }
 
             return jottTreeNode;
         }
 
-        ////System.out.println("expr - trying func_call");
+//        System.out.println("expr - trying func_call");
         JottTreeNode funcCall = func_call(new JottTreeNode(JottElement.FUNC_CALL));
         if (funcCall != null) {
-            ////System.out.println("expr - found func_call");
+            System.out.println("expr - found func_call");
             jottTreeNode.addChild(funcCall);
             tokenIndex+=1;
             return jottTreeNode;
         }
 
-        ////System.out.println("expr - all options don't work, no idea what to do now");
-        Failed=1; return null;
+//        System.out.println("expr - all options don't work, no idea what to do now");
+        Failed = 1; return null;
     }
 
     private static JottTreeNode type(JottTreeNode jottTreeNode) {
@@ -1307,70 +1305,95 @@ public class JottParser implements JottTree {
     }
 
     private static JottTreeNode b_expr(JottTreeNode jottTreeNode) {
-        Token token = tokens.get(tokenIndex);
+//        System.out.println(JottElement.B_EXPR);
+        Token firstToken = tokens.get(tokenIndex);
+
 
         int originalTokenIndex = tokenIndex;
 
-        // is this an id
-//        ////System.out.println(token.getToken()+"---------------------------------");
-        if (token.getTokenType() == TokenType.ID_KEYWORD || token.getToken().equals("True") || token.getToken().equals("False")){
-//            ////System.out.println("ID exists");
-            jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), token));
+
+        Token secondToken = tokens.get(tokenIndex+1);
+//        System.out.println("secondToken <----- " + secondToken.getToken());
+        if (secondToken.getTokenType() == TokenType.REL_OP) {
+            boolean iExprNodeSuccess = false;
+            boolean sExprNodeSuccess = false;
+
+            JottTreeNode iExprNode = i_expr(new JottTreeNode(JottElement.I_EXPR));
+//            System.out.println("iExprNode: " + (iExprNode != null));
+            iExprNodeSuccess = (iExprNode != null);
+//            System.out.println(iExprNodeSuccess ? "i_expr success" : "i_expr fail");
+            if (iExprNodeSuccess) {
+                jottTreeNode.addChild(iExprNode);
+            }
+
+            if (!iExprNodeSuccess) {
+                JottTreeNode sExprNode = s_expr(new JottTreeNode(JottElement.S_EXPR));
+//                System.out.println("sExprNode: " + (iExprNode != null));
+                sExprNodeSuccess = (sExprNode != null);
+                if (sExprNodeSuccess) {
+                    jottTreeNode.addChild(sExprNode);
+                }
+
+//                System.out.println(sExprNodeSuccess ? "s_expr success" : "s_expr fail");
+            }
+
+
+//            System.out.println("found rel op");
+            JottTreeNode relOpNode = new JottTreeNode(JottElement.REL_OP);
+            relOpNode.addChild(new JottTreeNode(secondToken));
+            jottTreeNode.addChild(relOpNode);
+
+            tokenIndex += 1;
+
+            if (iExprNodeSuccess) {
+//                System.out.println("second i_expr");
+                JottTreeNode iExprNode2 = i_expr(new JottTreeNode(JottElement.I_EXPR));
+                if (iExprNode2 != null) {
+                    jottTreeNode.addChild(iExprNode2);
+                }
+                return jottTreeNode;
+            }
+
+            if (sExprNodeSuccess) {
+//                System.out.println("second s_expr");
+                JottTreeNode sExprNode2 = s_expr(new JottTreeNode(JottElement.S_EXPR));
+                if (sExprNode2 != null) {
+                    jottTreeNode.addChild(sExprNode2);
+                    return jottTreeNode;
+                }
+            }
+
+//            System.out.println("b_expr failed");
+            tokenIndex = originalTokenIndex;
+            Failed=1; return null;
+        }
+
+//        System.out.println(firstToken.getToken());
+//        System.out.println(firstToken.getTokenType());
+        if ((firstToken.getToken().equals("True") || firstToken.getToken().equals("False")) && firstToken.getTokenType() == TokenType.ID_KEYWORD) {
+//            System.out.println(String.format("found Bool (%s)", firstToken.getToken()));
+            JottTreeNode boolNode = new JottTreeNode(JottElement.BOOL);
+            boolNode.addChild(new JottTreeNode(firstToken));
+            jottTreeNode.addChild(boolNode);
             tokenIndex += 1;
             return jottTreeNode;
+        }
 
-        }else {
+        if (firstToken.getTokenType() == TokenType.ID_KEYWORD) {
+            JottTreeNode funcCallNode = func_call(new JottTreeNode(JottElement.FUNC_CALL));
+            if (funcCallNode != null) {
+//                System.out.println("found a function call");
+                jottTreeNode.addChild(funcCallNode);
+            } else {
+//                System.out.println("not a function call");
+                jottTreeNode.addChild(id(new JottTreeNode(JottElement.ID), firstToken));
+            }
+            tokenIndex += 1;
+            return jottTreeNode;
+        }
 
-
-            if (i_expr(jottTreeNode) != null) {
-                tokenIndex += 1;
-                if (rel_op(jottTreeNode) != null && i_expr(jottTreeNode) != null) {
-                        // tokenIndex += 1;          <----------------------------------???????????
-                        return jottTreeNode;
-                }
-//                ////System.out.println("i_expr relOP i_expr Failure");
-                tokenIndex = originalTokenIndex;
-                Failed=1; return null;
-            }else{
-
-
-            if (d_expr(jottTreeNode) != null) {
-                tokenIndex += 1;
-                if (rel_op(jottTreeNode) != null && d_expr(jottTreeNode) != null) {
-                    // tokenIndex += 1;          <----------------------------------???????????
-                    return jottTreeNode;
-                }
-//                ////System.out.println("d_expr relOP d_expr Failure");
-                Failed=1; return null;
-            }else if (s_expr(jottTreeNode) != null) {
-                tokenIndex += 1;
-                if (rel_op(jottTreeNode) != null && s_expr(jottTreeNode) != null) {
-                    // tokenIndex += 1;          <----------------------------------???????????
-                    return jottTreeNode;
-                }
-//                ////System.out.println("s_expr relOP s_expr Failure");
-                Failed=1; return null;
-            }else if (b_expr(jottTreeNode) != null) {
-                    tokenIndex += 1;
-                    if (rel_op(jottTreeNode) != null && b_expr(jottTreeNode) != null) {
-                        // tokenIndex += 1;          <----------------------------------???????????
-                        return jottTreeNode;
-                    } else {
-//                        ////System.out.println("b_expr relOP b_expr Failure");
-                        tokenIndex = originalTokenIndex;
-                        Failed=1; return null;
-                    }
-
-                }else if(func_call(jottTreeNode)!=null){
-                        // tokenIndex += 1;          <----------------------------------???????????
-                        return jottTreeNode;
-                    }
-                    else{
-//                        ////System.out.println("function call Failure");
-                        tokenIndex = originalTokenIndex;
-                        Failed=1; return null;
-                    }
-        }}
+        tokenIndex = originalTokenIndex;
+        Failed=1; return null;
     }
 
     private static JottTreeNode i_expr(JottTreeNode jottTreeNode) {
