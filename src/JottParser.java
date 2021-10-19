@@ -1366,6 +1366,9 @@ public class JottParser implements JottTree {
 //            System.out.println("b_expr failed");
             tokenIndex = originalTokenIndex;
             Failed=1; return null;
+        }else if (secondToken.getTokenType() == TokenType.MATH_OP) {
+            tokenIndex = originalTokenIndex;
+            Failed=1;return null;
         }
 
 //        System.out.println(firstToken.getToken());
