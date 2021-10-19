@@ -24,7 +24,6 @@ public class AsmtStmt extends BodyStmt {
     @Override
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
-
         jstr.append("     ".repeat(getNestLevel()));
         jstr.append(type.convertToJott() + " ");
         jstr.append(name.convertToJott() + " = ");
@@ -42,25 +41,31 @@ public class AsmtStmt extends BodyStmt {
         // should be an IDkeyword type
 
         Token typeToken = tokens.remove(0);
-        System.out.println("FIRST:"+typeToken.getToken());
+        System.out.println("    FIRST:"+typeToken.getToken());
         Type type = new Type(typeToken.getToken(), typeToken.getFilename(),typeToken.getLineNum());
 
-        Token varToken = tokens.remove(0);
-        System.out.println("SECOND:"+typeToken.getToken());
-        if (varToken.getTokenType() != TokenType.ID_KEYWORD){
+
+        // getting next token
+        Token idToken = tokens.remove(0);
+        System.out.println("    SECOND:"+typeToken.getToken());
+        if (idToken.getTokenType() != TokenType.ID_KEYWORD){
             StringBuilder sb = new StringBuilder();
             sb.append("Syntax error\nInvalid token. Expected <id>. Got: ");
             sb.append(typeToken.getTokenType().toString()).append("\n");
-            sb.append(varToken.getFilename() + ":" +varToken.getLineNum());
+            sb.append(idToken.getFilename() + ":" +idToken.getLineNum());
             throw new ParsingException(sb.toString());
         }
 
-        Identifier id = new Identifier(varToken.getToken(), varToken.getFilename(),varToken.getLineNum());
+        Identifier id = new Identifier(idToken.getToken(), idToken.getFilename(),idToken.getLineNum());
+
+
+
+
 
         //looking for = token
         Token equalsToken = tokens.remove(0);
         // checking for =
-        System.out.println("THIRD:"+typeToken.getToken());
+        System.out.println("    THIRD:"+typeToken.getToken());
         if (equalsToken.getTokenType() != TokenType.ASSIGN){
             StringBuilder sb = new StringBuilder();
             sb.append("Syntax error\nInvalid token. Expected =. Got: ");
@@ -69,11 +74,28 @@ public class AsmtStmt extends BodyStmt {
             throw new ParsingException(sb.toString());
         }
 
+
+
+
+
         // checking for expression
+        System.out.println("    LOOKING FOR EXPR");
         Expr expr = Expr.parseExpr(tokens,nestLevel);
 
+        //check for ;
+        Token endStmt = tokens.remove(0);
+
+        if (endStmt.getTokenType() != TokenType.SEMICOLON){
+            StringBuilder sb = new StringBuilder();
+            sb.append("Syntax error\nInvalid token. Expected ;. Got: ");
+            sb.append(endStmt.getTokenType().toString()).append("\n");
+            sb.append(endStmt.getFilename() + ":" +endStmt.getLineNum());
+            throw new ParsingException(sb.toString());
+        }
+
+
         // if successful assignment statement
-        return new AsmtStmt(nestLevel,type,id,expr) ;
+        return new AsmtStmt(nestLevel,type,id,expr);
     }
 
 
