@@ -58,5 +58,14 @@ public class VarDec extends Stmt{
         // if successful var dec statement
         return new VarDec(nestLevel,type,id);
     }
-
+    // the format of asmt is {INDENT}TYPE NAME;
+    // where insendt is the number of tabs
+    @Override
+    public String convertToJott() {
+        StringBuilder jstr = new StringBuilder();
+        jstr.append("     ".repeat(getNestLevel()));
+        jstr.append(type.convertToJott() + " ");
+        jstr.append(name.convertToJott() + ";");
+        return jstr.toString();
+    }
 }
