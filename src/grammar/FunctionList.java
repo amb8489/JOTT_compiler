@@ -1,6 +1,7 @@
 package grammar;
 
-public class BodyStmt extends Body {
+public class FunctionList extends Program {
+
     @Override
     public String convertToJava() {
         return null;
@@ -20,4 +21,5 @@ public class BodyStmt extends Body {
     public boolean validateTree() {
         return false;
     }
+
 }

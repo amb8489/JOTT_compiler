@@ -1,4 +1,4 @@
 package grammar;
 
-public class ElseifStmt {
+public class ElseifStmt extends IfStmt {
 }
