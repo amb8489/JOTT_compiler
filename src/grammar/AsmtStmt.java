@@ -1,4 +1,4 @@
 package grammar;
 
-public class AsmtStmt {
+public class AsmtStmt extends BodyStmt {
 }
