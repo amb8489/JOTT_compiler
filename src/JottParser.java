@@ -5,6 +5,8 @@
  * @author
  */
 
+import grammar.JottTree;
+
 import java.util.ArrayList;
 
 public class JottParser {
