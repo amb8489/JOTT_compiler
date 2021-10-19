@@ -25,4 +25,8 @@ public class Program implements JottTree {
     public boolean validateTree() {
         return false;
     }
+
+    protected int getNestLevel() {
+        return 0;
+    }
 }

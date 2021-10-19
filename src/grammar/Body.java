@@ -1,6 +1,10 @@
 package grammar;
 
 public class Body extends FunctionDef {
+    public Body(int nestLevel) {
+        super(nestLevel);
+    }
+
     @Override
     public String convertToJava() {
         return null;
