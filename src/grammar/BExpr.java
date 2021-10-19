@@ -1,4 +1,4 @@
 package grammar;
 
-public class BExpr extends Expr{
+public class BExpr extends Expr {
 }
