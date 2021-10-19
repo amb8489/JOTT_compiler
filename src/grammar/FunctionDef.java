@@ -1,4 +1,4 @@
 package grammar;
 
-public class FunctionDef {
+public class FunctionDef extends FunctionList {
 }

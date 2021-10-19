@@ -1,4 +1,4 @@
 package grammar;
 
-public class FuncDefParamsList {
+public class FuncDefParamsList extends FuncDefParams {
 }
