@@ -1,6 +1,10 @@
 package grammar;
 
 public class WhileLoop extends BodyStmt {
+    public WhileLoop(int nestLevel) {
+        super(nestLevel);
+    }
+
     @Override
     public String convertToJava() {
         return null;

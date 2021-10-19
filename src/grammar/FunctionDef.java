@@ -1,6 +1,10 @@
 package grammar;
 
 public class FunctionDef extends FunctionList {
+    public FunctionDef(int nestLevel) {
+        super(nestLevel);
+    }
+
     @Override
     public String convertToJava() {
         return null;

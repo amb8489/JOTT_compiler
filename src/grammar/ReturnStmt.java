@@ -1,6 +1,10 @@
 package grammar;
 
 public class ReturnStmt extends Body {
+    public ReturnStmt(int nestLevel) {
+        super(nestLevel);
+    }
+
     @Override
     public String convertToJava() {
         return null;

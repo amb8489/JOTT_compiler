@@ -1,6 +1,10 @@
 package grammar;
 
 public class ElseifStmt extends IfStmt {
+    public ElseifStmt(int nestLevel) {
+        super(nestLevel);
+    }
+
     @Override
     public String convertToJava() {
         return null;
