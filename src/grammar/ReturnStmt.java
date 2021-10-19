@@ -1,4 +1,4 @@
 package grammar;
 
-public class ReturnStmt {
+public class ReturnStmt extends Body {
 }

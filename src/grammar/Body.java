@@ -1,4 +1,4 @@
 package grammar;
 
-public class Body {
+public class Body extends FunctionDef {
 }

@@ -1,4 +1,4 @@
 package grammar;
 
-public class While {
+public class While extends BodyStmt {
 }
