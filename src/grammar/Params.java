@@ -8,13 +8,13 @@ import java.util.ArrayList;
 //  params -> expr param |
 //  params -> , expr params | ε
 
-public class ParamsLst {
+public class Params {
 
     private Expr expr;
-    ArrayList<ParamsLst> paramsLst;
+    ArrayList<Params> paramsLst;
     boolean hasComma = false;
 
-    public ParamsLst(){
+    public Params(){
 
 
     }
@@ -22,7 +22,7 @@ public class ParamsLst {
 
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
-        for(ParamsLst p:paramsLst) {
+        for(Params p:paramsLst) {
             if (p.hasComma) {
                 jstr.append(",");
             }
@@ -31,10 +31,10 @@ public class ParamsLst {
         return jstr.toString();
     }
 
-    public static ArrayList<ParamsLst> parseParams(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public static ArrayList<Params> parseParams(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("------------------------PARSING Params------------------------");
 
-        ArrayList<ParamsLst> list_of_params = new ArrayList<>();
+        ArrayList<Params> list_of_params = new ArrayList<>();
 
         // check for next token == ], this means no params
 
