@@ -25,8 +25,7 @@ public class Params {
         if (this.hasComma) {
             jstr.append(",");
         }
-        jstr.append(expr + " ");
-
+        jstr.append(expr.convertToJott() + " ");
         return jstr.toString();
     }
 
@@ -53,15 +52,16 @@ public class Params {
         list_of_params.add(new Params(exp, false));
 
         Token comma = tokens.get(0);
-        System.out.println("    looking for new param" + comma.getToken());
+        System.out.println("        looking for new param:" + comma.getToken());
 
         while (comma.getTokenType() == TokenType.COMMA) {
             tokens.remove(0);
             exp = Expr.parseExpr(tokens, nestLevel);
+
             list_of_params.add(new Params(exp, true));
             comma = tokens.get(0);
-            System.out.println("    new param found");
-            System.out.println("    looking for new param" + comma.getToken());
+            System.out.println("        new param found:"+exp.convertToJott());
+            System.out.println("        looking for new param...:" + comma.getToken());
         }
         return list_of_params;
     }
