@@ -2,6 +2,7 @@ package grammar;
 
 
 import main.Token;
+import main.TokenType;
 
 import java.util.ArrayList;
 
@@ -11,23 +12,21 @@ import java.util.ArrayList;
 public class Params {
 
     private Expr expr;
-    ArrayList<Params> paramsLst;
     boolean hasComma = false;
 
-    public Params(){
-
-
+    public Params(Expr expr, boolean hasComma) {
+        this.expr = expr;
+        this.hasComma = hasComma;
     }
 
 
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
-        for(Params p:paramsLst) {
-            if (p.hasComma) {
-                jstr.append(",");
-            }
-            jstr.append(expr + " ");
+        if (this.hasComma) {
+            jstr.append(",");
         }
+        jstr.append(expr + " ");
+
         return jstr.toString();
     }
 
@@ -38,13 +37,33 @@ public class Params {
 
         // check for next token == ], this means no params
 
-        Token typeToken = tokens.remove(0);
-        System.out.println("    FIRST:" + typeToken.getToken());
-        Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum());
-        // first should have no comma or return null
+        Token first = tokens.get(0);
 
-        // all next need , exp till , is not next token
+        // epsilon case
+        if (first.getTokenType() == TokenType.R_BRACKET) {
+            return null;
+        }
+
+        // looking for expr
+        Expr exp = Expr.parseExpr(tokens, nestLevel);
+        System.out.println("    1st:" + exp.convertToJott());
+
+        // found expr looking for for with , expr
+
+        list_of_params.add(new Params(exp, false));
+
+        Token comma = tokens.get(0);
+        System.out.println("    looking for new param" + comma.getToken());
+
+        while (comma.getTokenType() == TokenType.COMMA) {
+            tokens.remove(0);
+            exp = Expr.parseExpr(tokens, nestLevel);
+            list_of_params.add(new Params(exp, true));
+            comma = tokens.get(0);
+            System.out.println("    new param found");
+            System.out.println("    looking for new param" + comma.getToken());
+        }
         return list_of_params;
     }
 
-    }
+}
