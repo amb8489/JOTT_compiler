@@ -26,7 +26,7 @@ public class JottTokenizer {
 			{"}", 6},{"=", 7},
 			{"<", 9},{">", 9},
 			{"/", 10},{"+", 10},
-			{"-", 10},{"*", 10},
+			{"-", 22},{"*", 10},
 			{";", 11},{".", 12},
 			{"digit", 13},{"letter", 15},
 			{":", 16},{"!", 17},
@@ -41,29 +41,30 @@ public class JottTokenizer {
 	private static final int ER = 21; // error state
 
 	private static final int[][] DFA = {
-			{0 ,1 ,2 ,3 ,4 ,5 ,6 ,7 ,ER,9 ,10,11,12,13,22,15,16,17,18,ER,F ,ER},     //0  start
-			{1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,F ,ER},     //1  # state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //2  , state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //3  ] state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //4  [ state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //5  } state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //6  { state
-			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER},     //7  = state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //8  == <= >= relitiveOp
-			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER},     //9  < > state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //10  /+-* state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //11  ; state
-			{ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,22,ER,ER,ER,ER,ER,ER,ER,ER},     //12  . state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,12,13,F ,F ,F ,F ,F ,F ,F ,ER},     //13  0123456789 state
-			{ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,22,ER,ER,ER,ER,ER,ER,F ,ER},     //14  Decimal state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,15,F ,15,F ,F ,F ,F ,F ,ER},     //15  lettER state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //16  : state
-			{ER,ER,ER,ER,ER,ER,ER,19,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER},     //17  ! state
-			{18,ER,F ,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER,18,ER,18,ER,ER,20 ,ER,ER,ER},     //18  " state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //19  != state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER},     //20  string
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F , 0},     //ER  ERror
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,22,F ,F ,F ,F ,F ,F ,F , 0}};   // 22 decimal number state
+			{0 ,1 ,2 ,3 ,4 ,5 ,6 ,7 ,ER,9 ,10,11,12,13,22,15,16,17,18,ER,F ,ER,23},     //0  start
+			{1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,F ,ER,F},     //1  # state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //2  , state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //3  ] state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //4  [ state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //5  } state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //6  { state
+			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER,F},     //7  = state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //8  == <= >= relitiveOp
+			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER,F},     //9  < > state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //10  /+-* state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //11  ; state
+			{ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,22,ER,ER,ER,ER,ER,ER,ER,ER,F},     //12  . state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,12,13,F ,F ,F ,F ,F ,F ,F ,ER,F},     //13  0123456789 state
+			{ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,22,ER,ER,ER,ER,ER,ER,F ,ER,F},     //14  Decimal state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,15,F ,15,F ,F ,F ,F ,F ,ER,F},     //15  lettER state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //16  : state
+			{ER,ER,ER,ER,ER,ER,ER,19,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F},     //17  ! state
+			{18,ER,F ,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER,18,ER,18,ER,ER,20 ,ER,ER,ER,F},     //18  " state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //19  != state
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //20  string
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F , 0,F},     //ER  ERror
+			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,22,F ,F ,F ,F ,F ,F ,F , 0,F},
+			{10 ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,12 ,13 ,F ,F ,F ,F ,F ,F ,F ,ER}};     //10  /-state
 
 	// helper function to help classify chars
 	private static int classify_char(char ch){
@@ -81,6 +82,7 @@ public class JottTokenizer {
 
 	private static Token tokenClass(String token_str , String file, int State_finished_at, int line_num){
 		System.out.println("fin at:"+State_finished_at + "  |"+ token_str);
+//		System.out.println("token: ("+token_str+")");
 
 		return switch (State_finished_at) {
 			case 2 -> new Token(token_str, file, line_num, TokenType.COMMA);
@@ -197,4 +199,10 @@ public class JottTokenizer {
 		// tokens list
 		 return tokens;
 	}
+	public static void main(String[] args) {
+		String filename = "src/tokenizerTestCases/number.jott";
+		ArrayList<Token> tokens = JottTokenizer.tokenize(filename);
+
+	}
+
 }

@@ -16,6 +16,10 @@ public class Type {
         this.linenum = lineNum;
     }
 
+    public static boolean isType(Token T) {
+        return "Integer Double Boolean String".contains(T.getToken());
+    }
+
 
     public Type ParseType(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("-------------------PARSING TYPE-----------------");
