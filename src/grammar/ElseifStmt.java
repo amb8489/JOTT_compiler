@@ -1,26 +1,35 @@
 package grammar;
 
-public class ElseifStmt extends IfStmt {
-    public ElseifStmt(int nestLevel) {
-        super(nestLevel);
+import main.Token;
+
+import java.util.ArrayList;
+
+public class ElseifStmt {
+
+    public ElseifStmt() {
+
     }
 
-    @Override
+    public static ElseifStmt ParseElsif_lst(ArrayList<Token> tokens, int nestLevel) {
+        return null;
+    }
+
+    public String convertToJott() {
+        return null;
+    }
+
     public String convertToJava() {
         return null;
     }
 
-    @Override
     public String convertToC() {
         return null;
     }
 
-    @Override
     public String convertToPython() {
         return null;
     }
 
-    @Override
     public boolean validateTree() {
         return false;
     }
