@@ -9,16 +9,16 @@ public class IfStmt extends BodyStmt {
     private Expr exp;
     private Body body1;
     private Body body2;
-    private ElseifStmt elif;
+    private ArrayList<ElseifStmt> elif;
 
-    public IfStmt(int nestLevel, Expr exp,Body body1,ElseifStmt elif) {
+    public IfStmt(int nestLevel, Expr exp,Body body1,ArrayList<ElseifStmt> elif) {
         super(nestLevel);
         this.exp = exp;
         this.body1 = body1;
         this.elif = elif;
 
     }
-    public IfStmt(int nestLevel, Expr exp,Body body1,Body body2,ElseifStmt elif) {
+    public IfStmt(int nestLevel, Expr exp,Body body1,Body body2,ArrayList<ElseifStmt> elif) {
         super(nestLevel);
         this.exp = exp;
         this.body1 = body1;
@@ -121,7 +121,7 @@ public class IfStmt extends BodyStmt {
         // ----------------------------------------------------------------------------
         System.out.println("    8th:"+R_BRACE.getToken());
 
-        ElseifStmt elif = ElseifStmt.ParseElsif_lst(tokens, nestLevel);
+        ArrayList<ElseifStmt> elsif_lst = ElseifStmt.ParseElsif_lst(tokens, nestLevel);
 
 
         // ----------------------------------------------------------------------------
@@ -165,11 +165,11 @@ public class IfStmt extends BodyStmt {
             }
 
             // need to add somthing about elif being null <---------------------------TODO
-            return new IfStmt( nestLevel, expr, body1, body2, elif);
+            return new IfStmt( nestLevel, expr, body1, body2, elsif_lst);
         }
 
         // need to add somthing about elif being null <---------------------------TODO
-        return new IfStmt( nestLevel, expr, body1, elif);
+        return new IfStmt( nestLevel, expr, body1, elsif_lst);
     }
 
         @Override
