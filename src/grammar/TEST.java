@@ -12,7 +12,7 @@ public class TEST {
         String filename = "src/tokenizerTestCases/number.jott";
         ArrayList<Token> tokens = JottTokenizer.tokenize(filename);
 
-        NumExpr p = NumExpr.parseNumExpr(tokens,0);
+        Expr p = Expr.parseExpr(tokens,0);
 
         assert p != null;
         System.out.print(p.convertToJott());
