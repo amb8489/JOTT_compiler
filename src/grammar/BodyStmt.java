@@ -18,7 +18,11 @@ public class BodyStmt extends Body {
         this.possible_stmt = possible_stmt;
     }
 
+    public BodyStmt(Object possible_if) {
+        super(0);//??????
 
+
+    }
 
 
     // body_stmt -> if_stmt|while_loop|stmt
