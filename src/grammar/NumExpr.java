@@ -10,8 +10,9 @@ public class NumExpr extends Expr {
     private FuncCall funcCall;
     private Token num;
     private Token mathop;
-
     private ArrayList<NumExpr> finalexp = null;
+
+    // ---------------------- constructors for different cases --------------------------------
 
     public NumExpr(Token num, Token mathop) {
         super(null);
@@ -41,6 +42,8 @@ public class NumExpr extends Expr {
         super(null);
         this.finalexp = finalExp;
     }
+
+
     //i_expr ->            id|int|
     //                    int op int|
     //                    int op i_expr|
@@ -50,30 +53,26 @@ public class NumExpr extends Expr {
 
     private static ArrayList<NumExpr> parseNumExpr_r(ArrayList<Token> tokens, int nestLevel, ArrayList<NumExpr> expLst) throws ParsingException {
 
-        // check next two tokens assuming we have two more tokens
+        // ---------------------- looking for id/int followed by math op --------------------------------
         Token possible_num = tokens.get(0);
         Token possible_op = tokens.get(1);
 
-        System.out.println(possible_num.getToken());
-        System.out.println(possible_op.getToken());
-
-        // check for num/id op ELSE check for just id else check for
         if ((possible_num.getTokenType() == TokenType.NUMBER || possible_num.getTokenType() == TokenType.ID_KEYWORD) && possible_op.getTokenType() == TokenType.MATH_OP) {
             tokens.remove(0);
             tokens.remove(0);
 
+            // ---------------------- numExpr can be id,id op, num,num op --------------------
+
             expLst.add(new NumExpr(possible_num, possible_op));
 
-            // go again
+            // ---------------------- trying to complete id/int op with valid follow ---------
             System.out.println("    going again int/id op");
             return parseNumExpr_r(tokens, nestLevel, expLst);
         }
 
 
-        // check for funccall op
+        // ---------------------- check for function call op --------------------------------
         FuncCall call = FuncCall.ParseFuncCall(tokens, nestLevel);
-
-
         possible_op = tokens.get(0);
 
         if (call != null && possible_op.getTokenType() == TokenType.MATH_OP) {
@@ -82,23 +81,23 @@ public class NumExpr extends Expr {
             System.out.println("    going again f(x)");
             return parseNumExpr_r(tokens, nestLevel, expLst);
         }
-
+        // ---------------------- check for lone function call ------------------------------
 
         // check for lone function call
         if (call != null) {
             System.out.println("    Function call found: " + call.convertToJott());
-
             expLst.add(new NumExpr(call, null));
             return expLst;
         }
 
-        // lone number done or lone id
+        // ---------------------- check for lone id or num ---------------------------------
 
         if (possible_num.getTokenType() == TokenType.NUMBER || possible_num.getTokenType() == TokenType.ID_KEYWORD) {
             tokens.remove(0);
             expLst.add(new NumExpr(possible_num));
             return expLst;
         }
+        // ---------------------error, goes on to try another expr in expr-----------------
 
         // error
         System.out.println("INCORRECT NUM EXPR");

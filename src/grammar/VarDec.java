@@ -22,6 +22,10 @@ public class VarDec extends Stmt{
     public static VarDec parseVarDec(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("------------------------PARSING Var-Dec------------------------");
 
+
+
+        // ---------------------- check for correct type ---------------------------
+
         // removing and checking the first token
         // should be an IDkeyword type
 
@@ -29,6 +33,8 @@ public class VarDec extends Stmt{
         System.out.println("    FIRST:"+typeToken.getToken());
         Type type = new Type(typeToken.getToken(), typeToken.getFilename(),typeToken.getLineNum());
 
+
+        // ----------------------------- var name-----------------------------------
 
         // getting next token
         Token idToken = tokens.remove(0);
@@ -40,10 +46,10 @@ public class VarDec extends Stmt{
             sb.append(idToken.getFilename() + ":" +idToken.getLineNum());
             throw new ParsingException(sb.toString());
         }
-
         Identifier id = new Identifier(idToken.getToken(), idToken.getFilename(),idToken.getLineNum());
 
-        //check for ;
+
+        // --------------------------------- check for ; ---------------------------
         Token endStmt = tokens.remove(0);
 
         if (endStmt.getTokenType() != TokenType.SEMICOLON){
@@ -55,9 +61,12 @@ public class VarDec extends Stmt{
         }
 
 
-        // if successful var dec statement
+        // --------------------------------- DONE------- ---------------------------
         return new VarDec(nestLevel,type,id);
     }
+
+
+
     // the format of asmt is {INDENT}TYPE NAME;
     // where insendt is the number of tabs
     @Override

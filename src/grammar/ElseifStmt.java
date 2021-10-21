@@ -17,25 +17,28 @@ public class ElseifStmt {
 
     //      elseif_lst -> elseif [ b_expr ] { body } elseif_lst | ε
     public static ArrayList<ElseifStmt> ParseElsif_lst(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-
-
-        ArrayList<ElseifStmt> elif_lists = new ArrayList<>();
-
         System.out.println("------------------------PARSING elif------------------------");
 
+        // list of all else if we will encounter if any
+        ArrayList<ElseifStmt> elif_lists = new ArrayList<>();
 
+
+        // looking if there is an "elseif"
         Token elseif = tokens.get(0);
-        // ε case
+
+        // if no elseif then : ε case and return, this is not an error
         if (!elseif.getToken().equals("elseif")) {
             return null;
         }
 
-
+        // while we did encounter an elseif in the tokens we will keep serching for elseif
         while(elseif.getToken().equals("elseif")){
-            tokens.remove(0);
-            System.out.println("    elif 1 found:" + elseif.getToken());
+            System.out.println("    elif found:" + elseif.getToken());
 
-            // ----------------------------------------------------------------------------
+            // removing elseif
+            tokens.remove(0);
+
+            // ---------------------------looking for [----------------------------------------
 
             Token L_BRACKET = tokens.remove(0);
             System.out.println("    2nd:"+L_BRACKET.getToken());
@@ -47,16 +50,15 @@ public class ElseifStmt {
                 sb.append(L_BRACKET.getFilename() + ":" +L_BRACKET.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-
-            // ----------------------------------------------------------------------------
-
             System.out.println("    3rd:"+L_BRACKET.getToken());
 
-            // looking for b expr <-----------------------------
+            // -----------------------looking for bool expr-------------------------------------------
+
+
             Expr expr = Expr.parseExpr(tokens,nestLevel);
 
 
-            // ----------------------------------------------------------------------------
+            // ---------------------------looking for ]----------------------------------------
 
             Token R_BRACKET = tokens.remove(0);
             System.out.println("    4th:"+R_BRACKET.getToken());
@@ -68,7 +70,9 @@ public class ElseifStmt {
                 sb.append(R_BRACKET.getFilename() + ":" +R_BRACKET.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-            // ----------------------------------------------------------------------------
+
+
+            // ---------------------------looking for {----------------------------------------
 
             Token L_BRACE = tokens.remove(0);
             System.out.println("    5th:"+L_BRACE.getToken());
@@ -80,13 +84,14 @@ public class ElseifStmt {
                 sb.append(L_BRACE.getFilename() + ":" +L_BRACE.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-
             System.out.println("    6th:"+L_BRACE.getToken());
+
+
+            // ---------------------------looking for body----------------------------------------
 
             Body body = Body.ParseBody(tokens, nestLevel);
 
-            // ----------------------------------------------------------------------------
-
+            // ---------------------------looking for }----------------------------------------
 
             Token R_BRACE = tokens.remove(0);
             System.out.println("    7th:"+R_BRACE.getToken());
@@ -98,17 +103,22 @@ public class ElseifStmt {
                 sb.append(R_BRACE.getFilename() + ":" +R_BRACE.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-            // ----------------------------------------------------------------------------
             System.out.println("    8th:"+R_BRACE.getToken());
 
+            // -----------------------adding what was found to list of seen elif stmts-----------------------
+
             elif_lists.add(new ElseifStmt(expr,body));
+
+            // ---------------------------looking for elif----------------------------------------
 
             elseif = tokens.get(0);
         }
 
+        // ---------------------------all done finding elif's----------------------------------------
 
         return elif_lists;
     }
+
     // elseif [ b_expr ] { body }
     public String convertToJott() {
 
