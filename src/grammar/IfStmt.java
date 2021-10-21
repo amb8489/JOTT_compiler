@@ -66,7 +66,7 @@ public class IfStmt  extends BodyStmt{
         // ---------------------- checking for bool expr ------------------------------
         Expr expr = Expr.parseExpr(tokens,nestLevel);
 
-        System.out.println("    3rd:"+expr.convertToJott());
+        System.out.println("    3rd EXPR FOUND:"+expr.convertToJott());
 
 
 
@@ -94,10 +94,11 @@ public class IfStmt  extends BodyStmt{
             sb.append(L_BRACE.getFilename() + ":" +L_BRACE.getLineNum());
             throw new ParsingException(sb.toString());
         }
-        System.out.println("    6th:"+L_BRACE.getToken());
         // ---------------------- checking for body -------------------------------
 
         Body body1 = Body.ParseBody(tokens, nestLevel);
+        System.out.println("    6th BODY :"+body1.convertToJott());
+
 
         // ---------------------- checking for } ----------------------------------
 

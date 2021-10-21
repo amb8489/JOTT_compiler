@@ -13,7 +13,8 @@ public class TEST {
         ArrayList<Token> tokens = JottTokenizer.tokenize(filename);
 
 //        Expr p = Expr.parseExpr(tokens,0);
-        IfStmt p = IfStmt.parseIfStmt(tokens,0);
+//        IfStmt p = IfStmt.parseIfStmt(tokens,0);
+        Expr p = BExpr.parseBExpr(tokens,0);
 
 
         System.out.print(p.convertToJott());
