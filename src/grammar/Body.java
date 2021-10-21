@@ -13,6 +13,10 @@ public class Body extends FunctionDef {
         super(nestLevel);
     }
 
+    public Body(int nestLevel, Expr expr, Body body1) {
+        super(nestLevel, expr, body1);
+    }
+
     public static Body ParseBody(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
 
         return null;

@@ -5,6 +5,10 @@ public class FunctionDef extends FunctionList {
         super(nestLevel);
     }
 
+    public FunctionDef(int nestLevel, Expr expr, Body body1) {
+        super(nestLevel, expr, body1);
+    }
+
     @Override
     public String convertToJava() {
         return null;

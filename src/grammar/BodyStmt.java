@@ -24,6 +24,11 @@ public class BodyStmt extends Body {
 
     }
 
+    public BodyStmt(int nestLevel, Expr expr, Body body1) {
+        super(nestLevel, expr, body1);
+
+    }
+
 
     // body_stmt -> if_stmt|while_loop|stmt
     public BodyStmt parseBodyStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {

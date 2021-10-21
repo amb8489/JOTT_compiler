@@ -13,7 +13,7 @@ public class VarDec extends Stmt{
 
     public VarDec(int nestLevel,Type type,Identifier name){
 
-            super(nestLevel);
+            super(null);
             this.type = type;
             this.name = name;
     }
@@ -38,7 +38,7 @@ public class VarDec extends Stmt{
 
         // getting next token
         Token idToken = tokens.remove(0);
-        System.out.println("    SECOND:"+typeToken.getToken());
+        System.out.println("    SECOND:"+idToken.getToken());
         if (idToken.getTokenType() != TokenType.ID_KEYWORD){
             StringBuilder sb = new StringBuilder();
             sb.append("Syntax error\nInvalid token. Expected <id>. Got: ");
@@ -51,6 +51,7 @@ public class VarDec extends Stmt{
 
         // --------------------------------- check for ; ---------------------------
         Token endStmt = tokens.remove(0);
+        System.out.println("    THIRD:"+endStmt.getToken());
 
         if (endStmt.getTokenType() != TokenType.SEMICOLON){
             StringBuilder sb = new StringBuilder();

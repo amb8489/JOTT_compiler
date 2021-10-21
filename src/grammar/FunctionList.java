@@ -6,6 +6,10 @@ public class FunctionList extends Program {
         super();
     }
 
+    public FunctionList(int nestLevel, Expr expr, Body body1) {
+
+    }
+
     @Override
     public String convertToJava() {
         return null;
