@@ -50,15 +50,19 @@ public class NumExpr extends Expr{
             Token possible_num = tokens.get(0);
             Token possible_op = tokens.get(1);
 
+            System.out.println(possible_num.getToken());
+            System.out.println(possible_op.getToken());
 
             // check for num/id op ELSE check for just id else check for
             if((possible_num.getTokenType() == TokenType.NUMBER || possible_num.getTokenType() == TokenType.ID_KEYWORD) && possible_op.getTokenType() == TokenType.MATH_OP){
                 tokens.remove(0);
                 tokens.remove(0);
+
                 expLst.add(new NumExpr(possible_num,possible_op));
 
                 // go again
-                parseNumExpr_r(tokens,nestLevel,expLst);
+                System.out.println("    going again int/id op");
+                return parseNumExpr_r(tokens,nestLevel,expLst);
             }
 
 
@@ -69,20 +73,19 @@ public class NumExpr extends Expr{
             if(call!=null && possible_op.getTokenType() == TokenType.MATH_OP){
                 tokens.remove(0);
                 expLst.add(new NumExpr(call,possible_op));
-                parseNumExpr_r(tokens,nestLevel,expLst);
+                System.out.println("    going again f(x)");
+                return parseNumExpr_r(tokens,nestLevel,expLst);
             }
 
 
-
-
-
             // check for lone function call
-            if(call!=null){
+            if(call !=null ){
                 expLst.add(new NumExpr(call,null));
                 return expLst;
             }
 
             // lone number done or lone id
+
             if (possible_num.getTokenType() == TokenType.NUMBER || possible_num.getTokenType() == TokenType.ID_KEYWORD){
                 tokens.remove(0);
                 expLst.add(new NumExpr(possible_num));
@@ -96,17 +99,39 @@ public class NumExpr extends Expr{
 
 
         public static NumExpr parseNumExpr(ArrayList<Token> tokens, int nestLevel) {
-        System.out.println("-------------------- parsing Int expr --------------------");
-          ArrayList<NumExpr> f =  parseNumExpr_r(tokens,nestLevel,new ArrayList<NumExpr>());
-          if (f == null){
-              return null;
-          }
-          return new NumExpr(parseNumExpr_r(tokens,nestLevel,new ArrayList<NumExpr>()));
+
+            System.out.println("-------------------- parsing Int expr --------------------");
+
+            ArrayList<NumExpr> f =  parseNumExpr_r(tokens,nestLevel,new ArrayList<NumExpr>());
+            if (f == null){
+                return null;
+            }
+            return new NumExpr(f);
     }
 
+    StringBuilder jstr = new StringBuilder();
 
     public String convertToJott() {
-        return "";
+            if (finalexp != null) {
+                for (NumExpr n:finalexp) {
+                    jstr.append(n.convertToJott());
+                }
+                jstr.append("\n");
+
+            }else {
+                if (num != null && mathop != null) {
+                    jstr.append(this.num.getToken()+ " "+this.mathop.getToken()+" ");
+
+                }else if (funcCall != null && mathop != null) {
+                    jstr.append(this.funcCall.convertToJott()+ " "+this.mathop.getToken()+" ");
+
+                }else if (funcCall == null && mathop == null) {
+                    jstr.append(this.num.getToken()+ " ");
+                }
+            }
+            return jstr.toString();
+
+
     }
 
 

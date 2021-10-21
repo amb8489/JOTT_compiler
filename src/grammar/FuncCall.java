@@ -10,4 +10,8 @@ public class FuncCall {
     public static FuncCall ParseFuncCall(ArrayList<Token> tokens, int nestLevel) {
         return null;
     }
+
+    public String convertToJott() {
+        return null;
+    }
 }
