@@ -12,10 +12,9 @@ public class TEST {
         String filename = "src/tokenizerTestCases/number.jott";
         ArrayList<Token> tokens = JottTokenizer.tokenize(filename);
 
-        ArrayList<Params> p = Params.parseParams(tokens,1);
+        NumExpr p = NumExpr.parseNumExpr(tokens,0);
 
-        for (Params params :p) {
-            System.out.print(params.convertToJott());
-        }
+        assert p != null;
+        System.out.print(p.convertToJott());
     }
 }
