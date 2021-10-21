@@ -24,16 +24,18 @@ public class Type {
     public Type ParseType(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("-------------------PARSING TYPE-----------------");
 
+
+        // ---------------------- check for type ------------------------------------
+
         Token typeToken = tokens.remove(0);
-
-
         if (typeToken.getTokenType() == TokenType.ID_KEYWORD) {
             if ("Integer".equals(typeToken.getToken()) ||"Double".equals(typeToken.getToken()) ||
                 "String".equals(typeToken.getToken())  || "Boolean".equals(typeToken.getToken())) {
                 return new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum());
             }
         }
-        // error
+        // ---------------------- error what was passed in not a valid type ---------
+
         StringBuilder sb = new StringBuilder();
         sb.append("Syntax error\nInvalid token. Expected Integer||Double||String||Boolean. Got: ");
         sb.append(typeToken.getTokenType().toString()).append("\n");

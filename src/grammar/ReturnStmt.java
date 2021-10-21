@@ -31,6 +31,8 @@ public class ReturnStmt extends Body {
         System.out.println("------------------------PARSING Return Stmt------------------------");
 
 
+
+        // ---------------------- check for return ------------------------------------
         Token returnToken = tokens.remove(0);
         System.out.println("    FIRST:"+returnToken.getToken());
         if (! returnToken.getToken().equals("return")){
@@ -42,12 +44,15 @@ public class ReturnStmt extends Body {
         }
 
 
+
+        // ---------------------- check for expr ------------------------------------
         // checking for expression
         System.out.println("    LOOKING FOR EXPR");
         Expr expr = Expr.parseExpr(tokens,nestLevel);
 
 
 
+        // ---------------------- check for end statment ------------------------------------
 
         //check for ;
         Token endStmt = tokens.remove(0);
@@ -61,7 +66,7 @@ public class ReturnStmt extends Body {
         }
 
 
-        // if successful assignment statement
+        // ---------------------- DONE ------------------------------------
         return new ReturnStmt(nestLevel,expr);
 
     }

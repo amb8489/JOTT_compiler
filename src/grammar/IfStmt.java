@@ -44,6 +44,7 @@ public class IfStmt extends BodyStmt {
         System.out.println("------------------------PARSING IF STMT------------------------");
 
 
+        // ---------------------- checking for if ----------------------------------
 
         Token IfToken = tokens.remove(0);
         System.out.println("    1st:"+IfToken.getToken());
@@ -55,7 +56,7 @@ public class IfStmt extends BodyStmt {
             sb.append(IfToken.getFilename() + ":" +IfToken.getLineNum());
             throw new ParsingException(sb.toString());
         }
-        // ----------------------------------------------------------------------------
+        // ---------------------- checking for [ ----------------------------------
 
         Token L_BRACKET = tokens.remove(0);
         System.out.println("    2nd:"+L_BRACKET.getToken());
@@ -67,16 +68,13 @@ public class IfStmt extends BodyStmt {
             sb.append(L_BRACKET.getFilename() + ":" +L_BRACKET.getLineNum());
             throw new ParsingException(sb.toString());
         }
-
-        // ----------------------------------------------------------------------------
-
         System.out.println("    3rd:"+L_BRACKET.getToken());
 
-        // looking for b expr <-----------------------------
+        // ---------------------- checking for bool expr ------------------------------
         Expr expr = Expr.parseExpr(tokens,nestLevel);
 
 
-        // ----------------------------------------------------------------------------
+        // ---------------------- checking for ] ----------------------------------
 
         Token R_BRACKET = tokens.remove(0);
         System.out.println("    4th:"+R_BRACKET.getToken());
@@ -88,7 +86,7 @@ public class IfStmt extends BodyStmt {
             sb.append(R_BRACKET.getFilename() + ":" +R_BRACKET.getLineNum());
             throw new ParsingException(sb.toString());
         }
-        // ----------------------------------------------------------------------------
+        // ---------------------- checking for { ----------------------------------
 
         Token L_BRACE = tokens.remove(0);
         System.out.println("    5th:"+L_BRACE.getToken());
@@ -100,12 +98,12 @@ public class IfStmt extends BodyStmt {
             sb.append(L_BRACE.getFilename() + ":" +L_BRACE.getLineNum());
             throw new ParsingException(sb.toString());
         }
-
         System.out.println("    6th:"+L_BRACE.getToken());
+        // ---------------------- checking for body -------------------------------
 
         Body body1 = Body.ParseBody(tokens, nestLevel);
 
-        // ----------------------------------------------------------------------------
+        // ---------------------- checking for } ----------------------------------
 
 
         Token R_BRACE = tokens.remove(0);
@@ -118,13 +116,12 @@ public class IfStmt extends BodyStmt {
             sb.append(R_BRACE.getFilename() + ":" +R_BRACE.getLineNum());
             throw new ParsingException(sb.toString());
         }
-        // ----------------------------------------------------------------------------
-        System.out.println("    8th:"+R_BRACE.getToken());
 
+        // ---------------------- checking for elif's --------------------------------
         ArrayList<ElseifStmt> elsif_lst = ElseifStmt.ParseElsif_lst(tokens, nestLevel);
 
 
-        // ----------------------------------------------------------------------------
+        // ---------------------- checking for else --------------------------------
 
         // check for else token
         Token elseToken = tokens.get(0);
@@ -134,6 +131,7 @@ public class IfStmt extends BodyStmt {
             tokens.remove(0);
 
 
+            // ---------------------- checking for { --------------------------------
 
             Token LL_BRACE = tokens.remove(0);
             System.out.println("    10th:"+LL_BRACE.getToken());
@@ -146,11 +144,12 @@ public class IfStmt extends BodyStmt {
                 throw new ParsingException(sb.toString());
             }
 
-            System.out.println("    11th:body");
+            // ---------------------- checking for body -------------------------------
 
+            System.out.println("    11th:body");
             Body body2 = Body.ParseBody(tokens, nestLevel);
 
-            // ----------------------------------------------------------------------------
+            // ---------------------- checking for } --------------------------------
 
 
             Token RR_BRACE = tokens.remove(0);
@@ -163,10 +162,12 @@ public class IfStmt extends BodyStmt {
                 sb.append(RR_BRACE.getFilename() + ":" +RR_BRACE.getLineNum());
                 throw new ParsingException(sb.toString());
             }
+            // ---------------------- all done with else --------------------------------
 
             // need to add somthing about elif being null <---------------------------TODO
             return new IfStmt( nestLevel, expr, body1, body2, elsif_lst);
         }
+        // ---------------------- all done no else --------------------------------
 
         // need to add somthing about elif being null <---------------------------TODO
         return new IfStmt( nestLevel, expr, body1, elsif_lst);

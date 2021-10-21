@@ -6,8 +6,14 @@ import main.TokenType;
 import java.util.ArrayList;
 
 public class FuncCall {
+
+    // functions name
     Token id;
+
+    // functions parms
     Params parms;
+
+    // ---------------------------constructor----------------------------------------
 
     public FuncCall(Token id, Params parms) {
         this.id = id;
@@ -19,17 +25,18 @@ public class FuncCall {
     public static FuncCall ParseFuncCall(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("---------------------------- PARSING FUNCTION CALL ----------------------------");
 
+        // ---------------- checking function call starts with id [----------------------
 
         Token id = tokens.get(0);
         Token lb = tokens.get(1);
-
-
         if (id.getTokenType() != TokenType.ID_KEYWORD || lb.getTokenType() != TokenType.L_BRACKET) {
             return null;
         }
-        tokens.remove(0);
         System.out.println("    1st:" + id.getToken());
+        tokens.remove(0);
 
+
+        // ---------------- checking for [ (redundant check)----------------------
 
         Token L_BRACKET = tokens.remove(0);
         // check for if
@@ -42,12 +49,13 @@ public class FuncCall {
         }
         System.out.println("    2nd:" + L_BRACKET.getToken());
 
+        // ---------------- looking for params for functions----------------------
 
         Params parms = Params.parseParams(tokens, nestLevel);
 
+        // ---------------------- checking for ] ----------------------------------
+
         Token R_BRACKET = tokens.remove(0);
-        System.out.println("    4th:" + R_BRACKET.getToken());
-        // check for if
         if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
             StringBuilder sb = new StringBuilder();
             sb.append("Syntax error\nInvalid token. Expected [. Got: ");
@@ -55,6 +63,10 @@ public class FuncCall {
             sb.append(R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum());
             throw new ParsingException(sb.toString());
         }
+        System.out.println("    4th:" + R_BRACKET.getToken());
+
+        // ---------------------- all done ----------------------------------
+
         System.out.println("function call done");
 
         return new FuncCall(id, parms);
