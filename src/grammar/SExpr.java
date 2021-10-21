@@ -22,7 +22,7 @@ public class SExpr extends Expr {
     }
 
 
-    public static Expr parseSExpr(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public static SExpr parseSExpr(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("-------------------parsing s_expr--------------------------");
 
 

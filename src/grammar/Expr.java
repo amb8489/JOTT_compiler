@@ -1,6 +1,7 @@
 package grammar;
 
 import main.Token;
+import main.TokenType;
 
 import java.util.ArrayList;
 
@@ -24,20 +25,21 @@ public class Expr {
 
         // ---------------------------looking for numExpr (int or dbl)----------------------------------------
 
-        NumExpr numExp = NumExpr.parseNumExpr(tokens, nestLevel);
+        if(tokens.get(1).getTokenType() != TokenType.REL_OP) {
+            NumExpr numExp = NumExpr.parseNumExpr(tokens, nestLevel);
 
-        if (numExp!=null){
-            return new Expr(numExp);
+            if (numExp != null) {
+                return new Expr(numExp);
+            }
+
+            // ---------------------------looking for s_expr (string expr)----------------------------------------
+
+            // if string lit id or funcion call
+            Expr s_expr = SExpr.parseSExpr(tokens, nestLevel);
+            if (s_expr != null) {
+                return new Expr(s_expr);
+            }
         }
-
-        // ---------------------------looking for s_expr (string expr)----------------------------------------
-
-        // if string lit id or funcion call
-        Expr s_expr = SExpr.parseSExpr(tokens, nestLevel);
-        if (s_expr!=null){
-            return new Expr(s_expr);
-        }
-
         // ---------------------------looking for b_expr (bool expr)----------------------------------------
 
         Expr b_expr = BExpr.parseBExpr(tokens, nestLevel);
