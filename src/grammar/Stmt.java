@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Stmt extends BodyStmt {
     public Stmt(int nestLevel) {
-        super(nestLevel);
+        super(null);
     }
 
     public static Stmt parseStmt(ArrayList<Token> tokens, int nestLevel) {

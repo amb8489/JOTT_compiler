@@ -5,14 +5,14 @@ import main.TokenType;
 
 import java.util.ArrayList;
 
-public class IfStmt extends BodyStmt {
+public class IfStmt  extends BodyStmt{
     private Expr exp;
     private Body body1;
     private Body body2;
     private ArrayList<ElseifStmt> elif;
 
     public IfStmt(int nestLevel, Expr exp,Body body1,ArrayList<ElseifStmt> elif) {
-        super(nestLevel);
+        super(null);
         this.exp = exp;
         this.body1 = body1;
         this.elif = elif;
@@ -30,7 +30,6 @@ public class IfStmt extends BodyStmt {
 
 
     // -----------------------------------   TODO
-    @Override
     public String convertToJott() {
         return null;
     }
@@ -50,11 +49,7 @@ public class IfStmt extends BodyStmt {
         System.out.println("    1st:"+IfToken.getToken());
         // check for if
         if (!IfToken.getToken().equals("if")){
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected if. Got: ");
-            sb.append(IfToken.getTokenType().toString()).append("\n");
-            sb.append(IfToken.getFilename() + ":" +IfToken.getLineNum());
-            throw new ParsingException(sb.toString());
+            return null;
         }
         // ---------------------- checking for [ ----------------------------------
 
@@ -173,22 +168,25 @@ public class IfStmt extends BodyStmt {
         return new IfStmt( nestLevel, expr, body1, elsif_lst);
     }
 
-        @Override
+
+
+
+    @Override
     public String convertToJava() {
         return null;
     }
-
     @Override
+
     public String convertToC() {
         return null;
     }
-
     @Override
+
     public String convertToPython() {
         return null;
     }
-
     @Override
+
     public boolean validateTree() {
         return false;
     }
