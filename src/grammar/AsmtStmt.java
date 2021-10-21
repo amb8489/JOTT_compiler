@@ -25,7 +25,9 @@ public class AsmtStmt extends BodyStmt {
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
         jstr.append("     ".repeat(getNestLevel()));
-        jstr.append(type.convertToJott() + " ");
+        if (!type.convertToJott().equals(name.convertToJott())) {
+            jstr.append(type.convertToJott() + " ");
+        }
         jstr.append(name.convertToJott() + " = ");
         jstr.append(exp.convertToJott() + ";\n");
         return jstr.toString();
@@ -41,17 +43,22 @@ public class AsmtStmt extends BodyStmt {
         System.out.println("    FIRST:" + typeToken.getToken());
         Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum());
 
+        Token idToken = tokens.get(0);
 
+        if (Type.isType(typeToken)) {
+            tokens.remove(0);
 
-        // getting next token
-        Token idToken = tokens.remove(0);
-        System.out.println("    SECOND:" + typeToken.getToken());
-        if (idToken.getTokenType() != TokenType.ID_KEYWORD) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected <id>. Got: ");
-            sb.append(typeToken.getTokenType().toString()).append("\n");
-            sb.append(idToken.getFilename() + ":" + idToken.getLineNum());
-            throw new ParsingException(sb.toString());
+            // getting next token
+            System.out.println("    SECOND:" + idToken.getToken());
+            if (idToken.getTokenType() != TokenType.ID_KEYWORD) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("Syntax error\nInvalid token. Expected <id>. Got: ");
+                sb.append(typeToken.getTokenType().toString()).append("\n");
+                sb.append(idToken.getFilename() + ":" + idToken.getLineNum());
+                throw new ParsingException(sb.toString());
+            }
+        }else {
+            idToken = typeToken;
         }
 
         // making id
@@ -62,7 +69,7 @@ public class AsmtStmt extends BodyStmt {
         Token equalsToken = tokens.remove(0);
 
         // checking for =
-        System.out.println("    THIRD:" + typeToken.getToken());
+        System.out.println("    THIRD:" + equalsToken.getToken());
         if (equalsToken.getTokenType() != TokenType.ASSIGN) {
             StringBuilder sb = new StringBuilder();
             sb.append("Syntax error\nInvalid token. Expected =. Got: ");
