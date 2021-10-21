@@ -63,10 +63,11 @@ public class IfStmt  extends BodyStmt{
             sb.append(L_BRACKET.getFilename() + ":" +L_BRACKET.getLineNum());
             throw new ParsingException(sb.toString());
         }
-        System.out.println("    3rd:"+L_BRACKET.getToken());
-
         // ---------------------- checking for bool expr ------------------------------
         Expr expr = Expr.parseExpr(tokens,nestLevel);
+
+        System.out.println("    3rd:"+expr.convertToJott());
+
 
 
         // ---------------------- checking for ] ----------------------------------
