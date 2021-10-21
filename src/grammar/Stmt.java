@@ -1,8 +1,16 @@
 package grammar;
 
+import main.Token;
+
+import java.util.ArrayList;
+
 public class Stmt extends BodyStmt {
     public Stmt(int nestLevel) {
         super(nestLevel);
+    }
+
+    public static Stmt parseStmt(ArrayList<Token> tokens, int nestLevel) {
+        return null;
     }
 
     @Override
