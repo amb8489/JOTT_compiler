@@ -68,12 +68,16 @@ public class JottTokenizer {
 
 	// helper function to help classify chars
 	private static int classify_char(char ch){
+
 		if (Character.isDigit(ch)) {
 			return lut.get("digit");
 		}
 		if (Character.isLetter(ch)) {
 			return lut.get("letter");
 		}else {
+			if (lut.get(String.valueOf(ch))== null){
+				return -1;
+			}
 			return lut.get(String.valueOf(ch));
 		}
 	}
@@ -140,50 +144,51 @@ public class JottTokenizer {
 				for (int i = 0; i < line.length(); i++) {
 
 					char ch = line.charAt(i);
+					if ( classify_char(ch) != -1) {
+						// updating state based on input ch
+						curr_state = DFA[curr_state][classify_char(ch)];
 
-					// updating state based on input ch
-					curr_state = DFA[curr_state][classify_char(ch)];
-
-					// if moved into error state
-					if (curr_state == ER) {
-						String error_msg = "Syntax Error\nInvalid token \"";
-						System.err.println(error_msg + token + "\"");
-						System.err.println(filename + ":" + curr_line_number);
-						return null;
-					}
-
-					// if not a comment
-					if (curr_state != 1) {
-
-						// add a space if we are in a string state else add no spaces
-						char space_char = ' ';
-						if (curr_state == 18) {
-							token.append(ch);
-						} else if (ch != space_char) {
-							token.append(ch);
+						// if moved into error state
+						if (curr_state == ER) {
+							String error_msg = "Syntax Error\nInvalid token \"";
+							System.err.println(error_msg + token + "\"");
+							System.err.println(filename + ":" + curr_line_number);
+							return null;
 						}
 
-						// looking ahead at the next char
-						if (i + 1 < line.length()) {
-							char next_ch = line.charAt(i + 1);
+						// if not a comment
+						if (curr_state != 1) {
 
-							// next state given current state and next char
-							int next = DFA[curr_state][classify_char(next_ch)];
+							// add a space if we are in a string state else add no spaces
+							char space_char = ' ';
+							if (curr_state == 18) {
+								token.append(ch);
+							} else if (ch != space_char) {
+								token.append(ch);
+							}
 
-							// if the next char will cause a finish
-							if (next == F) {
+							// looking ahead at the next char
+							if (i + 1 < line.length()) {
+								char next_ch = line.charAt(i + 1);
 
-								// if the token is not the empty token
-								if (!token.toString().equals("")) {
+								// next state given current state and next char
+								int next = DFA[curr_state][classify_char(next_ch)];
 
-									// adding and classifying token
-									tokens.add(tokenClass(token.toString(), filename, curr_state, curr_line_number));
+								// if the next char will cause a finish
+								if (next == F) {
 
-									// resting token
-									token = new StringBuilder();
+									// if the token is not the empty token
+									if (!token.toString().equals("")) {
 
-									// resetting the state machine on finish of token
-									curr_state = 0;
+										// adding and classifying token
+										tokens.add(tokenClass(token.toString(), filename, curr_state, curr_line_number));
+
+										// resting token
+										token = new StringBuilder();
+
+										// resetting the state machine on finish of token
+										curr_state = 0;
+									}
 								}
 							}
 						}
