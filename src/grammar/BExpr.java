@@ -50,13 +50,13 @@ public class BExpr extends Expr {
     public static ArrayList<BExpr> parseBExpr_r(ArrayList<Token> tokens, ArrayList<BExpr> blst, int nestLevel) throws ParsingException {
 
 
-        Token possible_bool = tokens.get(0);
+        Token possible_bool = tokens.get(TOKEN_IDX.IDX);
         boolean isBool = false;
         Expr possible_Expr = null;
 
 
         if ("true false".contains(possible_bool.getToken())) {
-            tokens.remove(0);
+            TOKEN_IDX.IDX++;
             isBool = true;
         }else {
              possible_Expr = NumExpr.parseNumExpr(tokens, nestLevel);
@@ -71,13 +71,13 @@ public class BExpr extends Expr {
                 }
             }
         }
-        Token possible_relOP = tokens.get(0);
+        Token possible_relOP = tokens.get(TOKEN_IDX.IDX);
 
         if (isBool) {
             if (possible_relOP.getTokenType() == TokenType.REL_OP) {
-                tokens.remove(0);
+                TOKEN_IDX.IDX++;
 
-                System.out.println("bool op, going again: "+tokens.get(0).getToken());
+                System.out.println("bool op, going again: "+tokens.get(TOKEN_IDX.IDX).getToken());
                 blst.add(new BExpr(possible_bool,possible_relOP));
                 return parseBExpr_r(tokens,blst,nestLevel);
             }
@@ -87,9 +87,9 @@ public class BExpr extends Expr {
             return blst;
         } else {
             if (possible_relOP.getTokenType() == TokenType.REL_OP) {
-                tokens.remove(0);
+                TOKEN_IDX.IDX++;
 
-                System.out.println("expr op, going again: "+tokens.get(0).getToken());
+                System.out.println("expr op, going again: "+tokens.get(TOKEN_IDX.IDX).getToken());
                 blst.add(new BExpr(possible_Expr,possible_relOP));
                 return parseBExpr_r(tokens,blst,nestLevel);
             }

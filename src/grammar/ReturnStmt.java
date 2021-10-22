@@ -36,11 +36,7 @@ public class ReturnStmt extends Body {
         Token returnToken = tokens.remove(0);
         System.out.println("    FIRST:"+returnToken.getToken());
         if (! returnToken.getToken().equals("return")){
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected return. Got: ");
-            sb.append(returnToken.getTokenType().toString()).append("\n");
-            sb.append(returnToken.getFilename() + ":" +returnToken.getLineNum());
-            throw new ParsingException(sb.toString());
+            return null;
         }
 
 
@@ -58,11 +54,7 @@ public class ReturnStmt extends Body {
         Token endStmt = tokens.remove(0);
 
         if (endStmt.getTokenType() != TokenType.SEMICOLON){
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected ;. Got: ");
-            sb.append(endStmt.getTokenType().toString()).append("\n");
-            sb.append(endStmt.getFilename() + ":" +endStmt.getLineNum());
-            throw new ParsingException(sb.toString());
+            return null;
         }
 
 

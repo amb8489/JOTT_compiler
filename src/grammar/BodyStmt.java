@@ -12,22 +12,14 @@ public class BodyStmt extends Body {
 
 
     public BodyStmt(IfStmt possible_if,WhileLoop possible_while,Stmt possible_stmt,int nestLevel) {
-        super(nestLevel);
+        super(null);
+
         this.possible_if = possible_if;
         this.possible_while = possible_while;
         this.possible_stmt = possible_stmt;
     }
 
-    public BodyStmt(Object possible_if) {
-        super(0);//??????
 
-
-    }
-
-    public BodyStmt(int nestLevel, Expr expr, Body body1) {
-        super(nestLevel, expr, body1);
-
-    }
 
 
     // body_stmt -> if_stmt|while_loop|stmt

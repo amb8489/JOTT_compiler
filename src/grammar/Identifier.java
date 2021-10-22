@@ -1,20 +1,20 @@
 package grammar;
 
+import main.Token;
+
 public class Identifier {
 
-    public String id;
-    public String filename;
-    public int lineNum;
+   Token id = null;
 
-    public Identifier(String id, String filename, int lineNum) {
+
+    public Identifier(Token id) {
         // TODO CHECK FOR ID BEING BAD
         this.id = id;
-        this.filename = filename;
-        this.lineNum = lineNum;
+
     }
 
 
     public String convertToJott() {
-        return id;
+        return id.getToken();
     }
 }
