@@ -25,7 +25,7 @@ public class Expr {
 
         // ---------------------------looking for numExpr (int or dbl)----------------------------------------
 
-        if(tokens.get(1).getTokenType() != TokenType.REL_OP) {
+        if(tokens.get(TOKEN_IDX.IDX+1).getTokenType() != TokenType.REL_OP) {
             NumExpr numExp = NumExpr.parseNumExpr(tokens, nestLevel);
 
             if (numExp != null) {
@@ -50,7 +50,7 @@ public class Expr {
 
         // ---------------------------error :( no valid expr found----------------------------------------
 
-        Token t = tokens.get(0);
+        Token t = tokens.get(TOKEN_IDX.IDX);
         StringBuilder sb = new StringBuilder();
         sb.append("Syntax error\nInvalid token. Expected Expr. Got: ");
         sb.append(t.getTokenType().toString()).append("\n");

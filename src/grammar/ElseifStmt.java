@@ -24,7 +24,7 @@ public class ElseifStmt {
 
 
         // looking if there is an "elseif"
-        Token elseif = tokens.get(0);
+        Token elseif = tokens.get(TOKEN_IDX.IDX);
 
         // if no elseif then : ε case and return, this is not an error
         if (!elseif.getToken().equals("elseif")) {
@@ -36,11 +36,11 @@ public class ElseifStmt {
             System.out.println("    elif found:" + elseif.getToken());
 
             // removing elseif
-            tokens.remove(0);
+            TOKEN_IDX.IDX++;
 
             // ---------------------------looking for [----------------------------------------
 
-            Token L_BRACKET = tokens.remove(0);
+            Token L_BRACKET = tokens.get(TOKEN_IDX.IDX);
             System.out.println("    2nd:"+L_BRACKET.getToken());
             // check for if
             if (L_BRACKET.getTokenType() != TokenType.L_BRACKET){
@@ -51,7 +51,7 @@ public class ElseifStmt {
                 throw new ParsingException(sb.toString());
             }
             System.out.println("    3rd:"+L_BRACKET.getToken());
-
+            TOKEN_IDX.IDX++;
             // -----------------------looking for bool expr-------------------------------------------
 
 
@@ -60,7 +60,7 @@ public class ElseifStmt {
 
             // ---------------------------looking for ]----------------------------------------
 
-            Token R_BRACKET = tokens.remove(0);
+            Token R_BRACKET = tokens.get(TOKEN_IDX.IDX);
             System.out.println("    4th:"+R_BRACKET.getToken());
             // check for if
             if (R_BRACKET.getTokenType() != TokenType.R_BRACKET){
@@ -70,11 +70,11 @@ public class ElseifStmt {
                 sb.append(R_BRACKET.getFilename() + ":" +R_BRACKET.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-
+            TOKEN_IDX.IDX++;
 
             // ---------------------------looking for {----------------------------------------
 
-            Token L_BRACE = tokens.remove(0);
+            Token L_BRACE = tokens.get(TOKEN_IDX.IDX);
             System.out.println("    5th:"+L_BRACE.getToken());
             // check for if
             if (L_BRACE.getTokenType() != TokenType.L_BRACE){
@@ -85,6 +85,7 @@ public class ElseifStmt {
                 throw new ParsingException(sb.toString());
             }
             System.out.println("    6th:"+L_BRACE.getToken());
+            TOKEN_IDX.IDX++;
 
 
             // ---------------------------looking for body----------------------------------------
@@ -93,7 +94,7 @@ public class ElseifStmt {
 
             // ---------------------------looking for }----------------------------------------
 
-            Token R_BRACE = tokens.remove(0);
+            Token R_BRACE = tokens.get(TOKEN_IDX.IDX);
             System.out.println("    7th:"+R_BRACE.getToken());
             // check for if
             if (R_BRACE.getTokenType() != TokenType.R_BRACE){
@@ -104,14 +105,14 @@ public class ElseifStmt {
                 throw new ParsingException(sb.toString());
             }
             System.out.println("    8th:"+R_BRACE.getToken());
-
+            TOKEN_IDX.IDX++;
             // -----------------------adding what was found to list of seen elif stmts-----------------------
 
             elif_lists.add(new ElseifStmt(expr,body));
 
             // ---------------------------looking for elif----------------------------------------
 
-            elseif = tokens.get(0);
+            elseif = tokens.get(TOKEN_IDX.IDX);
         }
 
         // ---------------------------all done finding elif's----------------------------------------

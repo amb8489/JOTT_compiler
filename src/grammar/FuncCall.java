@@ -24,22 +24,22 @@ public class FuncCall {
 
     public static FuncCall ParseFuncCall(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("---------------------------- PARSING FUNCTION CALL ----------------------------");
-        System.out.println(tokens.get(0).getToken());
+        System.out.println(tokens.get(TOKEN_IDX.IDX).getToken());
 
         // ---------------- checking function call starts with id [----------------------
 
-        Token id = tokens.get(0);
-        Token lb = tokens.get(1);
+        Token id = tokens.get(TOKEN_IDX.IDX);
+        Token lb = tokens.get(TOKEN_IDX.IDX+1);
         if (id.getTokenType() != TokenType.ID_KEYWORD || lb.getTokenType() != TokenType.L_BRACKET) {
             return null;
         }
         System.out.println("    1st:" + id.getToken());
-        tokens.remove(0);
+        TOKEN_IDX.IDX++;
 
 
         // ---------------- checking for [ (redundant check)----------------------
 
-        Token L_BRACKET = tokens.remove(0);
+        Token L_BRACKET = tokens.get(TOKEN_IDX.IDX);
         // check for if
         if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
             StringBuilder sb = new StringBuilder();
@@ -48,6 +48,7 @@ public class FuncCall {
             sb.append(L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum());
             throw new ParsingException(sb.toString());
         }
+        TOKEN_IDX.IDX++;
         System.out.println("    2nd:" + L_BRACKET.getToken());
 
         // ---------------- looking for params for functions----------------------
@@ -56,7 +57,8 @@ public class FuncCall {
 
         // ---------------------- checking for ] ----------------------------------
 
-        Token R_BRACKET = tokens.remove(0);
+        Token R_BRACKET = tokens.get(TOKEN_IDX.IDX);
+
         if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
             StringBuilder sb = new StringBuilder();
             sb.append("Syntax error\nInvalid token. Expected [. Got: ");
@@ -64,6 +66,7 @@ public class FuncCall {
             sb.append(R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum());
             throw new ParsingException(sb.toString());
         }
+        TOKEN_IDX.IDX++;
         System.out.println("    4th:" + R_BRACKET.getToken());
 
         // ---------------------- all done ----------------------------------

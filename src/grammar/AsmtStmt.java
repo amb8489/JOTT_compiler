@@ -39,14 +39,17 @@ public class AsmtStmt extends BodyStmt {
 
         // removing and checking the first token
         // should be an IDkeyword type
-        Token typeToken = tokens.remove(0);
+        Token typeToken = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    FIRST:" + typeToken.getToken());
         Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum());
+        TOKEN_IDX.IDX++;
 
-        Token idToken = tokens.get(0);
+
+        Token idToken = tokens.get(TOKEN_IDX.IDX);
 
         if (Type.isType(typeToken)) {
-            tokens.remove(0);
+            TOKEN_IDX.IDX++;
+
 
             // getting next token
             System.out.println("    SECOND:" + idToken.getToken());
@@ -62,11 +65,11 @@ public class AsmtStmt extends BodyStmt {
         }
 
         // making id
-        Identifier id = new Identifier(idToken.getToken(), idToken.getFilename(), idToken.getLineNum());
+        Identifier id = new Identifier(idToken);
 
 
         //looking for = token
-        Token equalsToken = tokens.remove(0);
+        Token equalsToken = tokens.get(TOKEN_IDX.IDX);
 
         // checking for =
         System.out.println("    THIRD:" + equalsToken.getToken());
@@ -77,6 +80,8 @@ public class AsmtStmt extends BodyStmt {
             sb.append(equalsToken.getFilename() + ":" + equalsToken.getLineNum());
             throw new ParsingException(sb.toString());
         }
+        TOKEN_IDX.IDX++;
+
 
 
         // checking for expression
@@ -84,7 +89,7 @@ public class AsmtStmt extends BodyStmt {
         Expr expr = Expr.parseExpr(tokens, nestLevel);
 
         //check for ;
-        Token endStmt = tokens.remove(0);
+        Token endStmt = tokens.get(TOKEN_IDX.IDX);
         if (endStmt.getTokenType() != TokenType.SEMICOLON) {
             StringBuilder sb = new StringBuilder();
             sb.append("Syntax error\nInvalid token. Expected ;. Got: ");
@@ -92,7 +97,7 @@ public class AsmtStmt extends BodyStmt {
             sb.append(endStmt.getFilename() + ":" + endStmt.getLineNum());
             throw new ParsingException(sb.toString());
         }
-
+        TOKEN_IDX.IDX++;
 
         // if successful assignment statement
         return new AsmtStmt(nestLevel, type, id, expr);

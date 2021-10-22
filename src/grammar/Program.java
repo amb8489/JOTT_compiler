@@ -1,12 +1,30 @@
 package grammar;
 
+import main.Token;
+
+import java.util.ArrayList;
+
 public class Program implements JottTree {
+
+
+    FunctionList funcLst = null;
+
+    public Program(FunctionList funcLst) {
+        this.funcLst = funcLst;
+    }
+
+    public Program parseProgram(ArrayList<Token>tokens,int nestlevel) throws ParsingException {
+        FunctionList funclst = FunctionList.parseFunctionList(tokens,nestlevel);
+        return new Program(funclst);
+    }
 
 
 
     @Override
     public String convertToJott() {
-        return null;
+        StringBuilder jstr = new StringBuilder();
+        jstr.append(funcLst.convertToJott());
+        return jstr.toString();
     }
 
     @Override

@@ -10,20 +10,19 @@ import java.util.ArrayList;
 // body -> body_stmt body|return_stmt|ε                                                                             <-- DONE
 
 public class Body extends FunctionDef {
-    ArrayList<BodyStmt>bodys = null;
-    ReturnStmt Hasreturn = null;
+    public ArrayList<BodyStmt>bodys = null;
+    public ReturnStmt Hasreturn = null;
 
-    public Body(int nestLevel) {
-        super(nestLevel);
-    }
 
-    public Body(int nestLevel, Expr expr, Body body1) {
-        super(nestLevel, expr, body1);
-    }
 
     public Body(ArrayList<BodyStmt> bodys, ReturnStmt rs) {
-        super(null);
+        super(new Identifier(null));
+        this.Hasreturn = rs;
+        this.bodys = bodys;
+    }
 
+    public Body(Object bodys) {
+        super(null);
     }
 
 
@@ -32,7 +31,7 @@ public class Body extends FunctionDef {
         ArrayList<BodyStmt> bodys = new ArrayList<>();
 
         // ------------------------ empty case -----------------
-        while (tokens.get(0).getTokenType() != TokenType.R_BRACKET){
+        while (tokens.get(TOKEN_IDX.IDX).getTokenType() != TokenType.R_BRACKET){
             System.out.println("    looking for body");
             BodyStmt bs =  BodyStmt.parseBodyStmt(tokens,nestLevel);
 
