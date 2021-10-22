@@ -29,7 +29,7 @@ public class WhileLoop extends BodyStmt {
         // ---------------- checking while call starts with while----------------------
 
         Token whileToken = tokens.get(0);
-        if (whileToken.getToken().equals("while")) {
+        if (! whileToken.getToken().equals("while")) {
             return null;
         }
         System.out.println("    1st:" + whileToken.getToken());

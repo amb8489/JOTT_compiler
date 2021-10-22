@@ -24,6 +24,7 @@ public class FuncCall {
 
     public static FuncCall ParseFuncCall(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("---------------------------- PARSING FUNCTION CALL ----------------------------");
+        System.out.println(tokens.get(0).getToken());
 
         // ---------------- checking function call starts with id [----------------------
 

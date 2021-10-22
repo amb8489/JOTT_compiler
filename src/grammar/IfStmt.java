@@ -45,12 +45,13 @@ public class IfStmt  extends BodyStmt{
 
         // ---------------------- checking for if ----------------------------------
 
-        Token IfToken = tokens.remove(0);
+        Token IfToken = tokens.get(0);
         System.out.println("    1st:"+IfToken.getToken());
         // check for if
         if (!IfToken.getToken().equals("if")){
             return null;
         }
+        tokens.remove(0);
         // ---------------------- checking for [ ----------------------------------
 
         Token L_BRACKET = tokens.remove(0);
@@ -64,6 +65,8 @@ public class IfStmt  extends BodyStmt{
             throw new ParsingException(sb.toString());
         }
         // ---------------------- checking for bool expr ------------------------------
+//        System.out.println("    3rd EXPR FOUND:"+tokens.get(0).getToken());
+
         Expr expr = Expr.parseExpr(tokens,nestLevel);
 
         System.out.println("    3rd EXPR FOUND:"+expr.convertToJott());
@@ -97,8 +100,11 @@ public class IfStmt  extends BodyStmt{
         // ---------------------- checking for body -------------------------------
 
         Body body1 = Body.ParseBody(tokens, nestLevel);
-        System.out.println("    6th BODY :"+body1.convertToJott());
-
+        if (body1 != null) {
+            System.out.println("    6th BODY :" + body1.convertToJott());
+        }else {
+            System.out.println("    6th EMPTY BODY");
+        }
 
         // ---------------------- checking for } ----------------------------------
 
