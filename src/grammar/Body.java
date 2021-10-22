@@ -30,22 +30,24 @@ public class Body extends FunctionDef {
 
         ArrayList<BodyStmt> bodys = new ArrayList<>();
 
+        if( tokens.get(TOKEN_IDX.IDX).getTokenType() == TokenType.R_BRACKET){
+            System.out.println("EMPTY BODY");
+            return null;
+        }
+
         // ------------------------ empty case -----------------
-        while (tokens.get(TOKEN_IDX.IDX).getTokenType() != TokenType.R_BRACKET){
+        while (tokens.get(TOKEN_IDX.IDX).getTokenType() != TokenType.R_BRACE){
             System.out.println("    looking for body");
             BodyStmt bs =  BodyStmt.parseBodyStmt(tokens,nestLevel);
 
-            if(bs == null){
+            if(bs ==  null){
                 System.out.println("EMPTY BODY");
+                ReturnStmt rs = ReturnStmt.parseReturnStmt(tokens,nestLevel);
+                return new Body(bodys,rs);
             }
             System.out.println("    body:::"+bs.convertToJott());
 
 
-
-            if (bs != null){
-                ReturnStmt rs = ReturnStmt.parseReturnStmt(tokens,nestLevel);
-                return new Body(bodys,rs);
-            }
 
             bodys.add(bs);
         }

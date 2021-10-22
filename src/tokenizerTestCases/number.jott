@@ -5,5 +5,8 @@
 	}elseif[w==7]{
 	    print["bar"];
 	    print["poo"];
+	    print["doo"];
+	    return 10;
+
 	}
 	return 5;
