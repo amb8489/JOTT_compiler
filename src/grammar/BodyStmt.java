@@ -29,19 +29,17 @@ public class BodyStmt extends Body {
         // ----------------------check for one of these three----------------------------------;
 
         // RESTORE TODO ------------------------------------- where left off
+        System.out.println("first::::"+tokens.get(TOKEN_IDX.IDX).getToken());
+
         IfStmt possible_if = IfStmt.parseIfStmt(tokens,nestLevel);
 
-
-
-
-
-        System.out.println("first::::"+tokens.get(0).getToken());
+        System.out.println("first::::"+tokens.get(TOKEN_IDX.IDX).getToken());
         if (possible_if != null){
             return new BodyStmt(possible_if,null,null,nestLevel);
         }
 
 
-        System.out.println("first again::::"+tokens.get(0).getToken());
+        System.out.println("first again::::"+tokens.get(TOKEN_IDX.IDX).getToken());
 
 
         WhileLoop possible_while = WhileLoop.parseWhile(tokens,nestLevel);
@@ -49,11 +47,12 @@ public class BodyStmt extends Body {
             return new BodyStmt(null,possible_while,null,nestLevel);
         }
 
-        System.out.println("first again::::"+tokens.get(0).getToken());
+        System.out.println("first again::::"+tokens.get(TOKEN_IDX.IDX).getToken());
 
 
         Stmt possible_stmt = Stmt.parseStmt(tokens,nestLevel);
         if (possible_stmt != null){
+            System.out.println("statment found");
             return new BodyStmt(null,null,possible_stmt,nestLevel);
         }
 
@@ -68,7 +67,7 @@ public class BodyStmt extends Body {
     public String convertToJott() {
 
         //TODO check what one is not null and print that one
-        return null;
+        return "jpt str not completed yet";
     }
 
     @Override

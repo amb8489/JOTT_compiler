@@ -1,8 +1,9 @@
     if[x==5]{
 `       print[y];
-	}else if[z < 3]{
+	}elseif[z < 3]{
 	    print["foo"];
 	}elseif[w==7]{
 	    print["bar"];
+	    print["poo"];
 	}
 	return 5;

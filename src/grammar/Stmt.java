@@ -1,6 +1,7 @@
 package grammar;
 
 import main.Token;
+import main.TokenType;
 
 import java.util.ArrayList;
 
@@ -27,10 +28,10 @@ public class Stmt {
 
 
 
-        //----------------------------trying asmt
+        //----------------------------trying asmt TODO HERE ISSUE
         TOKEN_IDX.save_token_IDX();
 
-        System.out.println("first again::::"+tokens.get(TOKEN_IDX.IDX).getToken());
+        System.out.println("Statment first again::::"+tokens.get(TOKEN_IDX.IDX).getToken());
 
 
         try {
@@ -60,8 +61,20 @@ public class Stmt {
 
         try {
             FuncCall funcCall = FuncCall.ParseFuncCall(tokens,nestLevel);
-            TOKEN_IDX.popRestore();
 
+            // ---------------------- check for end statment ------------------------------------
+
+            //check for ;
+            Token endStmt = tokens.get(TOKEN_IDX.IDX);
+
+            if (endStmt.getTokenType() != TokenType.SEMICOLON){
+                return null;
+            }
+            TOKEN_IDX.IDX++;
+
+
+
+            TOKEN_IDX.popRestore();
             return new Stmt(nestLevel,null,null,funcCall);
 
         }catch (ParsingException ignored){
