@@ -57,6 +57,7 @@ public class ElseifStmt {
 
             Expr expr = Expr.parseExpr(tokens,nestLevel);
 
+            System.out.println("    XPR FOUND:"+expr.convertToJott());
 
             // ---------------------------looking for ]----------------------------------------
 

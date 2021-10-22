@@ -31,7 +31,7 @@ public class IfStmt  {
 
     // -----------------------------------   TODO
     public String convertToJott() {
-        return null;
+        return "if stmt convert to jot not done yet";
     }
 
 
