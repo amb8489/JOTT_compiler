@@ -5,14 +5,13 @@ import java.util.ArrayList;
 import main.Token;
 import main.TokenType;
 
-public class AsmtStmt extends BodyStmt {
+public class AsmtStmt {
 
     private final Type type;
     private final Identifier name;
     private final Expr exp;
 
     public AsmtStmt(int nestLevel, Type type, Identifier name, Expr exp) {
-        super(nestLevel);
         this.type = type;
         this.name = name;
         this.exp = exp;
@@ -21,10 +20,9 @@ public class AsmtStmt extends BodyStmt {
 
     // the format of asmt is {INDENT}TYPE NAME = EXPR ;
     // where insendt is the number of tabs
-    @Override
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
-        jstr.append("     ".repeat(getNestLevel()));
+        jstr.append("     ".repeat(1));
         if (!type.convertToJott().equals(name.convertToJott())) {
             jstr.append(type.convertToJott() + " ");
         }
@@ -104,24 +102,4 @@ public class AsmtStmt extends BodyStmt {
     }
 
 
-    @Override
-    public String convertToJava() {
-        return null;
-    }
-
-
-    @Override
-    public String convertToC() {
-        return null;
-    }
-
-    @Override
-    public String convertToPython() {
-        return null;
-    }
-
-    @Override
-    public boolean validateTree() {
-        return false;
-    }
 }

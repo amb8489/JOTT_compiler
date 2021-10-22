@@ -14,11 +14,15 @@ public class TOKEN_IDX {
         return IDX;
     }
 
-    public  static void save_token_IDX() {
-        saved_token_IDX.add(0, IDX);
-    }
+    public  static void save_token_IDX() { saved_token_IDX.add(0, IDX); }
+
     public  static void restore_token_IDX() {
         IDX = saved_token_IDX.remove(0);
     }
+
+    public  static void popRestore() {
+        saved_token_IDX.remove(0);
+    }
+
 
 }

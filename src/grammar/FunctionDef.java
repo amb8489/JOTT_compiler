@@ -53,7 +53,7 @@ public class FunctionDef extends FunctionList {
 
          FuncDefParams func_def_params = FuncDefParams.parseFunctionDefParams(tokens,nestlevel);
 
-        if (lbrac.getTokenType() != TokenType.L_BRACKET){
+        if (func_def_params == null){
             System.out.println("TODO ERROR 1");
         }
 

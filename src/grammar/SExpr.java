@@ -26,25 +26,25 @@ public class SExpr extends Expr {
         System.out.println("-------------------parsing s_expr--------------------------");
 
 
-        Token possible_str = tokens.get(0);
+        Token possible_str = tokens.get(TOKEN_IDX.IDX);
 
         // ----------------------check for string------------------
         if (possible_str.getTokenType() == TokenType.STRING) {
 
-            tokens.remove(0);
-            return new SExpr(possible_str, null, null, nestLevel);
+            TOKEN_IDX.IDX++;
+        return new SExpr(possible_str, null, null, nestLevel);
         }
 
         // ----------------------check for id------------------
 
         if (possible_str.getTokenType() == TokenType.ID_KEYWORD) {
-            tokens.remove(0);
+            TOKEN_IDX.IDX++;
             return new SExpr(null, possible_str, null, nestLevel);
         }
         // ----------------------check for func call------------------
         FuncCall f = FuncCall.ParseFuncCall(tokens, nestLevel);
         if (f != null) {
-            tokens.remove(0);
+            TOKEN_IDX.IDX++;
             return new SExpr(null, null, f, nestLevel);
         }
 

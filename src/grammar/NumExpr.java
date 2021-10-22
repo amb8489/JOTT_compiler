@@ -54,12 +54,11 @@ public class NumExpr extends Expr {
     private static ArrayList<NumExpr> parseNumExpr_r(ArrayList<Token> tokens, int nestLevel, ArrayList<NumExpr> expLst) throws ParsingException {
 
         // ---------------------- looking for id/int followed by math op --------------------------------
-        Token possible_num = tokens.get(0);
-        Token possible_op = tokens.get(1);
+        Token possible_num = tokens.get(TOKEN_IDX.IDX);
+        Token possible_op = tokens.get(TOKEN_IDX.IDX+1);
 
         if ((possible_num.getTokenType() == TokenType.NUMBER || possible_num.getTokenType() == TokenType.ID_KEYWORD) && possible_op.getTokenType() == TokenType.MATH_OP) {
-            tokens.remove(0);
-            tokens.remove(0);
+            TOKEN_IDX.IDX+=2;
 
             // ---------------------- numExpr can be id,id op, num,num op --------------------
 
@@ -73,10 +72,10 @@ public class NumExpr extends Expr {
 
         // ---------------------- check for function call op --------------------------------
         FuncCall call = FuncCall.ParseFuncCall(tokens, nestLevel);
-        possible_op = tokens.get(0);
+        possible_op = tokens.get(TOKEN_IDX.IDX);
 
         if (call != null && possible_op.getTokenType() == TokenType.MATH_OP) {
-            tokens.remove(0);
+            TOKEN_IDX.IDX++;
             expLst.add(new NumExpr(call, possible_op));
             System.out.println("    going again f(x)");
             return parseNumExpr_r(tokens, nestLevel, expLst);
@@ -93,7 +92,7 @@ public class NumExpr extends Expr {
         // ---------------------- check for lone id or num ---------------------------------
 
         if (possible_num.getTokenType() == TokenType.NUMBER || possible_num.getTokenType() == TokenType.ID_KEYWORD) {
-            tokens.remove(0);
+            TOKEN_IDX.IDX++;
             expLst.add(new NumExpr(possible_num));
             return expLst;
         }
@@ -127,9 +126,7 @@ public class NumExpr extends Expr {
                 jstr.append(n.funcCall.convertToJott() + " " + n.mathop.getToken() + " ");
             } else if (n.funcCall == null && n.mathop == null) {
                 jstr.append(n.num.getToken() + " ");
-            } else if (n.funcCall != null && n.mathop == null) {
-                jstr.append(n.funcCall.convertToJott() + " ");
-            } else if (n.funcCall != null && n.mathop == null) {
+            } else if (n.funcCall != null) {
                 jstr.append(n.funcCall.convertToJott() + " ");
             }
         }
