@@ -42,13 +42,14 @@ public class Params {
         // ---------------------- check for empty list  (epsilon)----------------
 
         // check for next token == ], this means no params
-        Token first = tokens.get(0);
+        Token first = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    1st:" + first.getToken());
 
         // epsilon case
         if (first.getTokenType() == TokenType.R_BRACKET) {
             return null;
         }
+
 
         // ---------------------- check for expr ------------------------------------
 
@@ -60,10 +61,10 @@ public class Params {
 
         // ---------------------- checking for more params, comma started-----------------------
 
-        Token comma = tokens.get(0);
+        Token comma = tokens.get(TOKEN_IDX.IDX);
         while (comma.getTokenType() == TokenType.COMMA) {
             System.out.println("        looking for new param:" + comma.getToken());
-            tokens.remove(0);
+            TOKEN_IDX.IDX++;
 
             // ---------------------- check for expr ------------------------------------
 
@@ -72,7 +73,7 @@ public class Params {
 
             // ---------------------- check for , and look for more ----------------------
 
-            comma = tokens.get(0);
+            comma = tokens.get(TOKEN_IDX.IDX);
 
 
             System.out.println("        new param found:" + exp.convertToJott());

@@ -5,21 +5,21 @@ import main.TokenType;
 
 import java.util.ArrayList;
 
-public class IfStmt  extends BodyStmt{
+public class IfStmt  {
     private Expr exp;
     private Body body1;
     private Body body2;
     private ArrayList<ElseifStmt> elif;
 
     public IfStmt(int nestLevel, Expr exp,Body body1,ArrayList<ElseifStmt> elif) {
-        super(null);
+
         this.exp = exp;
         this.body1 = body1;
         this.elif = elif;
 
     }
     public IfStmt(int nestLevel, Expr exp,Body body1,Body body2,ArrayList<ElseifStmt> elif) {
-        super(nestLevel);
+
         this.exp = exp;
         this.body1 = body1;
         this.elif = elif;
@@ -179,21 +179,17 @@ public class IfStmt  extends BodyStmt{
 
 
 
-    @Override
     public String convertToJava() {
         return null;
     }
-    @Override
 
     public String convertToC() {
         return null;
     }
-    @Override
 
     public String convertToPython() {
         return null;
     }
-    @Override
 
     public boolean validateTree() {
         return false;

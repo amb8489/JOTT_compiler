@@ -33,12 +33,12 @@ public class ReturnStmt extends Body {
 
 
         // ---------------------- check for return ------------------------------------
-        Token returnToken = tokens.remove(0);
+        Token returnToken = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    FIRST:"+returnToken.getToken());
         if (! returnToken.getToken().equals("return")){
             return null;
         }
-
+        TOKEN_IDX.IDX++;
 
 
         // ---------------------- check for expr ------------------------------------
@@ -51,12 +51,12 @@ public class ReturnStmt extends Body {
         // ---------------------- check for end statment ------------------------------------
 
         //check for ;
-        Token endStmt = tokens.remove(0);
+        Token endStmt = tokens.get(TOKEN_IDX.IDX);
 
         if (endStmt.getTokenType() != TokenType.SEMICOLON){
             return null;
         }
-
+        TOKEN_IDX.IDX++;
 
         // ---------------------- DONE ------------------------------------
         return new ReturnStmt(nestLevel,expr);
