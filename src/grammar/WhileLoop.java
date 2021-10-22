@@ -8,16 +8,12 @@ import java.util.ArrayList;
 
 //while_loop -> while [ b_expr ] { body }
 
-public class WhileLoop extends BodyStmt {
+public class WhileLoop {
     private Expr exp;
     private Body body1;
 
-    public WhileLoop(int nestLevel) {
-        super(nestLevel);
-    }
 
     public WhileLoop(int nestLevel, Expr expr, Body body1) {
-        super(nestLevel, expr, body1);
         this.exp = expr;
         this.body1 = body1;
     }
@@ -28,17 +24,16 @@ public class WhileLoop extends BodyStmt {
 
         // ---------------- checking while call starts with while----------------------
 
-        Token whileToken = tokens.get(0);
+        Token whileToken = tokens.get(TOKEN_IDX.IDX);
         if (! whileToken.getToken().equals("while")) {
             return null;
         }
         System.out.println("    1st:" + whileToken.getToken());
-        tokens.remove(0);
-
+        TOKEN_IDX.IDX++;
 
         // ---------------------- checking for [ ----------------------------------
 
-        Token L_BRACKET = tokens.remove(0);
+        Token L_BRACKET = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    2nd:"+L_BRACKET.getToken());
         // check for if
         if (L_BRACKET.getTokenType() != TokenType.L_BRACKET){
@@ -46,6 +41,7 @@ public class WhileLoop extends BodyStmt {
 
         }
         System.out.println("    3rd:"+L_BRACKET.getToken());
+        TOKEN_IDX.IDX++;
 
         // ---------------------- checking for bool expr ------------------------------
         Expr expr = Expr.parseExpr(tokens,nestLevel);
@@ -53,21 +49,24 @@ public class WhileLoop extends BodyStmt {
 
         // ---------------------- checking for ] ----------------------------------
 
-        Token R_BRACKET = tokens.remove(0);
+        Token R_BRACKET = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    4th:"+R_BRACKET.getToken());
         // check for if
         if (R_BRACKET.getTokenType() != TokenType.R_BRACKET){
             return null;
 
         }
+        TOKEN_IDX.IDX++;
         // ---------------------- checking for { ----------------------------------
 
-        Token L_BRACE = tokens.remove(0);
+        Token L_BRACE = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    5th:"+L_BRACE.getToken());
         // check for if
         if (L_BRACE.getTokenType() != TokenType.L_BRACE){
             return null;
         }
+        TOKEN_IDX.IDX++;
+
         System.out.println("    6th:"+L_BRACE.getToken());
         // ---------------------- checking for body -------------------------------
 
@@ -76,32 +75,20 @@ public class WhileLoop extends BodyStmt {
         // ---------------------- checking for } ----------------------------------
 
 
-        Token R_BRACE = tokens.remove(0);
+        Token R_BRACE = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    7th:"+R_BRACE.getToken());
         // check for if
         if (R_BRACE.getTokenType() != TokenType.R_BRACE){
             return null;
         }
+        TOKEN_IDX.IDX++;
+
         return new WhileLoop(nestLevel, expr, body1);
     }
 
-    @Override
-    public String convertToJava() {
-        return null;
+    public String convertToJott() {
+
+        return "while covert to jott not done";
     }
 
-    @Override
-    public String convertToC() {
-        return null;
-    }
-
-    @Override
-    public String convertToPython() {
-        return null;
-    }
-
-    @Override
-    public boolean validateTree() {
-        return false;
-    }
 }

@@ -45,16 +45,16 @@ public class IfStmt  {
 
         // ---------------------- checking for if ----------------------------------
 
-        Token IfToken = tokens.get(0);
+        Token IfToken = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    1st:"+IfToken.getToken());
         // check for if
         if (!IfToken.getToken().equals("if")){
             return null;
         }
-        tokens.remove(0);
+        TOKEN_IDX.IDX++;
         // ---------------------- checking for [ ----------------------------------
 
-        Token L_BRACKET = tokens.remove(0);
+        Token L_BRACKET = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    2nd:"+L_BRACKET.getToken());
         // check for if
         if (L_BRACKET.getTokenType() != TokenType.L_BRACKET){
@@ -64,18 +64,19 @@ public class IfStmt  {
             sb.append(L_BRACKET.getFilename() + ":" +L_BRACKET.getLineNum());
             throw new ParsingException(sb.toString());
         }
+        TOKEN_IDX.IDX++;
         // ---------------------- checking for bool expr ------------------------------
 //        System.out.println("    3rd EXPR FOUND:"+tokens.get(0).getToken());
 
         Expr expr = Expr.parseExpr(tokens,nestLevel);
 
         System.out.println("    3rd EXPR FOUND:"+expr.convertToJott());
-
+        System.out.println("------>"+tokens.get(TOKEN_IDX.IDX).getToken());
 
 
         // ---------------------- checking for ] ----------------------------------
 
-        Token R_BRACKET = tokens.remove(0);
+        Token R_BRACKET = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    4th:"+R_BRACKET.getToken());
         // check for if
         if (R_BRACKET.getTokenType() != TokenType.R_BRACKET){
@@ -85,9 +86,10 @@ public class IfStmt  {
             sb.append(R_BRACKET.getFilename() + ":" +R_BRACKET.getLineNum());
             throw new ParsingException(sb.toString());
         }
+        TOKEN_IDX.IDX++;
         // ---------------------- checking for { ----------------------------------
 
-        Token L_BRACE = tokens.remove(0);
+        Token L_BRACE = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    5th:"+L_BRACE.getToken());
         // check for if
         if (L_BRACE.getTokenType() != TokenType.L_BRACE){
@@ -97,6 +99,8 @@ public class IfStmt  {
             sb.append(L_BRACE.getFilename() + ":" +L_BRACE.getLineNum());
             throw new ParsingException(sb.toString());
         }
+        TOKEN_IDX.IDX++;
+
         // ---------------------- checking for body -------------------------------
 
         Body body1 = Body.ParseBody(tokens, nestLevel);
@@ -109,7 +113,7 @@ public class IfStmt  {
         // ---------------------- checking for } ----------------------------------
 
 
-        Token R_BRACE = tokens.remove(0);
+        Token R_BRACE = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    7th:"+R_BRACE.getToken());
         // check for if
         if (R_BRACE.getTokenType() != TokenType.R_BRACE){
@@ -119,6 +123,7 @@ public class IfStmt  {
             sb.append(R_BRACE.getFilename() + ":" +R_BRACE.getLineNum());
             throw new ParsingException(sb.toString());
         }
+        TOKEN_IDX.IDX++;
 
         // ---------------------- checking for elif's --------------------------------
         ArrayList<ElseifStmt> elsif_lst = ElseifStmt.ParseElsif_lst(tokens, nestLevel);
@@ -127,16 +132,16 @@ public class IfStmt  {
         // ---------------------- checking for else --------------------------------
 
         // check for else token
-        Token elseToken = tokens.get(0);
+        Token elseToken = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    9th:"+elseToken.getToken());
         // check for if
         if (elseToken.getToken().equals("else")){
-            tokens.remove(0);
+            TOKEN_IDX.IDX++;
 
 
             // ---------------------- checking for { --------------------------------
 
-            Token LL_BRACE = tokens.remove(0);
+            Token LL_BRACE = tokens.get(TOKEN_IDX.IDX);
             System.out.println("    10th:"+LL_BRACE.getToken());
             // check for if
             if (LL_BRACE.getTokenType() != TokenType.L_BRACE){
@@ -146,6 +151,8 @@ public class IfStmt  {
                 sb.append(LL_BRACE.getFilename() + ":" +LL_BRACE.getLineNum());
                 throw new ParsingException(sb.toString());
             }
+            TOKEN_IDX.IDX++;
+
 
             // ---------------------- checking for body -------------------------------
 
@@ -155,7 +162,7 @@ public class IfStmt  {
             // ---------------------- checking for } --------------------------------
 
 
-            Token RR_BRACE = tokens.remove(0);
+            Token RR_BRACE = tokens.get(TOKEN_IDX.IDX);
             System.out.println("    12th:"+RR_BRACE.getToken());
             // check for if
             if (RR_BRACE.getTokenType() != TokenType.R_BRACE){
@@ -165,6 +172,8 @@ public class IfStmt  {
                 sb.append(RR_BRACE.getFilename() + ":" +RR_BRACE.getLineNum());
                 throw new ParsingException(sb.toString());
             }
+            TOKEN_IDX.IDX++;
+
             // ---------------------- all done with else --------------------------------
 
             // need to add somthing about elif being null <---------------------------TODO

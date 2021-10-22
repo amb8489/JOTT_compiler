@@ -35,6 +35,9 @@ public class Body extends FunctionDef {
             System.out.println("    looking for body");
             BodyStmt bs =  BodyStmt.parseBodyStmt(tokens,nestLevel);
 
+            if(bs == null){
+                System.out.println("EMPTY BODY");
+            }
             System.out.println("    body:::"+bs.convertToJott());
 
 

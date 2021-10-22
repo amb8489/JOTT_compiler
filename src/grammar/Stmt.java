@@ -8,18 +8,31 @@ import java.util.ArrayList;
 // stmt -> asmt|var_dec|func_call ;                                                                          <-- DONE
 
 public class Stmt {
+    AsmtStmt asmt = null;
+    VarDec var_dec = null;
+    FuncCall func_call = null;
+    int nestLevel;
 
 
+    public Stmt(int nestLevel, AsmtStmt asmt, VarDec vdec,FuncCall funcCall) {
+        this.nestLevel = nestLevel;
+        this.asmt = asmt;
+        this.var_dec = vdec;
+        this.func_call = funcCall;
+    }
 
     public static Stmt parseStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("-------------------PARSING STMT------------------");
 
 
 
-        System.out.println("first again::::"+tokens.get(0).getToken());
 
         //----------------------------trying asmt
         TOKEN_IDX.save_token_IDX();
+
+        System.out.println("first again::::"+tokens.get(TOKEN_IDX.IDX).getToken());
+
+
         try {
             AsmtStmt asmt = AsmtStmt.parseAsmtStmt(tokens,nestLevel);
             TOKEN_IDX.popRestore();
@@ -28,7 +41,7 @@ public class Stmt {
             TOKEN_IDX.restore_token_IDX();
         }
         //----------------------------trying var_dec
-        System.out.println("first again::::"+tokens.get(0).getToken());
+        System.out.println("first again::::"+tokens.get(TOKEN_IDX.IDX).getToken());
         TOKEN_IDX.save_token_IDX();
 
         try {
@@ -42,7 +55,7 @@ public class Stmt {
         }
 
         //----------------------------trying func_call
-        System.out.println("first again::::"+tokens.get(0).getToken());
+        System.out.println("first again::::"+tokens.get(TOKEN_IDX.IDX).getToken());
         TOKEN_IDX.save_token_IDX();
 
         try {
@@ -60,13 +73,7 @@ public class Stmt {
 
     public String convertToJott() {
 
-        if (stringLit != null){
-            return stringLit.getToken();
-        }
-        if (id != null){
-            return id.getToken();
-        }
-        return funcCall.convertToJott();
+        return "stmt covert to jott not done";
     }
 
 
