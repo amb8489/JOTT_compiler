@@ -31,20 +31,31 @@ public class BodyStmt extends Body {
 
 
     // body_stmt -> if_stmt|while_loop|stmt
-    public BodyStmt parseBodyStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public static BodyStmt parseBodyStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("----------------parsing body stmt---------------------");
 
         // ----------------------check for one of these three----------------------------------;
         IfStmt possible_if = IfStmt.parseIfStmt(tokens,nestLevel);
+
+
+
+
+
+        System.out.println("first::::"+tokens.get(0).getToken());
         if (possible_if != null){
             return new BodyStmt(possible_if,null,null,nestLevel);
         }
+
+
+        System.out.println("first again::::"+tokens.get(0).getToken());
 
 
         WhileLoop possible_while = WhileLoop.parseWhile(tokens,nestLevel);
         if (possible_while != null){
             return new BodyStmt(null,possible_while,null,nestLevel);
         }
+
+        System.out.println("first again::::"+tokens.get(0).getToken());
 
 
         Stmt possible_stmt = Stmt.parseStmt(tokens,nestLevel);
@@ -55,12 +66,7 @@ public class BodyStmt extends Body {
 
         // ----------------------Error, sould have been one of these three----------------------------------
 
-        Token t = tokens.get(0);
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected Expr. Got: ");
-            sb.append(t.getTokenType().toString()).append("\n");
-            sb.append(t.getFilename() + ":" +t.getLineNum());
-            throw new ParsingException(sb.toString());
+        return null;
 
     }
 

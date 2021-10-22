@@ -20,9 +20,9 @@ public class Stmt extends BodyStmt {
         System.out.println("-------------------PARSING STMT------------------");
 
     // restore lost tokens? TODO ???
-        ArrayList<Token> retore = new ArrayList<>();
-        retore.addAll(tokens);
 
+
+        System.out.println("first again::::"+tokens.get(0).getToken());
 
         //----------------------------trying asmt
         try {
@@ -50,14 +50,10 @@ public class Stmt extends BodyStmt {
 
             return new Stmt(nestLevel,null,null,funcCall);
 
-        }catch (ParsingException e){
-            Token T = tokens.remove(0);
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected stmt. Got: ");
-            sb.append(T.getTokenType().toString()).append("\n");
-            sb.append(T.getFilename() + ":" + T.getLineNum());
-            throw new ParsingException(sb.toString());
+        }catch (ParsingException ignored){
+
         }
+        return null;
     }
 
     @Override

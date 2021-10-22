@@ -9,6 +9,10 @@ public class FunctionDef extends FunctionList {
         super(nestLevel, expr, body1);
     }
 
+    public FunctionDef(Integer integer) {
+        super(integer);
+    }
+
     @Override
     public String convertToJava() {
         return null;
