@@ -13,6 +13,10 @@
 
  big[] : Void {
       print[69];
-
       return 9;
   }
+
+   oooo[] : Void {
+        print[69];
+        return 0;
+    }

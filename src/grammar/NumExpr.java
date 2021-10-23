@@ -55,10 +55,10 @@ public class NumExpr extends Expr {
 
         // ---------------------- looking for id/int followed by math op --------------------------------
         Token possible_num = tokens.get(TOKEN_IDX.IDX);
-        Token possible_op = tokens.get(TOKEN_IDX.IDX+1);
+        Token possible_op = tokens.get(TOKEN_IDX.IDX + 1);
 
         if ((possible_num.getTokenType() == TokenType.NUMBER || possible_num.getTokenType() == TokenType.ID_KEYWORD) && possible_op.getTokenType() == TokenType.MATH_OP) {
-            TOKEN_IDX.IDX+=2;
+            TOKEN_IDX.IDX += 2;
 
             // ---------------------- numExpr can be id,id op, num,num op --------------------
 

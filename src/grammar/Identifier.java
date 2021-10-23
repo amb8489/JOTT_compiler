@@ -4,7 +4,7 @@ import main.Token;
 
 public class Identifier {
 
-   Token id = null;
+    Token id = null;
 
 
     public Identifier(Token id) {

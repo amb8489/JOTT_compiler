@@ -12,9 +12,7 @@ public class TEST {
         String filename = "src/tokenizerTestCases/number.jott";
         ArrayList<Token> tokens = JottTokenizer.tokenize(filename);
 
-//        Expr p = Expr.parseExpr(tokens,0);
-//        IfStmt p = IfStmt.parseIfStmt(tokens,0);
-        Program p = Program.parseProgram(tokens,0);
+        Program p = Program.parseProgram(tokens, 0);
 
 
         System.out.print(p.convertToJott());

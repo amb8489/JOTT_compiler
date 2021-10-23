@@ -4,6 +4,7 @@ import main.Token;
 import main.TokenType;
 
 import java.util.ArrayList;
+
 ////     * b_expr ->
 //                 bool|
 //               numexp rel_op numexp|
@@ -58,8 +59,8 @@ public class BExpr extends Expr {
         if ("true false".contains(possible_bool.getToken())) {
             TOKEN_IDX.IDX++;
             isBool = true;
-        }else {
-             possible_Expr = NumExpr.parseNumExpr(tokens, nestLevel);
+        } else {
+            possible_Expr = NumExpr.parseNumExpr(tokens, nestLevel);
             if (possible_Expr == null) {
                 possible_Expr = SExpr.parseSExpr(tokens, nestLevel);
                 if (possible_Expr == null) {
@@ -77,9 +78,9 @@ public class BExpr extends Expr {
             if (possible_relOP.getTokenType() == TokenType.REL_OP) {
                 TOKEN_IDX.IDX++;
 
-                System.out.println("bool op, going again: "+tokens.get(TOKEN_IDX.IDX).getToken());
-                blst.add(new BExpr(possible_bool,possible_relOP));
-                return parseBExpr_r(tokens,blst,nestLevel);
+                System.out.println("bool op, going again: " + tokens.get(TOKEN_IDX.IDX).getToken());
+                blst.add(new BExpr(possible_bool, possible_relOP));
+                return parseBExpr_r(tokens, blst, nestLevel);
             }
             // lone bool
             System.out.println("lone bool");
@@ -89,9 +90,9 @@ public class BExpr extends Expr {
             if (possible_relOP.getTokenType() == TokenType.REL_OP) {
                 TOKEN_IDX.IDX++;
 
-                System.out.println("expr op, going again: "+tokens.get(TOKEN_IDX.IDX).getToken());
-                blst.add(new BExpr(possible_Expr,possible_relOP));
-                return parseBExpr_r(tokens,blst,nestLevel);
+                System.out.println("expr op, going again: " + tokens.get(TOKEN_IDX.IDX).getToken());
+                blst.add(new BExpr(possible_Expr, possible_relOP));
+                return parseBExpr_r(tokens, blst, nestLevel);
             }
             // lone expr
             System.out.println("lone expr");
@@ -105,7 +106,7 @@ public class BExpr extends Expr {
 
         System.out.println("-------------------- parsing BOOl expr --------------------");
 
-        ArrayList<BExpr> f = parseBExpr_r(tokens, new ArrayList<BExpr>() ,nestLevel);
+        ArrayList<BExpr> f = parseBExpr_r(tokens, new ArrayList<BExpr>(), nestLevel);
 
         return new BExpr(f);
     }
@@ -128,9 +129,6 @@ public class BExpr extends Expr {
             }
 
 
-
-
-
             // exp relop
             if (n.exp != null && n.relOp != null) {
                 jstr.append(n.exp.convertToJott() + n.relOp.getToken() + " ");
@@ -144,8 +142,6 @@ public class BExpr extends Expr {
 
         return jstr.toString();
     }
-
-
 
 
 }

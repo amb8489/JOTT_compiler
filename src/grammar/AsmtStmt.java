@@ -22,7 +22,7 @@ public class AsmtStmt {
     // where insendt is the number of tabs
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
-        jstr.append("     ".repeat(1));
+        jstr.append("     ".repeat(0));
         if (!type.convertToJott().equals(name.convertToJott())) {
             jstr.append(type.convertToJott() + " ");
         }
@@ -58,7 +58,7 @@ public class AsmtStmt {
                 sb.append(idToken.getFilename() + ":" + idToken.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-        }else {
+        } else {
             idToken = typeToken;
         }
 
@@ -79,7 +79,6 @@ public class AsmtStmt {
             throw new ParsingException(sb.toString());
         }
         TOKEN_IDX.IDX++;
-
 
 
         // checking for expression

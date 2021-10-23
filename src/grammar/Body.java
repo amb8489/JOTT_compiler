@@ -6,13 +6,11 @@ import main.TokenType;
 import java.util.ArrayList;
 
 
-
 // body -> body_stmt body|return_stmt|ε                                                                             <-- DONE
 
 public class Body extends FunctionDef {
-    public ArrayList<BodyStmt>bodys = null;
+    public ArrayList<BodyStmt> bodys = null;
     public ReturnStmt Hasreturn = null;
-
 
 
     public Body(ArrayList<BodyStmt> bodys, ReturnStmt rs) {
@@ -25,28 +23,27 @@ public class Body extends FunctionDef {
         super(null);
     }
 
-// TODO NOT CORRECT
+    // TODO NOT CORRECT
     public static Body ParseBody(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
 
         ArrayList<BodyStmt> bodys = new ArrayList<>();
 
-        if( tokens.get(TOKEN_IDX.IDX).getTokenType() == TokenType.R_BRACKET){
+        if (tokens.get(TOKEN_IDX.IDX).getTokenType() == TokenType.R_BRACKET) {
             System.out.println("EMPTY BODY");
             return null;
         }
 
         // ------------------------ empty case -----------------
-        while (tokens.get(TOKEN_IDX.IDX).getTokenType() != TokenType.R_BRACE){
+        while (tokens.get(TOKEN_IDX.IDX).getTokenType() != TokenType.R_BRACE) {
             System.out.println("    looking for body");
-            BodyStmt bs =  BodyStmt.parseBodyStmt(tokens,nestLevel);
+            BodyStmt bs = BodyStmt.parseBodyStmt(tokens, nestLevel);
 
-            if(bs ==  null){
+            if (bs == null) {
                 System.out.println("EMPTY BODY");
-                ReturnStmt rs = ReturnStmt.parseReturnStmt(tokens,nestLevel);
-                return new Body(bodys,rs);
+                ReturnStmt rs = ReturnStmt.parseReturnStmt(tokens, nestLevel);
+                return new Body(bodys, rs);
             }
-            System.out.println("    body:::"+bs.convertToJott());
-
+            System.out.println("    body:::" + bs.convertToJott());
 
 
             bodys.add(bs);
@@ -60,10 +57,10 @@ public class Body extends FunctionDef {
 
         StringBuilder jstr = new StringBuilder();
 
-        for(BodyStmt b:bodys){
-            jstr.append(b.convertToJott()+"\n");
+        for (BodyStmt b : bodys) {
+            jstr.append(b.convertToJott() + "\n");
         }
-        if(Hasreturn != null){
+        if (Hasreturn != null) {
             jstr.append(Hasreturn.convertToJott());
         }
 
