@@ -15,7 +15,7 @@ public class Program implements JottTree {
 
     public static Program parseProgram(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
         System.out.println("------------------------PARSING program------------------------");
-
+        TOKEN_IDX.reset();
         FunctionList funclst = FunctionList.parseFunctionList(tokens, nestlevel);
         return new Program(funclst);
     }

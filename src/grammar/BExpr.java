@@ -65,7 +65,7 @@ public class BExpr extends Expr {
                 possible_Expr = SExpr.parseSExpr(tokens, nestLevel);
                 if (possible_Expr == null) {
                     StringBuilder sb = new StringBuilder();
-                    sb.append("Syntax error\nInvalid token. Expected Bexpr. Got: ");
+                    sb.append("Syntax error\nInvalid token. Expected expr. Got: ");
                     sb.append(possible_bool.getTokenType().toString()).append("\n");
                     sb.append(possible_bool.getFilename() + ":" + possible_bool.getLineNum());
                     throw new ParsingException(sb.toString());

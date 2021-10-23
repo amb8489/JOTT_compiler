@@ -37,6 +37,7 @@ public class AsmtStmt {
 
         // removing and checking the first token
         // should be an IDkeyword type
+
         Token typeToken = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    FIRST:" + typeToken.getToken());
         Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum());
@@ -45,6 +46,7 @@ public class AsmtStmt {
 
         Token idToken = tokens.get(TOKEN_IDX.IDX);
 
+
         if (Type.isType(typeToken)) {
             TOKEN_IDX.IDX++;
 
@@ -52,11 +54,7 @@ public class AsmtStmt {
             // getting next token
             System.out.println("    SECOND:" + idToken.getToken());
             if (idToken.getTokenType() != TokenType.ID_KEYWORD) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Syntax error\nInvalid token. Expected <id>. Got: ");
-                sb.append(typeToken.getTokenType().toString()).append("\n");
-                sb.append(idToken.getFilename() + ":" + idToken.getLineNum());
-                throw new ParsingException(sb.toString());
+                return null;
             }
         } else {
             idToken = typeToken;
@@ -72,18 +70,17 @@ public class AsmtStmt {
         // checking for =
         System.out.println("    THIRD:" + equalsToken.getToken());
         if (equalsToken.getTokenType() != TokenType.ASSIGN) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected =. Got: ");
-            sb.append(equalsToken.getTokenType().toString()).append("\n");
-            sb.append(equalsToken.getFilename() + ":" + equalsToken.getLineNum());
-            throw new ParsingException(sb.toString());
+            return null;
+
         }
         TOKEN_IDX.IDX++;
 
 
         // checking for expression
         System.out.println("    LOOKING FOR EXPR");
-        Expr expr = Expr.parseExpr(tokens, nestLevel);
+        Expr expr = NumExpr.parseExpr(tokens, nestLevel);
+
+        System.out.println("----------------22----"+expr);
 
         //check for ;
         Token endStmt = tokens.get(TOKEN_IDX.IDX);

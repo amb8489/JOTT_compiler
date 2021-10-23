@@ -2,3 +2,4 @@
 #You cannot have stmts outside a function
 
 print[5];
+return 6;

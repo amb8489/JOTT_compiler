@@ -39,14 +39,23 @@ public class FuncDefParams {
         }
 
 
-        while (idd.getTokenType() != TokenType.R_BRACKET) {
 
+        while (idd.getTokenType() != TokenType.R_BRACKET) {
+            if (Type.isType(idd)){
+                StringBuilder sb = new StringBuilder();
+                sb.append("Syntax error\nInvalid token. <id>. Got: TYPE \n");
+                sb.append(idd.getFilename() + ":" + idd.getLineNum());
+                throw new ParsingException(sb.toString());
+            }
 
             System.out.println("    found id ???:" + idd.getToken());
 
             if (idd.getTokenType() != TokenType.ID_KEYWORD) {
-                System.out.println("TODO ERROR 0");
-                return null;
+                StringBuilder sb = new StringBuilder();
+                sb.append("Syntax error\nInvalid token. <id>. Got:");
+                sb.append(idd.getTokenType().toString()).append("\n");
+                sb.append(idd.getFilename() + ":" + idd.getLineNum());
+                throw new ParsingException(sb.toString());
             }
             Identifier id = new Identifier(idd);
 
@@ -65,9 +74,12 @@ public class FuncDefParams {
             // ---------------------------look for type -----------------------------
             Token type = tokens.get(TOKEN_IDX.IDX);
 
-            if (type.getTokenType() != TokenType.ID_KEYWORD) {
-                System.out.println("TODO ERROR 2");
-                return null;
+            if (!Type.isType(type)) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("Syntax error\nInvalid token. Expected <Type>. Got: ");
+                sb.append(type.getToken().toString()).append("\n");
+                sb.append(type.getFilename() + ":" + type.getLineNum());
+                throw new ParsingException(sb.toString());
             }
             TOKEN_IDX.IDX++;
 
@@ -78,10 +90,14 @@ public class FuncDefParams {
 
 
             idd = tokens.get(TOKEN_IDX.IDX);
-            if (idd.getTokenType() !=TokenType.COMMA){
-                System.out.println("+++++++++++++++++++++++++++"+tokens.get(TOKEN_IDX.IDX));
-
+            if (idd.getTokenType() !=TokenType.COMMA  && idd.getTokenType() == TokenType.R_BRACKET){
                 break;
+            }else if(idd.getTokenType() !=TokenType.COMMA) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("Syntax error\nInvalid token. Expected ,. Got: ");
+                sb.append(idd.getTokenType().toString()).append("\n");
+                sb.append(idd.getFilename() + ":" + idd.getLineNum());
+                throw new ParsingException(sb.toString());
             }
             TOKEN_IDX.IDX++;
             idd = tokens.get(TOKEN_IDX.IDX);
