@@ -29,9 +29,28 @@ public class IfStmt {
     }
 
 
-    // -----------------------------------   TODO
     public String convertToJott() {
-        return "if stmt convert to jot not done yet";
+
+
+
+        StringBuilder jstr = new StringBuilder();
+        jstr.append("     ".repeat(0));
+        jstr.append("if [ ");
+        jstr.append(this.exp.convertToJott() + " ] { \n");
+        jstr.append(body1.convertToJott() + "}\n");
+
+        if (elif != null){
+            for(ElseifStmt e:elif){
+                jstr.append(e.convertToJott()+"\n");
+            }
+        }
+        if (body2 != null){
+            jstr.append(" else { ");
+            jstr.append(body2.convertToJott() + "}\n");
+
+        }
+        return jstr.toString();
+
     }
 
 
@@ -182,6 +201,8 @@ public class IfStmt {
         // need to add somthing about elif being null <---------------------------TODO
         return new IfStmt(nestLevel, expr, body1, elsif_lst);
     }
+
+
 
 
     public String convertToJava() {

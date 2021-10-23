@@ -81,7 +81,7 @@ public class FuncCall {
 
 
         jstr.append(id.getToken() + "[ ");
-        jstr.append(parms.convertToJott() + " ]");
+        jstr.append(parms.convertToJott() + "]");
 
         return jstr.toString();
     }

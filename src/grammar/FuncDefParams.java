@@ -86,4 +86,15 @@ public class FuncDefParams {
     public boolean validateTree() {
         return false;
     }
+
+    //   func_def_params -> id : type func_def_params_t|ε                                                                 <-- DONE
+
+    public String convertToJott() {
+
+        StringBuilder jstr = new StringBuilder();
+
+        jstr.append(id.convertToJott()+ " : " + params.convertToJott());
+
+        return jstr.toString();
+    }
 }

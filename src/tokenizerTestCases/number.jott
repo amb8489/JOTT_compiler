@@ -1,22 +1,5 @@
- main[] : Void {
-     print[5];
-     print[ "foo bar"];
-
-     if[x == x+1]{
-        print[3]
-
-     }else{
-            return 4;
-     }
-     return 4;
- }
-
- big[] : Void {
-      print[69];
-      return 9;
-  }
-
-   oooo[] : Void {
-        print[69];
-        return 0;
-    }
+main[]:Integer{
+    print[5];
+    print[ "foo bar"];
+    return 4;
+}

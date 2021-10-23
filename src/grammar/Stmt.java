@@ -72,6 +72,8 @@ public class Stmt {
 
 
             TOKEN_IDX.popRestore();
+            System.out.println("-------------->>>>>>"+funcCall.convertToJott());
+
             return new Stmt(nestLevel, null, null, funcCall);
 
         } catch (ParsingException ignored) {
@@ -83,7 +85,16 @@ public class Stmt {
 
     public String convertToJott() {
 
-        return "stmt covert to jott not done";
+        if (asmt != null) {
+            return asmt.convertToJott();
+        }
+        if (var_dec != null) {
+            return var_dec.convertToJott();
+        }
+        if (func_call != null) {
+            return func_call.convertToJott();
+        }
+        return null;
     }
 
 
