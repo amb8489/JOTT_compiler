@@ -13,7 +13,6 @@ public class TEST {
         ArrayList<Token> tokens = JottTokenizer.tokenize(filename);
 
         Program p = Program.parseProgram(tokens, 0);
-
         System.out.println("---------------------------------------------------------------------------------------------------");
         System.out.print(p.convertToJott());
     }
