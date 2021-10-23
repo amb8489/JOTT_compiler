@@ -1,13 +1,7 @@
-#this will pass phase 2 and phase 3
-
-foo[x:Integer,x:Integer  ]:Integer{
-    return x + 1;
-}
+#this should pass parsing but fail sematic analysis (phase3)
+#return <id> is allowed
 
 main[]:Integer{
-    Integer x = 0;
-	while[x<10]{
-		print[x];
-	}
+    Double x = 5.0;
 	return x;
 }
