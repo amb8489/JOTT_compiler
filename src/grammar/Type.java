@@ -17,7 +17,18 @@ public class Type {
     }
 
     public static boolean isType(Token T) {
-        return "Integer Double Boolean String".contains(T.getToken());
+        String t = T.getToken();
+        return t.equals("Integer") || t.equals("Double")||t.equals("Boolean")|| t.equals("String");
+    }
+
+    public static Type parseFReturnStmt(ArrayList<Token> tokens, int nestlevel) {
+        Token funcReturnType = tokens.get(TOKEN_IDX.IDX);
+        if ( isType(funcReturnType) || funcReturnType.getToken().equals("Void")) {
+            TOKEN_IDX.IDX++;
+            return new Type(funcReturnType.getToken(),funcReturnType.getFilename(),funcReturnType.getLineNum());
+        }
+            return null;
+
     }
 
 

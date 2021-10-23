@@ -1,12 +1,18 @@
-    if[x==5]{
-`       print[y];
-	}elseif[z < 3]{
-	    print["foo"];
-	}elseif[w==7]{
-	    print["bar"];
-	    print["poo"];
-	    print["doo"];
-	    return 10;
+ main[] : Void {
+     print[5];
+     print[ "foo bar"];
 
-	}
-	return 5;
+     if[x == x+1]{
+        print[3]
+
+     }else{
+            return 4;
+     }
+     return 4;
+ }
+
+ big[] : Void {
+      print[69];
+
+      return 9;
+  }

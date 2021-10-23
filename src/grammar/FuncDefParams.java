@@ -26,6 +26,13 @@ public class FuncDefParams  {
         // ---------------------------look for id -----------------------------
         Token idd = tokens.get(TOKEN_IDX.IDX);
 
+        if (idd.getTokenType() == TokenType.R_BRACKET){
+            System.out.println("empty params");
+            return null;
+        }
+
+        System.out.println("    found id ???:"+idd.getToken());
+
         if (idd.getTokenType() != TokenType.ID_KEYWORD){
             System.out.println("TODO ERROR 0");
             return null;
