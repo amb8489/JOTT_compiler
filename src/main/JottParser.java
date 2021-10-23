@@ -6,6 +6,8 @@ package main; /**
  */
 
 import grammar.JottTree;
+import grammar.ParsingException;
+import grammar.Program;
 
 import java.util.ArrayList;
 
@@ -18,6 +20,12 @@ public class JottParser {
      *         or null upon an error in parsing.
      */
     public static JottTree parse(ArrayList<Token> tokens){
-		return null;
+
+        try {
+            Program p = Program.parseProgram(tokens, 0);
+            return p;
+        } catch (ParsingException e) {
+            return null;
+        }
     }
 }
