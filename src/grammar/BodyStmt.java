@@ -26,7 +26,6 @@ public class BodyStmt {
 
         // ----------------------check for one of these three----------------------------------;
 
-        // RESTORE TODO ------------------------------------- where left off
         System.out.println("first::::" + tokens.get(TOKEN_IDX.IDX).getToken());
 
         IfStmt possible_if = IfStmt.parseIfStmt(tokens, nestLevel);
@@ -49,6 +48,7 @@ public class BodyStmt {
 
 
         Stmt possible_stmt = Stmt.parseStmt(tokens, nestLevel);
+
         if (possible_stmt != null) {
             System.out.println("statment found: "+possible_stmt.convertToJott());
             return new BodyStmt(null, null, possible_stmt, nestLevel);

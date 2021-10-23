@@ -66,7 +66,13 @@ public class Stmt {
             Token endStmt = tokens.get(TOKEN_IDX.IDX);
 
             if (endStmt.getTokenType() != TokenType.SEMICOLON) {
-                return null;
+                System.out.println("FAILURE");
+                StringBuilder sb = new StringBuilder();
+                sb.append("Syntax error\nInvalid token. Expected ;. Got: ");
+                sb.append(endStmt.getTokenType().toString()).append("\n");
+                sb.append(endStmt.getFilename() + ":" + endStmt.getLineNum());
+
+                throw new ParsingException(sb.toString());
             }
             TOKEN_IDX.IDX++;
 
