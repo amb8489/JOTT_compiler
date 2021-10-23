@@ -37,14 +37,18 @@ public class WhileLoop {
         System.out.println("    2nd:"+L_BRACKET.getToken());
         // check for if
         if (L_BRACKET.getTokenType() != TokenType.L_BRACKET){
-            return null;
+            StringBuilder sb = new StringBuilder();
+            sb.append("Syntax error\nInvalid token. Expected [. Got: ");
+            sb.append(L_BRACKET.getTokenType().toString()).append("\n");
+            sb.append(L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum());
+            throw new ParsingException(sb.toString());
 
         }
         System.out.println("    3rd:"+L_BRACKET.getToken());
         TOKEN_IDX.IDX++;
 
         // ---------------------- checking for bool expr ------------------------------
-        Expr expr = Expr.parseExpr(tokens,nestLevel);
+        Expr expr = BExpr.parseBExpr(tokens,nestLevel);
 
 
         // ---------------------- checking for ] ----------------------------------
@@ -53,7 +57,11 @@ public class WhileLoop {
         System.out.println("    4th:"+R_BRACKET.getToken());
         // check for if
         if (R_BRACKET.getTokenType() != TokenType.R_BRACKET){
-            return null;
+            StringBuilder sb = new StringBuilder();
+            sb.append("Syntax error\nInvalid token. Expected ]. Got: ");
+            sb.append(R_BRACKET.getTokenType().toString()).append("\n");
+            sb.append(R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum());
+            throw new ParsingException(sb.toString());
 
         }
         TOKEN_IDX.IDX++;
@@ -63,7 +71,11 @@ public class WhileLoop {
         System.out.println("    5th:"+L_BRACE.getToken());
         // check for if
         if (L_BRACE.getTokenType() != TokenType.L_BRACE){
-            return null;
+            StringBuilder sb = new StringBuilder();
+            sb.append("Syntax error\nInvalid token. Expected {. Got: ");
+            sb.append(L_BRACE.getTokenType().toString()).append("\n");
+            sb.append(L_BRACE.getFilename() + ":" + L_BRACE.getLineNum());
+            throw new ParsingException(sb.toString());
         }
         TOKEN_IDX.IDX++;
 
@@ -79,7 +91,11 @@ public class WhileLoop {
         System.out.println("    7th:"+R_BRACE.getToken());
         // check for if
         if (R_BRACE.getTokenType() != TokenType.R_BRACE){
-            return null;
+            StringBuilder sb = new StringBuilder();
+            sb.append("Syntax error\nInvalid token. Expected }. Got: ");
+            sb.append(R_BRACE.getTokenType().toString()).append("\n");
+            sb.append(R_BRACE.getFilename() + ":" + R_BRACE.getLineNum());
+            throw new ParsingException(sb.toString());
         }
         TOKEN_IDX.IDX++;
 

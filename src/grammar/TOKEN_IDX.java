@@ -24,6 +24,9 @@ public class TOKEN_IDX {
     public  static void popRestore() {
         System.out.println(saved_token_IDX.remove(0)+": IDX no longer needed");
     }
+    public  static void reset() {
+        IDX = 0;
+    }
 
 
 }

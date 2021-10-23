@@ -48,7 +48,7 @@ public class JottTokenizer {
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //4  [ state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //5  } state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //6  { state
-			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER,F},     //7  = state
+			{F ,ER,ER,ER,ER,ER,ER,8, F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //7  = state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //8  == <= >= relitiveOp
 			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,F,F,F,F,F,F,F,ER,F ,ER,F},     //9  < > state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //10  /+-* state
@@ -85,7 +85,7 @@ public class JottTokenizer {
 
 	private static Token tokenClass(String token_str , String file, int State_finished_at, int line_num){
 //		System.out.println("fin at:"+State_finished_at + "  |"+ token_str);
-//		System.out.println("token: ("+token_str+")");
+		System.out.println("token: ("+token_str+")");
 
 		return switch (State_finished_at) {
 			case 2 -> new Token(token_str, file, line_num, TokenType.COMMA);
@@ -185,7 +185,10 @@ public class JottTokenizer {
 									if (!token.toString().equals("")) {
 
 										// adding and classifying token
-										tokens.add(tokenClass(token.toString(), filename, curr_state, curr_line_number));
+										Token t= tokenClass(token.toString(), filename, curr_state, curr_line_number);
+										if(t != null) {
+											tokens.add(t);
+										}
 
 										// resting token
 										token = new StringBuilder();

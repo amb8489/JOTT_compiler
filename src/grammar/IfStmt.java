@@ -193,7 +193,10 @@ public class IfStmt {
 
             // ---------------------- all done with else --------------------------------
 
-            // need to add somthing about elif being null <---------------------------TODO
+            if (elsif_lst == null){
+                TOKEN_IDX.IDX++;
+
+            }
             return new IfStmt(nestLevel, expr, body1, body2, elsif_lst);
         }
         // ---------------------- all done no else --------------------------------

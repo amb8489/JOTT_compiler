@@ -31,25 +31,27 @@ public class Stmt {
 
         System.out.println("Statment first again::::" + tokens.get(TOKEN_IDX.IDX).getToken());
 
+        AsmtStmt asmt = AsmtStmt.parseAsmtStmt(tokens, nestLevel);
 
-        try {
-            AsmtStmt asmt = AsmtStmt.parseAsmtStmt(tokens, nestLevel);
+        if(asmt != null){
             TOKEN_IDX.popRestore();
             return new Stmt(nestLevel, asmt, null, null);
-        } catch (ParsingException e) {
+        }else{
             TOKEN_IDX.restore_token_IDX();
         }
         //----------------------------trying var_dec
         System.out.println("first again::::" + tokens.get(TOKEN_IDX.IDX).getToken());
         TOKEN_IDX.save_token_IDX();
 
-        try {
-            VarDec varDec = VarDec.parseVarDec(tokens, nestLevel);
+
+        VarDec varDec = VarDec.parseVarDec(tokens, nestLevel);
+
+        if(varDec != null) {
             TOKEN_IDX.popRestore();
 
             return new Stmt(nestLevel, null, varDec, null);
 
-        } catch (ParsingException e) {
+        } else{
             TOKEN_IDX.restore_token_IDX();
         }
 
@@ -57,21 +59,19 @@ public class Stmt {
         System.out.println("first again::::" + tokens.get(TOKEN_IDX.IDX).getToken());
         TOKEN_IDX.save_token_IDX();
 
-        try {
-            FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel);
 
+            FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel);
+            if(funcCall != null){
             // ---------------------- check for end statment ------------------------------------
 
             //check for ;
             Token endStmt = tokens.get(TOKEN_IDX.IDX);
 
             if (endStmt.getTokenType() != TokenType.SEMICOLON) {
-                System.out.println("FAILURE");
                 StringBuilder sb = new StringBuilder();
                 sb.append("Syntax error\nInvalid token. Expected ;. Got: ");
                 sb.append(endStmt.getTokenType().toString()).append("\n");
                 sb.append(endStmt.getFilename() + ":" + endStmt.getLineNum());
-
                 throw new ParsingException(sb.toString());
             }
             TOKEN_IDX.IDX++;
@@ -82,10 +82,11 @@ public class Stmt {
 
             return new Stmt(nestLevel, null, null, funcCall);
 
-        } catch (ParsingException ignored) {
+        } else{
             TOKEN_IDX.restore_token_IDX();
         }
-        return null;
+
+            return null;
     }
 
 

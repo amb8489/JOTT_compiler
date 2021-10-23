@@ -8,7 +8,7 @@ foo[x:Integer]:Integer{
 
 main[]:Integer{
     Integer x = 0;
-	while[foo[x]<10.0]{
+	while[foo[x] < 10.0]{
 	    x = foo[x];
 		print[x];
 	}

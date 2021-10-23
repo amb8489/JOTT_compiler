@@ -38,11 +38,7 @@ public class VarDec{
         Token idToken = tokens.get(TOKEN_IDX.IDX);
         System.out.println("    SECOND:"+idToken.getToken());
         if (idToken.getTokenType() != TokenType.ID_KEYWORD){
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected <id>. Got: ");
-            sb.append(typeToken.getTokenType().toString()).append("\n");
-            sb.append(idToken.getFilename() + ":" +idToken.getLineNum());
-            throw new ParsingException(sb.toString());
+            return null;
         }
         TOKEN_IDX.IDX++;
 
@@ -59,11 +55,7 @@ public class VarDec{
         System.out.println("    THIRD:"+endStmt.getToken());
 
         if (endStmt.getTokenType() != TokenType.SEMICOLON){
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected ;. Got: ");
-            sb.append(endStmt.getTokenType().toString()).append("\n");
-            sb.append(endStmt.getFilename() + ":" +endStmt.getLineNum());
-            throw new ParsingException(sb.toString());
+            return null;
         }
 
         TOKEN_IDX.IDX++;

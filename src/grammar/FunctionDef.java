@@ -31,7 +31,11 @@ public class FunctionDef  {
 
         if (id.getTokenType() != TokenType.ID_KEYWORD) {
             System.out.println("TODO ERROR -1");
-            return null;
+            StringBuilder sb = new StringBuilder();
+            sb.append("Syntax error\nInvalid token. Expected <id>. Got: ");
+            sb.append(id.getTokenType().toString()).append("\n");
+            sb.append(id.getFilename() + ":" + id.getLineNum());
+            throw new ParsingException(sb.toString());
         }
         TOKEN_IDX.IDX++;
 
