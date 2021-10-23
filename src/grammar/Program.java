@@ -7,13 +7,15 @@ import java.util.ArrayList;
 public class Program implements JottTree {
 
 
-    FunctionList funcLst = null;
+    FunctionList funcLst;
 
     public Program(FunctionList funcLst) {
         this.funcLst = funcLst;
     }
 
-    public Program parseProgram(ArrayList<Token>tokens,int nestlevel) throws ParsingException {
+    public static Program parseProgram(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
+        System.out.println("------------------------PARSING program------------------------");
+
         FunctionList funclst = FunctionList.parseFunctionList(tokens,nestlevel);
         return new Program(funclst);
     }

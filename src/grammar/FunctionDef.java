@@ -9,9 +9,9 @@ public class FunctionDef extends FunctionList {
         private Identifier id;
         private FuncDefParams func_def_params;
         private Body bdy;
-        private ReturnStmt retrn;
+        private Type retrn;
 
-    public FunctionDef(Identifier identifier, FuncDefParams func_def_params, Body body, ReturnStmt retrn) {
+    public FunctionDef(Identifier identifier, FuncDefParams func_def_params, Body body, Type retrn) {
         super(null);
         this.id = identifier;
         this.func_def_params = func_def_params;
@@ -27,6 +27,7 @@ public class FunctionDef extends FunctionList {
     // function_def -> id [ func_def_params ] : function_return { body }                                                <-- DONE
 
     public static FunctionDef parseFunctionDef(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
+        System.out.println("------------------------PARSING Function DEF------------------------");
 
 
         // ---------------------------look for id -----------------------------
@@ -38,12 +39,13 @@ public class FunctionDef extends FunctionList {
         }
         TOKEN_IDX.IDX++;
 
-
+        System.out.println("    found id:"+id.getToken());
         // ---------------------------look for [ -----------------------------
         Token lbrac = tokens.get(TOKEN_IDX.IDX);
+        System.out.println("    found [???:"+lbrac.getToken());
 
         if (lbrac.getTokenType() != TokenType.L_BRACKET){
-            System.out.println("TODO ERROR 0");
+            System.out.println("TODO ERROR 99");
         }
         TOKEN_IDX.IDX++;
 
@@ -52,9 +54,8 @@ public class FunctionDef extends FunctionList {
         // ---------------------------look for func_def_params ---------------
 
          FuncDefParams func_def_params = FuncDefParams.parseFunctionDefParams(tokens,nestlevel);
-
         if (func_def_params == null){
-            System.out.println("TODO ERROR 1");
+            System.out.println("empty params");
         }
 
 
@@ -65,6 +66,8 @@ public class FunctionDef extends FunctionList {
         if (rbrac.getTokenType() != TokenType.R_BRACKET){
             System.out.println("TODO ERROR 2");
         }
+        System.out.println("found rbrac ? --> "+ rbrac.getToken());
+
         TOKEN_IDX.IDX++;
 
         // ---------------------------look for : -----------------------------
@@ -74,10 +77,12 @@ public class FunctionDef extends FunctionList {
             System.out.println("TODO ERROR 3");
         }
         TOKEN_IDX.IDX++;
+        System.out.println("found colon --> "+ col.getToken());
 
-        // ---------------------------look for return stmt -----------------------------
+        // ---------------------------look for function return AKA type or void -----------------------------
 
-        ReturnStmt retrn = ReturnStmt.parseReturnStmt(tokens,nestlevel);
+        Type retrn = Type.parseFReturnStmt(tokens,nestlevel);
+        System.out.println("found return --> "+ retrn.convertToJott());
 
         if(retrn == null){
             System.out.println("TODO ERROR 4");
@@ -92,6 +97,7 @@ public class FunctionDef extends FunctionList {
             System.out.println("TODO ERROR 5");
         }
         TOKEN_IDX.IDX++;
+        System.out.println("found { --> "+ L_BRACE.getToken());
 
 
         // ---------------------------look for body stmt -----------------------------
@@ -99,7 +105,9 @@ public class FunctionDef extends FunctionList {
         Body bdy = Body.ParseBody(tokens,nestlevel);
 
         if(bdy == null){
-            System.out.println("TODO ERROR 6");
+            System.out.println("found empty body");
+        }else {
+            System.out.println("Found body --> " + bdy.convertToJott());
         }
 
         // ---------------------------look for } -----------------------------
@@ -110,6 +118,8 @@ public class FunctionDef extends FunctionList {
         if (R_BRACE.getTokenType() != TokenType.R_BRACE){
             System.out.println("TODO ERROR 7");
         }
+        System.out.println("Found } --> " + R_BRACE.getToken());
+        TOKEN_IDX.IDX++;
 
         return new FunctionDef(new Identifier(id),func_def_params,bdy,retrn);
     }
