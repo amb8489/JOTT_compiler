@@ -1,6 +1,6 @@
 #this will pass phase 2 and phase 3
 
-foo[x:Integer  ]:Integer{
+foo[x:Integer,x:Integer  ]:Integer{
     return x + 1;
 }
 
