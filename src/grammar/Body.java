@@ -39,6 +39,10 @@ public class Body  {
             if (bs == null) {
                 System.out.println("EMPTY BODY 2");
                 ReturnStmt rs = ReturnStmt.parseReturnStmt(tokens, nestLevel);
+                if (rs == null) {
+                    System.out.println("EMPTY return");
+
+                }
                 return new Body(bodys, rs);
             }
             System.out.println("    adding body                         -----------" + bs.convertToJott());
