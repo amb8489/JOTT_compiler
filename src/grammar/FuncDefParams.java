@@ -6,14 +6,18 @@ import main.TokenType;
 import java.util.ArrayList;
 
 public class FuncDefParams {
-    private final Identifier id;
-    private final Token type;
-    private final Params params;
+    private Identifier id;
+    private Token type;
+    private ArrayList<FuncDefParams>fplist;
 
-    public FuncDefParams(Identifier id, Token type, Params params) {
+    public FuncDefParams(Identifier id, Token type,ArrayList<FuncDefParams> fplst) {
         this.id = id;
         this.type = type;
-        this.params = params;
+        this.fplist = fplst;
+    }
+
+    public FuncDefParams(ArrayList<FuncDefParams> fplist) {
+        this.fplist = fplist;
     }
 
 
@@ -22,8 +26,11 @@ public class FuncDefParams {
 
     public static FuncDefParams parseFunctionDefParams(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
 
+        ArrayList<FuncDefParams>fplist = new ArrayList<>();
 
         // ---------------------------look for id -----------------------------
+
+
         Token idd = tokens.get(TOKEN_IDX.IDX);
 
         if (idd.getTokenType() == TokenType.R_BRACKET) {
@@ -31,41 +38,55 @@ public class FuncDefParams {
             return null;
         }
 
-        System.out.println("    found id ???:" + idd.getToken());
 
-        if (idd.getTokenType() != TokenType.ID_KEYWORD) {
-            System.out.println("TODO ERROR 0");
-            return null;
+        while (idd.getTokenType() != TokenType.R_BRACKET) {
+
+
+            System.out.println("    found id ???:" + idd.getToken());
+
+            if (idd.getTokenType() != TokenType.ID_KEYWORD) {
+                System.out.println("TODO ERROR 0");
+                return null;
+            }
+            Identifier id = new Identifier(idd);
+
+            TOKEN_IDX.IDX++;
+
+            // ---------------------------look for : -----------------------------
+            Token col = tokens.get(TOKEN_IDX.IDX);
+
+            if (col.getTokenType() != TokenType.COLON) {
+                System.out.println("TODO ERROR 1");
+            }
+
+            TOKEN_IDX.IDX++;
+
+
+            // ---------------------------look for type -----------------------------
+            Token type = tokens.get(TOKEN_IDX.IDX);
+
+            if (type.getTokenType() != TokenType.ID_KEYWORD) {
+                System.out.println("TODO ERROR 2");
+                return null;
+            }
+            TOKEN_IDX.IDX++;
+
+
+            // ---------------------------look for func def parm t -----------------------------
+
+            fplist.add(new FuncDefParams(id, type, null));
+
+
+            idd = tokens.get(TOKEN_IDX.IDX);
+            if (idd.getTokenType() !=TokenType.COMMA){
+                break;
+            }
+            TOKEN_IDX.IDX++;
+            idd = tokens.get(TOKEN_IDX.IDX);
+
         }
-        Identifier id = new Identifier(idd);
+        return new FuncDefParams(fplist);
 
-        TOKEN_IDX.IDX++;
-
-        // ---------------------------look for : -----------------------------
-        Token col = tokens.get(TOKEN_IDX.IDX);
-
-        if (col.getTokenType() != TokenType.COLON) {
-            System.out.println("TODO ERROR 1");
-        }
-
-        TOKEN_IDX.IDX++;
-
-
-        // ---------------------------look for type -----------------------------
-        Token type = tokens.get(TOKEN_IDX.IDX);
-
-        if (type.getTokenType() != TokenType.ID_KEYWORD) {
-            System.out.println("TODO ERROR 2");
-            return null;
-        }
-        TOKEN_IDX.IDX++;
-
-
-        // ---------------------------look for func def parm t -----------------------------
-
-        Params params = Params.parseParams(tokens, nestlevel);
-
-        return new FuncDefParams(id, type, params);
 
     }
 
@@ -91,10 +112,26 @@ public class FuncDefParams {
 
     public String convertToJott() {
 
+
+
+
         StringBuilder jstr = new StringBuilder();
 
-        jstr.append(id.convertToJott()+ " : " + params.convertToJott());
+        StringBuilder fParmLst = new StringBuilder();
 
-        return jstr.toString();
+        fParmLst.append("");
+
+        if (fplist != null) {
+            for(FuncDefParams FDP: fplist) {
+                fParmLst.append(FDP.convertToJott());
+            }
+            return fParmLst.toString().substring(0, fParmLst.length()-1);
+        }else {
+
+
+            jstr.append(id.convertToJott() + " : " + type.getToken() + fParmLst+",");
+
+            return jstr.toString();
+        }
     }
 }

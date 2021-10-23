@@ -50,7 +50,7 @@ public class JottTokenizer {
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //6  { state
 			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER,F},     //7  = state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //8  == <= >= relitiveOp
-			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER,F},     //9  < > state
+			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,F,F,F,F,F,F,F,ER,F ,ER,F},     //9  < > state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //10  /+-* state
 			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //11  ; state
 			{ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,22,ER,ER,ER,ER,ER,ER,ER,ER,F},     //12  . state
@@ -141,7 +141,8 @@ public class JottTokenizer {
 				token = new StringBuilder();
 
 				// for each char in string
-				for (int i = 0; i < line.length(); i++) {
+				int i = 0;
+				while(i < line.length()) {
 
 					char ch = line.charAt(i);
 					if ( classify_char(ch) != -1) {
@@ -169,9 +170,13 @@ public class JottTokenizer {
 
 							// looking ahead at the next char
 							if (i + 1 < line.length()) {
-								char next_ch = line.charAt(i + 1);
 
 								// next state given current state and next char
+								while (classify_char(line.charAt(i + 1)) == -1){
+									i++;
+								}
+								char next_ch = line.charAt(i + 1);
+
 								int next = DFA[curr_state][classify_char(next_ch)];
 
 								// if the next char will cause a finish
@@ -193,6 +198,8 @@ public class JottTokenizer {
 							}
 						}
 					}
+						i++;
+
 				}
 			}
 		}
