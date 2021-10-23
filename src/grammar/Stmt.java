@@ -92,7 +92,7 @@ public class Stmt {
             return var_dec.convertToJott();
         }
         if (func_call != null) {
-            return func_call.convertToJott();
+            return func_call.convertToJott()+";";
         }
         return null;
     }
