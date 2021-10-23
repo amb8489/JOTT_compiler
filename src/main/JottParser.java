@@ -24,7 +24,7 @@ public class JottParser {
         try {
             Program p = Program.parseProgram(tokens, 0);
             return p;
-        } catch (ParsingException e) {
+        } catch (Exception | ParsingException e) {
             return null;
         }
     }

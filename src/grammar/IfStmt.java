@@ -125,6 +125,7 @@ public class IfStmt {
             System.out.println("    6th BODY :" + body1.convertToJott());
         } else {
             System.out.println("    6th EMPTY BODY");
+            TOKEN_IDX.IDX--;
         }
 
         // ---------------------- checking for } ----------------------------------
@@ -142,8 +143,10 @@ public class IfStmt {
         }
         TOKEN_IDX.IDX++;
 
+        System.out.println("first============: "+tokens.get(TOKEN_IDX.IDX).getToken());
         // ---------------------- checking for elif's --------------------------------
         ArrayList<ElseifStmt> elsif_lst = ElseifStmt.ParseElsif_lst(tokens, nestLevel);
+        System.out.println("first============: "+tokens.get(TOKEN_IDX.IDX).getToken());
 
 
         // ---------------------- checking for else --------------------------------
@@ -193,10 +196,10 @@ public class IfStmt {
 
             // ---------------------- all done with else --------------------------------
 
-            if (elsif_lst == null){
-                TOKEN_IDX.IDX++;
-
-            }
+//            if (elseTok == null){
+//                System.out.println("else if IS NULLLL");
+//                TOKEN_IDX.IDX++;
+//            }
             return new IfStmt(nestLevel, expr, body1, body2, elsif_lst);
         }
         // ---------------------- all done no else --------------------------------

@@ -32,10 +32,27 @@ foo[id:Integer, id2:String, id3:Double]:Integer{
                 }else{
                     return true;
                 }
+                if[false]{
+                    return 5;
+                }elseif[false]{
+                    Double x = -.1;
+                }elseif[false]{
+                     Double x = -.1;
+
+                }elseif[false]{
+                     Double x = -.1;
+
+                }else{
+                       yerr = 10;
+                }
+           }else{
+               return true;
+
            }
        }
        String s = "w00foo";
 }
+
 
 dist [id:Integer, id3:Double]:Integer{
 
