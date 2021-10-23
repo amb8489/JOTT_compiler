@@ -79,12 +79,15 @@ public class FuncDefParams {
 
             idd = tokens.get(TOKEN_IDX.IDX);
             if (idd.getTokenType() !=TokenType.COMMA){
+                System.out.println("+++++++++++++++++++++++++++"+tokens.get(TOKEN_IDX.IDX));
+
                 break;
             }
             TOKEN_IDX.IDX++;
             idd = tokens.get(TOKEN_IDX.IDX);
 
         }
+        System.out.println("+++++++++++++++++++++++++++"+tokens.get(TOKEN_IDX.IDX));
         return new FuncDefParams(fplist);
 
 
