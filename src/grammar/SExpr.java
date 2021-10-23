@@ -54,10 +54,10 @@ public class SExpr extends Expr {
     @Override
     public String convertToJott() {
 
-        if (stringLit != null){
+        if (stringLit != null) {
             return stringLit.getToken();
         }
-        if (id != null){
+        if (id != null) {
             return id.getToken();
         }
         return funcCall.convertToJott();

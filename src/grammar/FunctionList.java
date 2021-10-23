@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class FunctionList {
 
-    private  ArrayList<FunctionDef> lstfuncs;
+    private ArrayList<FunctionDef> lstfuncs;
 
 
     public FunctionList(ArrayList<FunctionDef> listOfFunctionDefs) {
@@ -22,20 +22,20 @@ public class FunctionList {
         ArrayList<FunctionDef> lstfuncs = new ArrayList<>();
         System.out.println("looking for function def");
 
-        FunctionDef fd = FunctionDef.parseFunctionDef(tokens,nestlevel);
+        FunctionDef fd = FunctionDef.parseFunctionDef(tokens, nestlevel);
 
-        if(fd == null){
+        if (fd == null) {
             System.out.println(" NO init function def");
 
             return null;
         }
         lstfuncs.add(fd);
 
-        while (TOKEN_IDX.IDX < tokens.size()){
+        while (TOKEN_IDX.IDX < tokens.size()) {
             System.out.println(" looking for more function def");
-            fd = FunctionDef.parseFunctionDef(tokens,nestlevel);
+            fd = FunctionDef.parseFunctionDef(tokens, nestlevel);
 
-            if(fd == null){
+            if (fd == null) {
                 System.out.println("no more function def found ");
                 return new FunctionList(lstfuncs);
             }
@@ -45,8 +45,6 @@ public class FunctionList {
         return new FunctionList(lstfuncs);
 
     }
-
-
 
 
     public String convertToJava() {

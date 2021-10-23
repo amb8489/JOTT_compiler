@@ -29,7 +29,7 @@ public class FuncCall {
         // ---------------- checking function call starts with id [----------------------
 
         Token id = tokens.get(TOKEN_IDX.IDX);
-        Token lb = tokens.get(TOKEN_IDX.IDX+1);
+        Token lb = tokens.get(TOKEN_IDX.IDX + 1);
         if (id.getTokenType() != TokenType.ID_KEYWORD || lb.getTokenType() != TokenType.L_BRACKET) {
             return null;
         }

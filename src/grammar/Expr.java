@@ -7,17 +7,10 @@ import java.util.ArrayList;
 
 public class Expr {
     Expr e;
+
     public Expr(Expr e) {
         this.e = e;
     }
-
-
-    //     * expr ->
-    //     i_expr|d_expr| start with type
-    //     s_expr|
-    //     b_expr|
-    //     id
-    //     |func_call
 
 
     public static Expr parseExpr(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
@@ -25,7 +18,7 @@ public class Expr {
 
         // ---------------------------looking for numExpr (int or dbl)----------------------------------------
 
-        if(tokens.get(TOKEN_IDX.IDX+1).getTokenType() != TokenType.REL_OP) {
+        if (tokens.get(TOKEN_IDX.IDX + 1).getTokenType() != TokenType.REL_OP) {
             NumExpr numExp = NumExpr.parseNumExpr(tokens, nestLevel);
 
             if (numExp != null) {
@@ -43,7 +36,7 @@ public class Expr {
         // ---------------------------looking for b_expr (bool expr)----------------------------------------
 
         Expr b_expr = BExpr.parseBExpr(tokens, nestLevel);
-        if (b_expr!=null){
+        if (b_expr != null) {
             return new Expr(b_expr);
         }
 
@@ -54,12 +47,12 @@ public class Expr {
         StringBuilder sb = new StringBuilder();
         sb.append("Syntax error\nInvalid token. Expected Expr. Got: ");
         sb.append(t.getTokenType().toString()).append("\n");
-        sb.append(t.getFilename() + ":" +t.getLineNum());
+        sb.append(t.getFilename() + ":" + t.getLineNum());
         throw new ParsingException(sb.toString());
 
     }
 
-        public String convertToJott() {
-            return e.convertToJott();
+    public String convertToJott() {
+        return e.convertToJott();
     }
 }

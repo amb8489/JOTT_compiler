@@ -9,7 +9,7 @@ public class ElseifStmt {
     private Expr exp;
     private Body body;
 
-    public ElseifStmt(Expr exp,Body body) {
+    public ElseifStmt(Expr exp, Body body) {
         this.exp = exp;
         this.body = body;
     }
@@ -32,7 +32,7 @@ public class ElseifStmt {
         }
 
         // while we did encounter an elseif in the tokens we will keep serching for elseif
-        while(elseif.getToken().equals("elseif")){
+        while (elseif.getToken().equals("elseif")) {
             System.out.println("    elif found:" + elseif.getToken());
 
             // removing elseif
@@ -41,34 +41,34 @@ public class ElseifStmt {
             // ---------------------------looking for [----------------------------------------
 
             Token L_BRACKET = tokens.get(TOKEN_IDX.IDX);
-            System.out.println("    2nd:"+L_BRACKET.getToken());
+            System.out.println("    2nd:" + L_BRACKET.getToken());
             // check for if
-            if (L_BRACKET.getTokenType() != TokenType.L_BRACKET){
+            if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Syntax error\nInvalid token. Expected [. Got: ");
                 sb.append(L_BRACKET.getTokenType().toString()).append("\n");
-                sb.append(L_BRACKET.getFilename() + ":" +L_BRACKET.getLineNum());
+                sb.append(L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-            System.out.println("    3rd:"+L_BRACKET.getToken());
+            System.out.println("    3rd:" + L_BRACKET.getToken());
             TOKEN_IDX.IDX++;
             // -----------------------looking for bool expr-------------------------------------------
 
 
-            Expr expr = Expr.parseExpr(tokens,nestLevel);
+            Expr expr = Expr.parseExpr(tokens, nestLevel);
 
-            System.out.println("    XPR FOUND:"+expr.convertToJott());
+            System.out.println("    XPR FOUND:" + expr.convertToJott());
 
             // ---------------------------looking for ]----------------------------------------
 
             Token R_BRACKET = tokens.get(TOKEN_IDX.IDX);
-            System.out.println("    4th:"+R_BRACKET.getToken());
+            System.out.println("    4th:" + R_BRACKET.getToken());
             // check for if
-            if (R_BRACKET.getTokenType() != TokenType.R_BRACKET){
+            if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Syntax error\nInvalid token. Expected ]. Got: ");
                 sb.append(R_BRACKET.getTokenType().toString()).append("\n");
-                sb.append(R_BRACKET.getFilename() + ":" +R_BRACKET.getLineNum());
+                sb.append(R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum());
                 throw new ParsingException(sb.toString());
             }
             TOKEN_IDX.IDX++;
@@ -76,16 +76,16 @@ public class ElseifStmt {
             // ---------------------------looking for {----------------------------------------
 
             Token L_BRACE = tokens.get(TOKEN_IDX.IDX);
-            System.out.println("    5th:"+L_BRACE.getToken());
+            System.out.println("    5th:" + L_BRACE.getToken());
             // check for if
-            if (L_BRACE.getTokenType() != TokenType.L_BRACE){
+            if (L_BRACE.getTokenType() != TokenType.L_BRACE) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Syntax error\nInvalid token. Expected {. Got: ");
                 sb.append(L_BRACE.getTokenType().toString()).append("\n");
-                sb.append(L_BRACE.getFilename() + ":" +L_BRACE.getLineNum());
+                sb.append(L_BRACE.getFilename() + ":" + L_BRACE.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-            System.out.println("    6th:"+L_BRACE.getToken());
+            System.out.println("    6th:" + L_BRACE.getToken());
             TOKEN_IDX.IDX++;
 
 
@@ -96,20 +96,20 @@ public class ElseifStmt {
             // ---------------------------looking for }----------------------------------------
 
             Token R_BRACE = tokens.get(TOKEN_IDX.IDX);
-            System.out.println("    7th:"+R_BRACE.getToken());
+            System.out.println("    7th:" + R_BRACE.getToken());
             // check for if
-            if (R_BRACE.getTokenType() != TokenType.R_BRACE){
+            if (R_BRACE.getTokenType() != TokenType.R_BRACE) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Syntax error\nInvalid token. Expected }. Got: ");
                 sb.append(R_BRACE.getTokenType().toString()).append("\n");
-                sb.append(R_BRACE.getFilename() + ":" +R_BRACE.getLineNum());
+                sb.append(R_BRACE.getFilename() + ":" + R_BRACE.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-            System.out.println("    8th:"+R_BRACE.getToken());
+            System.out.println("    8th:" + R_BRACE.getToken());
             TOKEN_IDX.IDX++;
             // -----------------------adding what was found to list of seen elif stmts-----------------------
 
-            elif_lists.add(new ElseifStmt(expr,body));
+            elif_lists.add(new ElseifStmt(expr, body));
 
             // ---------------------------looking for elif----------------------------------------
 

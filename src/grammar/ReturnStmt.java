@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ReturnStmt extends Body {
     private final Expr exp;
 
-    public ReturnStmt(int nestLevel,Expr exp) {
+    public ReturnStmt(int nestLevel, Expr exp) {
         super(nestLevel);
         this.exp = exp;
     }
@@ -20,22 +20,19 @@ public class ReturnStmt extends Body {
         StringBuilder jstr = new StringBuilder();
         jstr.append("     ".repeat(0));
         jstr.append("return ");
-        jstr.append(exp.convertToJott()+ ";\n");
+        jstr.append(exp.convertToJott() + ";\n");
         return jstr.toString();
     }
-
-
 
 
     public static ReturnStmt parseReturnStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("------------------------PARSING Return Stmt------------------------");
 
 
-
         // ---------------------- check for return ------------------------------------
         Token returnToken = tokens.get(TOKEN_IDX.IDX);
-        System.out.println("    FIRST:"+returnToken.getToken());
-        if (! returnToken.getToken().equals("return")){
+        System.out.println("    FIRST:" + returnToken.getToken());
+        if (!returnToken.getToken().equals("return")) {
             return null;
         }
         TOKEN_IDX.IDX++;
@@ -44,8 +41,7 @@ public class ReturnStmt extends Body {
         // ---------------------- check for expr ------------------------------------
         // checking for expression
         System.out.println("    LOOKING FOR EXPR");
-        Expr expr = Expr.parseExpr(tokens,nestLevel);
-
+        Expr expr = Expr.parseExpr(tokens, nestLevel);
 
 
         // ---------------------- check for end statment ------------------------------------
@@ -53,15 +49,15 @@ public class ReturnStmt extends Body {
         //check for ;
         Token endStmt = tokens.get(TOKEN_IDX.IDX);
 
-        if (endStmt.getTokenType() != TokenType.SEMICOLON){
+        if (endStmt.getTokenType() != TokenType.SEMICOLON) {
             return null;
         }
         TOKEN_IDX.IDX++;
 
         // ---------------------- DONE ------------------------------------
 
-        System.out.println("return found: return "+expr.convertToJott());
-        return new ReturnStmt(nestLevel,expr);
+        System.out.println("return found: return " + expr.convertToJott());
+        return new ReturnStmt(nestLevel, expr);
 
     }
 

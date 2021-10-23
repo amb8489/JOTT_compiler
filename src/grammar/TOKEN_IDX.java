@@ -19,7 +19,6 @@ public class TOKEN_IDX {
     public  static void restore_token_IDX() {
         IDX = saved_token_IDX.remove(0);
         System.out.println("Restoring to : "+IDX);
-
     }
 
     public  static void popRestore() {
