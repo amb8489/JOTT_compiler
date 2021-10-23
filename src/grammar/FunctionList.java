@@ -65,6 +65,11 @@ public class FunctionList {
     }
 
     public String convertToJott() {
-        return "func list to jott not imp";
+        StringBuilder jstr = new StringBuilder();
+
+        for (FunctionDef fd: lstfuncs) {
+            jstr.append(fd.convertToJott()+"\n");
+        }
+        return jstr.toString();
     }
 }

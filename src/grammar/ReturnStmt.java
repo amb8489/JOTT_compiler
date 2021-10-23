@@ -7,15 +7,13 @@ import main.TokenType;
 import java.util.ArrayList;
 
 //     return_stmt -> return expr end_stmt
-public class ReturnStmt extends Body {
+public class ReturnStmt  {
     private final Expr exp;
 
     public ReturnStmt(int nestLevel, Expr exp) {
-        super(nestLevel);
         this.exp = exp;
     }
 
-    @Override
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
         jstr.append("     ".repeat(0));
@@ -61,24 +59,4 @@ public class ReturnStmt extends Body {
 
     }
 
-
-    @Override
-    public String convertToJava() {
-        return null;
-    }
-
-    @Override
-    public String convertToC() {
-        return null;
-    }
-
-    @Override
-    public String convertToPython() {
-        return null;
-    }
-
-    @Override
-    public boolean validateTree() {
-        return false;
-    }
 }

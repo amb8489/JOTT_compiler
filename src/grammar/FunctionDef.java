@@ -5,23 +5,19 @@ import main.TokenType;
 
 import java.util.ArrayList;
 
-public class FunctionDef extends FunctionList {
+public class FunctionDef  {
     private Identifier id;
     private FuncDefParams func_def_params;
     private Body bdy;
     private Type retrn;
 
     public FunctionDef(Identifier identifier, FuncDefParams func_def_params, Body body, Type retrn) {
-        super(null);
         this.id = identifier;
         this.func_def_params = func_def_params;
         this.bdy = body;
         this.retrn = retrn;
     }
 
-    public FunctionDef(Identifier identifier) {
-        super(null);
-    }
 
 
     // function_def -> id [ func_def_params ] : function_return { body }                                                <-- DONE
@@ -121,24 +117,42 @@ public class FunctionDef extends FunctionList {
 
         return new FunctionDef(new Identifier(id), func_def_params, bdy, retrn);
     }
+    public boolean validateJott() {
+        return false;
+    }
 
-    @Override
+
     public String convertToJava() {
         return null;
     }
 
-    @Override
     public String convertToC() {
         return null;
     }
 
-    @Override
     public String convertToPython() {
         return null;
     }
 
-    @Override
     public boolean validateTree() {
         return false;
+    }
+
+    // function_def -> id [ func_def_params ] : function_return { body }                                                <-- DONE
+
+    public String convertToJott() {
+
+        StringBuilder jstr = new StringBuilder();
+
+        String funcP = (func_def_params == null) ? "" : func_def_params.convertToJott();
+
+        String bod = (bdy == null) ? "" : bdy.convertToJott();
+
+
+
+        jstr.append(id.convertToJott()+ " [ " + funcP+" ] ");
+        jstr.append(" : " + retrn.convertToJott()+" { \n" + bod +"}");
+
+        return jstr.toString();
     }
 }

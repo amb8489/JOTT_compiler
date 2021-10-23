@@ -103,8 +103,7 @@ public class Params {
             if (par.hasComma) {
                 jstr.append(",");
             }
-            System.out.println(par.expr.convertToJott());
-            jstr.append(par.expr.convertToJott() + " ");
+            jstr.append(par.expr.convertToJott() );
         }
 
 

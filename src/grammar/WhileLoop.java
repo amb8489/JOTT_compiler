@@ -88,7 +88,12 @@ public class WhileLoop {
 
     public String convertToJott() {
 
-        return "while covert to jott not done";
+        StringBuilder jstr = new StringBuilder();
+        jstr.append("     ".repeat(0));
+        jstr.append("while [ ");
+        jstr.append(this.exp.convertToJott() + " ] { \n");
+        jstr.append(body1.convertToJott() + "}\n");
+        return jstr.toString();
     }
 
 }

@@ -4,18 +4,19 @@ import main.Token;
 
 import java.util.ArrayList;
 
-public class BodyStmt extends Body {
-    IfStmt possible_if = null;
-    WhileLoop possible_while = null;
-    Stmt possible_stmt = null;
+public class BodyStmt {
+
+    public IfStmt possible_if ;
+    public WhileLoop possible_while;
+    public Stmt possible_stmt;
 
 
     public BodyStmt(IfStmt possible_if, WhileLoop possible_while, Stmt possible_stmt, int nestLevel) {
-        super(null);
 
         this.possible_if = possible_if;
         this.possible_while = possible_while;
         this.possible_stmt = possible_stmt;
+        System.out.println(convertToJott());
     }
 
 
@@ -49,47 +50,32 @@ public class BodyStmt extends Body {
 
         Stmt possible_stmt = Stmt.parseStmt(tokens, nestLevel);
         if (possible_stmt != null) {
-            System.out.println("statment found");
+            System.out.println("statment found: "+possible_stmt.convertToJott());
             return new BodyStmt(null, null, possible_stmt, nestLevel);
         }
+
         return null;
 
 
-        // ----------------------Error, sould have been one of these three----------------------------------
 
     }
 
-    @Override
     public String convertToJott() {
-        if (possible_if != null) {
-            return possible_if.convertToJott();
+
+        if (this.possible_if != null) {
+            return this.possible_if.convertToJott();
         }
-        if (possible_while != null) {
-            return possible_while.convertToJott();
+        if (this.possible_while != null) {
+            return this.possible_while.convertToJott();
         }
-        if (possible_stmt != null) {
-            possible_stmt.convertToJott();
+
+
+        if (this.possible_stmt != null) {
+            return this.possible_stmt.convertToJott();
         }
-        return null;
+
+
+        return "nu11";
     }
 
-    @Override
-    public String convertToJava() {
-        return null;
-    }
-
-    @Override
-    public String convertToC() {
-        return null;
-    }
-
-    @Override
-    public String convertToPython() {
-        return null;
-    }
-
-    @Override
-    public boolean validateTree() {
-        return false;
-    }
 }

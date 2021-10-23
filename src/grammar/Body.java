@@ -8,20 +8,17 @@ import java.util.ArrayList;
 
 // body -> body_stmt body|return_stmt|ε                                                                             <-- DONE
 
-public class Body extends FunctionDef {
+public class Body  {
     public ArrayList<BodyStmt> bodys = null;
     public ReturnStmt Hasreturn = null;
 
 
     public Body(ArrayList<BodyStmt> bodys, ReturnStmt rs) {
-        super(new Identifier(null));
         this.Hasreturn = rs;
         this.bodys = bodys;
     }
 
-    public Body(Object bodys) {
-        super(null);
-    }
+
 
     // TODO NOT CORRECT
     public static Body ParseBody(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
@@ -37,19 +34,20 @@ public class Body extends FunctionDef {
         while (tokens.get(TOKEN_IDX.IDX).getTokenType() != TokenType.R_BRACE) {
             System.out.println("    looking for body");
             BodyStmt bs = BodyStmt.parseBodyStmt(tokens, nestLevel);
+            System.out.println("    --->>>>>>>looking for body");
 
             if (bs == null) {
-                System.out.println("EMPTY BODY");
+                System.out.println("EMPTY BODY 2");
                 ReturnStmt rs = ReturnStmt.parseReturnStmt(tokens, nestLevel);
+                System.out.println("(((((("+rs.convertToJott());
                 return new Body(bodys, rs);
             }
-            System.out.println("    body:::" + bs.convertToJott());
-
-
+            System.out.println("    adding body                         -----------" + bs.convertToJott());
             bodys.add(bs);
         }
+        ReturnStmt rs = ReturnStmt.parseReturnStmt(tokens, nestLevel);
 
-        return null;
+        return new Body(bodys, null);
     }
 
 
@@ -67,23 +65,5 @@ public class Body extends FunctionDef {
         return jstr.toString();
     }
 
-    @Override
-    public String convertToJava() {
-        return null;
-    }
 
-    @Override
-    public String convertToC() {
-        return null;
-    }
-
-    @Override
-    public String convertToPython() {
-        return null;
-    }
-
-    @Override
-    public boolean validateTree() {
-        return false;
-    }
 }
