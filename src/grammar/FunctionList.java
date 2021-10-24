@@ -22,7 +22,7 @@ public class FunctionList {
         ArrayList<FunctionDef> lstfuncs = new ArrayList<>();
         System.out.println("looking for function def");
 
-        FunctionDef fd = FunctionDef.parseFunctionDef(tokens, nestlevel);
+        FunctionDef fd = FunctionDef.parseFunctionDef(tokens, 0);
 
         if (fd == null) {
             System.out.println(" NO init function def");

@@ -8,10 +8,12 @@ import java.util.ArrayList;
 public class ElseifStmt {
     private Expr exp;
     private Body body;
+    private int nestlevel;
 
-    public ElseifStmt(Expr exp, Body body) {
+    public ElseifStmt(Expr exp, Body body,int nestlevel) {
         this.exp = exp;
         this.body = body;
+        this.nestlevel = nestlevel;
     }
 
 
@@ -109,7 +111,7 @@ public class ElseifStmt {
             TOKEN_IDX.IDX++;
             // -----------------------adding what was found to list of seen elif stmts-----------------------
 
-            elif_lists.add(new ElseifStmt(expr, body));
+            elif_lists.add(new ElseifStmt(expr, body,nestLevel));
 
             // ---------------------------looking for elif----------------------------------------
 
@@ -123,11 +125,12 @@ public class ElseifStmt {
 
     // elseif [ b_expr ] { body }
     public String convertToJott() {
+        String SPACE = "    ".repeat(this.nestlevel-1);
 
         StringBuilder jstr = new StringBuilder();
-        jstr.append("elseif [ ");
-        jstr.append(exp.convertToJott() + " ] { ");
-        jstr.append(body.convertToJott() + " }\n");
+        jstr.append("elseif[ ");
+        jstr.append(exp.convertToJott() + "]{ \n");
+        jstr.append(body.convertToJott() +SPACE+"}");
         return jstr.toString();
     }
 

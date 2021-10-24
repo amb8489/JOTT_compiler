@@ -9,7 +9,7 @@ public class BodyStmt {
     public IfStmt possible_if ;
     public WhileLoop possible_while;
     public Stmt possible_stmt;
-
+    public int nestlevel;
 
     public BodyStmt(IfStmt possible_if, WhileLoop possible_while, Stmt possible_stmt, int nestLevel) {
 
@@ -17,6 +17,7 @@ public class BodyStmt {
         this.possible_while = possible_while;
         this.possible_stmt = possible_stmt;
         System.out.println(convertToJott());
+        this.nestlevel = nestLevel;
     }
 
 
@@ -28,7 +29,7 @@ public class BodyStmt {
 
         System.out.println("first::::" + tokens.get(TOKEN_IDX.IDX).getToken());
 
-        IfStmt possible_if = IfStmt.parseIfStmt(tokens, nestLevel);
+        IfStmt possible_if = IfStmt.parseIfStmt(tokens, nestLevel+1);
 
         System.out.println("first::::" + tokens.get(TOKEN_IDX.IDX).getToken());
         if (possible_if != null) {
@@ -39,7 +40,7 @@ public class BodyStmt {
         System.out.println("first again::::" + tokens.get(TOKEN_IDX.IDX).getToken());
 
 
-        WhileLoop possible_while = WhileLoop.parseWhile(tokens, nestLevel);
+        WhileLoop possible_while = WhileLoop.parseWhile(tokens, nestLevel+1);
         if (possible_while != null) {
             return new BodyStmt(null, possible_while, null, nestLevel);
         }
@@ -51,7 +52,7 @@ public class BodyStmt {
 
         if (possible_stmt != null) {
             System.out.println("statment found: "+possible_stmt.convertToJott());
-            return new BodyStmt(null, null, possible_stmt, nestLevel);
+            return new BodyStmt(null, null, possible_stmt, nestLevel+1);
         }
 
 
@@ -62,6 +63,7 @@ public class BodyStmt {
     }
 
     public String convertToJott() {
+        String SPACE = "    ".repeat(this.nestlevel);
 
         if (this.possible_if != null) {
             return this.possible_if.convertToJott();

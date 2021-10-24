@@ -10,12 +10,13 @@ public class FunctionDef  {
     private FuncDefParams func_def_params;
     private Body bdy;
     private Type retrn;
-
-    public FunctionDef(Identifier identifier, FuncDefParams func_def_params, Body body, Type retrn) {
+    private int nestlevel ;
+    public FunctionDef(Identifier identifier, FuncDefParams func_def_params, Body body, Type retrn,int nestlevel) {
         this.id = identifier;
         this.func_def_params = func_def_params;
         this.bdy = body;
         this.retrn = retrn;
+        this.nestlevel = nestlevel;
     }
 
 
@@ -24,7 +25,6 @@ public class FunctionDef  {
 
     public static FunctionDef parseFunctionDef(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
         System.out.println("------------------------PARSING Function DEF------------------------");
-
 
         // ---------------------------look for id -----------------------------
         Token id = tokens.get(TOKEN_IDX.IDX);
@@ -100,7 +100,7 @@ public class FunctionDef  {
 
         // ---------------------------look for body stmt -----------------------------
 
-        Body bdy = Body.ParseBody(tokens, nestlevel);
+        Body bdy = Body.ParseBody(tokens, nestlevel+1);
 
         if (bdy == null) {
             System.out.println("found empty body");
@@ -119,7 +119,7 @@ public class FunctionDef  {
         System.out.println("Found } --> " + R_BRACE.getToken());
         TOKEN_IDX.IDX++;
 
-        return new FunctionDef(new Identifier(id), func_def_params, bdy, retrn);
+        return new FunctionDef(new Identifier(id), func_def_params, bdy, retrn ,nestlevel);
     }
     public boolean validateJott() {
         return false;
@@ -153,9 +153,9 @@ public class FunctionDef  {
         String bod = (bdy == null) ? "" : bdy.convertToJott();
 
 
-
-        jstr.append(id.convertToJott()+ " [ " + funcP+" ] ");
-        jstr.append(" : " + retrn.convertToJott()+" { \n" + bod +"}");
+        String SPACE = "    ".repeat(this.nestlevel);
+        jstr.append(SPACE+ id.convertToJott()+ " [ " + funcP+" ] ");
+        jstr.append(" : " + retrn.convertToJott()+" { \n" + bod + SPACE+"}");
 
         return jstr.toString();
     }

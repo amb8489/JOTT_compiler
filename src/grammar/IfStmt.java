@@ -10,21 +10,22 @@ public class IfStmt {
     private Body body1;
     private Body body2;
     private ArrayList<ElseifStmt> elif;
-
-    public IfStmt(int nestLevel, Expr exp, Body body1, ArrayList<ElseifStmt> elif) {
+    private int nestlevel;
+    public IfStmt(int nestLevel, Expr exp, Body body1, ArrayList<ElseifStmt> elif,int nestlevel) {
 
         this.exp = exp;
         this.body1 = body1;
         this.elif = elif;
-
+        this.nestlevel = nestlevel;
     }
 
-    public IfStmt(int nestLevel, Expr exp, Body body1, Body body2, ArrayList<ElseifStmt> elif) {
+    public IfStmt(int nestLevel, Expr exp, Body body1, Body body2, ArrayList<ElseifStmt> elif,int nestlevel) {
 
         this.exp = exp;
         this.body1 = body1;
         this.elif = elif;
         this.body2 = body2;
+        this.nestlevel = nestlevel;
 
     }
 
@@ -34,19 +35,20 @@ public class IfStmt {
 
 
         StringBuilder jstr = new StringBuilder();
-        jstr.append("     ".repeat(0));
+        String SPACE = "    ".repeat(this.nestlevel-1);
+
         jstr.append("if [ ");
         jstr.append(this.exp.convertToJott() + " ] { \n");
-        jstr.append(body1.convertToJott() + "}\n");
+        jstr.append(body1.convertToJott() +SPACE+ "}");
 
         if (elif != null){
             for(ElseifStmt e:elif){
-                jstr.append(e.convertToJott()+"\n");
+                jstr.append(e.convertToJott()+"");
             }
         }
         if (body2 != null){
-            jstr.append(" else { ");
-            jstr.append(body2.convertToJott() + "}\n");
+            jstr.append("else{\n");
+            jstr.append(body2.convertToJott() +SPACE+"}\n");
 
         }
         return jstr.toString();
@@ -200,12 +202,12 @@ public class IfStmt {
 //                System.out.println("else if IS NULLLL");
 //                TOKEN_IDX.IDX++;
 //            }
-            return new IfStmt(nestLevel, expr, body1, body2, elsif_lst);
+            return new IfStmt(nestLevel, expr, body1, body2, elsif_lst,nestLevel);
         }
         // ---------------------- all done no else --------------------------------
 
         // need to add somthing about elif being null <---------------------------TODO
-        return new IfStmt(nestLevel, expr, body1, elsif_lst);
+        return new IfStmt(nestLevel, expr, body1, elsif_lst,nestLevel);
     }
 
 
