@@ -11,11 +11,13 @@ import java.util.ArrayList;
 public class WhileLoop {
     private Expr exp;
     private Body body1;
+    private int nestlevel;
 
 
-    public WhileLoop(int nestLevel, Expr expr, Body body1) {
+    public WhileLoop(int nestLevel, Expr expr, Body body1,int nestlevel) {
         this.exp = expr;
         this.body1 = body1;
+        this.nestlevel = nestlevel;
     }
 
 
@@ -99,16 +101,17 @@ public class WhileLoop {
         }
         TOKEN_IDX.IDX++;
 
-        return new WhileLoop(nestLevel, expr, body1);
+        return new WhileLoop(nestLevel, expr, body1,nestLevel);
     }
 
     public String convertToJott() {
+        String SPACE = "    ".repeat(this.nestlevel-1);
 
         StringBuilder jstr = new StringBuilder();
         jstr.append("     ".repeat(0));
         jstr.append("while [ ");
         jstr.append(this.exp.convertToJott() + " ] { \n");
-        jstr.append(body1.convertToJott() + "}\n");
+        jstr.append(body1.convertToJott() + SPACE+"}\n");
         return jstr.toString();
     }
 
