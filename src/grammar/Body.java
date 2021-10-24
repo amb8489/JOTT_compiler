@@ -11,16 +11,16 @@ import java.util.ArrayList;
 public class Body  {
     public ArrayList<BodyStmt> bodys = null;
     public ReturnStmt Hasreturn = null;
+    int nestlevel;
 
-
-    public Body(ArrayList<BodyStmt> bodys, ReturnStmt rs) {
+    public Body(ArrayList<BodyStmt> bodys, ReturnStmt rs,int nestlevel) {
         this.Hasreturn = rs;
         this.bodys = bodys;
+        this.nestlevel = nestlevel;
     }
 
 
 
-    // TODO NOT CORRECT
     public static Body ParseBody(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
 
         ArrayList<BodyStmt> bodys = new ArrayList<>();
@@ -43,26 +43,27 @@ public class Body  {
                     System.out.println("EMPTY return");
 
                 }
-                return new Body(bodys, rs);
+                return new Body(bodys, rs,nestLevel);
             }
             System.out.println("    adding body                         -----------" + bs.convertToJott());
             bodys.add(bs);
         }
         ReturnStmt rs = ReturnStmt.parseReturnStmt(tokens, nestLevel);
 
-        return new Body(bodys, null);
+        return new Body(bodys, null,nestLevel);
     }
 
 
     public String convertToJott() {
+        String SPACE = "    ".repeat(this.nestlevel);
 
         StringBuilder jstr = new StringBuilder();
 
         for (BodyStmt b : bodys) {
-            jstr.append(b.convertToJott() + "\n");
+            jstr.append(SPACE+b.convertToJott() + "\n");
         }
         if (Hasreturn != null) {
-            jstr.append(Hasreturn.convertToJott());
+            jstr.append(SPACE+Hasreturn.convertToJott()+"\n");
         }
 
         return jstr.toString();

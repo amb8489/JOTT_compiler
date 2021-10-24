@@ -1,20 +1,6 @@
 #this should pass parsing but fail sematic analysis (phase3)
 #return <id> is allowed
 
-main[]:Integer{
-    if[1 == 2 > 1 >=2 ]{
-        print["hi"];
-        if[3 == 4 > 5 >= true ]{
-                print["1"];
-                print["2"];
-            }
-            print["hello"];
-    }
-    x = 5;
-    Double x = 5.0;
-	return x;
-}
-
 foo[id:Integer, id2:String, id3:Double]:Integer{
 
     while[x < 10]{
