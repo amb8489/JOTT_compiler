@@ -114,5 +114,8 @@ public class WhileLoop {
         jstr.append(body1.convertToJott() + SPACE+"}\n");
         return jstr.toString();
     }
+    public boolean validateTree() {
+        return false;
+    }
 
 }

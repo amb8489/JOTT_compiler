@@ -11,17 +11,21 @@ foo[id:Integer, id2:String, id3:Double]:Integer{
    while[x < 100]{
            run[ id, id2, id3];
            if[true]{
-           if[true]{
-           if[true]{
-           if[true]{
-           if[true]{
-           return 5;
-           }
-           }
-           }
+                   print["hi"];
+                   while[x ==2 == b > 5]{
+                        print[3];
+                   }
+               if[true]{
+                   if[true]{
+                       if[true]{
+                           if[true]{
+                                return 5;
+                       }
+                   }
+               }
            }
 
-                dist[x,y];
+           dist[x,y];
            }elseif[false]{
                 if[true]{
                     return false;
@@ -52,6 +56,5 @@ foo[id:Integer, id2:String, id3:Double]:Integer{
 
 
 dist [id:Integer, id3:Double]:Integer{
-
    return id * id  +  id3 * id3;
 }

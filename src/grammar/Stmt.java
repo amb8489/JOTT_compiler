@@ -103,6 +103,9 @@ public class Stmt {
         }
         return null;
     }
+    public boolean validateTree() {
+        return false;
+    }
 
 
 }

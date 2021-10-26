@@ -134,5 +134,8 @@ public class NumExpr extends Expr {
         return jstr.toString();
     }
 
+    public boolean validateTree() {
+        return false;
+    }
 
 }

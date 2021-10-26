@@ -26,4 +26,8 @@ public class Identifier {
     public String convertToJott() {
         return id.getToken();
     }
+    public boolean validateTree() {
+        return false;
+    }
+
 }

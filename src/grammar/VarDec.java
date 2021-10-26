@@ -75,4 +75,8 @@ public class VarDec{
         jstr.append(name.convertToJott() + ";");
         return jstr.toString();
     }
+    public boolean validateTree() {
+        return false;
+    }
+
 }

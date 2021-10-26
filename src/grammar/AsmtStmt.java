@@ -98,4 +98,9 @@ public class AsmtStmt {
     }
 
 
+
+    public boolean validateTree() {
+        return false;
+    }
+
 }
