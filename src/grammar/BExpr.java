@@ -143,5 +143,7 @@ public class BExpr extends Expr {
         return jstr.toString();
     }
 
-
+    public boolean validateTree() {
+        return false;
+    }
 }

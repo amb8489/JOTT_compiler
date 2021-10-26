@@ -68,6 +68,9 @@ public class Body  {
 
         return jstr.toString();
     }
+    public boolean validateTree() {
+        return false;
+    }
 
 
 }

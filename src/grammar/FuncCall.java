@@ -85,4 +85,9 @@ public class FuncCall {
 
         return jstr.toString();
     }
+
+    public boolean validateTree() {
+        return false;
+    }
+
 }

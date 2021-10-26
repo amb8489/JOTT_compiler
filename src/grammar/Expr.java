@@ -55,4 +55,9 @@ public class Expr {
     public String convertToJott() {
         return e.convertToJott();
     }
+
+    public boolean validateTree() {
+        return false;
+    }
+
 }

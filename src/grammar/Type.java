@@ -59,5 +59,8 @@ public class Type {
     public String convertToJott(){
         return type;
     }
+    public boolean validateTree() {
+        return false;
+    }
 
 }

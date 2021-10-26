@@ -62,5 +62,8 @@ public class SExpr extends Expr {
         }
         return funcCall.convertToJott();
     }
+    public boolean validateTree() {
+        return false;
+    }
 
 }

@@ -48,7 +48,4 @@ public class Program implements JottTree {
         return false;
     }
 
-    protected int getNestLevel() {
-        return 0;
-    }
 }
