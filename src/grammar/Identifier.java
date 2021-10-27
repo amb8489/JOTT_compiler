@@ -11,14 +11,13 @@ public class Identifier {
 
 
     public Identifier(Token id) {
-        check(id);
         this.id = id;
 
     }
-    public static void check(Token id){
+    public static void check(Token id) throws ParsingException {
 
         if(IdBanList.contains(id.getToken())){
-            System.out.println("cant use "+id.getToken()+" as id");
+            throw new ParsingException("cant use "+id.getToken()+" as id");
         }
     }
 

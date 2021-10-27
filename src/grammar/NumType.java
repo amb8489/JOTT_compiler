@@ -12,35 +12,29 @@ public class NumType {
     int Inum;
     Token number;
 
-    public NumType(String type, double v,Token t) {
-        this.type = type;
-        this.Dnum = v;
-        this.number =t;
 
-    }
-    public NumType(String type, int v,Token t) {
-        this.type = type;
-        this.Inum = v;
-        this.number =t;
-    }
 
-    public NumType ParseNumType(Token token) throws ParsingException {
-        System.out.println("-------------------PARSING Num TYPE-----------------");
-        String str = token.getToken();
+    public NumType(Token possible_num) {
+        String str = possible_num.getToken();
+        this.number = possible_num;
+
         try {
             double v = Double.parseDouble(str);
-            String type = "Double";
-            return new NumType(type,v,token);
+            this.type = "Double";
+            this.Dnum = v;
         } catch (NumberFormatException nfe) {
         }
+
         try {
             int v = Integer.parseInt(str);
-            String type = "Integer";
-            return new NumType(type,v,token);
+            this.type = "Integer";
+            this.Inum = v;
+
         } catch (NumberFormatException nfe) {
-            return null;
         }
     }
+
+
     public String convertToJott() {
         return number.getToken();
     }
