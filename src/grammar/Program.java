@@ -21,6 +21,13 @@ public class Program implements JottTree {
     }
 
 
+
+    @Override
+    public boolean validateTree() {
+        return funcLst.validateTree();
+    }
+
+
     @Override
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
@@ -43,9 +50,6 @@ public class Program implements JottTree {
         return null;
     }
 
-    @Override
-    public boolean validateTree() {
-        return false;
-    }
+
 
 }
