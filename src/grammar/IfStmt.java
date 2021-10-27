@@ -11,22 +11,24 @@ public class IfStmt {
     private Body body2;
     private ArrayList<ElseifStmt> elif;
     private int nestlevel;
-    public IfStmt(int nestLevel, Expr exp, Body body1, ArrayList<ElseifStmt> elif,int nestlevel) {
+    public boolean HasGuaranteedReturn;
+    public IfStmt(int nestLevel, Expr exp, Body body1, ArrayList<ElseifStmt> elif,int nestlevel,boolean HasGuaranteedReturn) {
 
         this.exp = exp;
         this.body1 = body1;
         this.elif = elif;
         this.nestlevel = nestlevel;
+        this.HasGuaranteedReturn = HasGuaranteedReturn;
     }
 
-    public IfStmt(int nestLevel, Expr exp, Body body1, Body body2, ArrayList<ElseifStmt> elif,int nestlevel) {
+    public IfStmt(int nestLevel, Expr exp, Body body1, Body body2, ArrayList<ElseifStmt> elif,int nestlevel,boolean HasGuaranteedReturn) {
 
         this.exp = exp;
         this.body1 = body1;
         this.elif = elif;
         this.body2 = body2;
         this.nestlevel = nestlevel;
-
+        this.HasGuaranteedReturn = HasGuaranteedReturn;
     }
 
 
@@ -180,7 +182,12 @@ public class IfStmt {
 
             System.out.println("    11th:body");
             Body body2 = Body.ParseBody(tokens, nestLevel);
-
+            boolean HasGuaranteedReturn= false;
+            if(body2 != null) {
+                if (body2.Hasreturn != null) {
+                    HasGuaranteedReturn = true;
+                }
+            }
             // ---------------------- checking for } --------------------------------
 
 
@@ -202,12 +209,12 @@ public class IfStmt {
 //                System.out.println("else if IS NULLLL");
 //                TOKEN_IDX.IDX++;
 //            }
-            return new IfStmt(nestLevel, expr, body1, body2, elsif_lst,nestLevel);
+            return new IfStmt(nestLevel, expr, body1, body2, elsif_lst,nestLevel,HasGuaranteedReturn);
         }
         // ---------------------- all done no else --------------------------------
 
         // need to add somthing about elif being null <---------------------------TODO
-        return new IfStmt(nestLevel, expr, body1, elsif_lst,nestLevel);
+        return new IfStmt(nestLevel, expr, body1, elsif_lst,nestLevel,false);
     }
 
 

@@ -3,6 +3,7 @@ package grammar;
 import main.Token;
 import main.TokenType;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class FunctionDef  {
@@ -138,10 +139,6 @@ public class FunctionDef  {
         return null;
     }
 
-    public boolean validateTree() {
-        return false;
-    }
-
     // function_def -> id [ func_def_params ] : function_return { body }                                                <-- DONE
 
     public String convertToJott() {
@@ -159,5 +156,26 @@ public class FunctionDef  {
 
         return jstr.toString();
     }
+
+    public boolean validateTree() throws ParsingException {
+
+        // if return type is INT DOUBLE STRING BOOL
+        if (!this.retrn.type.equals("Void")){
+            if (this.bdy.HasGuaranteedReturnFromIf || this.bdy.Hasreturn != null){
+                return true;
+            }
+            throw new ParsingException("MISSING RETURN in function: "+this.id.convertToJott());
+
+        }else{
+            // VOID HAS NO RETURN
+            if (this.bdy.Hasreturn == null && !this.bdy.HasGuaranteedReturnFromIf){
+                return true;
+            }else{
+                throw new ParsingException("VOID function has return stmt");
+            }
+
+        }
+    }
+
 
 }
