@@ -1,39 +1,15 @@
 #this should pass parsing but fail sematic analysis (phase3)
 #return <id> is allowed
 
-foooo[id:Integer, id2:String, id3:Double]:Integer{
+main[id:Integer, id2:String, id3:Double]: Void {
 
-    while[x < 10]{
-	    #x = foo[x];
-		print[x];
-	}
-
-   while[x < 100]{
-           run[ id, id2, id3];
-           if[true]{
-                   print["hi"];
-                   while[x ==2 == b > 5]{
-                        print[3];
-                   }
-               if[true]{
-                   if[true]{
-                       if[true]{
-                           if[true]{
-                                return 5;
-                       }
-                   }
-               }
-           }
-
-           dist[x,y];
-           }elseif[false]{
-                if[true]{
-                    return false;
-                }else{
-                    return true;
-                }
                 if[false]{
-                    return 5;
+                    if[false]{
+                       return 5;
+
+                    }else{
+                       return 5;
+                    }
                 }elseif[false]{
                     Double x = -.1;
 
@@ -42,19 +18,14 @@ foooo[id:Integer, id2:String, id3:Double]:Integer{
 
                 }elseif[false]{
                      Double x = -.1;
+                         return 5;
+
 
                 }else{
                        yerr = 10;
+                       return 5;
+
                 }
-           }else{
-               return true;
 
-           }
-       }
-       String s = "w00foo";
 }
 
-
-main[id:Integer, id3:Double]:Integer{
-   return id * id  +  id3 * id3;
-}

@@ -67,10 +67,16 @@ public class FunctionList {
     }
 
 
-    public boolean validateTree() {
+    public boolean validateTree() throws ParsingException {
 
 
-        return false;
+        for (FunctionDef function: lstfuncs) {
+            boolean r = function.validateTree();
+            if (!r){
+                return false;
+            }
+        }
+        return true;
     }
 
     public String convertToJott() {

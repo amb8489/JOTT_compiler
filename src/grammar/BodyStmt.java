@@ -10,14 +10,16 @@ public class BodyStmt {
     public WhileLoop possible_while;
     public Stmt possible_stmt;
     public int nestlevel;
+    public boolean HasGuaranteedReturn;
 
-    public BodyStmt(IfStmt possible_if, WhileLoop possible_while, Stmt possible_stmt, int nestLevel) {
+    public BodyStmt(IfStmt possible_if, WhileLoop possible_while, Stmt possible_stmt, int nestLevel,boolean HasGuaranteedReturn) {
 
         this.possible_if = possible_if;
         this.possible_while = possible_while;
         this.possible_stmt = possible_stmt;
         System.out.println(convertToJott());
         this.nestlevel = nestLevel;
+        this.HasGuaranteedReturn = HasGuaranteedReturn;
     }
 
 
@@ -33,7 +35,8 @@ public class BodyStmt {
 
         System.out.println("first::::" + tokens.get(TOKEN_IDX.IDX).getToken());
         if (possible_if != null) {
-            return new BodyStmt(possible_if, null, null, nestLevel);
+
+            return new BodyStmt(possible_if, null, null, nestLevel,possible_if.HasGuaranteedReturn);
         }
 
 
@@ -42,7 +45,7 @@ public class BodyStmt {
 
         WhileLoop possible_while = WhileLoop.parseWhile(tokens, nestLevel+1);
         if (possible_while != null) {
-            return new BodyStmt(null, possible_while, null, nestLevel);
+            return new BodyStmt(null, possible_while, null, nestLevel,false);
         }
 
         System.out.println("first again::::" + tokens.get(TOKEN_IDX.IDX).getToken());
@@ -52,7 +55,7 @@ public class BodyStmt {
 
         if (possible_stmt != null) {
             System.out.println("statment found: "+possible_stmt.convertToJott());
-            return new BodyStmt(null, null, possible_stmt, nestLevel+1);
+            return new BodyStmt(null, null, possible_stmt, nestLevel+1,false);
         }
 
 

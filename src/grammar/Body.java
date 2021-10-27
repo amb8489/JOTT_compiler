@@ -11,12 +11,15 @@ import java.util.ArrayList;
 public class Body  {
     public ArrayList<BodyStmt> bodys = null;
     public ReturnStmt Hasreturn = null;
+    public boolean HasGuaranteedReturnFromIf;
+
     int nestlevel;
 
-    public Body(ArrayList<BodyStmt> bodys, ReturnStmt rs,int nestlevel) {
+    public Body(ArrayList<BodyStmt> bodys, ReturnStmt rs,int nestlevel,boolean GuaranteedReturn) {
         this.Hasreturn = rs;
         this.bodys = bodys;
         this.nestlevel = nestlevel;
+        this.HasGuaranteedReturnFromIf = GuaranteedReturn;
     }
 
 
@@ -43,14 +46,29 @@ public class Body  {
                     System.out.println("EMPTY return");
 
                 }
-                return new Body(bodys, rs,nestLevel);
+
+                boolean HasGuaranteedReturn =false;
+                for (BodyStmt b : bodys) {
+                    if (b.HasGuaranteedReturn) {
+                        HasGuaranteedReturn = true;
+                        break;
+                    }
+                }
+                return new Body(bodys, rs,nestLevel,HasGuaranteedReturn);
             }
             System.out.println("    adding body                         -----------" + bs.convertToJott());
             bodys.add(bs);
         }
         ReturnStmt rs = ReturnStmt.parseReturnStmt(tokens, nestLevel);
 
-        return new Body(bodys, null,nestLevel);
+        boolean HasGuaranteedReturn =false;
+        for (BodyStmt b : bodys) {
+            if (b.HasGuaranteedReturn) {
+                HasGuaranteedReturn = true;
+                break;
+            }
+        }
+        return new Body(bodys, null,nestLevel,HasGuaranteedReturn);
     }
 
 
