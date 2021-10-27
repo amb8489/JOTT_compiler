@@ -3,15 +3,14 @@ package grammar;
 import main.Token;
 import main.TokenType;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 
 public class FunctionDef  {
     public Identifier id;
-    private FuncDefParams func_def_params;
-    private Body bdy;
-    private Type retrn;
-    private int nestlevel ;
+    private final FuncDefParams func_def_params;
+    private final Body bdy;
+    private final Type retrn;
+    private final int nestlevel ;
     public FunctionDef(Identifier identifier, FuncDefParams func_def_params, Body body, Type retrn,int nestlevel) {
         this.id = identifier;
         this.func_def_params = func_def_params;

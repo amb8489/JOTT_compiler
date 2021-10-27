@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class FuncDefParams {
     private Identifier id;
     private Token type;
-    private ArrayList<FuncDefParams>fplist;
+    private final ArrayList<FuncDefParams> fplist;
 
     public FuncDefParams(Identifier id, Token type,ArrayList<FuncDefParams> fplst) {
         this.id = id;

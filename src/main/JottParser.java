@@ -1,16 +1,18 @@
-package main; /**
- * This class is responsible for paring Jott Tokens
- * into a Jott parse tree.
- *
- * @author
- */
+package main;
 
 import grammar.JottTree;
 import grammar.ParsingException;
 import grammar.Program;
-
 import java.util.ArrayList;
 
+/**
+ * This class is responsible for tokenizing Jott code.
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class JottParser {
 
     /**

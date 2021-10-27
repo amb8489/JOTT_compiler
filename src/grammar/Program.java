@@ -26,7 +26,7 @@ public class Program implements JottTree {
     @Override
     public boolean validateTree() throws ParsingException{
         if( !funcLst.ListHasMain()){
-            throw new ParsingException("Program is missing or has an incorrecly spelled main");
+            throw new ParsingException("Program is missing or has an incorrectly spelled main");
         }
 
         return funcLst.validateTree();
@@ -35,9 +35,7 @@ public class Program implements JottTree {
 
     @Override
     public String convertToJott() {
-        StringBuilder jstr = new StringBuilder();
-        jstr.append(funcLst.convertToJott());
-        return jstr.toString();
+        return funcLst.convertToJott();
     }
 
     @Override

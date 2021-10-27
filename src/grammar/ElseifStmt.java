@@ -6,9 +6,9 @@ import main.TokenType;
 import java.util.ArrayList;
 
 public class ElseifStmt {
-    private Expr exp;
-    private Body body;
-    private int nestlevel;
+    private final Expr exp;
+    private final Body body;
+    private final int nestlevel;
 
     public ElseifStmt(Expr exp, Body body,int nestlevel) {
         this.exp = exp;

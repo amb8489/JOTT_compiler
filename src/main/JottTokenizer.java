@@ -1,9 +1,4 @@
-package main; /**
- * This class is responsible for tokenizing Jott code.
- *
- * @author aaron berghash
- **/
-
+package main;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,210 +8,204 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
+/**
+ * This class is responsible for tokenizing Jott code.
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class JottTokenizer {
 
-
-
-	//look up table to map chars to their respective class in the dfa
-	private static Map<String, Integer> lut = Stream.of(new Object[][] {
-			{" ", 0},{"#", 1},
-			{",", 2},{"]", 3},
-			{"[", 4},{"{", 5},
-			{"}", 6},{"=", 7},
-			{"<", 9},{">", 9},
-			{"/", 10},{"+", 10},
-			{"-", 22},{"*", 10},
-			{";", 11},{".", 12},
-			{"digit", 13},{"letter", 15},
-			{":", 16},{"!", 17},
-			{"\"", 18},{"\n", 20}
-	}).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
-
+	private static final int F = 0;		// finish state is represented as 0
+	private static final int ER = 21;	// error state is represented as 21
 
 	// the dfa with transition states
-
-	// FINISIH AND ERROR STATE
-	private static final int F = 0;    // finish state
-	private static final int ER = 21; // error state
-
 	private static final int[][] DFA = {
-			{0 ,1 ,2 ,3 ,4 ,5 ,6 ,7 ,ER,9 ,10,11,12,13,22,15,16,17,18,ER,F ,ER,23},     //0  start
-			{1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,F ,ER,F},     //1  # state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //2  , state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //3  ] state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //4  [ state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //5  } state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //6  { state
-			{F ,ER,ER,ER,ER,ER,ER,8, F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //7  = state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //8  == <= >= relitiveOp
-			{F ,ER,ER,ER,ER,ER,ER,8 ,ER,ER,ER,ER,F,F,F,F,F,F,F,ER,F ,ER,F},     //9  < > state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //10  /+-* state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //11  ; state
-			{ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,22,ER,ER,ER,ER,ER,ER,ER,ER,F},     //12  . state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,12,13,F ,F ,F ,F ,F ,F ,F ,ER,F},     //13  0123456789 state
-			{ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,22,ER,ER,ER,ER,ER,ER,F ,ER,F},     //14  Decimal state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,15,F ,15,F ,F ,F ,F ,F ,ER,F},     //15  lettER state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //16  : state
-			{ER,ER,ER,ER,ER,ER,ER,19,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,ER,F},     //17  ! state
-			{18,ER,F ,ER,ER,ER,ER,ER,ER,ER,ER,F ,ER,18,ER,18,ER,ER,20 ,ER,ER,ER,F},     //18  " state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //19  != state
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,ER,F},     //20  string
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F , 0,F},     //ER  ERror
-			{F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,22,F ,F ,F ,F ,F ,F ,F , 0,F},
-			{10 ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,F ,12 ,13 ,F ,F ,F ,F ,F ,F ,F ,ER}};     //10  /-state
+			{0, 1, 2, 3, 4, 5, 6, 7, ER, 9, 10, 11, 12, 13, 22, 15, 16, 17, 18, ER, F, ER, 23},				// 0  start
+			{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, F, ER, F},							// 1  # state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 2  , state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 3  ] state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 4  [ state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 5  } state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 6  { state
+			{F, ER, ER, ER, ER, ER, ER, 8, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},					// 7  = state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 8  relOp state
+			{F, ER, ER, ER, ER, ER, ER, 8, ER, ER, ER, ER,  F, F, F, F, F, F, F, ER, F, ER, F},				// 9  < > state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 10  /+-* state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},     					// 11  ; state
+			{ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, 22, ER, ER, ER, ER, ER, ER, ER, ER, F},	// 12  . state
+			{F, F, F, F, F, F, F, F, F, F, F, F, 12, 13, F, F, F, F, F, F, F, ER, F},     					// 13  0123456789 state
+			{ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, 22, ER, ER, ER, ER, ER, ER, F, ER, F},		// 14  decimal state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, 15, F, 15, F, F, F, F, F, ER, F},     					// 15  letter state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},     					// 16  : state
+			{ER, ER, ER, ER, ER, ER, ER, 19,ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, F},		// 17  ! state
+			{18, ER, F, ER, ER, ER, ER, ER, ER, ER, ER, F, ER, 18, ER, 18, ER, ER, 20 ,ER, ER, ER, F},		// 18  " state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 19  != state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 20  string state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, 0, F},     						// 21  error state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, 22, F, F, F, F, F, F, F, 0, F},							// 22  bad state
+			{10, F, F, F, F, F, F, F, F, F, F, F, 12, 13, F, F, F, F, F, F, F, ER}};     					// 23  helper
 
-	// helper function to help classify chars
-	private static int classify_char(char ch){
-		if (Character.isDigit(ch)) {
-			return lut.get("digit");
+	// look up table is used to map chars to their respective class in the dfa
+	private static final Map<String, Integer> lookUpTable =
+			Stream.of(
+					new Object[][] {
+							{" ", 0}, {"#", 1}, {",", 2}, {"]", 3},
+							{"[", 4}, {"{", 5}, {"}", 6}, {"=", 7},
+							{"<", 9}, {">", 9}, {"/", 10}, {"+", 10},
+							{"-", 22}, {"*", 10}, {";", 11}, {".", 12},
+							{"digit", 13}, {"letter", 15}, {":", 16}, {"!", 17},
+							{"\"", 18}, {"\n", 20}
+					}
+			).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
+
+	/**
+	 * Classifies this character as a digit or a letter then returns the state from the look-up table.
+	 * @param character the provided character
+	 * @return returns the state from the look-up table
+	 */
+	private static int classifyCharacter(char character) {
+		if (Character.isDigit(character)) {
+			return lookUpTable.get("digit");
 		}
-		if (Character.isLetter(ch)) {
-			return lut.get("letter");
+		if (Character.isLetter(character)) {
+			return lookUpTable.get("letter");
 		}else {
-			if (lut.get(String.valueOf(ch))== null){
+			if (lookUpTable.get(String.valueOf(character)) == null) {
 				return -1;
 			}
-			return lut.get(String.valueOf(ch));
+			return lookUpTable.get(String.valueOf(character));
 		}
 	}
 
-	// classifies tokens based on where they finished in the DFA
+	/**
+	 * TODO: <-- add description
+	 * @param tokenString blah
+	 * @param file blah
+	 * @param stateFinishedAt blah
+	 * @param lineNumber blah
+	 * @return blah
+	 */
+	private static Token tokenClass(String tokenString, String file, int stateFinishedAt, int lineNumber){
+		System.out.printf("token: (%s)%n", tokenString);
 
-	private static Token tokenClass(String token_str , String file, int State_finished_at, int line_num){
-//		System.out.println("fin at:"+State_finished_at + "  |"+ token_str);
-		System.out.println("token: ("+token_str+")");
-
-		return switch (State_finished_at) {
-			case 2 -> new Token(token_str, file, line_num, TokenType.COMMA);
-			case 3 -> new Token(token_str, file, line_num, TokenType.R_BRACKET);
-			case 4 -> new Token(token_str, file, line_num, TokenType.L_BRACKET);
-			case 5 -> new Token(token_str, file, line_num, TokenType.L_BRACE);
-			case 6 -> new Token(token_str, file, line_num, TokenType.R_BRACE);
-			case 7 -> new Token(token_str, file, line_num, TokenType.ASSIGN);
-			case 8, 9, 19 -> new Token(token_str, file, line_num, TokenType.REL_OP);
-			case 10 -> new Token(token_str, file, line_num, TokenType.MATH_OP);
-			case 11 -> new Token(token_str, file, line_num, TokenType.SEMICOLON);
-			case 22, 12, 13 -> new Token(token_str, file, line_num, TokenType.NUMBER);
-			case 15 -> new Token(token_str, file, line_num, TokenType.ID_KEYWORD);
-			case 16 -> new Token(token_str, file, line_num, TokenType.COLON);
-			case 20, 18 -> new Token(token_str, file, line_num, TokenType.STRING);
-			default -> null;
+		return switch (stateFinishedAt) {
+			case 2 			-> new Token(tokenString, file, lineNumber, TokenType.COMMA);
+			case 3 			-> new Token(tokenString, file, lineNumber, TokenType.R_BRACKET);
+			case 4 			-> new Token(tokenString, file, lineNumber, TokenType.L_BRACKET);
+			case 5 			-> new Token(tokenString, file, lineNumber, TokenType.L_BRACE);
+			case 6 			-> new Token(tokenString, file, lineNumber, TokenType.R_BRACE);
+			case 7 			-> new Token(tokenString, file, lineNumber, TokenType.ASSIGN);
+			case 8, 9, 19 	-> new Token(tokenString, file, lineNumber, TokenType.REL_OP);
+			case 10 		-> new Token(tokenString, file, lineNumber, TokenType.MATH_OP);
+			case 11 		-> new Token(tokenString, file, lineNumber, TokenType.SEMICOLON);
+			case 22, 12, 13 -> new Token(tokenString, file, lineNumber, TokenType.NUMBER);
+			case 15 		-> new Token(tokenString, file, lineNumber, TokenType.ID_KEYWORD);
+			case 16 		-> new Token(tokenString, file, lineNumber, TokenType.COLON);
+			case 20, 18 	-> new Token(tokenString, file, lineNumber, TokenType.STRING);
+			default 		-> null;
 		};
 	}
+
 	/**
-	 * Takes in a filename and tokenizes that file into Tokens
-	 * based on the rules oF the Jott Language
+	 * Takes in a filename and tokenizes that file into token based on the rules of the Jott Language.
 	 * @param filename the name oF the file to tokenize; can be relative or absolute path
 	 * @return an ArrayList oF Jott Tokens
 	 */
 	public static ArrayList<Token> tokenize(String filename) {
-
 		// final tokens list
 		ArrayList<Token> tokens = new ArrayList<>();
 
 		// reading lines of file
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 
-			// state machine vars
+			// state machine variables
 			String line;
-			StringBuilder token;
-			int curr_line_number = 0;
-			int curr_state;
+			StringBuilder tokenString;
+			int currentLineNumber = 0;
+			int currentState;
 
 			// for each line in file
 			while ((line = br.readLine()) != null) {
 
-				// adding  new line char for help in the DFA
-				line+="\n";
-
-				// init state machine for this line
-				curr_line_number++;
-
-				// start state machine at start
-				curr_state = 0;
-
-				// init token ""
-				token = new StringBuilder();
+				line += "\n"; 					// adding  new line char for help in the DFA
+				currentLineNumber++; 			// init state machine for this line
+				currentState = 0; 				// start state machine at start
+				tokenString = new StringBuilder();  	// init token ""
 
 				// for each char in string
 				int i = 0;
-				while(i < line.length()) {
+				while (i < line.length()) {
+					char character = line.charAt(i);
 
-					char ch = line.charAt(i);
-					if ( classify_char(ch) != -1) {
-						// updating state based on input ch
-						curr_state = DFA[curr_state][classify_char(ch)];
+					if (classifyCharacter(character) != -1) {
+						currentState = DFA[currentState][classifyCharacter(character)]; // updating state based on input ch
 
 						// if moved into error state
-						if (curr_state == ER) {
+						if (currentState == ER) {
 							String error_msg = "Syntax Error\nInvalid token \"";
-							System.err.println(error_msg + token + "\"");
-							System.err.println(filename + ":" + curr_line_number);
+							System.err.printf("%s%s\"%n", error_msg, tokenString);
+							System.err.printf("%s:%s%n", filename, currentLineNumber);
 							return null;
 						}
 
 						// if not a comment
-						if (curr_state != 1) {
+						if (currentState != 1) {
 
 							// add a space if we are in a string state else add no spaces
 							char space_char = ' ';
-							if (curr_state == 18) {
-								token.append(ch);
-							} else if (ch != space_char) {
-								token.append(ch);
+
+							if (currentState == 18) {
+								tokenString.append(character);
+							} else if (character != space_char) {
+								tokenString.append(character);
 							}
 
 							// looking ahead at the next char
 							if (i + 1 < line.length()) {
-
 								// next state given current state and next char
-								while (classify_char(line.charAt(i + 1)) == -1){
-									i++;
-								}
-								char next_ch = line.charAt(i + 1);
+								while (classifyCharacter(line.charAt(i + 1)) == -1) { i++; }
 
-								int next = DFA[curr_state][classify_char(next_ch)];
+								char nextCharacter = line.charAt(i + 1);
+								int next = DFA[currentState][classifyCharacter(nextCharacter)];
 
 								// if the next char will cause a finish
 								if (next == F) {
-
 									// if the token is not the empty token
-									if (!token.toString().equals("")) {
+									if (!tokenString.toString().isEmpty()) {
 
 										// adding and classifying token
-										Token t= tokenClass(token.toString(), filename, curr_state, curr_line_number);
-										if(t != null) {
-											tokens.add(t);
-										}
-
-										// resting token
-										token = new StringBuilder();
-
-										// resetting the state machine on finish of token
-										curr_state = 0;
+										Token token = tokenClass(tokenString.toString(), filename, currentState, currentLineNumber);
+										if (token != null) { tokens.add(token); }
+										tokenString = new StringBuilder(); // restart tokenString
+										currentState = 0; // restart the state machine on finish of tokenString
 									}
 								}
 							}
 						}
 					}
-						i++;
-
+					i++;
 				}
 			}
 		}
 		catch (IOException e) {
-			System.err.println("COULD NOT FIND OR READ FILE :"+filename);
+			System.err.printf("COULD NOT FIND OR READ FILE : %s%n", filename);
 			return null;
 		}
 
 		// tokens list
-		 return tokens;
+		return tokens;
 	}
+
+	/**
+	 * TODO <-- add description
+	 * @param args blah
+	 */
 	public static void main(String[] args) {
 		String filename = "src/tokenizerTestCases/number.jott";
 		ArrayList<Token> tokens = JottTokenizer.tokenize(filename);
-
 	}
 
 }
