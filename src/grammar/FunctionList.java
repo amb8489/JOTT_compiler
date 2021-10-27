@@ -45,7 +45,14 @@ public class FunctionList {
         return new FunctionList(lstfuncs);
 
     }
-
+    public boolean ListHasMain(){
+        for(FunctionDef func: this.lstfuncs){
+            if(func.id.convertToJott().equals("main")){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public String convertToJava() {
         return null;

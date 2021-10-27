@@ -1,7 +1,7 @@
 #this should pass parsing but fail sematic analysis (phase3)
 #return <id> is allowed
 
-foo[id:Integer, id2:String, id3:Double]:Integer{
+foooo[id:Integer, id2:String, id3:Double]:Integer{
 
     while[x < 10]{
 	    #x = foo[x];
@@ -55,6 +55,6 @@ foo[id:Integer, id2:String, id3:Double]:Integer{
 }
 
 
-dist [id:Integer, id3:Double]:Integer{
+main[id:Integer, id3:Double]:Integer{
    return id * id  +  id3 * id3;
 }

@@ -6,7 +6,7 @@ import main.TokenType;
 import java.util.ArrayList;
 
 public class FunctionDef  {
-    private Identifier id;
+    public Identifier id;
     private FuncDefParams func_def_params;
     private Body bdy;
     private Type retrn;

@@ -2,6 +2,7 @@ package grammar;
 
 import main.Token;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class Program implements JottTree {
@@ -23,7 +24,11 @@ public class Program implements JottTree {
 
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree() throws ParsingException{
+        if( !funcLst.ListHasMain()){
+            throw new ParsingException("Program is missing or has an incorrecly spelled main");
+        }
+
         return funcLst.validateTree();
     }
 
