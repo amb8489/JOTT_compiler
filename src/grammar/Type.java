@@ -8,30 +8,56 @@ import java.util.ArrayList;
 public class Type {
     String type;
     String filename;
-    int linenum;
+    int lineNumber;
 
-    public Type(String token, String filename, int lineNum) {
+    /**
+     * TODO
+     * @param token TODO
+     * @param filename TODO
+     * @param lineNumber TODO
+     */
+    public Type(String token, String filename, int lineNumber) {
         this.type = token;
         this.filename = filename;
-        this.linenum = lineNum;
+        this.lineNumber = lineNumber;
     }
 
-    public static boolean isType(Token T) {
-        String t = T.getToken();
-        return t.equals("Integer") || t.equals("Double")||t.equals("Boolean")|| t.equals("String");
+    /**
+     * TODO
+     * @param token TODO
+     * @return TODO
+     */
+    public static boolean isType(Token token) {
+        String t = token.getToken();
+        return t.equals("Integer") ||
+                t.equals("Double") ||
+                t.equals("Boolean") ||
+                t.equals("String");
     }
 
-    public static Type parseFReturnStmt(ArrayList<Token> tokens, int nestlevel) {
-        Token funcReturnType = tokens.get(TOKEN_IDX.IDX);
+    /**
+     * TODO
+     * @param tokens TODO
+     * @param nestLevel TODO
+     * @return TODO
+     */
+    public static Type parseFReturnStmt(ArrayList<Token> tokens, int nestLevel) {
+        Token funcReturnType = tokens.get(TOKEN_IDX.index);
         if ( isType(funcReturnType) || funcReturnType.getToken().equals("Void")) {
-            TOKEN_IDX.IDX++;
+            TOKEN_IDX.index++;
             return new Type(funcReturnType.getToken(),funcReturnType.getFilename(),funcReturnType.getLineNum());
         }
             return null;
 
     }
 
-
+    /**
+     * TODO
+     * @param tokens TODO
+     * @param nestLevel TODO
+     * @return TODO
+     * @throws ParsingException TODO
+     */
     public Type ParseType(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("-------------------PARSING TYPE-----------------");
 
@@ -47,20 +73,22 @@ public class Type {
         }
         // ---------------------- error what was passed in not a valid type ---------
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("Syntax error\nInvalid token. Expected Integer||Double||String||Boolean. Got: ");
-        sb.append(typeToken.getTokenType().toString()).append("\n");
-        sb.append(typeToken.getFilename() + ":" +typeToken.getLineNum());
-        throw new ParsingException(sb.toString());
-
-
+        String sb = "Syntax error\nInvalid token. Expected Integer||Double||String||Boolean. Got: " +
+                typeToken.getTokenType().toString() + "\n" +
+                typeToken.getFilename() + ":" + typeToken.getLineNum();
+        throw new ParsingException(sb);
     }
 
-    public String convertToJott(){
-        return type;
-    }
-    public boolean validateTree() {
-        return false;
-    }
+    /**
+     * TODO
+     * @return TODO
+     */
+    public String convertToJott() { return type; }
+
+    /**
+     * TODO
+     * @return TODO
+     */
+    public boolean validateTree() { return false;}
 
 }

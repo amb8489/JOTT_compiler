@@ -1,88 +1,100 @@
 package grammar;
 
 import main.Token;
-
 import java.util.ArrayList;
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class BodyStmt {
+    public IfStmt possibleIf;
+    public WhileLoop possibleWhile;
+    public Stmt possibleStmt;
+    public int nestLevel;
+    public boolean hasGuaranteedReturn;
 
-    public IfStmt possible_if ;
-    public WhileLoop possible_while;
-    public Stmt possible_stmt;
-    public int nestlevel;
-    public boolean HasGuaranteedReturn;
-
-    public BodyStmt(IfStmt possible_if, WhileLoop possible_while, Stmt possible_stmt, int nestLevel,boolean HasGuaranteedReturn) {
-
-        this.possible_if = possible_if;
-        this.possible_while = possible_while;
-        this.possible_stmt = possible_stmt;
+    /**
+     * Constructor TODO
+     * @param possibleIf TODO
+     * @param possibleWhile TODO
+     * @param possibleStmt TODO
+     * @param nestLevel TODO
+     * @param hasGuaranteedReturn TODO
+     */
+    public BodyStmt(IfStmt possibleIf, WhileLoop possibleWhile, Stmt possibleStmt, int nestLevel, boolean hasGuaranteedReturn) {
+        this.possibleIf = possibleIf;
+        this.possibleWhile = possibleWhile;
+        this.possibleStmt = possibleStmt;
         System.out.println(convertToJott());
-        this.nestlevel = nestLevel;
-        this.HasGuaranteedReturn = HasGuaranteedReturn;
+        this.nestLevel = nestLevel;
+        this.hasGuaranteedReturn = hasGuaranteedReturn;
     }
 
-
-    // body_stmt -> if_stmt|while_loop|stmt
+    /**
+     * TODO
+     * @param tokens TODO
+     * @param nestLevel TODO
+     * @throws ParsingException TODO
+     */
     public static BodyStmt parseBodyStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("----------------parsing body stmt---------------------");
 
         // ----------------------check for one of these three----------------------------------;
 
-        System.out.println("first::::" + tokens.get(TOKEN_IDX.IDX).getToken());
+        System.out.println("first::::" + tokens.get(TOKEN_IDX.index).getToken());
 
-        IfStmt possible_if = IfStmt.parseIfStmt(tokens, nestLevel+1);
+        IfStmt possibleIf = IfStmt.parseIfStmt(tokens, nestLevel+1);
 
-        System.out.println("first::::" + tokens.get(TOKEN_IDX.IDX).getToken());
-        if (possible_if != null) {
-
-            return new BodyStmt(possible_if, null, null, nestLevel,possible_if.HasGuaranteedReturn);
+        System.out.println("first::::" + tokens.get(TOKEN_IDX.index).getToken());
+        if (possibleIf != null) {
+            return new BodyStmt(possibleIf, null, null, nestLevel,possibleIf.hasGuaranteedReturn);
         }
 
 
-        System.out.println("first again::::" + tokens.get(TOKEN_IDX.IDX).getToken());
+        System.out.println("first again::::" + tokens.get(TOKEN_IDX.index).getToken());
 
 
-        WhileLoop possible_while = WhileLoop.parseWhile(tokens, nestLevel+1);
-        if (possible_while != null) {
-            return new BodyStmt(null, possible_while, null, nestLevel,false);
+        WhileLoop possibleWhile = WhileLoop.parseWhile(tokens, nestLevel+1);
+        if (possibleWhile != null) {
+            return new BodyStmt(null, possibleWhile, null, nestLevel,false);
         }
 
-        System.out.println("first again::::" + tokens.get(TOKEN_IDX.IDX).getToken());
+        System.out.println("first again::::" + tokens.get(TOKEN_IDX.index).getToken());
 
 
-        Stmt possible_stmt = Stmt.parseStmt(tokens, nestLevel);
+        Stmt possibleStmt = Stmt.parseStmt(tokens, nestLevel);
 
-        if (possible_stmt != null) {
-            System.out.println("statment found: "+possible_stmt.convertToJott());
-            return new BodyStmt(null, null, possible_stmt, nestLevel+1,false);
+        if (possibleStmt != null) {
+            System.out.println("statement found: " + possibleStmt.convertToJott());
+            return new BodyStmt(null, null, possibleStmt, nestLevel+1,false);
         }
-
 
         return null;
-
-
-
     }
 
+    /**
+     * TODO
+     * @return TODO
+     */
     public String convertToJott() {
-        String SPACE = "    ".repeat(this.nestlevel);
+        String Space = "\t".repeat(this.nestLevel);
 
-        if (this.possible_if != null) {
-            return this.possible_if.convertToJott();
-        }
-        if (this.possible_while != null) {
-            return this.possible_while.convertToJott();
-        }
-
-
-        if (this.possible_stmt != null) {
-            return this.possible_stmt.convertToJott();
-        }
-
+        if (this.possibleIf != null) { return this.possibleIf.convertToJott(); }
+        if (this.possibleWhile != null) { return this.possibleWhile.convertToJott(); }
+        if (this.possibleStmt != null) { return this.possibleStmt.convertToJott(); }
 
         return "nu11";
     }
+
+    /**
+     * TODO
+     * @return TODO
+     */
     public boolean validateTree() {
         return false;
     }

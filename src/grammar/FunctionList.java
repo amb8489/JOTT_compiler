@@ -7,46 +7,52 @@ import java.util.ArrayList;
 
 // function_def function_list | E
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class FunctionList {
 
-    private ArrayList<FunctionDef> lstfuncs;
-
+    private final ArrayList<FunctionDef> listOfFunctionDefs;
 
     public FunctionList(ArrayList<FunctionDef> listOfFunctionDefs) {
-        this.lstfuncs = listOfFunctionDefs;
+        this.listOfFunctionDefs = listOfFunctionDefs;
     }
 
     public static FunctionList parseFunctionList(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
         System.out.println("------------------------PARSING FunctionList------------------------");
 
-        ArrayList<FunctionDef> lstfuncs = new ArrayList<>();
+        ArrayList<FunctionDef> listOfFunctionDefs = new ArrayList<>();
         System.out.println("looking for function def");
 
-        FunctionDef fd = FunctionDef.parseFunctionDef(tokens, 0);
+        FunctionDef functionDef = FunctionDef.parseFunctionDef(tokens, 0);
 
-        if (fd == null) {
+        if (functionDef == null) {
             System.out.println(" NO init function def");
-
             return null;
         }
-        lstfuncs.add(fd);
+        listOfFunctionDefs.add(functionDef);
 
-        while (TOKEN_IDX.IDX < tokens.size()) {
+        while (TOKEN_IDX.index < tokens.size()) {
             System.out.println(" looking for more function def");
-            fd = FunctionDef.parseFunctionDef(tokens, nestlevel);
+            functionDef = FunctionDef.parseFunctionDef(tokens, nestlevel);
 
-            if (fd == null) {
+            if (functionDef == null) {
                 System.out.println("no more function def found ");
-                return new FunctionList(lstfuncs);
+                return new FunctionList(listOfFunctionDefs);
             }
-            lstfuncs.add(fd);
+            listOfFunctionDefs.add(functionDef);
 
         }
-        return new FunctionList(lstfuncs);
+        return new FunctionList(listOfFunctionDefs);
 
     }
     public boolean ListHasMain(){
-        for(FunctionDef func: this.lstfuncs){
+        for(FunctionDef func: this.listOfFunctionDefs){
             if(func.id.convertToJott().equals("main")){
                 return true;
             }
@@ -70,7 +76,7 @@ public class FunctionList {
     public boolean validateTree() throws ParsingException {
 
 
-        for (FunctionDef function: lstfuncs) {
+        for (FunctionDef function: listOfFunctionDefs) {
             boolean r = function.validateTree();
             if (!r){
                 return false;
@@ -82,7 +88,7 @@ public class FunctionList {
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
 
-        for (FunctionDef fd: lstfuncs) {
+        for (FunctionDef fd: listOfFunctionDefs) {
             jstr.append(fd.convertToJott()+"\n");
         }
         return jstr.toString();

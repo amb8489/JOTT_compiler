@@ -3,29 +3,37 @@ package grammar;
 
 import main.Token;
 import main.TokenType;
-
 import java.util.ArrayList;
 
 //  params -> expr param |
 //  params -> , expr params | ε
 
+
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class Params {
 
-    private Expr expr;
+    private Expr expression;
     boolean hasComma = false;
-    ArrayList<Params> paramslst = null;
+    ArrayList<Params> paramsList = null;
 
 
     // ---------------------- cconstructors --------------------------------
 
-    public Params(Expr expr, boolean hasComma) {
-        this.expr = expr;
+    public Params(Expr expression, boolean hasComma) {
+        this.expression = expression;
         this.hasComma = hasComma;
     }
 
     public Params(ArrayList<Params> params) {
 
-        this.paramslst = params;
+        this.paramsList = params;
     }
 
 
@@ -41,7 +49,7 @@ public class Params {
         // ---------------------- check for empty list  (epsilon)----------------
 
         // check for next token == ], this means no params
-        Token first = tokens.get(TOKEN_IDX.IDX);
+        Token first = tokens.get(TOKEN_IDX.index);
         System.out.println("    1st:" + first.getToken());
 
         // epsilon case
@@ -60,10 +68,10 @@ public class Params {
 
         // ---------------------- checking for more params, comma started-----------------------
 
-        Token comma = tokens.get(TOKEN_IDX.IDX);
+        Token comma = tokens.get(TOKEN_IDX.index);
         while (comma.getTokenType() == TokenType.COMMA) {
             System.out.println("        looking for new param:" + comma.getToken());
-            TOKEN_IDX.IDX++;
+            TOKEN_IDX.index++;
 
             // ---------------------- check for expr ------------------------------------
 
@@ -72,7 +80,7 @@ public class Params {
 
             // ---------------------- check for , and look for more ----------------------
 
-            comma = tokens.get(TOKEN_IDX.IDX);
+            comma = tokens.get(TOKEN_IDX.index);
 
 
             System.out.println("        new param found:" + exp.convertToJott());
@@ -99,11 +107,11 @@ public class Params {
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
 
-        for (Params par : paramslst) {
+        for (Params par : paramsList) {
             if (par.hasComma) {
                 jstr.append(",");
             }
-            jstr.append(par.expr.convertToJott() );
+            jstr.append(par.expression.convertToJott() );
         }
 
 

@@ -2,93 +2,108 @@ package grammar;
 
 import main.Token;
 import main.TokenType;
-
 import java.util.ArrayList;
 
 
 // body -> body_stmt body|return_stmt|ε                                                                             <-- DONE
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class Body  {
-    public ArrayList<BodyStmt> bodys = null;
-    public ReturnStmt Hasreturn = null;
-    public boolean HasGuaranteedReturnFromIf;
+    public ArrayList<BodyStmt> bodies;
+    public ReturnStmt hasReturn;
+    public boolean hasGuaranteedReturnFromIf;
 
-    int nestlevel;
+    int nestLevel;
 
-    public Body(ArrayList<BodyStmt> bodys, ReturnStmt rs,int nestlevel,boolean GuaranteedReturn) {
-        this.Hasreturn = rs;
-        this.bodys = bodys;
-        this.nestlevel = nestlevel;
-        this.HasGuaranteedReturnFromIf = GuaranteedReturn;
+    public Body(ArrayList<BodyStmt> bodies, ReturnStmt rs, int nestLevel, boolean guaranteedReturn) {
+        this.hasReturn = rs;
+        this.bodies = bodies;
+        this.nestLevel = nestLevel;
+        this.hasGuaranteedReturnFromIf = guaranteedReturn;
     }
 
-
-
+    /**
+     * TODO
+     * @param tokens TODO
+     * @param nestLevel TODO
+     * @return TODO
+     * @throws ParsingException TODO
+     */
     public static Body ParseBody(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
 
-        ArrayList<BodyStmt> bodys = new ArrayList<>();
+        ArrayList<BodyStmt> bodies = new ArrayList<>();
 
-        if (tokens.get(TOKEN_IDX.IDX).getTokenType() == TokenType.R_BRACKET) {
+        if (tokens.get(TOKEN_IDX.index).getTokenType() == TokenType.R_BRACKET) {
             System.out.println("EMPTY BODY");
             return null;
         }
 
         // ------------------------ empty case -----------------
-        while (tokens.get(TOKEN_IDX.IDX).getTokenType() != TokenType.R_BRACE) {
-            System.out.println("    looking for body");
-            BodyStmt bs = BodyStmt.parseBodyStmt(tokens, nestLevel);
-            System.out.println("    --->>>>>>>looking for body");
+        while (tokens.get(TOKEN_IDX.index).getTokenType() != TokenType.R_BRACE) {
+            System.out.println("\tlooking for body");
+            BodyStmt bodyStmt = BodyStmt.parseBodyStmt(tokens, nestLevel);
+            System.out.println("\t--->>>>>>>looking for body");
 
-            if (bs == null) {
+            if (bodyStmt == null) {
                 System.out.println("EMPTY BODY 2");
-                ReturnStmt rs = ReturnStmt.parseReturnStmt(tokens, nestLevel);
-                if (rs == null) {
-                    System.out.println("EMPTY return");
+                ReturnStmt returnStmt = ReturnStmt.parseReturnStmt(tokens, nestLevel);
+                if (returnStmt == null) { System.out.println("EMPTY return"); }
 
-                }
-
-                boolean HasGuaranteedReturn =false;
-                for (BodyStmt b : bodys) {
-                    if (b.HasGuaranteedReturn) {
-                        HasGuaranteedReturn = true;
+                boolean hasGuaranteedReturn = false;
+                for (BodyStmt bodyStmtElement : bodies) {
+                    if (bodyStmtElement.hasGuaranteedReturn) {
+                        hasGuaranteedReturn = true;
                         break;
                     }
                 }
-                return new Body(bodys, rs,nestLevel,HasGuaranteedReturn);
+                return new Body(bodies, returnStmt,nestLevel,hasGuaranteedReturn);
             }
-            System.out.println("    adding body                         -----------" + bs.convertToJott());
-            bodys.add(bs);
+            System.out.println("\tadding body\t\t\t\t\t-----------" + bodyStmt.convertToJott());
+            bodies.add(bodyStmt);
         }
-        ReturnStmt rs = ReturnStmt.parseReturnStmt(tokens, nestLevel);
+        ReturnStmt returnStmt = ReturnStmt.parseReturnStmt(tokens, nestLevel);
 
-        boolean HasGuaranteedReturn =false;
-        for (BodyStmt b : bodys) {
-            if (b.HasGuaranteedReturn) {
-                HasGuaranteedReturn = true;
+        boolean hasGuaranteedReturn =false;
+        for (BodyStmt b : bodies) {
+            if (b.hasGuaranteedReturn) {
+                hasGuaranteedReturn = true;
                 break;
             }
         }
-        return new Body(bodys, null,nestLevel,HasGuaranteedReturn);
+        return new Body(bodies, null, nestLevel, hasGuaranteedReturn);
     }
 
-
+    /**
+     * TODO
+     * @return TODO
+     */
     public String convertToJott() {
-        String SPACE = "    ".repeat(this.nestlevel);
+        String space = "    ".repeat(this.nestLevel);
 
-        StringBuilder jstr = new StringBuilder();
+        StringBuilder jottString = new StringBuilder();
 
-        for (BodyStmt b : bodys) {
-            jstr.append(SPACE+b.convertToJott() + "\n");
+        for (BodyStmt b : bodies) {
+            jottString.append(space+b.convertToJott() + "\n");
         }
-        if (Hasreturn != null) {
-            jstr.append(SPACE+Hasreturn.convertToJott()+"\n");
+        if (hasReturn != null) {
+            jottString.append(space+ hasReturn.convertToJott()+"\n");
         }
 
-        return jstr.toString();
+        return jottString.toString();
     }
-    public boolean validateTree() {
-        return false;
-    }
+
+    /**
+     * TODO
+     * @return TODO
+     */
+    public boolean validateTree() { return false; }
 
 
 }

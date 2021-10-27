@@ -3,30 +3,40 @@ package grammar;
 import java.util.ArrayList;
 
 public class TOKEN_IDX {
-    public static int IDX = 0;
-    public static ArrayList<Integer> saved_token_IDX = new ArrayList<>();
+    public static int index = 0;
+    public static ArrayList<Integer> savedTokenIndex = new ArrayList<>();
 
-    public TOKEN_IDX(){
-        IDX = 0;
+    /**
+     * Constructor TODO
+     */
+    public TOKEN_IDX(){ index = 0; }
+
+    /**
+     * TODO
+     * @return TODO
+     */
+    public static int getTokenIndex() { return index; }
+
+    /**
+     * TODO
+     */
+    public static void saveTokenIndex() { savedTokenIndex.add(0, index); }
+
+    /**
+     * TODO
+     */
+    public static void restoreTokenIndex() {
+        index = savedTokenIndex.remove(0);
+        System.out.println("Restoring to : "+ index);
     }
 
-    public static int getToken_IDX() {
-        return IDX;
-    }
+    /**
+     * TODO
+     */
+    public static void popRestore() { System.out.println(savedTokenIndex.remove(0)+": IDX no longer needed"); }
 
-    public  static void save_token_IDX() { saved_token_IDX.add(0, IDX); }
-
-    public  static void restore_token_IDX() {
-        IDX = saved_token_IDX.remove(0);
-        System.out.println("Restoring to : "+IDX);
-    }
-
-    public  static void popRestore() {
-        System.out.println(saved_token_IDX.remove(0)+": IDX no longer needed");
-    }
-    public  static void reset() {
-        IDX = 0;
-    }
-
-
+    /**
+     * TODO
+     */
+    public static void reset() { index = 0; }
 }

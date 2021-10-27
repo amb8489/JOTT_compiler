@@ -2,23 +2,40 @@ package grammar;
 
 import main.Token;
 import main.TokenType;
-
 import java.util.ArrayList;
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class Expr {
-    Expr e;
+    Expr expression;
 
-    public Expr(Expr e) {
-        this.e = e;
+    /**
+     * Constructor TODO
+     * @param expression TODO
+     */
+    public Expr(Expr expression) {
+        this.expression = expression;
     }
 
-
+    /**
+     * TODO
+     * @param tokens TODO
+     * @param nestLevel TODO
+     * @return TODO
+     * @throws ParsingException TODO
+     */
     public static Expr parseExpr(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("------------------------PARSING expr-----------------------------");
 
         // ---------------------------looking for numExpr (int or dbl)----------------------------------------
 
-        if (tokens.get(TOKEN_IDX.IDX + 1).getTokenType() != TokenType.REL_OP) {
+        if (tokens.get(TOKEN_IDX.index + 1).getTokenType() != TokenType.REL_OP) {
             NumExpr numExp = NumExpr.parseNumExpr(tokens, nestLevel);
 
             if (numExp != null) {
@@ -43,7 +60,7 @@ public class Expr {
 
         // ---------------------------error :( no valid expr found----------------------------------------
 
-        Token t = tokens.get(TOKEN_IDX.IDX);
+        Token t = tokens.get(TOKEN_IDX.index);
         StringBuilder sb = new StringBuilder();
         sb.append("Syntax error\nInvalid token. Expected Expr. Got: ");
         sb.append(t.getTokenType().toString()).append("\n");
@@ -52,10 +69,18 @@ public class Expr {
 
     }
 
+    /**
+     * TODO
+     * @return TODO
+     */
     public String convertToJott() {
-        return e.convertToJott();
+        return expression.convertToJott();
     }
 
+    /**
+     * TODO
+     * @return TODO
+     */
     public boolean validateTree() {
         return false;
     }

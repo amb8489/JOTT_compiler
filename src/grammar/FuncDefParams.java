@@ -5,33 +5,54 @@ import main.TokenType;
 
 import java.util.ArrayList;
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class FuncDefParams {
-    private Identifier id;
+    private Identifier identifier;
     private Token type;
-    private final ArrayList<FuncDefParams> fplist;
+    private final ArrayList<FuncDefParams> functionParameterList;
 
-    public FuncDefParams(Identifier id, Token type,ArrayList<FuncDefParams> fplst) {
-        this.id = id;
+    /**
+     * Constructor TODO
+     * @param identifier TODO
+     * @param type TODO
+     * @param functionParameterList TODO
+     */
+    public FuncDefParams(Identifier identifier, Token type, ArrayList<FuncDefParams> functionParameterList) {
+        this.identifier = identifier;
         this.type = type;
-        this.fplist = fplst;
+        this.functionParameterList = functionParameterList;
     }
 
-    public FuncDefParams(ArrayList<FuncDefParams> fplist) {
-        this.fplist = fplist;
+    /**
+     * Constructor TODO
+     * @param functionParameterList TODO
+     */
+    public FuncDefParams(ArrayList<FuncDefParams> functionParameterList) {
+        this.functionParameterList = functionParameterList;
     }
 
+    /**
+     * Constructor TODO
+     * @param tokens TODO
+     * @param nestLevel TODO
+     * @return TODO
+     * @throws ParsingException TODO
+     */
+    public static FuncDefParams parseFunctionDefParams(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
 
-//   func_def_params -> id : type func_def_params_t|ε                                                                 <-- DONE
-
-
-    public static FuncDefParams parseFunctionDefParams(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
-
-        ArrayList<FuncDefParams>fplist = new ArrayList<>();
+        ArrayList<FuncDefParams> functionParameterList = new ArrayList<>();
 
         // ---------------------------look for id -----------------------------
 
 
-        Token idd = tokens.get(TOKEN_IDX.IDX);
+        Token idd = tokens.get(TOKEN_IDX.index);
 
         if (idd.getTokenType() == TokenType.R_BRACKET) {
             System.out.println("empty params");
@@ -59,20 +80,20 @@ public class FuncDefParams {
             }
             Identifier id = new Identifier(idd);
 
-            TOKEN_IDX.IDX++;
+            TOKEN_IDX.index++;
 
             // ---------------------------look for : -----------------------------
-            Token col = tokens.get(TOKEN_IDX.IDX);
+            Token col = tokens.get(TOKEN_IDX.index);
 
             if (col.getTokenType() != TokenType.COLON) {
                 System.out.println("TODO ERROR 1");
             }
 
-            TOKEN_IDX.IDX++;
+            TOKEN_IDX.index++;
 
 
             // ---------------------------look for type -----------------------------
-            Token type = tokens.get(TOKEN_IDX.IDX);
+            Token type = tokens.get(TOKEN_IDX.index);
 
             if (!Type.isType(type)) {
                 StringBuilder sb = new StringBuilder();
@@ -81,15 +102,15 @@ public class FuncDefParams {
                 sb.append(type.getFilename() + ":" + type.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-            TOKEN_IDX.IDX++;
+            TOKEN_IDX.index++;
 
 
             // ---------------------------look for func def parm t -----------------------------
 
-            fplist.add(new FuncDefParams(id, type, null));
+            functionParameterList.add(new FuncDefParams(id, type, null));
 
 
-            idd = tokens.get(TOKEN_IDX.IDX);
+            idd = tokens.get(TOKEN_IDX.index);
             if (idd.getTokenType() !=TokenType.COMMA  && idd.getTokenType() == TokenType.R_BRACKET){
                 break;
             }else if(idd.getTokenType() !=TokenType.COMMA) {
@@ -99,30 +120,42 @@ public class FuncDefParams {
                 sb.append(idd.getFilename() + ":" + idd.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-            TOKEN_IDX.IDX++;
-            idd = tokens.get(TOKEN_IDX.IDX);
+            TOKEN_IDX.index++;
+            idd = tokens.get(TOKEN_IDX.index);
 
         }
-        System.out.println("+++++++++++++++++++++++++++"+tokens.get(TOKEN_IDX.IDX));
-        return new FuncDefParams(fplist);
-
-
+        System.out.println("+++++++++++++++++++++++++++"+tokens.get(TOKEN_IDX.index));
+        return new FuncDefParams(functionParameterList);
     }
 
-
+    /**
+     * TODO
+     * @return TODO
+     */
     public String convertToJava() {
         return null;
     }
 
+    /**
+     * TODO
+     * @return TODO
+     */
     public String convertToC() {
         return null;
     }
 
-
+    /**
+     * TODO
+     * @return TODO
+     */
     public String convertToPython() {
         return null;
     }
 
+    /**
+     * TODO
+     * @return TODO
+     */
     public boolean validateTree() {
         return false;
     }
@@ -130,28 +163,20 @@ public class FuncDefParams {
     //   func_def_params -> id : type func_def_params_t|ε                                                                 <-- DONE
 
     public String convertToJott() {
+        StringBuilder jottString = new StringBuilder();
 
+        StringBuilder functionParameterList = new StringBuilder();
 
+        functionParameterList.append("");
 
-
-        StringBuilder jstr = new StringBuilder();
-
-        StringBuilder fParmLst = new StringBuilder();
-
-        fParmLst.append("");
-
-        if (fplist != null) {
-            for(FuncDefParams FDP: fplist) {
-                fParmLst.append(FDP.convertToJott());
+        if (this.functionParameterList != null) {
+            for(FuncDefParams FDP: this.functionParameterList) {
+                functionParameterList.append(FDP.convertToJott());
             }
-            return fParmLst.toString().substring(0, fParmLst.length()-1);
-        }else {
-
-
-            jstr.append(id.convertToJott() + " : " + type.getToken() + fParmLst+",");
-
-            return jstr.toString();
+            return functionParameterList.substring(0, functionParameterList.length()-1);
+        } else {
+            jottString.append(identifier.convertToJott() + " : " + type.getToken() + functionParameterList+",");
+            return jottString.toString();
         }
     }
-
 }

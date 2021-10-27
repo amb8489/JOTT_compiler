@@ -8,49 +8,49 @@ import java.util.ArrayList;
 
 //     return_stmt -> return expr end_stmt
 public class ReturnStmt  {
-    private final Expr exp;
+    private final Expr expression;
 
-    public ReturnStmt(int nestLevel, Expr exp) {
-        this.exp = exp;
+    /**
+     * Constructor TODO
+     * @param nestLevel TODO
+     * @param expression TODO
+     */
+    public ReturnStmt(int nestLevel, Expr expression) {
+        this.expression = expression;
     }
 
     public String convertToJott() {
-        StringBuilder jstr = new StringBuilder();
-        jstr.append("     ".repeat(0));
-        jstr.append("return ");
-        jstr.append(exp.convertToJott() + ";\n");
-        return jstr.toString();
+        String jottString = "\t".repeat(0) +
+                "return " +
+                expression.convertToJott() + ";\n";
+        return jottString;
     }
-
 
     public static ReturnStmt parseReturnStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("------------------------PARSING Return Stmt------------------------");
 
-
         // ---------------------- check for return ------------------------------------
-        Token returnToken = tokens.get(TOKEN_IDX.IDX);
-        System.out.println("    FIRST:" + returnToken.getToken());
+        Token returnToken = tokens.get(TOKEN_IDX.index);
+        System.out.println("\tFIRST:" + returnToken.getToken());
         if (!returnToken.getToken().equals("return")) {
             return null;
         }
-        TOKEN_IDX.IDX++;
-
+        TOKEN_IDX.index++;
 
         // ---------------------- check for expr ------------------------------------
         // checking for expression
-        System.out.println("    LOOKING FOR EXPR");
+        System.out.println("\tLOOKING FOR EXPR");
         Expr expr = Expr.parseExpr(tokens, nestLevel);
-
 
         // ---------------------- check for end statment ------------------------------------
 
         //check for ;
-        Token endStmt = tokens.get(TOKEN_IDX.IDX);
+        Token endStmt = tokens.get(TOKEN_IDX.index);
 
         if (endStmt.getTokenType() != TokenType.SEMICOLON) {
             return null;
         }
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
 
         // ---------------------- DONE ------------------------------------
 

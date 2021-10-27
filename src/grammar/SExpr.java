@@ -8,60 +8,76 @@ import java.util.ArrayList;
 // s_expr -> str_literal|id|func_call
 
 public class SExpr extends Expr {
-    private Token stringLit = null;
-    private Token id = null;
-    private FuncCall funcCall = null;
-    int nest_level;
+    private final Token stringLiteral;
+    private final Token token;
+    private final FuncCall funcCall;
+    int nestLevel;
 
-    public SExpr(Token stringLit, Token id, FuncCall funcCall, int nestlvl) {
+    /**
+     * Constructor TODO
+     * @param stringLiteral TODO
+     * @param token TODO
+     * @param funcCall TODO
+     * @param nestLevel TODO
+     */
+    public SExpr(Token stringLiteral, Token token, FuncCall funcCall, int nestLevel) {
         super(null);
-        this.stringLit = stringLit;
-        this.id = id;
+        this.stringLiteral = stringLiteral;
+        this.token = token;
         this.funcCall = funcCall;
-        this.nest_level = nestlvl;
+        this.nestLevel = nestLevel;
     }
 
-
+    /**
+     * TODO
+     * @param tokens TODO
+     * @param nestLevel TODO
+     * @return TODO
+     * @throws ParsingException TODO
+     */
     public static SExpr parseSExpr(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("-------------------parsing s_expr--------------------------");
 
-
-        Token possible_str = tokens.get(TOKEN_IDX.IDX);
+        Token possibleString = tokens.get(TOKEN_IDX.index);
 
         // ----------------------check for string------------------
-        if (possible_str.getTokenType() == TokenType.STRING) {
+        if (possibleString.getTokenType() == TokenType.STRING) {
 
-            TOKEN_IDX.IDX++;
-        return new SExpr(possible_str, null, null, nestLevel);
+            TOKEN_IDX.index++;
+        return new SExpr(possibleString, null, null, nestLevel);
         }
 
         // ----------------------check for id------------------
 
-        if (possible_str.getTokenType() == TokenType.ID_KEYWORD) {
-            TOKEN_IDX.IDX++;
-            return new SExpr(null, possible_str, null, nestLevel);
+        if (possibleString.getTokenType() == TokenType.ID_KEYWORD) {
+            TOKEN_IDX.index++;
+            return new SExpr(null, possibleString, null, nestLevel);
         }
         // ----------------------check for func call------------------
-        FuncCall f = FuncCall.ParseFuncCall(tokens, nestLevel);
-        if (f != null) {
-            TOKEN_IDX.IDX++;
-            return new SExpr(null, null, f, nestLevel);
+        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel);
+        if (funcCall != null) {
+            TOKEN_IDX.index++;
+            return new SExpr(null, null, funcCall, nestLevel);
         }
 
         return null;
     }
 
+    /**
+     * TODO
+     * @return TODO
+     */
     @Override
     public String convertToJott() {
-
-        if (stringLit != null) {
-            return stringLit.getToken();
-        }
-        if (id != null) {
-            return id.getToken();
-        }
+        if (stringLiteral != null) { return stringLiteral.getToken(); }
+        if (token != null) { return token.getToken(); }
         return funcCall.convertToJott();
     }
+
+    /**
+     * TODO
+     * @return TODO
+     */
     public boolean validateTree() {
         return false;
     }

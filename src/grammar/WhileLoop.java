@@ -2,52 +2,58 @@ package grammar;
 
 import main.Token;
 import main.TokenType;
-
 import java.util.ArrayList;
 
-
-//while_loop -> while [ b_expr ] { body }
-
 public class WhileLoop {
-    private Expr exp;
-    private Body body1;
-    private int nestlevel;
+    private final Expr expression;
+    private final Body body;
+    private final int nestLevel;
 
-
-    public WhileLoop(int nestLevel, Expr expr, Body body1,int nestlevel) {
-        this.exp = expr;
-        this.body1 = body1;
-        this.nestlevel = nestlevel;
+    /**
+     * TODO
+     * @param nestLevel TODO
+     * @param expr TODO
+     * @param body TODO
+     */
+    public WhileLoop(int nestLevel, Expr expr, Body body) {
+        this.expression = expr;
+        this.body = body;
+        this.nestLevel = nestLevel;
     }
 
-
+    /**
+     * TODO
+     * @param tokens TODO
+     * @param nestLevel TODO
+     * @return TODO
+     * @throws ParsingException TODO
+     */
     public static WhileLoop parseWhile(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("---------------------------- PARSING while loop ----------------------------");
 
         // ---------------- checking while call starts with while----------------------
 
-        Token whileToken = tokens.get(TOKEN_IDX.IDX);
-        if (! whileToken.getToken().equals("while")) {
+        Token whileToken = tokens.get(TOKEN_IDX.index);
+        if (!whileToken.getToken().equals("while")) {
             return null;
         }
-        System.out.println("    1st:" + whileToken.getToken());
-        TOKEN_IDX.IDX++;
+        System.out.println("\t1st:" + whileToken.getToken());
+        TOKEN_IDX.index++;
 
         // ---------------------- checking for [ ----------------------------------
 
-        Token L_BRACKET = tokens.get(TOKEN_IDX.IDX);
-        System.out.println("    2nd:"+L_BRACKET.getToken());
+        Token L_BRACKET = tokens.get(TOKEN_IDX.index);
+        System.out.println("\t2nd:"+L_BRACKET.getToken());
         // check for if
         if (L_BRACKET.getTokenType() != TokenType.L_BRACKET){
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected [. Got: ");
-            sb.append(L_BRACKET.getTokenType().toString()).append("\n");
-            sb.append(L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum());
-            throw new ParsingException(sb.toString());
+            String stringBuilder = "Syntax error\nInvalid token. Expected [. Got: " +
+                    L_BRACKET.getTokenType().toString() + "\n" +
+                    L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum();
+            throw new ParsingException(stringBuilder);
 
         }
-        System.out.println("    3rd:"+L_BRACKET.getToken());
-        TOKEN_IDX.IDX++;
+        System.out.println("\t3rd:"+L_BRACKET.getToken());
+        TOKEN_IDX.index++;
 
         // ---------------------- checking for bool expr ------------------------------
         Expr expr = BExpr.parseBExpr(tokens,nestLevel);
@@ -55,33 +61,32 @@ public class WhileLoop {
 
         // ---------------------- checking for ] ----------------------------------
 
-        Token R_BRACKET = tokens.get(TOKEN_IDX.IDX);
-        System.out.println("    4th:"+R_BRACKET.getToken());
+        Token R_BRACKET = tokens.get(TOKEN_IDX.index);
+        System.out.println("\t4th:"+R_BRACKET.getToken());
+
         // check for if
         if (R_BRACKET.getTokenType() != TokenType.R_BRACKET){
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected ]. Got: ");
-            sb.append(R_BRACKET.getTokenType().toString()).append("\n");
-            sb.append(R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum());
-            throw new ParsingException(sb.toString());
+            String stringBuilder = "Syntax error\nInvalid token. Expected ]. Got: " +
+                    R_BRACKET.getTokenType().toString() + "\n" +
+                    R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum();
+            throw new ParsingException(stringBuilder);
 
         }
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
         // ---------------------- checking for { ----------------------------------
 
-        Token L_BRACE = tokens.get(TOKEN_IDX.IDX);
-        System.out.println("    5th:"+L_BRACE.getToken());
+        Token L_BRACE = tokens.get(TOKEN_IDX.index);
+        System.out.println("\t5th:"+L_BRACE.getToken());
         // check for if
         if (L_BRACE.getTokenType() != TokenType.L_BRACE){
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected {. Got: ");
-            sb.append(L_BRACE.getTokenType().toString()).append("\n");
-            sb.append(L_BRACE.getFilename() + ":" + L_BRACE.getLineNum());
-            throw new ParsingException(sb.toString());
+            String stringBuilder = "Syntax error\nInvalid token. Expected {. Got: " +
+                    L_BRACE.getTokenType().toString() + "\n" +
+                    L_BRACE.getFilename() + ":" + L_BRACE.getLineNum();
+            throw new ParsingException(stringBuilder);
         }
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
 
-        System.out.println("    6th:"+L_BRACE.getToken());
+        System.out.println("\t6th:"+L_BRACE.getToken());
         // ---------------------- checking for body -------------------------------
 
         Body body1 = Body.ParseBody(tokens, nestLevel);
@@ -89,31 +94,38 @@ public class WhileLoop {
         // ---------------------- checking for } ----------------------------------
 
 
-        Token R_BRACE = tokens.get(TOKEN_IDX.IDX);
-        System.out.println("    7th:"+R_BRACE.getToken());
+        Token R_BRACE = tokens.get(TOKEN_IDX.index);
+        System.out.println("\t7th:"+R_BRACE.getToken());
         // check for if
         if (R_BRACE.getTokenType() != TokenType.R_BRACE){
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected }. Got: ");
-            sb.append(R_BRACE.getTokenType().toString()).append("\n");
-            sb.append(R_BRACE.getFilename() + ":" + R_BRACE.getLineNum());
-            throw new ParsingException(sb.toString());
+            String stringBuilder = "Syntax error\nInvalid token. Expected }. Got: " +
+                    R_BRACE.getTokenType().toString() + "\n" +
+                    R_BRACE.getFilename() + ":" + R_BRACE.getLineNum();
+            throw new ParsingException(stringBuilder);
         }
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
 
-        return new WhileLoop(nestLevel, expr, body1,nestLevel);
+        return new WhileLoop(nestLevel, expr, body1);
     }
 
+    /**
+     * TODO
+     * @return TODO
+     */
     public String convertToJott() {
-        String SPACE = "    ".repeat(this.nestlevel-1);
+        String SPACE = "\t".repeat(this.nestLevel -1);
 
-        StringBuilder jstr = new StringBuilder();
-        jstr.append("     ".repeat(0));
-        jstr.append("while [ ");
-        jstr.append(this.exp.convertToJott() + " ] { \n");
-        jstr.append(body1.convertToJott() + SPACE+"}\n");
-        return jstr.toString();
+        String jottString = "\t".repeat(0) +
+                "while [ " +
+                this.expression.convertToJott() + " ] { \n" +
+                body.convertToJott() + SPACE + "}\n";
+        return jottString;
     }
+
+    /**
+     * TODO
+     * @return TODO
+     */
     public boolean validateTree() {
         return false;
     }

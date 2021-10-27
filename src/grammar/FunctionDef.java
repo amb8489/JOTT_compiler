@@ -5,29 +5,42 @@ import main.TokenType;
 
 import java.util.ArrayList;
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class FunctionDef  {
     public Identifier id;
-    private final FuncDefParams func_def_params;
-    private final Body bdy;
-    private final Type retrn;
-    private final int nestlevel ;
-    public FunctionDef(Identifier identifier, FuncDefParams func_def_params, Body body, Type retrn,int nestlevel) {
+    private final FuncDefParams funcDefParams;
+    private final Body body;
+    private final Type return_;
+    private final int nestLevel;
+
+    /**
+     * Constructor TODO
+     * @param identifier TODO
+     * @param funcDefParams TODO
+     * @param body TODO
+     * @param return_ TODO
+     * @param nestLevel TODO
+     */
+    public FunctionDef(Identifier identifier, FuncDefParams funcDefParams, Body body, Type return_, int nestLevel) {
         this.id = identifier;
-        this.func_def_params = func_def_params;
-        this.bdy = body;
-        this.retrn = retrn;
-        this.nestlevel = nestlevel;
+        this.funcDefParams = funcDefParams;
+        this.body = body;
+        this.return_ = return_;
+        this.nestLevel = nestLevel;
     }
-
-
-
-    // function_def -> id [ func_def_params ] : function_return { body }                                                <-- DONE
 
     public static FunctionDef parseFunctionDef(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
         System.out.println("------------------------PARSING Function DEF------------------------");
 
         // ---------------------------look for id -----------------------------
-        Token id = tokens.get(TOKEN_IDX.IDX);
+        Token id = tokens.get(TOKEN_IDX.index);
 
         if (id.getTokenType() != TokenType.ID_KEYWORD) {
             System.out.println("TODO ERROR -1");
@@ -37,17 +50,17 @@ public class FunctionDef  {
             sb.append(id.getFilename() + ":" + id.getLineNum());
             throw new ParsingException(sb.toString());
         }
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
 
         System.out.println("    found id:" + id.getToken());
         // ---------------------------look for [ -----------------------------
-        Token lbrac = tokens.get(TOKEN_IDX.IDX);
+        Token lbrac = tokens.get(TOKEN_IDX.index);
         System.out.println("    found [???:" + lbrac.getToken());
 
         if (lbrac.getTokenType() != TokenType.L_BRACKET) {
             System.out.println("TODO ERROR 99");
         }
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
 
 
         // ---------------------------look for func_def_params ---------------
@@ -59,22 +72,22 @@ public class FunctionDef  {
 
 
         // ---------------------------look for ] -----------------------------
-        Token rbrac = tokens.get(TOKEN_IDX.IDX);
+        Token rbrac = tokens.get(TOKEN_IDX.index);
 
         if (rbrac.getTokenType() != TokenType.R_BRACKET) {
             System.out.println("TODO ERROR 2");
         }
         System.out.println("found rbrac ? --> " + rbrac.getToken());
 
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
 
         // ---------------------------look for : -----------------------------
-        Token col = tokens.get(TOKEN_IDX.IDX);
+        Token col = tokens.get(TOKEN_IDX.index);
 
         if (col.getTokenType() != TokenType.COLON) {
             System.out.println("TODO ERROR 3");
         }
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
         System.out.println("found colon --> " + col.getToken());
 
         // ---------------------------look for function return AKA type or void -----------------------------
@@ -89,12 +102,12 @@ public class FunctionDef  {
         // ---------------------------look for { -----------------------------
 
 
-        Token L_BRACE = tokens.get(TOKEN_IDX.IDX);
+        Token L_BRACE = tokens.get(TOKEN_IDX.index);
 
         if (L_BRACE.getTokenType() != TokenType.L_BRACE) {
             System.out.println("TODO ERROR 5");
         }
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
         System.out.println("found { --> " + L_BRACE.getToken());
 
 
@@ -111,13 +124,13 @@ public class FunctionDef  {
         // ---------------------------look for } -----------------------------
 
 
-        Token R_BRACE = tokens.get(TOKEN_IDX.IDX);
+        Token R_BRACE = tokens.get(TOKEN_IDX.index);
 
         if (R_BRACE.getTokenType() != TokenType.R_BRACE) {
             System.out.println("TODO ERROR 7");
         }
         System.out.println("Found } --> " + R_BRACE.getToken());
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
 
         return new FunctionDef(new Identifier(id), func_def_params, bdy, retrn ,nestlevel);
     }
@@ -144,14 +157,14 @@ public class FunctionDef  {
 
         StringBuilder jstr = new StringBuilder();
 
-        String funcP = (func_def_params == null) ? "" : func_def_params.convertToJott();
+        String funcP = (funcDefParams == null) ? "" : funcDefParams.convertToJott();
 
-        String bod = (bdy == null) ? "" : bdy.convertToJott();
+        String bod = (body == null) ? "" : body.convertToJott();
 
 
-        String SPACE = "    ".repeat(this.nestlevel);
+        String SPACE = "    ".repeat(this.nestLevel);
         jstr.append(SPACE+ id.convertToJott()+ " [ " + funcP+" ] ");
-        jstr.append(" : " + retrn.convertToJott()+" { \n" + bod + SPACE+"}");
+        jstr.append(" : " + return_.convertToJott()+" { \n" + bod + SPACE+"}");
 
         return jstr.toString();
     }
@@ -159,15 +172,15 @@ public class FunctionDef  {
     public boolean validateTree() throws ParsingException {
 
         // if return type is INT DOUBLE STRING BOOL
-        if (!this.retrn.type.equals("Void")){
-            if (this.bdy.HasGuaranteedReturnFromIf || this.bdy.Hasreturn != null){
+        if (!this.return_.type.equals("Void")){
+            if (this.body.hasGuaranteedReturnFromIf || this.body.hasReturn != null){
                 return true;
             }
             throw new ParsingException("MISSING RETURN in function: "+this.id.convertToJott());
 
         }else{
             // VOID HAS NO RETURN
-            if (this.bdy.Hasreturn == null && !this.bdy.HasGuaranteedReturnFromIf){
+            if (this.body.hasReturn == null && !this.body.hasGuaranteedReturnFromIf){
                 return true;
             }else{
                 throw new ParsingException("VOID function has return stmt");

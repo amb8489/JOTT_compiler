@@ -1,55 +1,76 @@
 package grammar;
 
 import java.util.ArrayList;
-
 import main.Token;
 import main.TokenType;
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class AsmtStmt {
 
     private final Type type;
-    private final Identifier name;
-    private final Expr exp;
+    private final Identifier identifier;
+    private final Expr expression;
 
-    public AsmtStmt(int nestLevel, Type type, Identifier name, Expr exp) {
+    /**
+     * This is the constructor for AsmtStmt.
+     * @param nestLevel TODO: is this necessary?
+     * @param type TODO: blah
+     * @param identifier TODO: blah
+     * @param expression TODO: blah
+     */
+    public AsmtStmt(int nestLevel, Type type, Identifier identifier, Expr expression) { // TODO: is nestLevel necessary?
         this.type = type;
-        this.name = name;
-        this.exp = exp;
+        this.identifier = identifier;
+        this.expression = expression;
     }
 
-
-    // the format of asmt is {INDENT}TYPE NAME = EXPR ;
-    // where insendt is the number of tabs
+    /**
+     * The format of asmt is {INDENT}TYPE NAME = EXPR ;
+     * where indent is the number of tabs
+     * @return TODO <--- blah
+     */
     public String convertToJott() {
-        StringBuilder jstr = new StringBuilder();
-        jstr.append("     ".repeat(0));
-        if (!type.convertToJott().equals(name.convertToJott())) {
-            jstr.append(type.convertToJott() + " ");
+        StringBuilder jottString = new StringBuilder();
+        jottString.append("\t".repeat(0));
+        if (!type.convertToJott().equals(identifier.convertToJott())) {
+            jottString.append(String.format("%s ", type.convertToJott()));
         }
-        jstr.append(name.convertToJott() + " = ");
-        jstr.append(exp.convertToJott() + ";\n");
-        return jstr.toString();
+
+        jottString.append(String.format("%s = ", identifier.convertToJott()));
+        jottString.append(String.format("%s;\n", expression.convertToJott()));
+
+        return jottString.toString();
     }
 
-
+    /**
+     * TODO: blah
+     * @param tokens TODO: blah
+     * @param nestLevel TODO: blah
+     * @return TODO: blah
+     * @throws ParsingException TODO: blah
+     */
     public static AsmtStmt parseAsmtStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("------------------------PARSING ASMT-STMT------------------------");
 
         // removing and checking the first token
         // should be an IDkeyword type
 
-        Token typeToken = tokens.get(TOKEN_IDX.IDX);
+        Token typeToken = tokens.get(TOKEN_IDX.index);
         System.out.println("    FIRST:" + typeToken.getToken());
         Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum());
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
 
-
-        Token idToken = tokens.get(TOKEN_IDX.IDX);
-
+        Token idToken = tokens.get(TOKEN_IDX.index);
 
         if (Type.isType(typeToken)) {
-            TOKEN_IDX.IDX++;
-
+            TOKEN_IDX.index++;
 
             // getting next token
             System.out.println("    SECOND:" + idToken.getToken());
@@ -60,12 +81,9 @@ public class AsmtStmt {
             idToken = typeToken;
         }
 
-        // making id
-        Identifier id = new Identifier(idToken);
+        Identifier id = new Identifier(idToken); // making id
+        Token equalsToken = tokens.get(TOKEN_IDX.index); // looking for = token
 
-
-        //looking for = token
-        Token equalsToken = tokens.get(TOKEN_IDX.IDX);
 
         // checking for =
         System.out.println("    THIRD:" + equalsToken.getToken());
@@ -73,32 +91,33 @@ public class AsmtStmt {
             return null;
 
         }
-        TOKEN_IDX.IDX++;
-
+        TOKEN_IDX.index++;
 
         // checking for expression
-        System.out.println("    LOOKING FOR EXPR");
+        System.out.println("\tLOOKING FOR EXPR");
         Expr expr = NumExpr.parseExpr(tokens, nestLevel);
 
         System.out.println("----------------22----"+expr);
 
         //check for ;
-        Token endStmt = tokens.get(TOKEN_IDX.IDX);
+        Token endStmt = tokens.get(TOKEN_IDX.index);
         if (endStmt.getTokenType() != TokenType.SEMICOLON) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected ;. Got: ");
-            sb.append(endStmt.getTokenType().toString()).append("\n");
-            sb.append(endStmt.getFilename() + ":" + endStmt.getLineNum());
-            throw new ParsingException(sb.toString());
+            String message = String.format("Syntax error\nInvalid token. Expected ;. Got: %s\n%s:%s",
+                    endStmt.getTokenType().toString(),
+                    endStmt.getFilename(),
+                    endStmt.getLineNum());
+            throw new ParsingException(message);
         }
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
 
         // if successful assignment statement
         return new AsmtStmt(nestLevel, type, id, expr);
     }
 
-
-
+    /**
+     * TODO: need to implement this in phase 3
+     * @return something
+     */
     public boolean validateTree() {
         return false;
     }

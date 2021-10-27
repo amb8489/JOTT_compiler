@@ -2,44 +2,57 @@ package grammar;
 
 import main.Token;
 import main.TokenType;
-
 import java.util.ArrayList;
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class FuncCall {
-
-    // functions name
-    Token id;
-
-    // functions parms
-    Params parms;
+    Token token; // function name
+    Params parameters; // function parameters
 
     // ---------------------------constructor----------------------------------------
 
-    public FuncCall(Token id, Params parms) {
-        this.id = id;
-        this.parms = parms;
+    /**
+     * Constructor TODO
+     * @param token TODO
+     * @param parameters TODO
+     */
+    public FuncCall(Token token, Params parameters) {
+        this.token = token;
+        this.parameters = parameters;
     }
 
-    // func_call -> id [ params ]                                                                                       <-- DONE
-
+    /**
+     * TODO
+     * @param tokens TODO
+     * @param nestLevel TODO
+     * @return TODO
+     * @throws ParsingException TODO
+     */
     public static FuncCall ParseFuncCall(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("---------------------------- PARSING FUNCTION CALL ----------------------------");
-        System.out.println(tokens.get(TOKEN_IDX.IDX).getToken());
+        System.out.println(tokens.get(TOKEN_IDX.index).getToken());
 
         // ---------------- checking function call starts with id [----------------------
 
-        Token id = tokens.get(TOKEN_IDX.IDX);
-        Token lb = tokens.get(TOKEN_IDX.IDX + 1);
+        Token id = tokens.get(TOKEN_IDX.index);
+        Token lb = tokens.get(TOKEN_IDX.index + 1);
         if (id.getTokenType() != TokenType.ID_KEYWORD || lb.getTokenType() != TokenType.L_BRACKET) {
             return null;
         }
         System.out.println("    1st:" + id.getToken());
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
 
 
         // ---------------- checking for [ (redundant check)----------------------
 
-        Token L_BRACKET = tokens.get(TOKEN_IDX.IDX);
+        Token L_BRACKET = tokens.get(TOKEN_IDX.index);
         // check for if
         if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
             StringBuilder sb = new StringBuilder();
@@ -48,7 +61,7 @@ public class FuncCall {
             sb.append(L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum());
             throw new ParsingException(sb.toString());
         }
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
         System.out.println("    2nd:" + L_BRACKET.getToken());
 
         // ---------------- looking for params for functions----------------------
@@ -57,7 +70,7 @@ public class FuncCall {
 
         // ---------------------- checking for ] ----------------------------------
 
-        Token R_BRACKET = tokens.get(TOKEN_IDX.IDX);
+        Token R_BRACKET = tokens.get(TOKEN_IDX.index);
 
         if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
             StringBuilder sb = new StringBuilder();
@@ -66,7 +79,7 @@ public class FuncCall {
             sb.append(R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum());
             throw new ParsingException(sb.toString());
         }
-        TOKEN_IDX.IDX++;
+        TOKEN_IDX.index++;
         System.out.println("    4th:" + R_BRACKET.getToken());
 
         // ---------------------- all done ----------------------------------
@@ -76,16 +89,24 @@ public class FuncCall {
         return new FuncCall(id, parms);
     }
 
+    /**
+     * TODO
+     * @return TODO
+     */
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
 
 
-        jstr.append(id.getToken() + "[ ");
-        jstr.append(parms.convertToJott() + "]");
+        jstr.append(token.getToken() + "[ ");
+        jstr.append(parameters.convertToJott() + "]");
 
         return jstr.toString();
     }
 
+    /**
+     * TODO
+     * @return TODO
+     */
     public boolean validateTree() {
         return false;
     }

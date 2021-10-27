@@ -5,19 +5,41 @@ import main.TokenType;
 
 import java.util.ArrayList;
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class ElseifStmt {
-    private final Expr exp;
+    private final Expr expression;
     private final Body body;
-    private final int nestlevel;
+    private final int nestLevel;
 
-    public ElseifStmt(Expr exp, Body body,int nestlevel) {
-        this.exp = exp;
+    /**
+     * Constructor
+     * @param expression TODO
+     * @param body TODO
+     * @param nestLevel TODO
+     */
+    public ElseifStmt(Expr expression, Body body, int nestLevel) {
+        this.expression = expression;
         this.body = body;
-        this.nestlevel = nestlevel;
+        this.nestLevel = nestLevel;
     }
 
 
-    //      elseif_lst -> elseif [ b_expr ] { body } elseif_lst | ε
+    //      elseif_lst -> elseif [ b_expr ] { body } elseif_lst | ε TODO <-- what is this
+
+    /**
+     * TODO
+     * @param tokens TODO
+     * @param nestLevel TODO
+     * @return TODO
+     * @throws ParsingException TODO
+     */
     public static ArrayList<ElseifStmt> ParseElsif_lst(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         System.out.println("------------------------PARSING elif------------------------");
 
@@ -26,7 +48,7 @@ public class ElseifStmt {
 
 
         // looking if there is an "elseif"
-        Token elseif = tokens.get(TOKEN_IDX.IDX);
+        Token elseif = tokens.get(TOKEN_IDX.index);
 
         // if no elseif then : ε case and return, this is not an error
         if (!elseif.getToken().equals("elseif")) {
@@ -38,11 +60,11 @@ public class ElseifStmt {
             System.out.println("    elif found:" + elseif.getToken());
 
             // removing elseif
-            TOKEN_IDX.IDX++;
+            TOKEN_IDX.index++;
 
             // ---------------------------looking for [----------------------------------------
 
-            Token L_BRACKET = tokens.get(TOKEN_IDX.IDX);
+            Token L_BRACKET = tokens.get(TOKEN_IDX.index);
             System.out.println("    2nd:" + L_BRACKET.getToken());
             // check for if
             if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
@@ -53,7 +75,7 @@ public class ElseifStmt {
                 throw new ParsingException(sb.toString());
             }
             System.out.println("    3rd:" + L_BRACKET.getToken());
-            TOKEN_IDX.IDX++;
+            TOKEN_IDX.index++;
             // -----------------------looking for bool expr-------------------------------------------
 
 
@@ -63,7 +85,7 @@ public class ElseifStmt {
 
             // ---------------------------looking for ]----------------------------------------
 
-            Token R_BRACKET = tokens.get(TOKEN_IDX.IDX);
+            Token R_BRACKET = tokens.get(TOKEN_IDX.index);
             System.out.println("    4th:" + R_BRACKET.getToken());
             // check for if
             if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
@@ -73,11 +95,11 @@ public class ElseifStmt {
                 sb.append(R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-            TOKEN_IDX.IDX++;
+            TOKEN_IDX.index++;
 
             // ---------------------------looking for {----------------------------------------
 
-            Token L_BRACE = tokens.get(TOKEN_IDX.IDX);
+            Token L_BRACE = tokens.get(TOKEN_IDX.index);
             System.out.println("    5th:" + L_BRACE.getToken());
             // check for if
             if (L_BRACE.getTokenType() != TokenType.L_BRACE) {
@@ -88,7 +110,7 @@ public class ElseifStmt {
                 throw new ParsingException(sb.toString());
             }
             System.out.println("    6th:" + L_BRACE.getToken());
-            TOKEN_IDX.IDX++;
+            TOKEN_IDX.index++;
 
 
             // ---------------------------looking for body----------------------------------------
@@ -97,7 +119,7 @@ public class ElseifStmt {
 
             // ---------------------------looking for }----------------------------------------
 
-            Token R_BRACE = tokens.get(TOKEN_IDX.IDX);
+            Token R_BRACE = tokens.get(TOKEN_IDX.index);
             System.out.println("    7th:" + R_BRACE.getToken());
             // check for if
             if (R_BRACE.getTokenType() != TokenType.R_BRACE) {
@@ -108,14 +130,14 @@ public class ElseifStmt {
                 throw new ParsingException(sb.toString());
             }
             System.out.println("    8th:" + R_BRACE.getToken());
-            TOKEN_IDX.IDX++;
+            TOKEN_IDX.index++;
             // -----------------------adding what was found to list of seen elif stmts-----------------------
 
             elif_lists.add(new ElseifStmt(expr, body,nestLevel));
 
             // ---------------------------looking for elif----------------------------------------
 
-            elseif = tokens.get(TOKEN_IDX.IDX);
+            elseif = tokens.get(TOKEN_IDX.index);
         }
 
         // ---------------------------all done finding elif's----------------------------------------
@@ -123,29 +145,50 @@ public class ElseifStmt {
         return elif_lists;
     }
 
-    // elseif [ b_expr ] { body }
-    public String convertToJott() {
-        String SPACE = "    ".repeat(this.nestlevel-1);
 
-        StringBuilder jstr = new StringBuilder();
-        jstr.append("elseif[ ");
-        jstr.append(exp.convertToJott() + "]{ \n");
-        jstr.append(body.convertToJott() +SPACE+"}");
-        return jstr.toString();
+    // elseif [ b_expr ] { body } TODO <--- what is this
+
+    /**
+     * TODO
+     * @return TODO
+     */
+    public String convertToJott() {
+        String SPACE = "    ".repeat(this.nestLevel -1);
+
+        String jottString = "elseif[ " +
+                expression.convertToJott() + "]{ \n" +
+                body.convertToJott() + SPACE + "}";
+        return jottString;
     }
 
+    /**
+     * TODO
+     * @return TODO
+     */
     public String convertToJava() {
         return null;
     }
 
+    /**
+     * TODO
+     * @return TODO
+     */
     public String convertToC() {
         return null;
     }
 
+    /**
+     * TODO
+     * @return TODO
+     */
     public String convertToPython() {
         return null;
     }
 
+    /**
+     * TODO
+     * @return TODO
+     */
     public boolean validateTree() {
         return false;
     }
