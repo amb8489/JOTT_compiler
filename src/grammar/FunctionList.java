@@ -75,8 +75,8 @@ public class FunctionList {
 
     public boolean validateTree() throws ParsingException {
 
-
         for (FunctionDef function: listOfFunctionDefs) {
+
             boolean r = function.validateTree();
             if (!r){
                 return false;

@@ -17,7 +17,7 @@ public class FunctionDef  {
     public Identifier id;
     private final FuncDefParams funcDefParams;
     private final Body body;
-    private final Type return_;
+    private final Type return_tpye;
     private final int nestLevel;
 
     /**
@@ -25,14 +25,14 @@ public class FunctionDef  {
      * @param identifier TODO
      * @param funcDefParams TODO
      * @param body TODO
-     * @param return_ TODO
+     * @param return_tpye TODO
      * @param nestLevel TODO
      */
-    public FunctionDef(Identifier identifier, FuncDefParams funcDefParams, Body body, Type return_, int nestLevel) {
+    public FunctionDef(Identifier identifier, FuncDefParams funcDefParams, Body body, Type return_tpye, int nestLevel) {
         this.id = identifier;
         this.funcDefParams = funcDefParams;
         this.body = body;
-        this.return_ = return_;
+        this.return_tpye = return_tpye;
         this.nestLevel = nestLevel;
     }
 
@@ -164,15 +164,18 @@ public class FunctionDef  {
 
         String SPACE = "    ".repeat(this.nestLevel);
         jstr.append(SPACE+ id.convertToJott()+ " [ " + funcP+" ] ");
-        jstr.append(" : " + return_.convertToJott()+" { \n" + bod + SPACE+"}");
+        jstr.append(" : " + return_tpye.convertToJott()+" { \n" + bod + SPACE+"}");
 
         return jstr.toString();
     }
 
     public boolean validateTree() throws ParsingException {
 
+        funcDefParams.validateTree();
+        body.validateTree();
+
         // if return type is INT DOUBLE STRING BOOL
-        if (!this.return_.type.equals("Void")){
+        if (!this.return_tpye.type.equals("Void")){
             if (this.body.hasGuaranteedReturnFromIf || this.body.hasReturn != null){
                 return true;
             }
@@ -187,6 +190,9 @@ public class FunctionDef  {
             }
 
         }
+
+
+
     }
 
 

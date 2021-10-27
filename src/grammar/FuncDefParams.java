@@ -156,8 +156,15 @@ public class FuncDefParams {
      * TODO
      * @return TODO
      */
-    public boolean validateTree() {
-        return false;
+    public boolean validateTree() throws ParsingException {
+
+        // check that var is not a keyword, if it is it wil throw an error
+        for(FuncDefParams param: functionParameterList) {
+            if(param.identifier != null){ Identifier.check(param.identifier.id);}
+            if(param.type != null){ Type.isType(param.type);}
+        }
+
+        return true;
     }
 
     //   func_def_params -> id : type func_def_params_t|ε                                                                 <-- DONE

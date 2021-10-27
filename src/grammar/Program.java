@@ -2,6 +2,7 @@ package grammar;
 
 import main.Token;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Description
@@ -32,7 +33,10 @@ public class Program implements JottTree {
     public static Program parseProgram(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
         System.out.println("------------------------PARSING program------------------------");
         TOKEN_IDX.reset();
+        ValidateTable.clearTables();
+
         FunctionList funclst = FunctionList.parseFunctionList(tokens, 0);
+
         return new Program(funclst);
     }
 

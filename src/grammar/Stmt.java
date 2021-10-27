@@ -114,8 +114,12 @@ public class Stmt {
      * TODO
      * @return TODO
      */
-    public boolean validateTree() {
-        return false;
+    public boolean validateTree() throws ParsingException {
+
+        if (asmt != null) { return asmt.validateTree(); }
+        if (varDec != null) { return varDec.validateTree(); }
+        if (funcCall != null) { return funcCall.validateTree(); }
+        return true;
     }
 
 

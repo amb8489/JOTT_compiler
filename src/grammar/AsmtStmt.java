@@ -39,7 +39,7 @@ public class AsmtStmt {
     public String convertToJott() {
         StringBuilder jottString = new StringBuilder();
         jottString.append("\t".repeat(0));
-        if (!type.convertToJott().equals(identifier.convertToJott())) {
+        if (type != null) {
             jottString.append(String.format("%s ", type.convertToJott()));
         }
 
@@ -111,15 +111,68 @@ public class AsmtStmt {
         TOKEN_IDX.index++;
 
         // if successful assignment statement
-        return new AsmtStmt(nestLevel, type, id, expr);
+        if(Type.isType(typeToken)){
+            return new AsmtStmt(nestLevel, type, id, expr);
+
+        }
+        return new AsmtStmt(nestLevel, null, id, expr);
     }
 
     /**
      * TODO: need to implement this in phase 3
      * @return something
      */
-    public boolean validateTree() {
-        return false;
+    public boolean validateTree() throws ParsingException {
+
+        // check that expr is good
+        expression.validateTree();
+
+        // check that id is good
+        Identifier.check(identifier.id);
+
+
+        // if we have type id = val;
+        if(type != null) {
+
+
+            // see that type of left = type of right
+
+            if (type.type.equals(expression.type)) {
+
+                ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
+                    add(type.type);
+                    add(expression.convertToJott());
+                }});
+            }
+            return true;
+        }
+        // if we have id = val;
+        else{
+
+
+            // updaing value already in tabel
+
+            //1) check that the var in question exists
+            String Varid = identifier.convertToJott();
+            if (!ValidateTable.variables.containsKey(Varid)){
+                throw new ParsingException(String.format("var %s dose not exist: line %d",Varid,identifier.id.getLineNum()));
+            }
+
+            //2) get type var tpye and check its being assigned the same type
+            // get type var tpye and check its being assigned the same type
+            String varType = ValidateTable.variables.get(identifier.convertToJott()).get(0);
+
+//            if(expression.type.equals(varType)) {
+            if(expression.type.equals(varType)) {
+
+                    ValidateTable.variables.get(identifier.convertToJott()).set(1, expression.convertToJott());
+                return true;
+            }
+
+            // Failure
+            throw new ParsingException(String.format("var %s assigned wrong type dose not exist: line %d",Varid,identifier.id.getLineNum()));
+
+        }
     }
 
 }

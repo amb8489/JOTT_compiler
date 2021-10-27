@@ -13,14 +13,15 @@ import java.util.ArrayList;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class Expr {
-    Expr expression;
-
+    public Expr expression;
+    public String type;
     /**
      * Constructor TODO
      * @param expression TODO
      */
-    public Expr(Expr expression) {
+    public Expr(Expr expression,String type) {
         this.expression = expression;
+        this.type = type;
     }
 
     /**
@@ -39,7 +40,9 @@ public class Expr {
             NumExpr numExp = NumExpr.parseNumExpr(tokens, nestLevel);
 
             if (numExp != null) {
-                return new Expr(numExp);
+                // check for int or double
+
+                return new Expr(numExp,"null");
             }
 
             // ---------------------------looking for s_expr (string expr)----------------------------------------
@@ -47,14 +50,14 @@ public class Expr {
             // if string lit id or funcion call
             Expr s_expr = SExpr.parseSExpr(tokens, nestLevel);
             if (s_expr != null) {
-                return new Expr(s_expr);
+                return new Expr(s_expr,"String");
             }
         }
         // ---------------------------looking for b_expr (bool expr)----------------------------------------
 
         Expr b_expr = BExpr.parseBExpr(tokens, nestLevel);
         if (b_expr != null) {
-            return new Expr(b_expr);
+            return new Expr(b_expr,"Boolean");
         }
 
 

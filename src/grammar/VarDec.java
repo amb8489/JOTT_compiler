@@ -18,6 +18,8 @@ public class VarDec {
     public VarDec(int nestLevel, Type type,Identifier identifier){
             this.type = type;
             this.identifier = identifier;
+
+
     }
 
     /**
@@ -85,7 +87,9 @@ public class VarDec {
      * @return TODO
      */
     public boolean validateTree() {
-        return false;
+        // name ---> type null
+        ValidateTable.variables.put(identifier.convertToJott(),new ArrayList<String>() {{add(type.type);add(null);}});
+        return true;
     }
 
 }

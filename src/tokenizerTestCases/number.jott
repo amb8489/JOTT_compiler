@@ -1,31 +1,13 @@
 #this should pass parsing but fail sematic analysis (phase3)
 #return <id> is allowed
 
-main[id:Integer, id2:String, id3:Double]: Void {
+main[id:Integer, id2:String, id3:Double]: Double {
 
-                if[false]{
-                    if[false]{
-                       return 5;
+String b;
 
-                    }else{
-                       return 5;
-                    }
-                }elseif[false]{
-                    Double x = -.1;
+b = "hello ";
 
-                }elseif[false]{
-                     Double x = -.1;
-
-                }elseif[false]{
-                     Double x = -.1;
-                         return 5;
-
-
-                }else{
-                       yerr = 10;
-                       return 5;
-
-                }
+return 4;
 
 }
 

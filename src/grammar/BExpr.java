@@ -31,7 +31,7 @@ public class BExpr extends Expr {
      * @param finalExp TODO blah
      */
     public BExpr(ArrayList<BExpr> finalExp) {
-        super(null);
+        super(null,null);
         this.finalexp = finalExp;
     }
 
@@ -40,7 +40,7 @@ public class BExpr extends Expr {
      * @param bool TODO blah
      */
     public BExpr(Token bool) {
-        super(null);
+        super(null,null);
         this.bool = bool;
     }
 
@@ -50,7 +50,7 @@ public class BExpr extends Expr {
      * @param relOp TODO blah
      */
     public BExpr(Token bool, Token relOp) {
-        super(null);
+        super(null,null);
         this.bool = bool;
         this.relOp = relOp;
     }
@@ -61,7 +61,7 @@ public class BExpr extends Expr {
      * @param relOP TODO blah
      */
     public BExpr(Expr expr, Token relOP) {
-        super(null);
+        super(null,null);
         this.relOp = relOP;
         this.exp = expr;
     }
@@ -71,7 +71,7 @@ public class BExpr extends Expr {
      * @param expr TODO blah
      */
     public BExpr(Expr expr) {
-        super(null);
+        super(null,null);
         this.exp = expr;
     }
 

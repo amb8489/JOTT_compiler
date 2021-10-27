@@ -21,7 +21,7 @@ public class SExpr extends Expr {
      * @param nestLevel TODO
      */
     public SExpr(Token stringLiteral, Token token, FuncCall funcCall, int nestLevel) {
-        super(null);
+        super(null,null);
         this.stringLiteral = stringLiteral;
         this.token = token;
         this.funcCall = funcCall;

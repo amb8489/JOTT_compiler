@@ -18,7 +18,20 @@ public class TEST {
 
         Program p = Program.parseProgram(tokens, 0);
         p.validateTree();
+
         System.out.println("---------------------------------------------------------------------------------------------------");
         System.out.print(p.convertToJott());
+
+        System.out.println("-----var table-----");
+
+        for (String key : ValidateTable.variables.keySet()) {
+            String type = ValidateTable.variables.get(key).get(0);
+            String val = ValidateTable.variables.get(key).get(1);
+
+            System.out.println(type+" "+key + " = "+val);
+        }
+
+
+
     }
 }

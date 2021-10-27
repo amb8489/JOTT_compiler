@@ -20,10 +20,11 @@ public class BodyStmt {
 
     /**
      * Constructor TODO
-     * @param possibleIf TODO
-     * @param possibleWhile TODO
-     * @param possibleStmt TODO
-     * @param nestLevel TODO
+     *
+     * @param possibleIf          TODO
+     * @param possibleWhile       TODO
+     * @param possibleStmt        TODO
+     * @param nestLevel           TODO
      * @param hasGuaranteedReturn TODO
      */
     public BodyStmt(IfStmt possibleIf, WhileLoop possibleWhile, Stmt possibleStmt, int nestLevel, boolean hasGuaranteedReturn) {
@@ -37,7 +38,8 @@ public class BodyStmt {
 
     /**
      * TODO
-     * @param tokens TODO
+     *
+     * @param tokens    TODO
      * @param nestLevel TODO
      * @throws ParsingException TODO
      */
@@ -48,20 +50,20 @@ public class BodyStmt {
 
         System.out.println("first::::" + tokens.get(TOKEN_IDX.index).getToken());
 
-        IfStmt possibleIf = IfStmt.parseIfStmt(tokens, nestLevel+1);
+        IfStmt possibleIf = IfStmt.parseIfStmt(tokens, nestLevel + 1);
 
         System.out.println("first::::" + tokens.get(TOKEN_IDX.index).getToken());
         if (possibleIf != null) {
-            return new BodyStmt(possibleIf, null, null, nestLevel,possibleIf.hasGuaranteedReturn);
+            return new BodyStmt(possibleIf, null, null, nestLevel, possibleIf.hasGuaranteedReturn);
         }
 
 
         System.out.println("first again::::" + tokens.get(TOKEN_IDX.index).getToken());
 
 
-        WhileLoop possibleWhile = WhileLoop.parseWhile(tokens, nestLevel+1);
+        WhileLoop possibleWhile = WhileLoop.parseWhile(tokens, nestLevel + 1);
         if (possibleWhile != null) {
-            return new BodyStmt(null, possibleWhile, null, nestLevel,false);
+            return new BodyStmt(null, possibleWhile, null, nestLevel, false);
         }
 
         System.out.println("first again::::" + tokens.get(TOKEN_IDX.index).getToken());
@@ -71,7 +73,7 @@ public class BodyStmt {
 
         if (possibleStmt != null) {
             System.out.println("statement found: " + possibleStmt.convertToJott());
-            return new BodyStmt(null, null, possibleStmt, nestLevel+1,false);
+            return new BodyStmt(null, null, possibleStmt, nestLevel + 1, false);
         }
 
         return null;
@@ -79,24 +81,42 @@ public class BodyStmt {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public String convertToJott() {
         String Space = "\t".repeat(this.nestLevel);
 
-        if (this.possibleIf != null) { return this.possibleIf.convertToJott(); }
-        if (this.possibleWhile != null) { return this.possibleWhile.convertToJott(); }
-        if (this.possibleStmt != null) { return this.possibleStmt.convertToJott(); }
+        if (this.possibleIf != null) {
+            return this.possibleIf.convertToJott();
+        }
+        if (this.possibleWhile != null) {
+            return this.possibleWhile.convertToJott();
+        }
+        if (this.possibleStmt != null) {
+            return this.possibleStmt.convertToJott();
+        }
 
-        return "nu11";
+        return null;
     }
 
     /**
      * TODO
+     *
      * @return TODO
      */
-    public boolean validateTree() {
-        return false;
-    }
+    public boolean validateTree() throws ParsingException {
 
+        if (this.possibleIf != null) {
+            return possibleIf.validateTree();
+        }
+        if (this.possibleWhile != null) {
+            return possibleWhile.validateTree();
+        }
+        if (this.possibleStmt != null) {
+            return possibleStmt.validateTree();
+        }
+
+        return true;
+    }
 }

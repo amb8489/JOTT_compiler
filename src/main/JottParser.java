@@ -3,6 +3,8 @@ package main;
 import grammar.JottTree;
 import grammar.ParsingException;
 import grammar.Program;
+import grammar.ValidateTable;
+
 import java.util.ArrayList;
 
 /**
@@ -26,6 +28,8 @@ public class JottParser {
         try {
             Program p = Program.parseProgram(tokens, 0);
             p.validateTree();
+
+
             return p;
         } catch (Exception | ParsingException e) {
             return null;

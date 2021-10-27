@@ -24,7 +24,7 @@ public class Identifier {
 
     public static void check(Token id) throws ParsingException {
         if (idBanList.contains(id.getToken())) {
-            throw new ParsingException(String.format("can't use %s as id", id.getToken()));
+            throw new ParsingException(String.format("can't use %s as id: line %d", id.getToken(),id.getLineNum()));
         }
     }
 

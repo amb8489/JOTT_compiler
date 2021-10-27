@@ -1,5 +1,5 @@
-foo [  ]  : Void { 
-    Integer while = 5 ;
+main [  ]  : Integer { 
+    print[ "Hello World"];
+    return 1 ;
 
-    print[ while ];
 }

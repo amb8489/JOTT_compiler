@@ -23,14 +23,15 @@ public class NumExpr extends Expr {
     // ---------------------- constructors for different cases --------------------------------
 
     public NumExpr(NumType num, Token mathOp) {
-        super(null);
+        super(null,null);
         this.num = num;
         this.mathOp = mathOp;
         this.functionCall = null;
     }
 
     public NumExpr(NumType num) {
-        super(null);
+        super(null,null);
+
         this.num = num;
         this.mathOp = null;
         this.functionCall = null;
@@ -38,7 +39,7 @@ public class NumExpr extends Expr {
     }
 
     public NumExpr(FuncCall call, Token mathOp) {
-        super(null);
+        super(null,null);
         this.num = null;
 
         this.functionCall = call;
@@ -46,7 +47,7 @@ public class NumExpr extends Expr {
     }
 
     public NumExpr(ArrayList<NumExpr> finalExp) {
-        super(null);
+        super(null,null);
         this.finalexp = finalExp;
     }
 
