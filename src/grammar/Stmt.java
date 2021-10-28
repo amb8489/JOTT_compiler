@@ -51,6 +51,7 @@ public class Stmt {
         } else {
             TOKEN_IDX.restoreTokenIndex();
         }
+
         //----------------------------trying var_dec
         //System.out.println("first again::::" + tokens.get(TOKEN_IDX.index).getToken());
         TOKEN_IDX.saveTokenIndex();
@@ -65,6 +66,7 @@ public class Stmt {
         } else {
             TOKEN_IDX.restoreTokenIndex();
         }
+
 
         //----------------------------trying func_call
         //System.out.println("first again::::" + tokens.get(TOKEN_IDX.index).getToken());

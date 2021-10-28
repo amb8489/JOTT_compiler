@@ -17,6 +17,7 @@ public class TEST {
         ArrayList<Token> tokens = JottTokenizer.tokenize(filename);
 
         Program p = Program.parseProgram(tokens, 0);
+        System.out.println(p.convertToJott());
         p.validateTree();
 
         System.out.println("---------------------------------------------------------------------------------------------------");

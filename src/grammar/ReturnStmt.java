@@ -40,8 +40,8 @@ public class ReturnStmt  {
         // ---------------------- check for expr ------------------------------------
         // checking for expression
         //System.out.println("\tLOOKING FOR EXPR");
-        Expr expr = Expr.parseExpr(tokens, nestLevel);
 
+        Expr expr = Expr.parseExpr(tokens, nestLevel);
         // ---------------------- check for end statment ------------------------------------
 
         //check for ;

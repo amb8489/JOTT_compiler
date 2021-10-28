@@ -47,7 +47,10 @@ public class Body  {
         // ------------------------ empty case -----------------
         while (tokens.get(TOKEN_IDX.index).getTokenType() != TokenType.R_BRACE) {
             //System.out.println("\tlooking for body");
-            BodyStmt bodyStmt = BodyStmt.parseBodyStmt(tokens, nestLevel);
+            BodyStmt bodyStmt = null;
+            if(!tokens.get(TOKEN_IDX.index).getToken().equals("return")){
+                 bodyStmt = BodyStmt.parseBodyStmt(tokens, nestLevel);
+            }
             //System.out.println("\t--->>>>>>>looking for body");
 
             if (bodyStmt == null) {
@@ -68,6 +71,7 @@ public class Body  {
             //System.out.println("\tadding body\t\t\t\t\t-----------" + bodyStmt.convertToJott());
             bodies.add(bodyStmt);
         }
+
         ReturnStmt returnStmt = ReturnStmt.parseReturnStmt(tokens, nestLevel);
 
         boolean hasGuaranteedReturn =false;

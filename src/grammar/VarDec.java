@@ -50,6 +50,8 @@ public class VarDec {
         if (idToken.getTokenType() != TokenType.ID_KEYWORD){
             return null;
         }
+        Identifier.check(idToken);
+
         TOKEN_IDX.index++;
 
         Identifier identifier = new Identifier(idToken);
