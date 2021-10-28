@@ -27,7 +27,7 @@ public class JottParser {
 
         try {
             Program p = Program.parseProgram(tokens, 0);
-            p.validateTree();
+//            p.validateTree();
 
 
             return p;

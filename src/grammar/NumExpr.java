@@ -15,11 +15,11 @@ import java.util.ArrayList;
  */
 public class NumExpr extends Expr {
 
-    private FuncCall functionCall;
-    private NumType num;
-    private Token mathOp;
-    private ArrayList<NumExpr> finalexp = null;
-
+    public FuncCall functionCall;
+    public NumType num;
+    public Token mathOp;
+    public ArrayList<NumExpr> finalexp;
+    public String ExpType;
     // ---------------------- constructors for different cases --------------------------------
 
     public NumExpr(NumType num, Token mathOp) {
@@ -46,9 +46,11 @@ public class NumExpr extends Expr {
         this.mathOp = mathOp;
     }
 
-    public NumExpr(ArrayList<NumExpr> finalExp) {
+    public NumExpr(ArrayList<NumExpr> finalExp,String ExpType) {
         super(null,null);
         this.finalexp = finalExp;
+        this.ExpType = ExpType;
+        this.num = null;
     }
 
 
@@ -116,11 +118,48 @@ public class NumExpr extends Expr {
 
         System.out.println("-------------------- parsing num expr --------------------");
 
-        ArrayList<NumExpr> f = parseNumExpr_r(tokens, nestLevel, new ArrayList<NumExpr>());
-        if (f == null) {
+        ArrayList<NumExpr> expLst = parseNumExpr_r(tokens, nestLevel, new ArrayList<NumExpr>());
+        if(expLst == null){
             return null;
         }
-        return new NumExpr(f);
+
+        boolean isINTexp = true;
+
+
+
+        for(NumExpr exp : expLst){
+            if (exp.num != null && exp.num.getNumType() != null) {
+                if (!exp.num.numType.equals("Integer")) {
+                    isINTexp = false;
+                    break;
+                }
+            }
+        }
+
+        if(!isINTexp){
+            int i = 0;
+            for(NumExpr exp : expLst){
+                if (exp.num != null && exp.num.getNumType() != null) {
+                    if (!exp.num.numType.equals("Double")) {
+                        isINTexp = true;
+                        break;
+                    }
+                }
+                i++;
+
+            }
+            if (isINTexp){
+
+                throw new ParsingException("expression with int op double not allowed, line: "+expLst.get(i).num.number.getLineNum());
+            }
+        }
+        NumExpr b = new NumExpr(expLst,null);
+        System.out.println("88999 "+b.convertToJott());
+
+        String ExpType = isINTexp ? "Integer":"Double";
+
+
+        return new NumExpr(expLst,ExpType);
     }
 
     @Override

@@ -124,33 +124,48 @@ public class AsmtStmt {
      */
     public boolean validateTree() throws ParsingException {
 
-        // check that expr is good
+        //TODO
+        // check that expr is good aka that funtion return types are = to expr type
+        // and that vars in the expr 1) exist and 2) are the type of the expr type
+        // check that ids for vars are ok use Identifier.check(identifier.id);
+
         expression.validateTree();
 
-        // check that id is good
+        // 1) check that id for var is good
         Identifier.check(identifier.id);
 
+        // 2) check if we are looking at a : type id = expr  __OR__   id = expr
 
-        // if we have type id = val;
+        // 2) if we have : type id = val;
         if(type != null) {
 
+            // check that we havet already defined this var ??????????????? scope??????
+            if (!ValidateTable.variables.containsKey(identifier.convertToJott())) {
 
-            // see that type of left = type of right
+                // see that type of left = type of right
 
-            if (type.type.equals(expression.type)) {
+                if (type.type.equals(expression.type)) {
+                    ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
+                        add(type.type);
+                        add(expression.convertToJott());
+                    }});
+                    return true;
+                }
 
-                ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
-                    add(type.type);
-                    add(expression.convertToJott());
-                }});
+
+                // Failure
+                throw new ParsingException(String.format("var %s assigned wrong type: line %d", identifier.convertToJott(), identifier.id.getLineNum()));
+
+            }else {
+                throw new ParsingException(String.format("var %s dose already exist: line %d",identifier.convertToJott(),identifier.id.getLineNum()));
+
             }
-            return true;
         }
-        // if we have id = val;
+        // ELSE if we have:    id = val;
         else{
 
 
-            // updaing value already in tabel
+            // updating value already in table
 
             //1) check that the var in question exists
             String Varid = identifier.convertToJott();
@@ -162,7 +177,6 @@ public class AsmtStmt {
             // get type var tpye and check its being assigned the same type
             String varType = ValidateTable.variables.get(identifier.convertToJott()).get(0);
 
-//            if(expression.type.equals(varType)) {
             if(expression.type.equals(varType)) {
 
                     ValidateTable.variables.get(identifier.convertToJott()).set(1, expression.convertToJott());
@@ -170,7 +184,7 @@ public class AsmtStmt {
             }
 
             // Failure
-            throw new ParsingException(String.format("var %s assigned wrong type dose not exist: line %d",Varid,identifier.id.getLineNum()));
+            throw new ParsingException(String.format("var %s assigned wrong type: line %d",Varid,identifier.id.getLineNum()));
 
         }
     }

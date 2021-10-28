@@ -6,7 +6,7 @@ import main.TokenType;
 import java.util.ArrayList;
 
 public class Type {
-    String type;
+    String type = null;
     String filename;
     int lineNumber;
 

@@ -22,7 +22,7 @@ public class TEST {
         System.out.println("---------------------------------------------------------------------------------------------------");
         System.out.print(p.convertToJott());
 
-        System.out.println("-----var table-----");
+        System.out.println("-----final var table-----");
 
         for (String key : ValidateTable.variables.keySet()) {
             String type = ValidateTable.variables.get(key).get(0);

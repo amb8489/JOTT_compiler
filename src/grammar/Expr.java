@@ -37,12 +37,10 @@ public class Expr {
         // ---------------------------looking for numExpr (int or dbl)----------------------------------------
 
         if (tokens.get(TOKEN_IDX.index + 1).getTokenType() != TokenType.REL_OP) {
-            NumExpr numExp = NumExpr.parseNumExpr(tokens, nestLevel);
+            NumExpr Exp = NumExpr.parseNumExpr(tokens, nestLevel);
 
-            if (numExp != null) {
-                // check for int or double
-
-                return new Expr(numExp,"null");
+            if (Exp != null) {
+                return new Expr(Exp, Exp.ExpType);
             }
 
             // ---------------------------looking for s_expr (string expr)----------------------------------------
@@ -85,6 +83,7 @@ public class Expr {
      * @return TODO
      */
     public boolean validateTree() {
+
         return false;
     }
 
