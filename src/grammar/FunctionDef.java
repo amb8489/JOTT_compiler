@@ -170,9 +170,14 @@ public class FunctionDef  {
     }
 
     public boolean validateTree() throws ParsingException {
+        if(funcDefParams !=null) {
+            funcDefParams.validateTree();
+        }
 
-        funcDefParams.validateTree();
-        body.validateTree();
+        if(body !=null) {
+            body.validateTree();
+        }
+
 
         // if return type is INT DOUBLE STRING BOOL
         if (!this.return_tpye.type.equals("Void")){

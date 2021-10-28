@@ -53,7 +53,7 @@ public class Body  {
             if (bodyStmt == null) {
                 //System.out.println("EMPTY BODY 2");
                 ReturnStmt returnStmt = ReturnStmt.parseReturnStmt(tokens, nestLevel);
-                //if (returnStmt == null) { System.out.println("EMPTY return"); }
+//                if (returnStmt == null) { System.out.println("EMPTY return"); }
 
                 boolean hasGuaranteedReturn = false;
                 for (BodyStmt bodyStmtElement : bodies) {
@@ -62,6 +62,7 @@ public class Body  {
                         break;
                     }
                 }
+
                 return new Body(bodies, returnStmt,nestLevel,hasGuaranteedReturn);
             }
             //System.out.println("\tadding body\t\t\t\t\t-----------" + bodyStmt.convertToJott());
@@ -76,7 +77,8 @@ public class Body  {
                 break;
             }
         }
-        return new Body(bodies, null, nestLevel, hasGuaranteedReturn);
+
+        return new Body(bodies, returnStmt, nestLevel, hasGuaranteedReturn);
     }
 
     /**
