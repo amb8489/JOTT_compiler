@@ -27,13 +27,14 @@ public class TOKEN_IDX {
      */
     public static void restoreTokenIndex() {
         index = savedTokenIndex.remove(0);
-        System.out.println("Restoring to : "+ index);
+        //System.out.println("Restoring to : "+ index);
     }
 
     /**
      * TODO
      */
-    public static void popRestore() { System.out.println(savedTokenIndex.remove(0)+": IDX no longer needed"); }
+    public static void popRestore() {
+        savedTokenIndex.remove(0);}
 
     /**
      * TODO

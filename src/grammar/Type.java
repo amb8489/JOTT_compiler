@@ -59,7 +59,7 @@ public class Type {
      * @throws ParsingException TODO
      */
     public Type ParseType(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        System.out.println("-------------------PARSING TYPE-----------------");
+        //System.out.println("-------------------PARSING TYPE-----------------");
 
 
         // ---------------------- check for type ------------------------------------

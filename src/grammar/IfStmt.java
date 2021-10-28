@@ -73,13 +73,13 @@ public class IfStmt {
     //     * if_stmt ->  if [ b_expr ] { body } elseif_lst
 //     *           | if [ b_expr ] { body } elseif_lst else { body }
     public static IfStmt parseIfStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        System.out.println("------------------------PARSING IF STMT------------------------");
+        //System.out.println("------------------------PARSING IF STMT------------------------");
 
 
         // ---------------------- checking for if ----------------------------------
 
         Token IfToken = tokens.get(TOKEN_IDX.index);
-        System.out.println("\t1st:" + IfToken.getToken());
+        //System.out.println("\t1st:" + IfToken.getToken());
         // check for if
         if (!IfToken.getToken().equals("if")) {
             return null;
@@ -88,7 +88,7 @@ public class IfStmt {
         // ---------------------- checking for [ ----------------------------------
 
         Token L_BRACKET = tokens.get(TOKEN_IDX.index);
-        System.out.println("\t2nd:" + L_BRACKET.getToken());
+        //System.out.println("\t2nd:" + L_BRACKET.getToken());
         // check for if
         if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
             String sb = "Syntax error\nInvalid token. Expected [. Got: " +
@@ -98,18 +98,18 @@ public class IfStmt {
         }
         TOKEN_IDX.index++;
         // ---------------------- checking for bool expression ------------------------------
-//        System.out.println("    3rd EXPR FOUND:"+tokens.get(0).getToken());
+//        //System.out.println("    3rd EXPR FOUND:"+tokens.get(0).getToken());
 
         Expr expression = Expr.parseExpr(tokens, nestLevel);
 
-        System.out.println("\t3rd EXPR FOUND:" + expression.convertToJott());
-        System.out.println("------>" + tokens.get(TOKEN_IDX.index).getToken());
+        //System.out.println("\t3rd EXPR FOUND:" + expression.convertToJott());
+        //System.out.println("------>" + tokens.get(TOKEN_IDX.index).getToken());
 
 
         // ---------------------- checking for ] ----------------------------------
 
         Token R_BRACKET = tokens.get(TOKEN_IDX.index);
-        System.out.println("\t4th:" + R_BRACKET.getToken());
+        //System.out.println("\t4th:" + R_BRACKET.getToken());
         // check for if
         if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
             String sb = "Syntax error\nInvalid token. Expected ]. Got: " +
@@ -121,7 +121,7 @@ public class IfStmt {
         // ---------------------- checking for { ----------------------------------
 
         Token L_BRACE = tokens.get(TOKEN_IDX.index);
-        System.out.println("\t5th:" + L_BRACE.getToken());
+        //System.out.println("\t5th:" + L_BRACE.getToken());
         // check for if
         if (L_BRACE.getTokenType() != TokenType.L_BRACE) {
             String sb = "Syntax error\nInvalid token. Expected {. Got: " +
@@ -135,9 +135,9 @@ public class IfStmt {
 
         Body body1 = Body.ParseBody(tokens, nestLevel);
         if (body1 != null) {
-            System.out.println("\t6th BODY :" + body1.convertToJott());
+            //System.out.println("\t6th BODY :" + body1.convertToJott());
         } else {
-            System.out.println("\t6th EMPTY BODY");
+            //System.out.println("\t6th EMPTY BODY");
             TOKEN_IDX.index--;
         }
 
@@ -145,7 +145,7 @@ public class IfStmt {
 
 
         Token R_BRACE = tokens.get(TOKEN_IDX.index);
-        System.out.println("\t7th:" + R_BRACE.getToken());
+        //System.out.println("\t7th:" + R_BRACE.getToken());
         // check for if
         if (R_BRACE.getTokenType() != TokenType.R_BRACE) {
             String sb = "Syntax error\nInvalid token. Expected }. Got: " +
@@ -155,17 +155,17 @@ public class IfStmt {
         }
         TOKEN_IDX.index++;
 
-        System.out.println("first============: "+tokens.get(TOKEN_IDX.index).getToken());
+        //System.out.println("first============: "+tokens.get(TOKEN_IDX.index).getToken());
         // ---------------------- checking for elif's --------------------------------
         ArrayList<ElseifStmt> elseIfList = ElseifStmt.ParseElsif_lst(tokens, nestLevel);
-        System.out.println("first============: "+tokens.get(TOKEN_IDX.index).getToken());
+        //System.out.println("first============: "+tokens.get(TOKEN_IDX.index).getToken());
 
 
         // ---------------------- checking for else --------------------------------
 
         // check for else token
         Token elseToken = tokens.get(TOKEN_IDX.index);
-        System.out.println("\t9th:" + elseToken.getToken());
+        //System.out.println("\t9th:" + elseToken.getToken());
         // check for if
         if (elseToken.getToken().equals("else")) {
             TOKEN_IDX.index++;
@@ -174,7 +174,7 @@ public class IfStmt {
             // ---------------------- checking for { --------------------------------
 
             Token LL_BRACE = tokens.get(TOKEN_IDX.index);
-            System.out.println("\t10th:" + LL_BRACE.getToken());
+            //System.out.println("\t10th:" + LL_BRACE.getToken());
             // check for if
             if (LL_BRACE.getTokenType() != TokenType.L_BRACE) {
                 String sb = "Syntax error\nInvalid token. Expected {. Got: " +
@@ -187,7 +187,7 @@ public class IfStmt {
 
             // ---------------------- checking for body -------------------------------
 
-            System.out.println("\t11th:body");
+            //System.out.println("\t11th:body");
             Body body2 = Body.ParseBody(tokens, nestLevel);
             boolean hasGuaranteedReturn= false;
             if (body2 != null) {
@@ -199,7 +199,7 @@ public class IfStmt {
 
 
             Token RR_BRACE = tokens.get(TOKEN_IDX.index);
-            System.out.println("\t12th:" + RR_BRACE.getToken());
+            //System.out.println("\t12th:" + RR_BRACE.getToken());
             // check for if
             if (RR_BRACE.getTokenType() != TokenType.R_BRACE) {
                 String sb = "Syntax error\nInvalid token. Expected }. Got: " +
@@ -212,7 +212,7 @@ public class IfStmt {
             // ---------------------- all done with else --------------------------------
 
 //            if (elseTok == null){
-//                System.out.println("else if IS NULLLL");
+//                //System.out.println("else if IS NULLLL");
 //                TOKEN_IDX.IDX++;
 //            }
             return new IfStmt(expression, body1, body2, elseIfList, nestLevel, hasGuaranteedReturn);

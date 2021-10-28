@@ -36,7 +36,7 @@ public class SExpr extends Expr {
      * @throws ParsingException TODO
      */
     public static SExpr parseSExpr(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        System.out.println("-------------------parsing s_expr--------------------------");
+        //////System.out.println("-------------------parsing s_expr--------------------------");
 
         Token possibleString = tokens.get(TOKEN_IDX.index);
 

@@ -57,13 +57,13 @@ public class AsmtStmt {
      * @throws ParsingException TODO: blah
      */
     public static AsmtStmt parseAsmtStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        System.out.println("------------------------PARSING ASMT-STMT------------------------");
+        //System.out.println("------------------------PARSING ASMT-STMT------------------------");
 
         // removing and checking the first token
         // should be an IDkeyword type
 
         Token typeToken = tokens.get(TOKEN_IDX.index);
-        System.out.println("    FIRST:" + typeToken.getToken());
+        //System.out.println("    FIRST:" + typeToken.getToken());
         Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum());
         TOKEN_IDX.index++;
 
@@ -73,7 +73,7 @@ public class AsmtStmt {
             TOKEN_IDX.index++;
 
             // getting next token
-            System.out.println("    SECOND:" + idToken.getToken());
+            //System.out.println("    SECOND:" + idToken.getToken());
             if (idToken.getTokenType() != TokenType.ID_KEYWORD) {
                 return null;
             }
@@ -86,7 +86,7 @@ public class AsmtStmt {
 
 
         // checking for =
-        System.out.println("    THIRD:" + equalsToken.getToken());
+        //System.out.println("    THIRD:" + equalsToken.getToken());
         if (equalsToken.getTokenType() != TokenType.ASSIGN) {
             return null;
 
@@ -94,10 +94,10 @@ public class AsmtStmt {
         TOKEN_IDX.index++;
 
         // checking for expression
-        System.out.println("\tLOOKING FOR EXPR");
+        //System.out.println("\tLOOKING FOR EXPR");
         Expr expr = NumExpr.parseExpr(tokens, nestLevel);
 
-        System.out.println("----------------22----"+expr);
+        //System.out.println("----------------22----"+expr);
 
         //check for ;
         Token endStmt = tokens.get(TOKEN_IDX.index);

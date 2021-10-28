@@ -151,7 +151,7 @@ public class Phase3Tester {
 
         private String tokenListString(ArrayList<Token> tokens){
             StringBuilder sb = new StringBuilder();
-            System.out.println(tokens.size());
+//            System.out.println(tokens.size());
 
             for (Token t: tokens) {
                 sb.append(t.getToken());

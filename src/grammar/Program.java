@@ -31,7 +31,7 @@ public class Program implements JottTree {
      * @throws ParsingException TODO
      */
     public static Program parseProgram(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
-        System.out.println("------------------------PARSING program------------------------");
+        //System.out.println("------------------------PARSING program------------------------");
         TOKEN_IDX.reset();
         ValidateTable.clearTables();
 

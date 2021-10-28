@@ -41,7 +41,7 @@ public class ElseifStmt {
      * @throws ParsingException TODO
      */
     public static ArrayList<ElseifStmt> ParseElsif_lst(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        System.out.println("------------------------PARSING elif------------------------");
+        //System.out.println("------------------------PARSING elif------------------------");
 
         // list of all else if we will encounter if any
         ArrayList<ElseifStmt> elif_lists = new ArrayList<>();
@@ -57,7 +57,7 @@ public class ElseifStmt {
 
         // while we did encounter an elseif in the tokens we will keep serching for elseif
         while (elseif.getToken().equals("elseif")) {
-            System.out.println("    elif found:" + elseif.getToken());
+            //System.out.println("    elif found:" + elseif.getToken());
 
             // removing elseif
             TOKEN_IDX.index++;
@@ -65,7 +65,7 @@ public class ElseifStmt {
             // ---------------------------looking for [----------------------------------------
 
             Token L_BRACKET = tokens.get(TOKEN_IDX.index);
-            System.out.println("    2nd:" + L_BRACKET.getToken());
+            //System.out.println("    2nd:" + L_BRACKET.getToken());
             // check for if
             if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
                 StringBuilder sb = new StringBuilder();
@@ -74,19 +74,19 @@ public class ElseifStmt {
                 sb.append(L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-            System.out.println("    3rd:" + L_BRACKET.getToken());
+            //System.out.println("    3rd:" + L_BRACKET.getToken());
             TOKEN_IDX.index++;
             // -----------------------looking for bool expr-------------------------------------------
 
 
             Expr expr = Expr.parseExpr(tokens, nestLevel);
 
-            System.out.println("    XPR FOUND:" + expr.convertToJott());
+            //System.out.println("    XPR FOUND:" + expr.convertToJott());
 
             // ---------------------------looking for ]----------------------------------------
 
             Token R_BRACKET = tokens.get(TOKEN_IDX.index);
-            System.out.println("    4th:" + R_BRACKET.getToken());
+            //System.out.println("    4th:" + R_BRACKET.getToken());
             // check for if
             if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
                 StringBuilder sb = new StringBuilder();
@@ -100,7 +100,7 @@ public class ElseifStmt {
             // ---------------------------looking for {----------------------------------------
 
             Token L_BRACE = tokens.get(TOKEN_IDX.index);
-            System.out.println("    5th:" + L_BRACE.getToken());
+            //System.out.println("    5th:" + L_BRACE.getToken());
             // check for if
             if (L_BRACE.getTokenType() != TokenType.L_BRACE) {
                 StringBuilder sb = new StringBuilder();
@@ -109,7 +109,7 @@ public class ElseifStmt {
                 sb.append(L_BRACE.getFilename() + ":" + L_BRACE.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-            System.out.println("    6th:" + L_BRACE.getToken());
+            //System.out.println("    6th:" + L_BRACE.getToken());
             TOKEN_IDX.index++;
 
 
@@ -120,7 +120,7 @@ public class ElseifStmt {
             // ---------------------------looking for }----------------------------------------
 
             Token R_BRACE = tokens.get(TOKEN_IDX.index);
-            System.out.println("    7th:" + R_BRACE.getToken());
+            //System.out.println("    7th:" + R_BRACE.getToken());
             // check for if
             if (R_BRACE.getTokenType() != TokenType.R_BRACE) {
                 StringBuilder sb = new StringBuilder();
@@ -129,7 +129,7 @@ public class ElseifStmt {
                 sb.append(R_BRACE.getFilename() + ":" + R_BRACE.getLineNum());
                 throw new ParsingException(sb.toString());
             }
-            System.out.println("    8th:" + R_BRACE.getToken());
+            //System.out.println("    8th:" + R_BRACE.getToken());
             TOKEN_IDX.index++;
             // -----------------------adding what was found to list of seen elif stmts-----------------------
 

@@ -37,13 +37,13 @@ public class FunctionDef  {
     }
 
     public static FunctionDef parseFunctionDef(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
-        System.out.println("------------------------PARSING Function DEF------------------------");
+        //System.out.println("------------------------PARSING Function DEF------------------------");
 
         // ---------------------------look for id -----------------------------
         Token id = tokens.get(TOKEN_IDX.index);
 
         if (id.getTokenType() != TokenType.ID_KEYWORD) {
-            System.out.println("TODO ERROR -1");
+            //System.out.println("TODO ERROR -1");
             StringBuilder sb = new StringBuilder();
             sb.append("Syntax error\nInvalid token. Expected <id>. Got: ");
             sb.append(id.getTokenType().toString()).append("\n");
@@ -52,13 +52,13 @@ public class FunctionDef  {
         }
         TOKEN_IDX.index++;
 
-        System.out.println("    found id:" + id.getToken());
+        //System.out.println("    found id:" + id.getToken());
         // ---------------------------look for [ -----------------------------
         Token lbrac = tokens.get(TOKEN_IDX.index);
-        System.out.println("    found [???:" + lbrac.getToken());
+        //System.out.println("    found [???:" + lbrac.getToken());
 
         if (lbrac.getTokenType() != TokenType.L_BRACKET) {
-            System.out.println("TODO ERROR 99");
+            //System.out.println("TODO ERROR 99");
         }
         TOKEN_IDX.index++;
 
@@ -67,7 +67,7 @@ public class FunctionDef  {
 
         FuncDefParams func_def_params = FuncDefParams.parseFunctionDefParams(tokens, nestlevel);
         if (func_def_params == null) {
-            System.out.println("empty params");
+            //System.out.println("empty params");
         }
 
 
@@ -75,9 +75,9 @@ public class FunctionDef  {
         Token rbrac = tokens.get(TOKEN_IDX.index);
 
         if (rbrac.getTokenType() != TokenType.R_BRACKET) {
-            System.out.println("TODO ERROR 2");
+            //System.out.println("TODO ERROR 2");
         }
-        System.out.println("found rbrac ? --> " + rbrac.getToken());
+        //System.out.println("found rbrac ? --> " + rbrac.getToken());
 
         TOKEN_IDX.index++;
 
@@ -85,18 +85,18 @@ public class FunctionDef  {
         Token col = tokens.get(TOKEN_IDX.index);
 
         if (col.getTokenType() != TokenType.COLON) {
-            System.out.println("TODO ERROR 3");
+            //System.out.println("TODO ERROR 3");
         }
         TOKEN_IDX.index++;
-        System.out.println("found colon --> " + col.getToken());
+        //System.out.println("found colon --> " + col.getToken());
 
         // ---------------------------look for function return AKA type or void -----------------------------
 
         Type retrn = Type.parseFReturnStmt(tokens, nestlevel);
-        System.out.println("found return --> " + retrn.convertToJott());
+        //System.out.println("found return --> " + retrn.convertToJott());
 
         if (retrn == null) {
-            System.out.println("TODO ERROR 4");
+            //System.out.println("TODO ERROR 4");
         }
 
         // ---------------------------look for { -----------------------------
@@ -105,10 +105,10 @@ public class FunctionDef  {
         Token L_BRACE = tokens.get(TOKEN_IDX.index);
 
         if (L_BRACE.getTokenType() != TokenType.L_BRACE) {
-            System.out.println("TODO ERROR 5");
+            //System.out.println("TODO ERROR 5");
         }
         TOKEN_IDX.index++;
-        System.out.println("found { --> " + L_BRACE.getToken());
+        //System.out.println("found { --> " + L_BRACE.getToken());
 
 
         // ---------------------------look for body stmt -----------------------------
@@ -116,9 +116,9 @@ public class FunctionDef  {
         Body bdy = Body.ParseBody(tokens, nestlevel+1);
 
         if (bdy == null) {
-            System.out.println("found empty body");
+            //System.out.println("found empty body");
         } else {
-            System.out.println("Found body --> " + bdy.convertToJott());
+            //System.out.println("Found body --> " + bdy.convertToJott());
         }
 
         // ---------------------------look for } -----------------------------
@@ -127,9 +127,9 @@ public class FunctionDef  {
         Token R_BRACE = tokens.get(TOKEN_IDX.index);
 
         if (R_BRACE.getTokenType() != TokenType.R_BRACE) {
-            System.out.println("TODO ERROR 7");
+            //System.out.println("TODO ERROR 7");
         }
-        System.out.println("Found } --> " + R_BRACE.getToken());
+        //System.out.println("Found } --> " + R_BRACE.getToken());
         TOKEN_IDX.index++;
 
         return new FunctionDef(new Identifier(id), func_def_params, bdy, retrn ,nestlevel);

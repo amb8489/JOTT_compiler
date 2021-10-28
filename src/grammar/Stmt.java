@@ -36,12 +36,12 @@ public class Stmt {
      * @throws ParsingException TODO
      */
     public static Stmt parseStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        System.out.println("-------------------PARSING STMT------------------");
+        //System.out.println("-------------------PARSING STMT------------------");
 
         //----------------------------trying asmt TODO HERE ISSUE
         TOKEN_IDX.saveTokenIndex();
 
-        System.out.println("Statment first again::::" + tokens.get(TOKEN_IDX.index).getToken());
+        //System.out.println("Statment first again::::" + tokens.get(TOKEN_IDX.index).getToken());
 
         AsmtStmt asmt = AsmtStmt.parseAsmtStmt(tokens, nestLevel);
 
@@ -52,7 +52,7 @@ public class Stmt {
             TOKEN_IDX.restoreTokenIndex();
         }
         //----------------------------trying var_dec
-        System.out.println("first again::::" + tokens.get(TOKEN_IDX.index).getToken());
+        //System.out.println("first again::::" + tokens.get(TOKEN_IDX.index).getToken());
         TOKEN_IDX.saveTokenIndex();
 
         VarDec varDec = VarDec.parseVarDec(tokens, nestLevel);
@@ -67,7 +67,7 @@ public class Stmt {
         }
 
         //----------------------------trying func_call
-        System.out.println("first again::::" + tokens.get(TOKEN_IDX.index).getToken());
+        //System.out.println("first again::::" + tokens.get(TOKEN_IDX.index).getToken());
         TOKEN_IDX.saveTokenIndex();
 
 
@@ -89,7 +89,7 @@ public class Stmt {
 
 
             TOKEN_IDX.popRestore();
-            System.out.println("-------------->>>>>>"+funcCall.convertToJott());
+            //System.out.println("-------------->>>>>>"+funcCall.convertToJott());
 
             return new Stmt(nestLevel, null, null, funcCall);
 

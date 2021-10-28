@@ -40,20 +40,20 @@ public class Body  {
         ArrayList<BodyStmt> bodies = new ArrayList<>();
 
         if (tokens.get(TOKEN_IDX.index).getTokenType() == TokenType.R_BRACKET) {
-            System.out.println("EMPTY BODY");
+            //System.out.println("EMPTY BODY");
             return null;
         }
 
         // ------------------------ empty case -----------------
         while (tokens.get(TOKEN_IDX.index).getTokenType() != TokenType.R_BRACE) {
-            System.out.println("\tlooking for body");
+            //System.out.println("\tlooking for body");
             BodyStmt bodyStmt = BodyStmt.parseBodyStmt(tokens, nestLevel);
-            System.out.println("\t--->>>>>>>looking for body");
+            //System.out.println("\t--->>>>>>>looking for body");
 
             if (bodyStmt == null) {
-                System.out.println("EMPTY BODY 2");
+                //System.out.println("EMPTY BODY 2");
                 ReturnStmt returnStmt = ReturnStmt.parseReturnStmt(tokens, nestLevel);
-                if (returnStmt == null) { System.out.println("EMPTY return"); }
+                //if (returnStmt == null) { System.out.println("EMPTY return"); }
 
                 boolean hasGuaranteedReturn = false;
                 for (BodyStmt bodyStmtElement : bodies) {
@@ -64,7 +64,7 @@ public class Body  {
                 }
                 return new Body(bodies, returnStmt,nestLevel,hasGuaranteedReturn);
             }
-            System.out.println("\tadding body\t\t\t\t\t-----------" + bodyStmt.convertToJott());
+            //System.out.println("\tadding body\t\t\t\t\t-----------" + bodyStmt.convertToJott());
             bodies.add(bodyStmt);
         }
         ReturnStmt returnStmt = ReturnStmt.parseReturnStmt(tokens, nestLevel);

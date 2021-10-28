@@ -112,13 +112,13 @@ public class BExpr extends Expr {
             if (possibleRelOp.getTokenType() == TokenType.REL_OP) {
                 TOKEN_IDX.index++;
                 
-                System.out.printf("bool op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
+                //System.out.printf("bool op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
                 booleanList.add(new BExpr(possibleBool, possibleRelOp));
                 return parseBExpr_r(tokens, booleanList, nestLevel);
             }
             
             // lone bool
-            System.out.println("lone bool");
+            //System.out.println("lone bool");
             booleanList.add(new BExpr(possibleBool));
             return booleanList;
             
@@ -126,12 +126,12 @@ public class BExpr extends Expr {
             if (possibleRelOp.getTokenType() == TokenType.REL_OP) {
                 TOKEN_IDX.index++;
 
-                System.out.printf("expr op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
+                //System.out.printf("expr op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
                 booleanList.add(new BExpr(possibleExpr, possibleRelOp));
                 return parseBExpr_r(tokens, booleanList, nestLevel);
             }
             // lone expr
-            System.out.println("lone expr");
+            //System.out.println("lone expr");
 
             booleanList.add(new BExpr(possibleExpr));
             return booleanList;
@@ -147,7 +147,7 @@ public class BExpr extends Expr {
      */
     public static Expr parseBExpr(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
 
-        System.out.println("-------------------- parsing bool expr --------------------");
+        //System.out.println("-------------------- parsing bool expr --------------------");
 
         ArrayList<BExpr> f = parseBExpr_r(tokens, new ArrayList<BExpr>(), nestLevel);
 

@@ -24,25 +24,25 @@ public class FunctionList {
     }
 
     public static FunctionList parseFunctionList(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
-        System.out.println("------------------------PARSING FunctionList------------------------");
+        //System.out.println("------------------------PARSING FunctionList------------------------");
 
         ArrayList<FunctionDef> listOfFunctionDefs = new ArrayList<>();
-        System.out.println("looking for function def");
+        //System.out.println("looking for function def");
 
         FunctionDef functionDef = FunctionDef.parseFunctionDef(tokens, 0);
 
         if (functionDef == null) {
-            System.out.println(" NO init function def");
+            //System.out.println(" NO init function def");
             return null;
         }
         listOfFunctionDefs.add(functionDef);
 
         while (TOKEN_IDX.index < tokens.size()) {
-            System.out.println(" looking for more function def");
+            //System.out.println(" looking for more function def");
             functionDef = FunctionDef.parseFunctionDef(tokens, nestlevel);
 
             if (functionDef == null) {
-                System.out.println("no more function def found ");
+                //System.out.println("no more function def found ");
                 return new FunctionList(listOfFunctionDefs);
             }
             listOfFunctionDefs.add(functionDef);

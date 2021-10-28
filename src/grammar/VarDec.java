@@ -30,7 +30,7 @@ public class VarDec {
      * @throws ParsingException TODO
      */
     public static VarDec parseVarDec(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        System.out.println("------------------------PARSING Var-Dec------------------------");
+        //System.out.println("------------------------PARSING Var-Dec------------------------");
 
         // ---------------------- check for correct type ---------------------------
 
@@ -38,7 +38,7 @@ public class VarDec {
         // should be an IDkeyword type
 
         Token typeToken = tokens.get(TOKEN_IDX.index);
-        System.out.println("    FIRST:"+typeToken.getToken());
+        //System.out.println("    FIRST:"+typeToken.getToken());
         Type type = new Type(typeToken.getToken(), typeToken.getFilename(),typeToken.getLineNum());
         TOKEN_IDX.index++;
 
@@ -46,7 +46,7 @@ public class VarDec {
 
         // getting next token
         Token idToken = tokens.get(TOKEN_IDX.index);
-        System.out.println("    SECOND:"+idToken.getToken());
+        //System.out.println("    SECOND:"+idToken.getToken());
         if (idToken.getTokenType() != TokenType.ID_KEYWORD){
             return null;
         }
@@ -56,7 +56,7 @@ public class VarDec {
 
         // --------------------------------- check for ; ---------------------------
         Token endStmt = tokens.get(TOKEN_IDX.index);
-        System.out.println("    THIRD:"+endStmt.getToken());
+        //System.out.println("    THIRD:"+endStmt.getToken());
 
         if (endStmt.getTokenType() != TokenType.SEMICOLON){
             return null;

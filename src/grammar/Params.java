@@ -38,7 +38,7 @@ public class Params {
 
 
     public static ArrayList<Params> parseParams_r(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        System.out.println("------------------------PARSING Params------------------------");
+        //System.out.println("------------------------PARSING Params------------------------");
 
 
         // ---------------------- list of params --------------------------------
@@ -50,7 +50,7 @@ public class Params {
 
         // check for next token == ], this means no params
         Token first = tokens.get(TOKEN_IDX.index);
-        System.out.println("    1st:" + first.getToken());
+        //System.out.println("    1st:" + first.getToken());
 
         // epsilon case
         if (first.getTokenType() == TokenType.R_BRACKET) {
@@ -62,7 +62,7 @@ public class Params {
 
         // looking for expr
         Expr exp = Expr.parseExpr(tokens, nestLevel);
-        System.out.println("    2nd- expr found :" + exp.convertToJott());
+        //System.out.println("    2nd- expr found :" + exp.convertToJott());
         list_of_params.add(new Params(exp, false));
 
 
@@ -70,7 +70,7 @@ public class Params {
 
         Token comma = tokens.get(TOKEN_IDX.index);
         while (comma.getTokenType() == TokenType.COMMA) {
-            System.out.println("        looking for new param:" + comma.getToken());
+            //System.out.println("        looking for new param:" + comma.getToken());
             TOKEN_IDX.index++;
 
             // ---------------------- check for expr ------------------------------------
@@ -83,11 +83,11 @@ public class Params {
             comma = tokens.get(TOKEN_IDX.index);
 
 
-            System.out.println("        new param found:" + exp.convertToJott());
-            System.out.println("        looking for new param...:" + comma.getToken());
+            //System.out.println("        new param found:" + exp.convertToJott());
+            //System.out.println("        looking for new param...:" + comma.getToken());
         }
 
-        System.out.println("        looking DONE:" + comma.getToken());
+        //System.out.println("        looking DONE:" + comma.getToken());
         // ---------------------- done ------------------------------------
 
         return list_of_params;
@@ -99,7 +99,7 @@ public class Params {
             return null;
         }
         Params p = new Params(f);
-        System.out.println("->>>" + p.convertToJott() + "<<<-");
+        //System.out.println("->>>" + p.convertToJott() + "<<<-");
         return p;
 
     }

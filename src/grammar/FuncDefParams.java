@@ -55,7 +55,7 @@ public class FuncDefParams {
         Token idd = tokens.get(TOKEN_IDX.index);
 
         if (idd.getTokenType() == TokenType.R_BRACKET) {
-            System.out.println("empty params");
+            //System.out.println("empty params");
             return null;
         }
 
@@ -69,7 +69,7 @@ public class FuncDefParams {
                 throw new ParsingException(sb.toString());
             }
 
-            System.out.println("    found id ???:" + idd.getToken());
+            //System.out.println("    found id ???:" + idd.getToken());
 
             if (idd.getTokenType() != TokenType.ID_KEYWORD) {
                 StringBuilder sb = new StringBuilder();
@@ -86,7 +86,7 @@ public class FuncDefParams {
             Token col = tokens.get(TOKEN_IDX.index);
 
             if (col.getTokenType() != TokenType.COLON) {
-                System.out.println("TODO ERROR 1");
+                //System.out.println("TODO ERROR 1");
             }
 
             TOKEN_IDX.index++;
@@ -124,7 +124,7 @@ public class FuncDefParams {
             idd = tokens.get(TOKEN_IDX.index);
 
         }
-        System.out.println("+++++++++++++++++++++++++++"+tokens.get(TOKEN_IDX.index));
+        //System.out.println("+++++++++++++++++++++++++++"+tokens.get(TOKEN_IDX.index));
         return new FuncDefParams(functionParameterList);
     }
 

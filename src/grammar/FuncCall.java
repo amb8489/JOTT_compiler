@@ -36,8 +36,8 @@ public class FuncCall {
      * @throws ParsingException TODO
      */
     public static FuncCall ParseFuncCall(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        System.out.println("---------------------------- PARSING FUNCTION CALL ----------------------------");
-        System.out.println(tokens.get(TOKEN_IDX.index).getToken());
+        //System.out.println("---------------------------- PARSING FUNCTION CALL ----------------------------");
+        //System.out.println(tokens.get(TOKEN_IDX.index).getToken());
 
         // ---------------- checking function call starts with id [----------------------
 
@@ -46,7 +46,7 @@ public class FuncCall {
         if (id.getTokenType() != TokenType.ID_KEYWORD || lb.getTokenType() != TokenType.L_BRACKET) {
             return null;
         }
-        System.out.println("    1st:" + id.getToken());
+        //System.out.println("    1st:" + id.getToken());
         TOKEN_IDX.index++;
 
 
@@ -62,7 +62,7 @@ public class FuncCall {
             throw new ParsingException(sb.toString());
         }
         TOKEN_IDX.index++;
-        System.out.println("    2nd:" + L_BRACKET.getToken());
+        //System.out.println("    2nd:" + L_BRACKET.getToken());
 
         // ---------------- looking for params for functions----------------------
 
@@ -80,11 +80,11 @@ public class FuncCall {
             throw new ParsingException(sb.toString());
         }
         TOKEN_IDX.index++;
-        System.out.println("    4th:" + R_BRACKET.getToken());
+        //System.out.println("    4th:" + R_BRACKET.getToken());
 
         // ---------------------- all done ----------------------------------
 
-        System.out.println("function call done");
+        //System.out.println("function call done");
 
         return new FuncCall(id, parms);
     }

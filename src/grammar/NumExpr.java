@@ -75,7 +75,7 @@ public class NumExpr extends Expr {
             expLst.add(new NumExpr(new NumType(possible_num), possible_op));
 
             // ---------------------- trying to complete id/int op with valid follow ---------
-            System.out.println("    going again int/id op");
+            ////System.out.println("    going again int/id op");
             return parseNumExpr_r(tokens, nestLevel, expLst);
         }
 
@@ -87,14 +87,14 @@ public class NumExpr extends Expr {
         if (call != null && possible_op.getTokenType() == TokenType.MATH_OP) {
             TOKEN_IDX.index++;
             expLst.add(new NumExpr(call, possible_op));
-            System.out.println("    going again f(x)");
+            ////System.out.println("    going again f(x)");
             return parseNumExpr_r(tokens, nestLevel, expLst);
         }
         // ---------------------- check for lone function call ------------------------------
 
         // check for lone function call
         if (call != null) {
-            System.out.println("    Function call found: " + call.convertToJott());
+            ////System.out.println("    Function call found: " + call.convertToJott());
             expLst.add(new NumExpr(call, null));
             return expLst;
         }
@@ -109,14 +109,14 @@ public class NumExpr extends Expr {
         // ---------------------error, goes on to try another expr in expr-----------------
 
         // error
-        System.out.println("INCORRECT NUM EXPR");
+        ////System.out.println("INCORRECT NUM EXPR");
         return null;
     }
 
 
     public static NumExpr parseNumExpr(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
 
-        System.out.println("-------------------- parsing num expr --------------------");
+        ////System.out.println("-------------------- parsing num expr --------------------");
 
         ArrayList<NumExpr> expLst = parseNumExpr_r(tokens, nestLevel, new ArrayList<NumExpr>());
         if(expLst == null){
@@ -154,7 +154,7 @@ public class NumExpr extends Expr {
             }
         }
         NumExpr b = new NumExpr(expLst,null);
-        System.out.println("88999 "+b.convertToJott());
+        ////System.out.println("88999 "+b.convertToJott());
 
         String ExpType = isINTexp ? "Integer":"Double";
 
