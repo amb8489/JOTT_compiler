@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class Phase3Tester {
     
@@ -177,7 +178,7 @@ public class Phase3Tester {
 
         }
 
-        public static void main(String[] args) {
+        public static void main(String[] args) throws InterruptedException {
             System.out.println("NOTE: System.err may print at the end. This is fine.");
             main.Phase3Tester tester = new main.Phase3Tester();
 
@@ -193,6 +194,9 @@ public class Phase3Tester {
                 else{
                     System.out.println("\tFailed\n");
                 }
+
+                TimeUnit.MINUTES.sleep((long) .1);
+
             }
 
             System.out.printf("Passed: %d/%d%n", passedTests, numTests);
