@@ -1,5 +1,10 @@
-foo [  ]  : Void { 
-    Integer while = 5 ;
+main [  ]  : Integer { 
+    Integer x = 0 ;
 
-    print[ while ];
+    return x ;
+
+}
+foo [ x : Integer ]  : Integer { 
+    return x + 1 ;
+
 }
