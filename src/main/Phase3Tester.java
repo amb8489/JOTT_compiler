@@ -70,7 +70,7 @@ public class Phase3Tester {
                     return false;
                 }
 
-                System.out.println(tokenListString(tokens));
+//                System.out.println(tokenListString(tokens));
                 ArrayList<Token> cpyTokens = new ArrayList<>(tokens);
                 JottTree root = JottParser.parse(tokens);
 
@@ -83,6 +83,7 @@ public class Phase3Tester {
                 } else if (test.error) {
                     System.err.println("\tFailed Test: " + test.testName);
                     System.err.println("\t\tExpected a null and got JottTree");
+                    System.err.println("what was parsed:\n"+root.convertToJott());
                     return false;
                 }
 
