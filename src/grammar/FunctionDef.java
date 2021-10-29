@@ -17,7 +17,7 @@ public class FunctionDef  {
     public Identifier id;
     private final FuncDefParams funcDefParams;
     private final Body body;
-    private final Type return_tpye;
+    public final Type return_tpye;
     private final int nestLevel;
 
     /**

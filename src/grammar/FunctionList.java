@@ -78,6 +78,11 @@ public class FunctionList {
         for (FunctionDef function: listOfFunctionDefs) {
 
             boolean r = function.validateTree();
+            ValidateTable.functions.put(function.id.convertToJott(),new ArrayList<String>() {
+                {add(function.return_tpye.type);
+                    //TODO this functions params
+                    add(null);}});
+
             if (!r){
                 return false;
             }
