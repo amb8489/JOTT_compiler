@@ -14,9 +14,9 @@ import java.util.ArrayList;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class FuncDefParams {
-    private Identifier identifier;
-    private Token type;
-    private final ArrayList<FuncDefParams> functionParameterList;
+    public Identifier identifier;
+    public Token type;
+    public final ArrayList<FuncDefParams> functionParameterList;
 
     /**
      * Constructor TODO
@@ -37,7 +37,6 @@ public class FuncDefParams {
     public FuncDefParams(ArrayList<FuncDefParams> functionParameterList) {
         this.functionParameterList = functionParameterList;
     }
-
     /**
      * Constructor TODO
      * @param tokens TODO

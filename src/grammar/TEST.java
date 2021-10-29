@@ -32,6 +32,19 @@ public class TEST {
             System.out.println(type+" "+key + " = "+val);
         }
 
+        System.out.println("-----final func table-----");
+
+        for (String key : ValidateTable.functions.keySet()) {
+            String type = ValidateTable.functions.get(key).get(0);
+
+            System.out.print(key + " returns "+type + " with args: [ ");
+            for(String s : ValidateTable.functions.get(key).subList(1,ValidateTable.functions.get(key).size())) {
+                System.out.print(s+" ");
+            }
+            System.out.println(" ]");
+
+        }
+
 
 
     }

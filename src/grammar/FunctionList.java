@@ -74,15 +74,21 @@ public class FunctionList {
 
 
     public boolean validateTree() throws ParsingException {
-
         for (FunctionDef function: listOfFunctionDefs) {
 
             boolean r = function.validateTree();
-            ValidateTable.functions.put(function.id.convertToJott(),new ArrayList<String>() {
-                {add(function.return_tpye.type);
-                    //TODO this functions params
-                    add(null);}});
+            // setting function id and its return type
 
+            ValidateTable.functions.put(function.id.convertToJott(),new ArrayList<>() {
+                {add(function.return_tpye.type);}});
+
+            // setting function params
+            if(function.funcDefParams !=null) {
+                for (FuncDefParams params : function.funcDefParams.functionParameterList) {
+                    ValidateTable.functions.get(function.id.convertToJott()).add(params.identifier.convertToJott());
+                    ValidateTable.functions.get(function.id.convertToJott()).add(params.type.getToken());
+                }
+            }
             if (!r){
                 return false;
             }

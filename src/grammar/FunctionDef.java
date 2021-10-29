@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class FunctionDef  {
     public Identifier id;
-    private final FuncDefParams funcDefParams;
+    public final FuncDefParams funcDefParams;
     private final Body body;
     public final Type return_tpye;
     private final int nestLevel;
