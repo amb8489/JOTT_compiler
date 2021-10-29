@@ -218,8 +218,13 @@ public class NumExpr extends Expr {
                 }
             }
             if (n.num !=null && n.num.isVar){
-                if (!ValidateTable.variables.get(n.num.Vnum).get(0).equals(this.ExpType)) {
-                    throw new ParsingException("bad var type in exp: "+ValidateTable.variables.get(n.num.Vnum).get(0)+" "+n.num.Vnum);
+                if (ValidateTable.variables.containsKey(n.num.Vnum)) {
+                    if (!ValidateTable.variables.get(n.num.Vnum).get(0).equals(this.ExpType)) {
+                        throw new ParsingException("bad var type in exp: " + ValidateTable.variables.get(n.num.Vnum).get(0) + " " + n.num.Vnum);
+                    }
+                }else {
+                    throw new ParsingException("use of undefined var: " +n.num.Vnum + " line:"+n.num.number.getLineNum());
+
                 }
             }
 
