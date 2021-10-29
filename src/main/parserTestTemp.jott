@@ -1,10 +1,6 @@
 main [  ]  : Integer { 
-    Integer x = 0 ;
-
-    return x ;
-
-}
-foo [ x : Integer ]  : Integer { 
-    return x + 1 ;
+    print[5];
+    print["foo bar"];
+    return 1;
 
 }

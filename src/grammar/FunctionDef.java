@@ -182,11 +182,11 @@ public class FunctionDef  {
         if (!this.return_tpye.type.equals("Void")){
             if ( this.body.hasReturn != null){
 
-                if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expression.type)){
+                if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expression.Etype)){
                     this.body.hasReturn.expression.validateTree();
                     return true;
                 }
-                throw new ParsingException("RETURNING WRONG TYPE in function: "+this.id.convertToJott()+" "+this.body.hasReturn.expression.type+" "+ValidateTable.functions.get(this.id.convertToJott()).get(0));
+                throw new ParsingException("RETURNING WRONG TYPE in function: "+this.id.convertToJott()+" "+this.body.hasReturn.expression.Etype+" "+ValidateTable.functions.get(this.id.convertToJott()).get(0));
 
             }
             throw new ParsingException("MISSING RETURN in function: "+this.id.convertToJott());

@@ -1,12 +1,12 @@
 #this will pass phase 2 but fail phase 3 for foo return type not matching
 
-foo[y:Integer]:Integer{
+foo[y:Integer]:String{
     print[y];
-	return 3;
+	return "fff";
 }
 
 main[]:Integer{
-    Integer x = foo[5];
+    String x = foo[5];
 	print[x];
-	return x;
+	return b;
 }

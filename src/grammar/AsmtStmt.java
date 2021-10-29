@@ -14,9 +14,9 @@ import main.TokenType;
  */
 public class AsmtStmt {
 
-    private final Type type;
+    public Type type;
     private final Identifier identifier;
-    private final Expr expression;
+    public Expr expression;
 
     /**
      * This is the constructor for AsmtStmt.
@@ -142,10 +142,18 @@ public class AsmtStmt {
             // check that we havet already defined this var ??????????????? scope??????
             if (!ValidateTable.variables.containsKey(identifier.convertToJott())) {
 
+
+                System.out.println(expression.Etype);
+
+                this.expression.validateTree();
+
+                System.out.println(expression.expression.Etype);
+
                 // see that type of left = type of right
 
-                if (type.type.equals(expression.type)) {
-                    expression.validateTree();
+                System.out.println(type.type+" "+expression.expression.Etype);
+
+                if (type.type.equals(expression.expression.Etype)) {
                     ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
                         add(type.type);
                         add(expression.convertToJott());
@@ -178,7 +186,7 @@ public class AsmtStmt {
             // get type var tpye and check its being assigned the same type
             String varType = ValidateTable.variables.get(identifier.convertToJott()).get(0);
 
-            if(expression.type.equals(varType)) {
+            if(expression.Etype.equals(varType)) {
 
                     ValidateTable.variables.get(identifier.convertToJott()).set(1, expression.convertToJott());
                 return true;

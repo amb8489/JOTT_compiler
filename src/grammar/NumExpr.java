@@ -166,26 +166,53 @@ public class NumExpr extends Expr {
 
         for (NumExpr n : finalexp) {
             if (n.num != null && n.mathOp != null) {
-                jstr.append(n.num.convertToJott() + " " + n.mathOp.getToken() + " ");
+                jstr.append(n.num.convertToJott() + "" + n.mathOp.getToken() + "");
             } else if (n.functionCall != null && n.mathOp != null) {
-                jstr.append(n.functionCall.convertToJott() + " " + n.mathOp.getToken() + " ");
+                jstr.append(n.functionCall.convertToJott() + "" + n.mathOp.getToken() + "");
             } else if (n.functionCall == null && n.mathOp == null) {
-                jstr.append(n.num.convertToJott() + " ");
+                jstr.append(n.num.convertToJott() + "");
             } else if (n.functionCall != null) {
-                jstr.append(n.functionCall.convertToJott() + " ");
+                jstr.append(n.functionCall.convertToJott() + "");
             }
         }
 
         return jstr.toString();
     }
+
     @Override
     public boolean validateTree() throws ParsingException {
-
-        boolean isINTexp = true;
-
+        // a single function call can be any type we dont know yet so we gotta varify the function type
+        // because int epr will take all single function call
+        System.out.println("--->"+this.ExpType);
+        int isSingleFunctionCall = 0;
+        String PrevFunctionType = null;
         for (NumExpr n : this.finalexp) {
+
+            if (n.functionCall == null) {
+
+                isSingleFunctionCall= 0;
+                break;
+            }
+            isSingleFunctionCall++;
+            String funcType = ValidateTable.functions.get(n.functionCall.name.getToken()).get(0);
+            if(PrevFunctionType == null){
+                PrevFunctionType = funcType;
+            }else if (!funcType.equals(PrevFunctionType) ){
+                throw new ParsingException("func mis match type: "+ValidateTable.functions.get(n.functionCall.name.getToken()).get(0));
+            }
+        }
+        if (isSingleFunctionCall>0){
+            this.setType(PrevFunctionType);
+            System.out.println("--new exp type:"+PrevFunctionType);
+            return true;
+        }
+
+
+
+            for (NumExpr n : this.finalexp) {
             System.out.println(n.functionCall);
             if (n.functionCall != null){
+
                 if (!ValidateTable.functions.get(n.functionCall.name.getToken()).get(0).equals(this.ExpType)) {
                     throw new ParsingException("func Wrong type in exp: "+ValidateTable.functions.get(n.functionCall.name.getToken()).get(0));
                 }

@@ -14,14 +14,14 @@ import java.util.ArrayList;
  */
 public class Expr {
     public Expr expression;
-    public String type;
+    public String Etype;
     /**
      * Constructor TODO
      * @param expression TODO
      */
     public Expr(Expr expression,String type) {
         this.expression = expression;
-        this.type = type;
+        this.Etype = type;
     }
 
     /**
@@ -88,4 +88,7 @@ public class Expr {
         return expression.validateTree();
     }
 
+    public void setType(String type) {
+        this.Etype = type;
+    }
 }
