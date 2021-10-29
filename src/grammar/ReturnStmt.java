@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 //     return_stmt -> return expr end_stmt
 public class ReturnStmt  {
-    private final Expr expression;
+    public Expr expression;
 
     /**
      * Constructor TODO

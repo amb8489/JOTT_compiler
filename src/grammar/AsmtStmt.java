@@ -129,7 +129,7 @@ public class AsmtStmt {
         // and that vars in the expr 1) exist and 2) are the type of the expr type
         // check that ids for vars are ok use Identifier.check(identifier.id);
 
-        expression.validateTree();
+
 
         // 1) check that id for var is good
         Identifier.check(identifier.id);

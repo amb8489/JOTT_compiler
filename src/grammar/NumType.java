@@ -17,7 +17,10 @@ public class NumType {
     public String numType;
     public double Dnum;
     public int Inum;
+    public String Vnum;
+
     public Token number;
+    public boolean isVar;
 
 
 
@@ -26,6 +29,7 @@ public class NumType {
 
 
         String str = num.getToken();
+        this.isVar = false;
 
         try {
             double v = Double.parseDouble(str);
@@ -40,6 +44,13 @@ public class NumType {
             this.Inum = v;
 
         } catch (NumberFormatException ignored) {
+
+            // not a num but a var
+            if (this.numType==null) {
+                System.out.println("---"+num.getToken());
+                this.isVar = true;
+                this.Vnum = str;
+            }
         }
     }
 

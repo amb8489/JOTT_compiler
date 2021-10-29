@@ -178,11 +178,16 @@ public class FunctionDef  {
             body.validateTree();
         }
 
-
         // if return type is INT DOUBLE STRING BOOL
         if (!this.return_tpye.type.equals("Void")){
             if ( this.body.hasReturn != null){
-                return true;
+
+                if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expression.type)){
+                    this.body.hasReturn.expression.validateTree();
+                    return true;
+                }
+                throw new ParsingException("RETURNING WRONG TYPE in function: "+this.id.convertToJott());
+
             }
             throw new ParsingException("MISSING RETURN in function: "+this.id.convertToJott());
 

@@ -3,6 +3,7 @@ package grammar;
 import main.Token;
 import main.TokenType;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 /**
@@ -41,7 +42,6 @@ public class NumExpr extends Expr {
     public NumExpr(FuncCall call, Token mathOp) {
         super(null,null);
         this.num = null;
-
         this.functionCall = call;
         this.mathOp = mathOp;
     }
@@ -94,7 +94,7 @@ public class NumExpr extends Expr {
 
         // check for lone function call
         if (call != null) {
-            ////System.out.println("    Function call found: " + call.convertToJott());
+//            System.out.println("    Function call found: " + call.convertToJott());
             expLst.add(new NumExpr(call, null));
             return expLst;
         }
@@ -153,8 +153,6 @@ public class NumExpr extends Expr {
                 throw new ParsingException("expression with int op double not allowed, line: "+expLst.get(i).num.number.getLineNum());
             }
         }
-        NumExpr b = new NumExpr(expLst,null);
-        ////System.out.println("88999 "+b.convertToJott());
 
         String ExpType = isINTexp ? "Integer":"Double";
 
@@ -180,9 +178,25 @@ public class NumExpr extends Expr {
 
         return jstr.toString();
     }
+    @Override
+    public boolean validateTree() throws ParsingException {
 
-    public boolean validateTree() {
+        boolean isINTexp = true;
 
+        for (NumExpr n : this.finalexp) {
+            System.out.println(n.functionCall);
+            if (n.functionCall != null){
+                if (!ValidateTable.functions.get(n.functionCall.name.getToken()).get(0).equals(this.ExpType)) {
+                    throw new ParsingException("func Wrong type in exp: "+ValidateTable.functions.get(n.functionCall.name.getToken()).get(0));
+                }
+            }
+            if (n.num.isVar){
+                if (!ValidateTable.variables.get(n.num.Vnum).get(0).equals(this.ExpType)) {
+                    throw new ParsingException("bad var type in exp: "+ValidateTable.variables.get(n.num.Vnum).get(0)+" "+n.num.Vnum);
+                }
+            }
+
+        }
 
 
         return false;

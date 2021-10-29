@@ -1,21 +1,12 @@
-#this will pass phase 2 and phase 3
-foo[x:Integer]:Integer{
-    return x + 1;
+
+
+
+foo[]:Double{
+    return 6.9;
 }
 
 main[]:Integer{
-    Integer x = 0;
-	while[x<10]{
-	    #x = foo[x];
-		print[x];
-	}
-	return x;
-}
+    Integer x = 0 ;
 
-zoo[x:Integer, b:Double, zz:Double]:String{
-	while[x<10]{
-	    #x = foo[x];
-		print[x];
-	}
-	return x;
+	return x + 1;
 }

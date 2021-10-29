@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class FuncCall {
-    Token token; // function name
+    Token name; // function name
     Params parameters; // function parameters
 
     // ---------------------------constructor----------------------------------------
@@ -24,7 +24,7 @@ public class FuncCall {
      * @param parameters TODO
      */
     public FuncCall(Token token, Params parameters) {
-        this.token = token;
+        this.name = token;
         this.parameters = parameters;
     }
 
@@ -97,7 +97,7 @@ public class FuncCall {
         StringBuilder jstr = new StringBuilder();
 
 
-        jstr.append(token.getToken() + "[ ");
+        jstr.append(name.getToken() + "[ ");
 
         if (parameters == null){
             jstr.append("]");

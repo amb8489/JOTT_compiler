@@ -82,9 +82,9 @@ public class Expr {
      * TODO
      * @return TODO
      */
-    public boolean validateTree() {
+    public boolean validateTree() throws ParsingException {
 
-        return false;
+        return expression.validateTree();
     }
 
 }
