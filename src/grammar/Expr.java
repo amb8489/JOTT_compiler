@@ -38,7 +38,6 @@ public class Expr {
 
         if (tokens.get(TOKEN_IDX.index + 1).getTokenType() != TokenType.REL_OP) {
             NumExpr Exp = NumExpr.parseNumExpr(tokens, nestLevel);
-
             if (Exp != null) {
                 return new Expr(Exp, Exp.ExpType);
             }
@@ -47,9 +46,11 @@ public class Expr {
 
             // if string lit id or funcion call
             Expr s_expr = SExpr.parseSExpr(tokens, nestLevel);
+
             if (s_expr != null) {
                 return new Expr(s_expr,"String");
             }
+
         }
         // ---------------------------looking for b_expr (bool expr)----------------------------------------
 

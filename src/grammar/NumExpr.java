@@ -190,7 +190,7 @@ public class NumExpr extends Expr {
                     throw new ParsingException("func Wrong type in exp: "+ValidateTable.functions.get(n.functionCall.name.getToken()).get(0));
                 }
             }
-            if (n.num.isVar){
+            if (n.num !=null && n.num.isVar){
                 if (!ValidateTable.variables.get(n.num.Vnum).get(0).equals(this.ExpType)) {
                     throw new ParsingException("bad var type in exp: "+ValidateTable.variables.get(n.num.Vnum).get(0)+" "+n.num.Vnum);
                 }

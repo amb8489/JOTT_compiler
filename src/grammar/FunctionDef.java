@@ -186,7 +186,7 @@ public class FunctionDef  {
                     this.body.hasReturn.expression.validateTree();
                     return true;
                 }
-                throw new ParsingException("RETURNING WRONG TYPE in function: "+this.id.convertToJott());
+                throw new ParsingException("RETURNING WRONG TYPE in function: "+this.id.convertToJott()+" "+this.body.hasReturn.expression.type+" "+ValidateTable.functions.get(this.id.convertToJott()).get(0));
 
             }
             throw new ParsingException("MISSING RETURN in function: "+this.id.convertToJott());
