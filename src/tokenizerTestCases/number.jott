@@ -8,5 +8,5 @@ foo[y:Integer]:Integer{
 main[]:Integer{
     Integer x = foo[5];
 	print[x];
-	return foo[];
+	return x;
 }

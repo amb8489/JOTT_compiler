@@ -145,6 +145,7 @@ public class AsmtStmt {
                 // see that type of left = type of right
 
                 if (type.type.equals(expression.type)) {
+                    expression.validateTree();
                     ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
                         add(type.type);
                         add(expression.convertToJott());
