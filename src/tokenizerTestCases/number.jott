@@ -8,5 +8,6 @@ foo[]:Double{
 main[]:Integer{
     Integer x = 0 ;
 
+
 	return x + 1;
 }
