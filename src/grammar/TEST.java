@@ -5,6 +5,14 @@ import main.Token;
 
 import java.util.ArrayList;
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class TEST {
 
     /**
@@ -16,7 +24,7 @@ public class TEST {
         String filename = "src/tokenizerTestCases/number.jott";
         ArrayList<Token> tokens = JottTokenizer.tokenize(filename);
 
-        Program p = Program.parseProgram(tokens, 0);
+        Program p = Program.parseProgram(tokens);
         System.out.println(p.convertToJott());
         p.validateTree();
 

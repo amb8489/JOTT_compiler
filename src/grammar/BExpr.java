@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class BExpr extends Expr {
     private ArrayList<BExpr> finalexp = null;
 
-    private Expr exp;
+    private Expr expr;
     private Token bool;
     private Token relOp;
     // ---------------------- constructors for different cases --------------------------------
@@ -63,7 +63,7 @@ public class BExpr extends Expr {
     public BExpr(Expr expr, Token relOP) {
         super(null,null);
         this.relOp = relOP;
-        this.exp = expr;
+        this.expr = expr;
     }
 
     /**
@@ -72,7 +72,7 @@ public class BExpr extends Expr {
      */
     public BExpr(Expr expr) {
         super(null,null);
-        this.exp = expr;
+        this.expr = expr;
     }
 
     /**
@@ -83,7 +83,7 @@ public class BExpr extends Expr {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static ArrayList<BExpr> parseBExpr_r(ArrayList<Token> tokens, ArrayList<BExpr> booleanList, int nestLevel)
+    public static ArrayList<BExpr> parseBExpr_r(int nestLevel, ArrayList<Token> tokens, ArrayList<BExpr> booleanList)
             throws ParsingException {
         Token possibleBool = tokens.get(TOKEN_IDX.index);
         boolean isBool = false;
@@ -114,7 +114,7 @@ public class BExpr extends Expr {
                 
                 //System.out.printf("bool op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
                 booleanList.add(new BExpr(possibleBool, possibleRelOp));
-                return parseBExpr_r(tokens, booleanList, nestLevel);
+                return parseBExpr_r(nestLevel, tokens, booleanList);
             }
             
             // lone bool
@@ -128,7 +128,7 @@ public class BExpr extends Expr {
 
                 //System.out.printf("expr op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
                 booleanList.add(new BExpr(possibleExpr, possibleRelOp));
-                return parseBExpr_r(tokens, booleanList, nestLevel);
+                return parseBExpr_r(nestLevel, tokens, booleanList);
             }
             // lone expr
             //System.out.println("lone expr");
@@ -149,7 +149,7 @@ public class BExpr extends Expr {
 
         //System.out.println("-------------------- parsing bool expr --------------------");
 
-        ArrayList<BExpr> f = parseBExpr_r(tokens, new ArrayList<BExpr>(), nestLevel);
+        ArrayList<BExpr> f = parseBExpr_r(nestLevel, tokens, new ArrayList<BExpr>());
 
         return new BExpr(f);
     }
@@ -174,13 +174,13 @@ public class BExpr extends Expr {
             }
 
             // exp relOp
-            if (n.exp != null && n.relOp != null) {
-                jottString.append(String.format("%s%s ", n.exp.convertToJott(), n.relOp.getToken()));
+            if (n.expr != null && n.relOp != null) {
+                jottString.append(String.format("%s%s ", n.expr.convertToJott(), n.relOp.getToken()));
             }
 
             // exp
-            if (n.exp != null && n.relOp == null) {
-                jottString.append(String.format("%s ", n.exp.convertToJott()));
+            if (n.expr != null && n.relOp == null) {
+                jottString.append(String.format("%s ", n.expr.convertToJott()));
             }
         }
 

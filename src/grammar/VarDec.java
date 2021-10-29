@@ -2,20 +2,26 @@ package grammar;
 
 import main.Token;
 import main.TokenType;
-
 import java.util.ArrayList;
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class VarDec {
     private final Type type;
     private final Identifier identifier;
 
     /**
      * TODO
-     * @param nestLevel TODO
      * @param type TODO
      * @param identifier TODO
      */
-    public VarDec(int nestLevel, Type type,Identifier identifier){
+    public VarDec(Type type,Identifier identifier){
             this.type = type;
             this.identifier = identifier;
 
@@ -67,11 +73,11 @@ public class VarDec {
         TOKEN_IDX.index++;
 
         // --------------------------------- DONE------- ---------------------------
-        return new VarDec(nestLevel,type,identifier);
+        return new VarDec(type, identifier);
     }
 
     // the format of asmt is {INDENT}TYPE NAME;
-    // where insendt is the number of tabs
+    // where indent is the number of tabs
 
     /**
      * TODO
@@ -90,7 +96,10 @@ public class VarDec {
      */
     public boolean validateTree() {
         // name ---> type null
-        ValidateTable.variables.put(identifier.convertToJott(),new ArrayList<String>() {{add(type.type);add(null);}});
+        ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
+            add(type.type);
+            add(null);
+        }});
         return true;
     }
 

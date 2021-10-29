@@ -4,8 +4,16 @@ import main.Token;
 import main.TokenType;
 import java.util.ArrayList;
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class WhileLoop {
-    private final Expr expression;
+    private final Expr expr;
     private final Body body;
     private final int nestLevel;
 
@@ -16,7 +24,7 @@ public class WhileLoop {
      * @param body TODO
      */
     public WhileLoop(int nestLevel, Expr expr, Body body) {
-        this.expression = expr;
+        this.expr = expr;
         this.body = body;
         this.nestLevel = nestLevel;
     }
@@ -113,12 +121,12 @@ public class WhileLoop {
      * @return TODO
      */
     public String convertToJott() {
-        String SPACE = "\t".repeat(this.nestLevel -1);
+        String space = "\t".repeat(this.nestLevel -1);
 
         String jottString = "\t".repeat(0) +
                 "while [ " +
-                this.expression.convertToJott() + " ] { \n" +
-                body.convertToJott() + SPACE + "}\n";
+                this.expr.convertToJott() + " ] { \n" +
+                body.convertToJott() + space + "}\n";
         return jottString;
     }
 

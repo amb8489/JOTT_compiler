@@ -16,19 +16,18 @@ public class AsmtStmt {
 
     private final Type type;
     private final Identifier identifier;
-    private final Expr expression;
+    private final Expr expr;
 
     /**
      * This is the constructor for AsmtStmt.
-     * @param nestLevel TODO: is this necessary?
      * @param type TODO: blah
      * @param identifier TODO: blah
-     * @param expression TODO: blah
+     * @param expr TODO: blah
      */
-    public AsmtStmt(int nestLevel, Type type, Identifier identifier, Expr expression) { // TODO: is nestLevel necessary?
+    public AsmtStmt(Type type, Identifier identifier, Expr expr) {
         this.type = type;
         this.identifier = identifier;
-        this.expression = expression;
+        this.expr = expr;
     }
 
     /**
@@ -44,7 +43,7 @@ public class AsmtStmt {
         }
 
         jottString.append(String.format("%s = ", identifier.convertToJott()));
-        jottString.append(String.format("%s;\n", expression.convertToJott()));
+        jottString.append(String.format("%s;\n", expr.convertToJott()));
 
         return jottString.toString();
     }
@@ -52,7 +51,6 @@ public class AsmtStmt {
     /**
      * TODO: blah
      * @param tokens TODO: blah
-     * @param nestLevel TODO: blah
      * @return TODO: blah
      * @throws ParsingException TODO: blah
      */
@@ -111,11 +109,10 @@ public class AsmtStmt {
         TOKEN_IDX.index++;
 
         // if successful assignment statement
-        if(Type.isType(typeToken)){
-            return new AsmtStmt(nestLevel, type, id, expr);
-
+        if (Type.isType(typeToken)) {
+            return new AsmtStmt(type, id, expr);
         }
-        return new AsmtStmt(nestLevel, null, id, expr);
+        return new AsmtStmt(null, id, expr);
     }
 
     /**
@@ -125,11 +122,11 @@ public class AsmtStmt {
     public boolean validateTree() throws ParsingException {
 
         //TODO
-        // check that expr is good aka that funtion return types are = to expr type
+        // check that expr is good aka that function return types are = to expr type
         // and that vars in the expr 1) exist and 2) are the type of the expr type
         // check that ids for vars are ok use Identifier.check(identifier.id);
 
-        expression.validateTree();
+        expr.validateTree();
 
         // 1) check that id for var is good
         Identifier.check(identifier.id);
@@ -137,17 +134,17 @@ public class AsmtStmt {
         // 2) check if we are looking at a : type id = expr  __OR__   id = expr
 
         // 2) if we have : type id = val;
-        if(type != null) {
+        if (type != null) {
 
             // check that we havet already defined this var ??????????????? scope??????
             if (!ValidateTable.variables.containsKey(identifier.convertToJott())) {
 
                 // see that type of left = type of right
 
-                if (type.type.equals(expression.type)) {
+                if (type.type.equals(expr.type)) {
                     ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
                         add(type.type);
-                        add(expression.convertToJott());
+                        add(expr.convertToJott());
                     }});
                     return true;
                 }
@@ -155,36 +152,31 @@ public class AsmtStmt {
 
                 // Failure
                 throw new ParsingException(String.format("var %s assigned wrong type: line %d", identifier.convertToJott(), identifier.id.getLineNum()));
-
-            }else {
+            } else {
                 throw new ParsingException(String.format("var %s dose already exist: line %d",identifier.convertToJott(),identifier.id.getLineNum()));
-
             }
-        }
-        // ELSE if we have:    id = val;
-        else{
 
+        } else {
+            // ELSE if we have:    id = val;
 
             // updating value already in table
 
             //1) check that the var in question exists
-            String Varid = identifier.convertToJott();
-            if (!ValidateTable.variables.containsKey(Varid)){
-                throw new ParsingException(String.format("var %s dose not exist: line %d",Varid,identifier.id.getLineNum()));
+            String variableId = identifier.convertToJott();
+            if (!ValidateTable.variables.containsKey(variableId)){
+                throw new ParsingException(String.format("var %s dose not exist: line %d", variableId, identifier.id.getLineNum()));
             }
 
-            //2) get type var tpye and check its being assigned the same type
-            // get type var tpye and check its being assigned the same type
+            //2) get type var type and check its being assigned the same type
+            // get type var type and check its being assigned the same type
             String varType = ValidateTable.variables.get(identifier.convertToJott()).get(0);
 
-            if(expression.type.equals(varType)) {
-
-                    ValidateTable.variables.get(identifier.convertToJott()).set(1, expression.convertToJott());
+            if (expr.type.equals(varType)) {
+                ValidateTable.variables.get(identifier.convertToJott()).set(1, expr.convertToJott());
                 return true;
             }
-
             // Failure
-            throw new ParsingException(String.format("var %s assigned wrong type: line %d",Varid,identifier.id.getLineNum()));
+            throw new ParsingException(String.format("var %s assigned wrong type: line %d", variableId, identifier.id.getLineNum()));
 
         }
     }

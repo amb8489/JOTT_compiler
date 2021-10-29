@@ -3,19 +3,21 @@ package grammar;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class ValidateTable {
-
 
     // name ---> [type,value]     val is null for un initialized vars
     public static HashMap<String, ArrayList<String>> variables = new HashMap<>();
 
-
-    // name ---> [ReturnType, params.. ]     params = tpye
-
+    // name ---> [ReturnType, params.. ]     params = type
     public static HashMap<String, ArrayList<String>> functions = new HashMap<>();
-
-
-
 
     public static void clearTables(){
         variables.clear();

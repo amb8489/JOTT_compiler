@@ -14,33 +14,50 @@ import java.util.ArrayList;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class IfStmt {
-    private final Expr expression;
+    private final Expr expr;
     private final Body body1;
     private Body body2;
     private final ArrayList<ElseifStmt> elseIfStatements;
     private final int nestLevel;
     public boolean hasGuaranteedReturn;
 
-    public IfStmt(Expr expression,
+    /**
+     * Constructor
+     * @param expr
+     * @param body1
+     * @param elseIfStatements
+     * @param nestLevel
+     * @param hasGuaranteedReturn
+     */
+    public IfStmt(Expr expr,
                       Body body1,
                       ArrayList<ElseifStmt> elseIfStatements,
                       int nestLevel,
                       boolean hasGuaranteedReturn) {
-        this.expression = expression;
+        this.expr = expr;
         this.body1 = body1;
         this.elseIfStatements = elseIfStatements;
         this.nestLevel = nestLevel;
         this.hasGuaranteedReturn = hasGuaranteedReturn;
     }
 
-    public IfStmt(Expr expression,
+    /**
+     * Constructor
+     * @param expr TODO
+     * @param body1 TODO
+     * @param body2 TODO
+     * @param elseIfStatements TODO
+     * @param nestLevel TODO
+     * @param hasGuaranteedReturn TODO
+     */
+    public IfStmt(Expr expr,
                       Body body1,
                       Body body2,
                       ArrayList<ElseifStmt> elseIfStatements,
                       int nestLevel,
                       boolean hasGuaranteedReturn) {
 
-        this.expression = expression;
+        this.expr = expr;
         this.body1 = body1;
         this.elseIfStatements = elseIfStatements;
         this.body2 = body2;
@@ -53,7 +70,7 @@ public class IfStmt {
         String SPACE = "\t".repeat(this.nestLevel -1);
 
         jstr.append("if [ ");
-        jstr.append(this.expression.convertToJott() + " ] { \n");
+        jstr.append(this.expr.convertToJott() + " ] { \n");
         jstr.append(body1.convertToJott() +SPACE+ "}");
 
         if (elseIfStatements != null){

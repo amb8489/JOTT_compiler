@@ -2,7 +2,6 @@ package grammar;
 
 import main.Token;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Description
@@ -26,18 +25,17 @@ public class Program implements JottTree {
     /**
      * TODO
      * @param tokens TODO
-     * @param nestlevel TODO
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static Program parseProgram(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
+    public static Program parseProgram(ArrayList<Token> tokens) throws ParsingException {
         //System.out.println("------------------------PARSING program------------------------");
         TOKEN_IDX.reset();
         ValidateTable.clearTables();
 
-        FunctionList funclst = FunctionList.parseFunctionList(tokens, 0);
+        FunctionList functionList = FunctionList.parseFunctionList(tokens, 0);
 
-        return new Program(funclst);
+        return new Program(functionList);
     }
 
     /**

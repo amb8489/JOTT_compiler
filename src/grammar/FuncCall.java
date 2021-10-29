@@ -16,8 +16,6 @@ public class FuncCall {
     Token token; // function name
     Params parameters; // function parameters
 
-    // ---------------------------constructor----------------------------------------
-
     /**
      * Constructor TODO
      * @param token TODO

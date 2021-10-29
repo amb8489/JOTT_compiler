@@ -80,7 +80,7 @@ public class FunctionList {
             // setting function id and its return type
 
             ValidateTable.functions.put(function.id.convertToJott(),new ArrayList<>() {
-                {add(function.return_tpye.type);}});
+                {add(function.returnType.type);}});
 
             // setting function params
             if(function.funcDefParams !=null) {

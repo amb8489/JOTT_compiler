@@ -13,14 +13,15 @@ import java.util.ArrayList;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class Expr {
-    public Expr expression;
+    public Expr expr;
     public String type;
+
     /**
      * Constructor TODO
-     * @param expression TODO
+     * @param expr TODO
      */
-    public Expr(Expr expression,String type) {
-        this.expression = expression;
+    public Expr(Expr expr, String type) {
+        this.expr = expr;
         this.type = type;
     }
 
@@ -37,36 +38,36 @@ public class Expr {
         // ---------------------------looking for numExpr (int or dbl)----------------------------------------
 
         if (tokens.get(TOKEN_IDX.index + 1).getTokenType() != TokenType.REL_OP) {
-            NumExpr Exp = NumExpr.parseNumExpr(tokens, nestLevel);
+            NumExpr numExpr = NumExpr.parseNumExpr(tokens, nestLevel);
 
-            if (Exp != null) {
-                return new Expr(Exp, Exp.ExpType);
+            if (numExpr != null) {
+                return new Expr(numExpr, numExpr.expType);
             }
 
-            // ---------------------------looking for s_expr (string expr)----------------------------------------
+            // ---------------------------looking for sExpr (string expr)----------------------------------------
 
             // if string lit id or funcion call
-            Expr s_expr = SExpr.parseSExpr(tokens, nestLevel);
-            if (s_expr != null) {
-                return new Expr(s_expr,"String");
+            Expr sExpr = SExpr.parseSExpr(tokens, nestLevel);
+            if (sExpr != null) {
+                return new Expr(sExpr,"String");
             }
         }
-        // ---------------------------looking for b_expr (bool expr)----------------------------------------
+        // ---------------------------looking for bExpr (bool expr)----------------------------------------
 
-        Expr b_expr = BExpr.parseBExpr(tokens, nestLevel);
-        if (b_expr != null) {
-            return new Expr(b_expr,"Boolean");
+        Expr bExpr = BExpr.parseBExpr(tokens, nestLevel);
+        if (bExpr != null) {
+            return new Expr(bExpr,"Boolean");
         }
 
 
         // ---------------------------error :( no valid expr found----------------------------------------
 
         Token t = tokens.get(TOKEN_IDX.index);
-        StringBuilder sb = new StringBuilder();
-        sb.append("Syntax error\nInvalid token. Expected Expr. Got: ");
-        sb.append(t.getTokenType().toString()).append("\n");
-        sb.append(t.getFilename() + ":" + t.getLineNum());
-        throw new ParsingException(sb.toString());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Syntax error\nInvalid token. Expected Expr. Got: ");
+        stringBuilder.append(t.getTokenType().toString()).append("\n");
+        stringBuilder.append(t.getFilename() + ":" + t.getLineNum());
+        throw new ParsingException(stringBuilder.toString());
 
     }
 
@@ -75,7 +76,7 @@ public class Expr {
      * @return TODO
      */
     public String convertToJott() {
-        return expression.convertToJott();
+        return expr.convertToJott();
     }
 
     /**

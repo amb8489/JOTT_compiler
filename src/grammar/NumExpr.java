@@ -16,23 +16,23 @@ import java.util.ArrayList;
 public class NumExpr extends Expr {
 
     public FuncCall functionCall;
-    public NumType num;
+    public NumType numType;
     public Token mathOp;
-    public ArrayList<NumExpr> finalexp;
-    public String ExpType;
+    public ArrayList<NumExpr> finalExpression;
+    public String expType;
     // ---------------------- constructors for different cases --------------------------------
 
-    public NumExpr(NumType num, Token mathOp) {
+    public NumExpr(NumType numType, Token mathOp) {
         super(null,null);
-        this.num = num;
+        this.numType = numType;
         this.mathOp = mathOp;
         this.functionCall = null;
     }
 
-    public NumExpr(NumType num) {
+    public NumExpr(NumType numType) {
         super(null,null);
 
-        this.num = num;
+        this.numType = numType;
         this.mathOp = null;
         this.functionCall = null;
 
@@ -40,7 +40,7 @@ public class NumExpr extends Expr {
 
     public NumExpr(FuncCall call, Token mathOp) {
         super(null,null);
-        this.num = null;
+        this.numType = null;
 
         this.functionCall = call;
         this.mathOp = mathOp;
@@ -48,9 +48,9 @@ public class NumExpr extends Expr {
 
     public NumExpr(ArrayList<NumExpr> finalExp,String ExpType) {
         super(null,null);
-        this.finalexp = finalExp;
-        this.ExpType = ExpType;
-        this.num = null;
+        this.finalExpression = finalExp;
+        this.expType = ExpType;
+        this.numType = null;
     }
 
 
@@ -128,8 +128,8 @@ public class NumExpr extends Expr {
 
 
         for(NumExpr exp : expLst){
-            if (exp.num != null && exp.num.getNumType() != null) {
-                if (!exp.num.numType.equals("Integer")) {
+            if (exp.numType != null && exp.numType.getNumType() != null) {
+                if (!exp.numType.numType.equals("Integer")) {
                     isINTexp = false;
                     break;
                 }
@@ -139,8 +139,8 @@ public class NumExpr extends Expr {
         if(!isINTexp){
             int i = 0;
             for(NumExpr exp : expLst){
-                if (exp.num != null && exp.num.getNumType() != null) {
-                    if (!exp.num.numType.equals("Double")) {
+                if (exp.numType != null && exp.numType.getNumType() != null) {
+                    if (!exp.numType.numType.equals("Double")) {
                         isINTexp = true;
                         break;
                     }
@@ -150,7 +150,7 @@ public class NumExpr extends Expr {
             }
             if (isINTexp){
 
-                throw new ParsingException("expression with int op double not allowed, line: "+expLst.get(i).num.number.getLineNum());
+                throw new ParsingException("expression with int op double not allowed, line: "+expLst.get(i).numType.number.getLineNum());
             }
         }
         NumExpr b = new NumExpr(expLst,null);
@@ -166,13 +166,13 @@ public class NumExpr extends Expr {
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
 
-        for (NumExpr n : finalexp) {
-            if (n.num != null && n.mathOp != null) {
-                jstr.append(n.num.convertToJott() + " " + n.mathOp.getToken() + " ");
+        for (NumExpr n : finalExpression) {
+            if (n.numType != null && n.mathOp != null) {
+                jstr.append(n.numType.convertToJott() + " " + n.mathOp.getToken() + " ");
             } else if (n.functionCall != null && n.mathOp != null) {
                 jstr.append(n.functionCall.convertToJott() + " " + n.mathOp.getToken() + " ");
             } else if (n.functionCall == null && n.mathOp == null) {
-                jstr.append(n.num.convertToJott() + " ");
+                jstr.append(n.numType.convertToJott() + " ");
             } else if (n.functionCall != null) {
                 jstr.append(n.functionCall.convertToJott() + " ");
             }

@@ -17,7 +17,7 @@ public class FunctionDef  {
     public Identifier id;
     public final FuncDefParams funcDefParams;
     private final Body body;
-    public final Type return_tpye;
+    public final Type returnType;
     private final int nestLevel;
 
     /**
@@ -25,14 +25,14 @@ public class FunctionDef  {
      * @param identifier TODO
      * @param funcDefParams TODO
      * @param body TODO
-     * @param return_tpye TODO
+     * @param returnType TODO
      * @param nestLevel TODO
      */
-    public FunctionDef(Identifier identifier, FuncDefParams funcDefParams, Body body, Type return_tpye, int nestLevel) {
+    public FunctionDef(Identifier identifier, FuncDefParams funcDefParams, Body body, Type returnType, int nestLevel) {
         this.id = identifier;
         this.funcDefParams = funcDefParams;
         this.body = body;
-        this.return_tpye = return_tpye;
+        this.returnType = returnType;
         this.nestLevel = nestLevel;
     }
 
@@ -54,45 +54,45 @@ public class FunctionDef  {
 
         //System.out.println("    found id:" + id.getToken());
         // ---------------------------look for [ -----------------------------
-        Token lbrac = tokens.get(TOKEN_IDX.index);
-        //System.out.println("    found [???:" + lbrac.getToken());
+        Token leftBracketToken = tokens.get(TOKEN_IDX.index);
+        //System.out.println("    found [???:" + leftBracketToken.getToken());
 
-        if (lbrac.getTokenType() != TokenType.L_BRACKET) {
+        if (leftBracketToken.getTokenType() != TokenType.L_BRACKET) {
             //System.out.println("TODO ERROR 99");
         }
         TOKEN_IDX.index++;
 
 
-        // ---------------------------look for func_def_params ---------------
+        // ---------------------------look for funcDefParams ---------------
 
-        FuncDefParams func_def_params = FuncDefParams.parseFunctionDefParams(tokens, nestlevel);
-        if (func_def_params == null) {
+        FuncDefParams funcDefParams = FuncDefParams.parseFunctionDefParams(tokens, nestlevel);
+        if (funcDefParams == null) {
             //System.out.println("empty params");
         }
 
 
         // ---------------------------look for ] -----------------------------
-        Token rbrac = tokens.get(TOKEN_IDX.index);
+        Token rightBracketToken = tokens.get(TOKEN_IDX.index);
 
-        if (rbrac.getTokenType() != TokenType.R_BRACKET) {
+        if (rightBracketToken.getTokenType() != TokenType.R_BRACKET) {
             //System.out.println("TODO ERROR 2");
         }
-        //System.out.println("found rbrac ? --> " + rbrac.getToken());
+        //System.out.println("found rightBracketToken ? --> " + rightBracketToken.getToken());
 
         TOKEN_IDX.index++;
 
         // ---------------------------look for : -----------------------------
-        Token col = tokens.get(TOKEN_IDX.index);
+        Token colonToken = tokens.get(TOKEN_IDX.index);
 
-        if (col.getTokenType() != TokenType.COLON) {
+        if (colonToken.getTokenType() != TokenType.COLON) {
             //System.out.println("TODO ERROR 3");
         }
         TOKEN_IDX.index++;
-        //System.out.println("found colon --> " + col.getToken());
+        //System.out.println("found colon --> " + colonToken.getToken());
 
         // ---------------------------look for function return AKA type or void -----------------------------
 
-        Type retrn = Type.parseFReturnStmt(tokens, nestlevel);
+        Type retrn = Type.parseFReturnStmt(tokens);
         //System.out.println("found return --> " + retrn.convertToJott());
 
         if (retrn == null) {
@@ -113,13 +113,15 @@ public class FunctionDef  {
 
         // ---------------------------look for body stmt -----------------------------
 
-        Body bdy = Body.ParseBody(tokens, nestlevel+1);
+        Body body = Body.ParseBody(tokens, nestlevel+1);
 
-        if (bdy == null) {
+        /**
+        if (body == null) {
             //System.out.println("found empty body");
         } else {
-            //System.out.println("Found body --> " + bdy.convertToJott());
+            //System.out.println("Found body --> " + body.convertToJott());
         }
+         **/
 
         // ---------------------------look for } -----------------------------
 
@@ -132,7 +134,7 @@ public class FunctionDef  {
         //System.out.println("Found } --> " + R_BRACE.getToken());
         TOKEN_IDX.index++;
 
-        return new FunctionDef(new Identifier(id), func_def_params, bdy, retrn ,nestlevel);
+        return new FunctionDef(new Identifier(id), funcDefParams, body, retrn ,nestlevel);
     }
     public boolean validateJott() {
         return false;
@@ -164,7 +166,7 @@ public class FunctionDef  {
 
         String SPACE = "    ".repeat(this.nestLevel);
         jstr.append(SPACE+ id.convertToJott()+ " [ " + funcP+" ] ");
-        jstr.append(" : " + return_tpye.convertToJott()+" { \n" + bod + SPACE+"}");
+        jstr.append(" : " + returnType.convertToJott()+" { \n" + bod + SPACE+"}");
 
         return jstr.toString();
     }
@@ -180,7 +182,7 @@ public class FunctionDef  {
 
 
         // if return type is INT DOUBLE STRING BOOL
-        if (!this.return_tpye.type.equals("Void")){
+        if (!this.returnType.type.equals("Void")){
             if (this.body.hasGuaranteedReturnFromIf || this.body.hasReturn != null){
                 return true;
             }

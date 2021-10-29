@@ -5,8 +5,16 @@ import main.TokenType;
 
 import java.util.ArrayList;
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class Type {
-    String type = null;
+    String type;
     String filename;
     int lineNumber;
 
@@ -28,24 +36,23 @@ public class Type {
      * @return TODO
      */
     public static boolean isType(Token token) {
-        String t = token.getToken();
-        return t.equals("Integer") ||
-                t.equals("Double") ||
-                t.equals("Boolean") ||
-                t.equals("String");
+        String tokenString = token.getToken();
+        return tokenString.equals("Integer") ||
+                tokenString.equals("Double") ||
+                tokenString.equals("Boolean") ||
+                tokenString.equals("String");
     }
 
     /**
      * TODO
      * @param tokens TODO
-     * @param nestLevel TODO
      * @return TODO
      */
-    public static Type parseFReturnStmt(ArrayList<Token> tokens, int nestLevel) {
+    public static Type parseFReturnStmt(ArrayList<Token> tokens) {
         Token funcReturnType = tokens.get(TOKEN_IDX.index);
-        if ( isType(funcReturnType) || funcReturnType.getToken().equals("Void")) {
+        if (isType(funcReturnType) || funcReturnType.getToken().equals("Void")) {
             TOKEN_IDX.index++;
-            return new Type(funcReturnType.getToken(),funcReturnType.getFilename(),funcReturnType.getLineNum());
+            return new Type(funcReturnType.getToken(), funcReturnType.getFilename(), funcReturnType.getLineNum());
         }
             return null;
 
@@ -54,11 +61,10 @@ public class Type {
     /**
      * TODO
      * @param tokens TODO
-     * @param nestLevel TODO
      * @return TODO
      * @throws ParsingException TODO
      */
-    public Type ParseType(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public Type ParseType(ArrayList<Token> tokens) throws ParsingException {
         //System.out.println("-------------------PARSING TYPE-----------------");
 
 
@@ -73,10 +79,10 @@ public class Type {
         }
         // ---------------------- error what was passed in not a valid type ---------
 
-        String sb = "Syntax error\nInvalid token. Expected Integer||Double||String||Boolean. Got: " +
+        String string = "Syntax error\nInvalid token. Expected Integer||Double||String||Boolean. Got: " +
                 typeToken.getTokenType().toString() + "\n" +
                 typeToken.getFilename() + ":" + typeToken.getLineNum();
-        throw new ParsingException(sb);
+        throw new ParsingException(string);
     }
 
     /**

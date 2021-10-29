@@ -7,6 +7,14 @@ import java.util.ArrayList;
 
 // s_expr -> str_literal|id|func_call
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class SExpr extends Expr {
     private final Token stringLiteral;
     private final Token token;

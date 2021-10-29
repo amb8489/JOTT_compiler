@@ -2,8 +2,6 @@ package grammar;
 
 import main.Token;
 
-import java.util.ArrayList;
-
 /**
  * Description
  *
@@ -15,31 +13,33 @@ import java.util.ArrayList;
 public class NumType {
 
     public String numType;
-    public double Dnum;
-    public int Inum;
+    public double doubleNumber;
+    public int integerNumber;
     public Token number;
 
 
 
     public NumType(Token num) {
         this.number = num;
+        String string = num.getToken();
 
-
-        String str = num.getToken();
-
+        // is this a double?
         try {
-            double v = Double.parseDouble(str);
+            double number = Double.parseDouble(string);
             this.numType = "Double";
-            this.Dnum = v;
+            this.doubleNumber = number;
         } catch (NumberFormatException ignored) {
+            // hmm, so this must be something else
         }
 
+        // is this an integer?
         try {
-            int v = Integer.parseInt(str);
+            int number = Integer.parseInt(string);
             this.numType = "Integer";
-            this.Inum = v;
+            this.integerNumber = number;
 
         } catch (NumberFormatException ignored) {
+            // hmm, so this must be something else
         }
     }
 

@@ -14,18 +14,18 @@ import java.util.ArrayList;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class ElseifStmt {
-    private final Expr expression;
+    private final Expr expr;
     private final Body body;
     private final int nestLevel;
 
     /**
      * Constructor
-     * @param expression TODO
+     * @param expr TODO
      * @param body TODO
      * @param nestLevel TODO
      */
-    public ElseifStmt(Expr expression, Body body, int nestLevel) {
-        this.expression = expression;
+    public ElseifStmt(Expr expr, Body body, int nestLevel) {
+        this.expr = expr;
         this.body = body;
         this.nestLevel = nestLevel;
     }
@@ -156,7 +156,7 @@ public class ElseifStmt {
         String SPACE = "    ".repeat(this.nestLevel -1);
 
         String jottString = "elseif[ " +
-                expression.convertToJott() + "]{ \n" +
+                expr.convertToJott() + "]{ \n" +
                 body.convertToJott() + SPACE + "}";
         return jottString;
     }

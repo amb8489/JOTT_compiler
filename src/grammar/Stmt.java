@@ -8,8 +8,16 @@ import java.util.ArrayList;
 
 // stmt -> asmt|var_dec|func_call ;                                                                          <-- DONE
 
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class Stmt {
-    AsmtStmt asmt;
+    AsmtStmt asmtStmt;
     VarDec varDec;
     FuncCall funcCall;
     int nestLevel;
@@ -17,13 +25,13 @@ public class Stmt {
     /**
      * Constructor TODO
      * @param nestLevel TODO
-     * @param asmt TODO
+     * @param asmtStmt TODO
      * @param varDec TODO
      * @param funcCall TODO
      */
-    public Stmt(int nestLevel, AsmtStmt asmt, VarDec varDec, FuncCall funcCall) {
+    public Stmt(int nestLevel, AsmtStmt asmtStmt, VarDec varDec, FuncCall funcCall) {
         this.nestLevel = nestLevel;
-        this.asmt = asmt;
+        this.asmtStmt = asmtStmt;
         this.varDec = varDec;
         this.funcCall = funcCall;
     }
@@ -38,16 +46,16 @@ public class Stmt {
     public static Stmt parseStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         //System.out.println("-------------------PARSING STMT------------------");
 
-        //----------------------------trying asmt TODO HERE ISSUE
+        //----------------------------trying asmtStmt TODO HERE ISSUE
         TOKEN_IDX.saveTokenIndex();
 
         //System.out.println("Statment first again::::" + tokens.get(TOKEN_IDX.index).getToken());
 
-        AsmtStmt asmt = AsmtStmt.parseAsmtStmt(tokens, nestLevel);
+        AsmtStmt asmtStmt = AsmtStmt.parseAsmtStmt(tokens, nestLevel);
 
-        if (asmt != null) {
+        if (asmtStmt != null) {
             TOKEN_IDX.popRestore();
-            return new Stmt(nestLevel, asmt, null, null);
+            return new Stmt(nestLevel, asmtStmt, null, null);
         } else {
             TOKEN_IDX.restoreTokenIndex();
         }
@@ -75,17 +83,17 @@ public class Stmt {
 
             FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel);
             if(funcCall != null){
-            // ---------------------- check for end statment ------------------------------------
+            // ---------------------- check for end statement ------------------------------------
 
             //check for ;
             Token endStmt = tokens.get(TOKEN_IDX.index);
 
             if (endStmt.getTokenType() != TokenType.SEMICOLON) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Syntax error\nInvalid token. Expected ;. Got: ");
-                sb.append(endStmt.getTokenType().toString()).append("\n");
-                sb.append(endStmt.getFilename() + ":" + endStmt.getLineNum());
-                throw new ParsingException(sb.toString());
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Syntax error\nInvalid token. Expected ;. Got: ");
+                stringBuilder.append(endStmt.getTokenType().toString()).append("\n");
+                stringBuilder.append(endStmt.getFilename() + ":" + endStmt.getLineNum());
+                throw new ParsingException(stringBuilder.toString());
             }
             TOKEN_IDX.index++;
 
@@ -106,7 +114,7 @@ public class Stmt {
      * @return TODO
      */
     public String convertToJott() {
-        if (asmt != null) { return asmt.convertToJott(); }
+        if (asmtStmt != null) { return asmtStmt.convertToJott(); }
         if (varDec != null) { return varDec.convertToJott(); }
         if (funcCall != null) { return funcCall.convertToJott() + ";"; }
         return null;
@@ -117,8 +125,7 @@ public class Stmt {
      * @return TODO
      */
     public boolean validateTree() throws ParsingException {
-
-        if (asmt != null) { return asmt.validateTree(); }
+        if (asmtStmt != null) { return asmtStmt.validateTree(); }
         if (varDec != null) { return varDec.validateTree(); }
         if (funcCall != null) { return funcCall.validateTree(); }
         return true;

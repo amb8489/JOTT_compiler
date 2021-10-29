@@ -19,20 +19,26 @@ import java.util.ArrayList;
  */
 public class Params {
 
-    private Expr expression;
+    private Expr expr;
     boolean hasComma = false;
     ArrayList<Params> paramsList = null;
 
 
-    // ---------------------- cconstructors --------------------------------
-
-    public Params(Expr expression, boolean hasComma) {
-        this.expression = expression;
+    /**
+     * Constructor
+     * @param expr
+     * @param hasComma
+     */
+    public Params(Expr expr, boolean hasComma) {
+        this.expr = expr;
         this.hasComma = hasComma;
     }
 
+    /**
+     * Constructor
+     * @param params
+     */
     public Params(ArrayList<Params> params) {
-
         this.paramsList = params;
     }
 
@@ -43,17 +49,17 @@ public class Params {
 
         // ---------------------- list of params --------------------------------
 
-        ArrayList<Params> list_of_params = new ArrayList<>();
+        ArrayList<Params> listOfParams = new ArrayList<>();
 
 
         // ---------------------- check for empty list  (epsilon)----------------
 
         // check for next token == ], this means no params
-        Token first = tokens.get(TOKEN_IDX.index);
+        Token firstToken = tokens.get(TOKEN_IDX.index);
         //System.out.println("    1st:" + first.getToken());
 
         // epsilon case
-        if (first.getTokenType() == TokenType.R_BRACKET) {
+        if (firstToken.getTokenType() == TokenType.R_BRACKET) {
             return null;
         }
 
@@ -61,26 +67,26 @@ public class Params {
         // ---------------------- check for expr ------------------------------------
 
         // looking for expr
-        Expr exp = Expr.parseExpr(tokens, nestLevel);
+        Expr expr = Expr.parseExpr(tokens, nestLevel);
         //System.out.println("    2nd- expr found :" + exp.convertToJott());
-        list_of_params.add(new Params(exp, false));
+        listOfParams.add(new Params(expr, false));
 
 
         // ---------------------- checking for more params, comma started-----------------------
 
-        Token comma = tokens.get(TOKEN_IDX.index);
-        while (comma.getTokenType() == TokenType.COMMA) {
+        Token commaToken = tokens.get(TOKEN_IDX.index);
+        while (commaToken.getTokenType() == TokenType.COMMA) {
             //System.out.println("        looking for new param:" + comma.getToken());
             TOKEN_IDX.index++;
 
             // ---------------------- check for expr ------------------------------------
 
-            exp = Expr.parseExpr(tokens, nestLevel);
-            list_of_params.add(new Params(exp, true));
+            expr = Expr.parseExpr(tokens, nestLevel);
+            listOfParams.add(new Params(expr, true));
 
             // ---------------------- check for , and look for more ----------------------
 
-            comma = tokens.get(TOKEN_IDX.index);
+            commaToken = tokens.get(TOKEN_IDX.index);
 
 
             //System.out.println("        new param found:" + exp.convertToJott());
@@ -90,32 +96,26 @@ public class Params {
         //System.out.println("        looking DONE:" + comma.getToken());
         // ---------------------- done ------------------------------------
 
-        return list_of_params;
+        return listOfParams;
     }
 
     public static Params parseParams(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        ArrayList<Params> f = parseParams_r(tokens, nestLevel);
-        if (f == null) {
-            return null;
-        }
-        Params p = new Params(f);
+        ArrayList<Params> params = parseParams_r(tokens, nestLevel);
+        if (params == null) { return null; }
         //System.out.println("->>>" + p.convertToJott() + "<<<-");
-        return p;
+        return new Params(params);
 
     }
 
     public String convertToJott() {
-        StringBuilder jstr = new StringBuilder();
+        StringBuilder jottString = new StringBuilder();
 
-        for (Params par : paramsList) {
-            if (par.hasComma) {
-                jstr.append(",");
-            }
-            jstr.append(par.expression.convertToJott() );
+        for (Params param : paramsList) {
+            if (param.hasComma) { jottString.append(","); }
+            jottString.append(param.expr.convertToJott() );
         }
 
-
-        return jstr.toString();
+        return jottString.toString();
     }
     public boolean validateTree() {
         return false;

@@ -3,26 +3,31 @@ package grammar;
 
 import main.Token;
 import main.TokenType;
-
 import java.util.ArrayList;
 
 //     return_stmt -> return expr end_stmt
+
+/**
+ * Description
+ *
+ * @author Aaron Berghash (amb8489@rit.edu)
+ * @author Connor Switenky (cs4331@rit.edu)
+ * @author Jake Peverly (jzp7326@rit.edu)
+ * @author Kaitlyn DeCola (kmd8594@rit.edu)
+ */
 public class ReturnStmt  {
-    private final Expr expression;
+    private final Expr expr;
 
     /**
      * Constructor TODO
-     * @param nestLevel TODO
      * @param expression TODO
      */
-    public ReturnStmt(int nestLevel, Expr expression) {
-        this.expression = expression;
+    public ReturnStmt(Expr expression) {
+        this.expr = expression;
     }
 
     public String convertToJott() {
-        String jottString = "\t".repeat(0) +
-                "return " +
-                expression.convertToJott() + ";\n";
+        String jottString = "\t".repeat(0) + "return " + expr.convertToJott() + ";\n";
         return jottString;
     }
 
@@ -55,7 +60,7 @@ public class ReturnStmt  {
         // ---------------------- DONE ------------------------------------
 
         //System.out.println("return found: return " + expr.convertToJott());
-        return new ReturnStmt(nestLevel, expr);
+        return new ReturnStmt(expr);
 
     }
     public boolean validateTree() {
