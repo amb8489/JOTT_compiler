@@ -12,6 +12,10 @@ boo[y:Integer]:Double{
 
 main[]:Integer{
     Integer x ;
+
+    Integer v = 0;
+    Double b = 0.0;
+
 	print[x];
-	return  x;
+	return  1 + 4 + v + x;
 }

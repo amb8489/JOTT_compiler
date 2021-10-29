@@ -147,7 +147,7 @@ public class AsmtStmt {
                 this.expression.validateTree();
 
 
-                // see that type of left = type of right
+                // see that type of left = type of right for function
 
                 if (type.type.equals(expression.expression.Etype)) {
                     ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
@@ -157,8 +157,15 @@ public class AsmtStmt {
                     return true;
                 }
 
+                // see that type of left = type expr
 
-                // Failure
+                if (type.type.equals(expression.Etype)) {
+                    ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
+                        add(type.type);
+                        add(expression.convertToJott());
+                    }});
+                    return true;
+                }
                 throw new ParsingException(String.format("var %s assigned wrong type: line %d", identifier.convertToJott(), identifier.id.getLineNum()));
 
             }else {
