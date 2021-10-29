@@ -143,15 +143,11 @@ public class AsmtStmt {
             if (!ValidateTable.variables.containsKey(identifier.convertToJott())) {
 
 
-                System.out.println(expression.Etype);
 
                 this.expression.validateTree();
 
-                System.out.println(expression.expression.Etype);
 
                 // see that type of left = type of right
-
-                System.out.println(type.type+" "+expression.expression.Etype);
 
                 if (type.type.equals(expression.expression.Etype)) {
                     ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
