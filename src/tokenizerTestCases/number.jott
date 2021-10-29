@@ -11,3 +11,11 @@ main[]:Integer{
 	}
 	return x;
 }
+
+zoo[x:Integer, b:Double, zz:Double]:String{
+	while[x<10]{
+	    #x = foo[x];
+		print[x];
+	}
+	return x;
+}
