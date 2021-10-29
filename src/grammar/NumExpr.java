@@ -202,8 +202,12 @@ public class NumExpr extends Expr {
             // how many function calls weve seen
             isSingleFunctionCall++;
             // gettting that functions real return type from table
-            String funcType = ValidateTable.functions.get(n.functionCall.name.getToken()).get(0);
 
+            // makes sure function exits
+            if(! ValidateTable.functions.containsKey(n.functionCall.name.getToken())) {
+                throw new ParsingException("use of undefined Function : " + n.functionCall.name.getToken() +" line:"+n.functionCall.name.getLineNum());
+            }
+            String funcType = ValidateTable.functions.get(n.functionCall.name.getToken()).get(0);
             // if its the first func call we've seen set the prev type to this type
             if (PrevFunctionType == null) {
                 PrevFunctionType = funcType;

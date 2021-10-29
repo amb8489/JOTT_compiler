@@ -47,7 +47,6 @@ public class NumType {
 
             // not a num but a var
             if (this.numType==null) {
-                System.out.println("---"+num.getToken());
                 this.isVar = true;
                 this.Vnum = str;
             }
