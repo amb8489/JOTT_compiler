@@ -98,6 +98,11 @@ public class FuncCall {
 
 
         jstr.append(token.getToken() + "[ ");
+
+        if (parameters == null){
+            jstr.append("]");
+            return jstr.toString();
+        }
         jstr.append(parameters.convertToJott() + "]");
 
         return jstr.toString();

@@ -51,9 +51,12 @@ public class FunctionList {
         return new FunctionList(listOfFunctionDefs);
 
     }
-    public boolean ListHasMain(){
+    public boolean ListHasMain() throws ParsingException {
         for(FunctionDef func: this.listOfFunctionDefs){
             if(func.id.convertToJott().equals("main")){
+                if (! func.return_tpye.type.equals("Integer")){
+                    throw new ParsingException("MAIN DOES NOT RETURN INT");
+                }
                 return true;
             }
         }

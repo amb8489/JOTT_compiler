@@ -181,7 +181,7 @@ public class FunctionDef  {
 
         // if return type is INT DOUBLE STRING BOOL
         if (!this.return_tpye.type.equals("Void")){
-            if (this.body.hasGuaranteedReturnFromIf || this.body.hasReturn != null){
+            if ( this.body.hasReturn != null){
                 return true;
             }
             throw new ParsingException("MISSING RETURN in function: "+this.id.convertToJott());
