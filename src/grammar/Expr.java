@@ -88,4 +88,7 @@ public class Expr {
         return expr.validateTree();
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
 }

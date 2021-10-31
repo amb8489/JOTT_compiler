@@ -3,7 +3,6 @@ package grammar;
 import main.Token;
 import main.TokenType;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 
 /**
@@ -19,8 +18,8 @@ public class NumExpr extends Expr {
     public FuncCall functionCall;
     public NumType numType;
     public Token mathOp;
-    public ArrayList<NumExpr> finalExpression;
-    public String expType;
+    public ArrayList<NumExpr> finalExpr;
+    public String exprType;
     // ---------------------- constructors for different cases --------------------------------
 
     public NumExpr(NumType numType, Token mathOp) {
@@ -31,8 +30,7 @@ public class NumExpr extends Expr {
     }
 
     public NumExpr(NumType numType) {
-        super(null,null);
-
+        super(null, null);
         this.numType = numType;
         this.mathOp = null;
         this.functionCall = null;
@@ -40,19 +38,18 @@ public class NumExpr extends Expr {
     }
 
     public NumExpr(FuncCall call, Token mathOp) {
-        super(null,null);
+        super(null, null);
         this.numType = null;
         this.functionCall = call;
         this.mathOp = mathOp;
     }
-
-    public NumExpr(ArrayList<NumExpr> finalExp,String ExpType) {
+    
+    public NumExpr(ArrayList<NumExpr> finalExpr, String ExpType) {
         super(null,null);
-        this.finalExpression = finalExp;
-        this.expType = ExpType;
+        this.finalExpr = finalExpr;
+        this.exprType = ExpType;
         this.numType = null;
     }
-
 
     //i_expr ->            id|int|
     //                    int op int|
@@ -119,13 +116,12 @@ public class NumExpr extends Expr {
         ////System.out.println("-------------------- parsing num expr --------------------");
 
         ArrayList<NumExpr> expLst = parseNumExpr_r(tokens, nestLevel, new ArrayList<NumExpr>());
-        if(expLst == null){
+        if (expLst == null) {
             return null;
         }
 
         boolean isINTexp = true;
-
-
+        
 
         for(NumExpr exp : expLst){
             if (exp.numType != null && exp.numType.getNumType() != null) {
@@ -136,9 +132,9 @@ public class NumExpr extends Expr {
             }
         }
 
-        if(!isINTexp){
+        if (!isINTexp) {
             int i = 0;
-            for(NumExpr exp : expLst){
+            for (NumExpr exp : expLst) {
                 if (exp.numType != null && exp.numType.getNumType() != null) {
                     if (!exp.numType.numType.equals("Double")) {
                         isINTexp = true;
@@ -146,58 +142,119 @@ public class NumExpr extends Expr {
                     }
                 }
                 i++;
-
             }
-            if (isINTexp){
-
-                throw new ParsingException("expression with int op double not allowed, line: "+expLst.get(i).numType.number.getLineNum());
+            if (isINTexp) {
+                throw new ParsingException("expression with int op double not allowed, line: " + expLst.get(i).numType.number.getLineNum());
             }
         }
 
-        String ExpType = isINTexp ? "Integer":"Double";
+        String ExpType = isINTexp ? "Integer" : "Double";
 
 
-        return new NumExpr(expLst,ExpType);
+        return new NumExpr(expLst, ExpType);
     }
 
     @Override
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
 
-        for (NumExpr n : finalExpression) {
+        for (NumExpr n : finalExpr) {
             if (n.numType != null && n.mathOp != null) {
-                jstr.append(n.numType.convertToJott() + " " + n.mathOp.getToken() + " ");
+                jstr.append(n.numType.convertToJott() + "" + n.mathOp.getToken() + "");
             } else if (n.functionCall != null && n.mathOp != null) {
-                jstr.append(n.functionCall.convertToJott() + " " + n.mathOp.getToken() + " ");
+                jstr.append(n.functionCall.convertToJott() + "" + n.mathOp.getToken() + "");
             } else if (n.functionCall == null && n.mathOp == null) {
-                jstr.append(n.numType.convertToJott() + " ");
+                jstr.append(n.numType.convertToJott() + "");
             } else if (n.functionCall != null) {
-                jstr.append(n.functionCall.convertToJott() + " ");
+                jstr.append(n.functionCall.convertToJott() + "");
             }
         }
 
         return jstr.toString();
     }
+
     @Override
     public boolean validateTree() throws ParsingException {
+        // a single function or a change of only functions call can be any type, we dont know yet their so we gotta varify the function type
+        // because int epr will take all single function calls made even if that fuction returns a string itll think it returns an int
 
-        boolean isINTexp = true;
+        // see how many function call are in the expr
+        int isSingleFunctionCall = 0;
 
-        for (NumExpr n : this.finalexp) {
-            System.out.println(n.functionCall);
-            if (n.functionCall != null){
-                if (!ValidateTable.functions.get(n.functionCall.name.getToken()).get(0).equals(this.ExpType)) {
-                    throw new ParsingException("func Wrong type in exp: "+ValidateTable.functions.get(n.functionCall.name.getToken()).get(0));
-                }
+        // keep track of the function call type (its real type looked up in the table)
+        String PrevFunctionType = null;
+
+        // going through all the exprs looking for a lone function call
+        for (NumExpr n : this.finalExpr) {
+
+            // if we have a number or a var then we know its a number expr and can be varified
+            // for int expr or dbl exp below this for loop
+            if (n.functionCall == null) {
+                isSingleFunctionCall = 0;
+                break;
             }
-            if (n.num !=null && n.num.isVar){
-                if (!ValidateTable.variables.get(n.num.Vnum).get(0).equals(this.ExpType)) {
-                    throw new ParsingException("bad var type in exp: "+ValidateTable.variables.get(n.num.Vnum).get(0)+" "+n.num.Vnum);
-                }
-            }
 
+            // how many function calls weve seen
+            isSingleFunctionCall++;
+            // gettting that functions real return type from table
+
+            // makes sure function exits
+            if(! ValidateTable.functions.containsKey(n.functionCall.name.getToken())) {
+                throw new ParsingException("use of undefined Function : " + n.functionCall.name.getToken() +" line:"+n.functionCall.name.getLineNum());
+            }
+            String funcType = ValidateTable.functions.get(n.functionCall.name.getToken()).get(0);
+            // if its the first func call we've seen set the prev type to this type
+            if (PrevFunctionType == null) {
+                PrevFunctionType = funcType;
+            } else
+                // at this point our expr is only made of function falls like foo[] + boo[] +too[]... only functions
+                // all of these function return types should match to be a valid expr
+                if (!funcType.equals(PrevFunctionType)) {
+                    throw new ParsingException("func mis match type: " + ValidateTable.functions.get(n.functionCall.name.getToken()).get(0));
+                }
+        }
+        // if we had an  expr of  function calls that all return types matched then we know that this expr type is really
+        // what we were seeing in the table and not just the assumed catch all int expr for a function
+        if (isSingleFunctionCall > 0) {
+            this.setType(PrevFunctionType);
+            return true;
         }
 
+        // this will varify that function return types match the expr type
+        for (NumExpr n : this.finalExpr) {
+            // this is checked above but im just keeping it for now
+            if (n.functionCall != null) {
+
+                if (!ValidateTable.functions.get(n.functionCall.name.getToken()).get(0).equals(this.exprType)) {
+                    throw new ParsingException("func Wrong type in exp: " + ValidateTable.functions.get(n.functionCall.name.getToken()).get(0));
+                }
+            }
+            // this checks for a var in an expr like : 1 + x that 1) x exists 2) its been init and 3) its type is okay
+
+            // is a var and not a number ex: is x and NOT like 1 or .2
+            if (n.numType != null && n.numType.isVar) {
+
+                ///1) var exits
+
+                if (ValidateTable.variables.containsKey(n.numType.varNumber)) {
+                    ArrayList<String> varProperties = ValidateTable.variables.get(n.numType.varNumber);
+
+                    ///2) var type matches expr type
+                    if (varProperties.get(0).equals(this.exprType)) {
+
+                        ///3) var has been init
+
+                        if (varProperties.get(1) == null) {
+                            throw new ParsingException("use of un-init var: " + n.numType.varNumber + " line:" + n.numType.number.getLineNum());
+                        }
+                    }else {
+                        throw new ParsingException("bad var type in exp: " + ValidateTable.variables.get(n.numType.varNumber).get(0) + " " + n.numType.varNumber);
+                    }
+                } else {
+                    throw new ParsingException("use of undefined var: " + n.numType.varNumber + " line:" + n.numType.number.getLineNum());
+                }
+            }
+        }
 
         return false;
     }

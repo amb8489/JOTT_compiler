@@ -182,19 +182,20 @@ public class FunctionDef  {
 
         // if return type is INT DOUBLE STRING BOOL
         if (!this.returnType.type.equals("Void")){
-            if (this.body.hasReturn != null) {
-                if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expression.type)){
-                    this.body.hasReturn.expression.validateTree();
+            if (this.body.hasReturn != null){
+                if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expression.Etype)){
+                    this.body.hasReturn.expr.validateTree();
                     return true;
                 }
-                throw new ParsingException("RETURNING WRONG TYPE in function: "+this.id.convertToJott()+" "+this.body.hasReturn.expression.type+" "+ValidateTable.functions.get(this.id.convertToJott()).get(0));
+
+                throw new ParsingException("RETURNING WRONG TYPE in function: "+this.id.convertToJott()+" "+this.body.hasReturn.expr.type+" "+ValidateTable.functions.get(this.id.convertToJott()).get(0));
             }
             throw new ParsingException("MISSING RETURN in function: "+this.id.convertToJott());
         } else {
             // VOID HAS NO RETURN
             if (this.body.hasReturn == null && !this.body.hasGuaranteedReturnFromIf){
                 return true;
-            }else{
+            } else {
                 throw new ParsingException("VOID function has return stmt");
             }
 

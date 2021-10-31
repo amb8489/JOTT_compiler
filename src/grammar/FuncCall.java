@@ -95,7 +95,7 @@ public class FuncCall {
         StringBuilder jstr = new StringBuilder();
 
 
-        jstr.append(name.getToken() + "[ ");
+        jstr.append(name.getToken() + "[");
 
         if (parameters == null){
             jstr.append("]");

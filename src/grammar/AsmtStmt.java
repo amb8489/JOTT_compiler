@@ -14,9 +14,9 @@ import main.TokenType;
  */
 public class AsmtStmt {
 
-    private final Type type;
+    public Type type;
     private final Identifier identifier;
-    private final Expr expr;
+    public Expr expr;
 
     /**
      * This is the constructor for AsmtStmt.
@@ -138,9 +138,15 @@ public class AsmtStmt {
             // check that we havet already defined this var ??????????????? scope??????
             if (!ValidateTable.variables.containsKey(identifier.convertToJott())) {
 
-                // see that type of left = type of right
+
+
+                this.expression.validateTree();
+
 
                 if (type.type.equals(expr.type)) {
+                // see that type of left = type of right for function
+
+                if (type.type.equals(expression.expression.Etype)) {
                     ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
                         add(type.type);
                         add(expr.convertToJott());
@@ -148,8 +154,15 @@ public class AsmtStmt {
                     return true;
                 }
 
+                // see that type of left = type expr
 
-                // Failure
+                if (type.type.equals(expr.Etype)) {
+                    ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
+                        add(type.type);
+                        add(expr.convertToJott());
+                    }});
+                    return true;
+                }
                 throw new ParsingException(String.format("var %s assigned wrong type: line %d", identifier.convertToJott(), identifier.id.getLineNum()));
             } else {
                 throw new ParsingException(String.format("var %s dose already exist: line %d",identifier.convertToJott(),identifier.id.getLineNum()));
@@ -170,8 +183,8 @@ public class AsmtStmt {
             // get type var type and check its being assigned the same type
             String varType = ValidateTable.variables.get(identifier.convertToJott()).get(0);
 
-            if (expr.type.equals(varType)) {
-                ValidateTable.variables.get(identifier.convertToJott()).set(1, expr.convertToJott());
+            if (expr.Etype.equals(varType)) {
+                ValidateTable.variables.get(identifier.convertToJott()).set(1, expression.convertToJott());
                 return true;
             }
             // Failure

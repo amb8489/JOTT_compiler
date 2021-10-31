@@ -181,7 +181,7 @@ public class FuncDefParams {
             }
             return functionParameterList.substring(0, functionParameterList.length()-1);
         } else {
-            jottString.append(identifier.convertToJott() + " : " + type.getToken() + functionParameterList+",");
+            jottString.append(identifier.convertToJott() + ":" + type.getToken() + functionParameterList+",");
             return jottString.toString();
         }
     }

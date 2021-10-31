@@ -33,20 +33,20 @@ public class JottTokenizer {
 			{F, ER, ER, ER, ER, ER, ER, 8, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},					// 7  = state
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 8  relOp state
 			{F, ER, ER, ER, ER, ER, ER, 8, ER, ER, ER, ER,  F, F, F, F, F, F, F, ER, F, ER, F},				// 9  < > state
-			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 10  /+-* state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F,23},							// 10  /+-* state
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},     					// 11  ; state
 			{ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, 22, ER, ER, ER, ER, ER, ER, ER, ER, F},	// 12  . state
 			{F, F, F, F, F, F, F, F, F, F, F, F, 12, 13, F, F, F, F, F, F, F, ER, F},     					// 13  0123456789 state
 			{ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, 22, ER, ER, ER, ER, ER, ER, F, ER, F},		// 14  decimal state
-			{F, F, F, F, F, F, F, F, F, F, F, F, F, 15, F, 15, F, F, F, F, F, ER, F},     					// 15  letter state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, 15, F, 15, F, F, F, F, F, ER, F,F},     					// 15  letter state
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},     					// 16  : state
 			{ER, ER, ER, ER, ER, ER, ER, 19,ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, F},		// 17  ! state
 			{18, ER, F, ER, ER, ER, ER, ER, ER, ER, ER, F, ER, 18, ER, 18, ER, ER, 20 ,ER, ER, ER, F},		// 18  " state
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 19  != state
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 20  string state
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, 0, F},     						// 21  error state
-			{F, F, F, F, F, F, F, F, F, F, F, F, F, 22, F, F, F, F, F, F, F, 0, F},							// 22  bad state
-			{10, F, F, F, F, F, F, F, F, F, F, F, 12, 13, F, F, F, F, F, F, F, ER}};     					// 23  helper
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, 22, F, F, F, F, F, F, F, 0, F,22},							// 22  bad state
+			{10, F, F, F, F, F, F, F, F, F, F, F, 12, 13, F, F, F, F, F, F, F, ER,22}};     					// 23  helper
 
 	// look up table is used to map chars to their respective class in the dfa
 	private static final Map<String, Integer> lookUpTable =
@@ -89,7 +89,7 @@ public class JottTokenizer {
 	 * @return blah
 	 */
 	private static Token tokenClass(String tokenString, String file, int stateFinishedAt, int lineNumber){
-//		System.out.printf("token: (%s)%n", tokenString);
+		System.out.printf("token: (%s)%n", tokenString);
 
 		return switch (stateFinishedAt) {
 			case 2 			-> new Token(tokenString, file, lineNumber, TokenType.COMMA);
@@ -166,21 +166,61 @@ public class JottTokenizer {
 							// looking ahead at the next char
 							if (i + 1 < line.length()) {
 								// next state given current state and next char
-								while (classifyCharacter(line.charAt(i + 1)) == -1) { i++; }
+								while (classifyCharacter(line.charAt(i + 1)) == -1) {
+									i++;
+								}
 
 								char nextCharacter = line.charAt(i + 1);
 								int next = DFA[currentState][classifyCharacter(nextCharacter)];
 
-								// if the next char will cause a finish
-								if (next == F) {
-									// if the token is not the empty token
-									if (!tokenString.toString().isEmpty()) {
+								if (character == '-' && nextCharacter == '-') {
+									Token token = tokenClass(tokenString.toString(), filename, currentState, currentLineNumber);
+									if (token != null) {
+										tokens.add(token);
+									}
+									tokenString = new StringBuilder(); // restart tokenString
+//									currentState = 0; // restart the state machine on finish of tokenString
+//									i++;
+								} else if ( currentState == 10 && nextCharacter == '-') {
+									System.err.println("dsds");
+									Token token = tokenClass(tokenString.toString(), filename, currentState, currentLineNumber);
 
-										// adding and classifying token
-										Token token = tokenClass(tokenString.toString(), filename, currentState, currentLineNumber);
-										if (token != null) { tokens.add(token); }
-										tokenString = new StringBuilder(); // restart tokenString
-										currentState = 0; // restart the state machine on finish of tokenString
+									if (token != null) {
+										tokens.add(token);
+									}
+									tokenString = new StringBuilder(); // restart tokenString
+
+									tokenString.append(nextCharacter);
+									i++;
+
+
+//									currentState = 0; // restart the state machine on finish of tokenString
+								}else if (character == '-' && (next == 12 || next == 13)) {
+									Token token = tokenClass(tokenString.toString(), filename, currentState, currentLineNumber);
+
+									if (token != null) {
+										tokens.add(token);
+									}
+									tokenString = new StringBuilder(); // restart tokenString
+
+//									tokenString.append(nextCharacter);
+
+
+//									currentState = 0; // restart the state machine on finish of tokenString
+								}else {
+									// if the next char will cause a finish
+									if (next == F) {
+										// if the token is not the empty token
+										if (!tokenString.toString().isEmpty()) {
+
+											// adding and classifying token
+											Token token = tokenClass(tokenString.toString(), filename, currentState, currentLineNumber);
+											if (token != null) {
+												tokens.add(token);
+											}
+											tokenString = new StringBuilder(); // restart tokenString
+											currentState = 0; // restart the state machine on finish of tokenString
+										}
 									}
 								}
 							}
