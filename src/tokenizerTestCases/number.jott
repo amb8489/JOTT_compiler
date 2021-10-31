@@ -1,13 +1,12 @@
-#this will pass phase 2 and phase 3
-foo[x:Integer]:Integer{
-    return x + 1;
+#this will pass phase 2 but fail phase 3 for foo return type not matching
+
+foo[y:Integer]:Integer{
+    print[y];
+	return 3;
 }
 
 main[]:Integer{
-    Integer x = 0;
-	while[x<10]{
-	    #x = foo[x];
-		print[x];
-	}
+    Integer x = foo[5];
+	print[x];
 	return x;
 }

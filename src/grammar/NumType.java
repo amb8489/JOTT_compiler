@@ -15,7 +15,10 @@ public class NumType {
     public String numType;
     public double doubleNumber;
     public int integerNumber;
+    public String varNumber;
+
     public Token number;
+    public boolean isVar;
 
 
 
@@ -24,6 +27,8 @@ public class NumType {
         String string = num.getToken();
 
         // is this a double?
+        this.isVar = false;
+
         try {
             double number = Double.parseDouble(string);
             this.numType = "Double";
@@ -39,16 +44,16 @@ public class NumType {
             this.integerNumber = number;
 
         } catch (NumberFormatException ignored) {
-            // hmm, so this must be something else
+            // not a num but a var
+            if (this.numType==null) {
+                System.out.println("---"+num.getToken());
+                this.isVar = true;
+                this.varNumber = string;
+            }
         }
     }
 
+    public String getNumType() { return numType; }
 
-    public String getNumType() {
-        return numType;
-    }
-
-    public String convertToJott() {
-        return number.getToken();
-    }
+    public String convertToJott() { return number.getToken(); }
 }

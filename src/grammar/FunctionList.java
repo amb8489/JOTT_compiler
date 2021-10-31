@@ -51,9 +51,12 @@ public class FunctionList {
         return new FunctionList(listOfFunctionDefs);
 
     }
-    public boolean ListHasMain(){
+    public boolean ListHasMain() throws ParsingException {
         for(FunctionDef func: this.listOfFunctionDefs){
             if(func.id.convertToJott().equals("main")){
+                if (! func.returnType.type.equals("Integer")){
+                    throw new ParsingException("MAIN DOES NOT RETURN INT");
+                }
                 return true;
             }
         }
@@ -74,14 +77,10 @@ public class FunctionList {
 
 
     public boolean validateTree() throws ParsingException {
+
         for (FunctionDef function: listOfFunctionDefs) {
-
-            boolean r = function.validateTree();
-            // setting function id and its return type
-
             ValidateTable.functions.put(function.id.convertToJott(),new ArrayList<>() {
                 {add(function.returnType.type);}});
-
             // setting function params
             if(function.funcDefParams !=null) {
                 for (FuncDefParams params : function.funcDefParams.functionParameterList) {
@@ -89,6 +88,13 @@ public class FunctionList {
                     ValidateTable.functions.get(function.id.convertToJott()).add(params.type.getToken());
                 }
             }
+
+            boolean r = function.validateTree();
+            // setting function id and its return type
+
+
+
+
             if (!r){
                 return false;
             }

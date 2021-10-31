@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class ReturnStmt  {
-    private final Expr expr;
+    public Expr expr;
 
     /**
      * Constructor TODO

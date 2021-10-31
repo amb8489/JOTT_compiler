@@ -51,6 +51,7 @@ public class Expr {
             if (sExpr != null) {
                 return new Expr(sExpr,"String");
             }
+
         }
         // ---------------------------looking for bExpr (bool expr)----------------------------------------
 
@@ -83,9 +84,8 @@ public class Expr {
      * TODO
      * @return TODO
      */
-    public boolean validateTree() {
-
-        return false;
+    public boolean validateTree() throws ParsingException {
+        return expr.validateTree();
     }
 
 }

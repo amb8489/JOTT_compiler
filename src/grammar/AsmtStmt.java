@@ -126,7 +126,6 @@ public class AsmtStmt {
         // and that vars in the expr 1) exist and 2) are the type of the expr type
         // check that ids for vars are ok use Identifier.check(identifier.id);
 
-        expr.validateTree();
 
         // 1) check that id for var is good
         Identifier.check(identifier.id);
@@ -176,7 +175,7 @@ public class AsmtStmt {
                 return true;
             }
             // Failure
-            throw new ParsingException(String.format("var %s assigned wrong type: line %d", variableId, identifier.id.getLineNum()));
+            throw new ParsingException(String.format("var %s assigned wrong type: line %d", variableId,identifier.id.getLineNum()));
 
         }
     }

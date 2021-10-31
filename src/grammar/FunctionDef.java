@@ -180,15 +180,17 @@ public class FunctionDef  {
             body.validateTree();
         }
 
-
         // if return type is INT DOUBLE STRING BOOL
         if (!this.returnType.type.equals("Void")){
-            if (this.body.hasGuaranteedReturnFromIf || this.body.hasReturn != null){
-                return true;
+            if (this.body.hasReturn != null) {
+                if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expression.type)){
+                    this.body.hasReturn.expression.validateTree();
+                    return true;
+                }
+                throw new ParsingException("RETURNING WRONG TYPE in function: "+this.id.convertToJott()+" "+this.body.hasReturn.expression.type+" "+ValidateTable.functions.get(this.id.convertToJott()).get(0));
             }
             throw new ParsingException("MISSING RETURN in function: "+this.id.convertToJott());
-
-        }else{
+        } else {
             // VOID HAS NO RETURN
             if (this.body.hasReturn == null && !this.body.hasGuaranteedReturnFromIf){
                 return true;
