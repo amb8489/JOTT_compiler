@@ -72,11 +72,6 @@ public class ValidateTable {
                 // check correct number of params given for that function
                 if (parameters.paramsList.size() == builtinParams.size()) {
 
-                    // print can take any type so if we have 1 param we know we are set for PRINT
-                    if (funcName.getToken().equals("print")) {
-                        return true;
-                    }
-
                     // index just to know what param we are on in loop
                     int index = 0;
 
@@ -90,11 +85,12 @@ public class ValidateTable {
                         }
 
                         // if given param at index matches type of function param at index
-                        if (param.expr.type != null && !param.expr.type.equals(builtinParams.get(index))) {
-
-                            //error if type for param is wrong
-                            String msg = "function: " + funcName.getToken() + " def takes " + builtinParams + " was given:" + param.expr.type + "| line:" + funcName.getLineNum();
-                            throw new ParsingException(msg);
+                        if ((param.expr.type != null && !param.expr.type.equals(builtinParams.get(index)) )) {
+                            if(! builtinParams.get(index).equals("any")) {
+                                //error if type for param is wrong
+                                String msg = "function: " + funcName.getToken() + " def takes " + builtinParams + " was given:" + param.expr.type + "| line:" + funcName.getLineNum();
+                                throw new ParsingException(msg);
+                            }
                         }
 
                         // onto the next param to check
@@ -208,6 +204,10 @@ public class ValidateTable {
         Scopes.put(functionName,new ValidateTable(functionName));
     }
 
+
+    public static boolean isVarDefinedInScope(String scopeName,String varName){
+        return Scopes.get(scopeName).variables.containsKey(varName);
+    }
 
 
 

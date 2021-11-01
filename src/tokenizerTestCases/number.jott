@@ -1,9 +1,10 @@
 #this will pass phase 3
 
 foo[x:Integer]:Void{
-        print[t];
         Double y = 1.0;
         Integer x = 5;
+         print[x];
+
 
 }
 

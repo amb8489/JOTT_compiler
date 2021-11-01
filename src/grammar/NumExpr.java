@@ -288,7 +288,7 @@ public class NumExpr extends Expr {
 
                 ///1) var exits
 
-                if (ValidateTable.getScope(scope).variables.containsKey(n.numType.varNumber)) {
+                if (ValidateTable.isVarDefinedInScope(scope,n.numType.varNumber)) {  // ****************************
                     ArrayList<String> varProperties = ValidateTable.getScope(scope).variables.get(n.numType.varNumber);
 
                     ///2) var type matches expr type
