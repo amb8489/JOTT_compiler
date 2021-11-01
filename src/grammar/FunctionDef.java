@@ -19,7 +19,7 @@ public class FunctionDef {
     private final Body body;
     public final Type returnType;
     private final int nestLevel;
-    public String insideOfFunction;
+    public String scope;
 
 
     /**
@@ -37,8 +37,7 @@ public class FunctionDef {
         this.body = body;
         this.returnType = returnType;
         this.nestLevel = nestLevel;
-        this.insideOfFunction = id.id.getToken();
-        this.insideOfFunction = insideOfFunction;
+        this.scope = id.id.getToken();
 
     }
 
@@ -170,13 +169,13 @@ public class FunctionDef {
                     this.body.hasReturn.expr.type = body.hasReturn.expr.expr.type;
                 }
 
-                if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expr.type)) {
+                if (ValidateTable.getScope(scope).functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expr.type)) {
                     System.out.println(this.body.hasReturn.expr.type);
 
                     return true;
                 }
                 System.out.println(this.body.hasReturn.expr.type);
-                throw new ParsingException("RETURNING WRONG TYPE in function: " + this.id.convertToJott() + " " + this.body.hasReturn.expr.type + " " + ValidateTable.functions.get(this.id.convertToJott()).get(0));
+                throw new ParsingException("RETURNING WRONG TYPE in function: " + this.id.convertToJott() + " " + this.body.hasReturn.expr.type + " " + ValidateTable.getScope(scope).functions.get(this.id.convertToJott()).get(0));
             }
 
             if (this.body.hasGuaranteedReturnFromIf) {

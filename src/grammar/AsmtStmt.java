@@ -17,7 +17,7 @@ public class AsmtStmt {
     public Type type;                       // what variable type is this?
     private final Identifier identifier;    // what variable name (id) is this?
     public Expr expr;                       //
-    public String insideOfFunction;
+    public String scope;
 
     /**
      * This is the constructor for AsmtStmt.
@@ -26,11 +26,11 @@ public class AsmtStmt {
      * @param identifier what variable name is this?
      * @param expr       the expression object that holds
      */
-    public AsmtStmt(Type type, Identifier identifier, Expr expr,String insideOfFunction) {
+    public AsmtStmt(Type type, Identifier identifier, Expr expr,String scope) {
         this.type = type;
         this.identifier = identifier;
         this.expr = expr;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
     }
 
     /**
@@ -58,7 +58,7 @@ public class AsmtStmt {
      * @return TODO: blah
      * @throws ParsingException TODO: blah
      */
-    public static AsmtStmt parseAsmtStmt(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
+    public static AsmtStmt parseAsmtStmt(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
         //System.out.println("------------------------PARSING ASMT-STMT------------------------");
 
         // removing and checking the first token
@@ -66,7 +66,7 @@ public class AsmtStmt {
 
         Token typeToken = tokens.get(TokenIndex.currentTokenIndex);
         //System.out.println("    FIRST:" + typeToken.getToken());
-        Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum(),insideOfFunction);
+        Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum(),scope);
         TokenIndex.currentTokenIndex++;
 
         Token idToken = tokens.get(TokenIndex.currentTokenIndex);
@@ -83,7 +83,7 @@ public class AsmtStmt {
             idToken = typeToken;
         }
 
-        Identifier id = new Identifier(idToken, insideOfFunction); // making id
+        Identifier id = new Identifier(idToken, scope); // making id
         Token equalsToken = tokens.get(TokenIndex.currentTokenIndex); // looking for = token
 
         // checking for =
@@ -96,7 +96,7 @@ public class AsmtStmt {
 
         // checking for expression
         //System.out.println("\tLOOKING FOR EXPR");
-        Expr expr = NumExpr.parseExpr(tokens, nestLevel, insideOfFunction);
+        Expr expr = NumExpr.parseExpr(tokens, nestLevel, scope);
 
         //check for ;
         Token endStmt = tokens.get(TokenIndex.currentTokenIndex);
@@ -111,9 +111,9 @@ public class AsmtStmt {
 
         // if successful assignment statement
         if (Type.isType(typeToken)) {
-            return new AsmtStmt(type, id, expr,insideOfFunction);
+            return new AsmtStmt(type, id, expr,scope);
         }
-        return new AsmtStmt(null, id, expr,insideOfFunction);
+        return new AsmtStmt(null, id, expr,scope);
     }
 
     /**
@@ -137,7 +137,7 @@ public class AsmtStmt {
         if (type != null) {
 
             // check that we have already defined this var ??????????????? scope??????
-            if (!ValidateTable.variables.containsKey(identifier.convertToJott())) {
+            if (!ValidateTable.getScope(scope).variables.containsKey(identifier.convertToJott())) {
 
 
                 this.expr.validateTree();
@@ -152,7 +152,7 @@ public class AsmtStmt {
                 System.out.println(this.type.type + " " + expr.type);
 
                 if (type.type.equals(expr.type)) {
-                    ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
+                    ValidateTable.getScope(scope).variables.put(identifier.convertToJott(), new ArrayList<>() {{
                         add(type.type);
                         add(expr.convertToJott());
                     }});
@@ -168,16 +168,16 @@ public class AsmtStmt {
             // updating value already in table
             //1) check that the var in question exists
             String varId = identifier.convertToJott();
-            if (!ValidateTable.variables.containsKey(varId)) {
+            if (!ValidateTable.getScope(scope).variables.containsKey(varId)) {
                 throw new ParsingException(String.format("var %s dose not exist: line %d", varId, identifier.id.getLineNum()));
             }
 
             //2) get type var tpye and check its being assigned the same type
             // get type var tpye and check its being assigned the same type
-            String varType = ValidateTable.variables.get(identifier.convertToJott()).get(0);
+            String varType = ValidateTable.getScope(scope).variables.get(identifier.convertToJott()).get(0);
 
             if (expr.type.equals(varType)) {
-                ValidateTable.variables.get(identifier.convertToJott()).set(1, expr.convertToJott());
+                ValidateTable.getScope(scope).variables.get(identifier.convertToJott()).set(1, expr.convertToJott());
                 return true;
             }
 

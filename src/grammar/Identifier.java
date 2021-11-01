@@ -16,7 +16,7 @@ public class Identifier {
     private static final Set<String> idBanList = Set.of("while", "for", "True", "False", "if", "elseif", "else", "print","concat","length","input");
 
     Token id;
-    public String insideOfFunction;
+    public String scope;
 
     /**
      * This is the constructor for an identifier.
@@ -24,9 +24,9 @@ public class Identifier {
      * @param id the name of this identifier
 
     */
-    public Identifier(Token id, String insideOfFunction) {
+    public Identifier(Token id, String scope) {
         this.id = id;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
     }
 
     public static void check(Token id) throws ParsingException {

@@ -24,17 +24,17 @@ public class BExpr extends Expr {
     private Expr expr;
     private Token bool;
     private Token relOp;
-    public String insideOfFunction;
+    public String scope;
 
     /**
      * This is the constructor for a boolean expression class.
      *
      * @param finalExp TODO blah
      */
-    public BExpr(ArrayList<BExpr> finalExp,String insideOfFunction) {
+    public BExpr(ArrayList<BExpr> finalExp,String scope) {
         super(null, null,null);
         this.finalExpr = finalExp;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
     }
 
@@ -43,10 +43,10 @@ public class BExpr extends Expr {
      *
      * @param bool TODO blah
      */
-    public BExpr(Token bool,String insideOfFunction) {
+    public BExpr(Token bool,String scope) {
         super(null, null,null);
         this.bool = bool;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
     }
 
@@ -56,11 +56,11 @@ public class BExpr extends Expr {
      * @param bool  TODO blah
      * @param relOp TODO blah
      */
-    public BExpr(Token bool, Token relOp,String insideOfFunction) {
+    public BExpr(Token bool, Token relOp,String scope) {
         super(null, null,null);
         this.bool = bool;
         this.relOp = relOp;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
     }
 
@@ -70,11 +70,11 @@ public class BExpr extends Expr {
      * @param expr  TODO blah
      * @param relOP TODO blah
      */
-    public BExpr(Expr expr, Token relOP,String insideOfFunction) {
+    public BExpr(Expr expr, Token relOP,String scope) {
         super(null, null,null);
         this.relOp = relOP;
         this.expr = expr;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
     }
 
@@ -83,10 +83,10 @@ public class BExpr extends Expr {
      *
      * @param expr TODO blah
      */
-    public BExpr(Expr expr,String insideOfFunction) {
+    public BExpr(Expr expr,String scope) {
         super(null, null,null);
         this.expr = expr;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
     }
 
     /**
@@ -98,7 +98,7 @@ public class BExpr extends Expr {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static ArrayList<BExpr> parseBExpr_r(int nestLevel, ArrayList<Token> tokens, ArrayList<BExpr> booleanList,String insideOfFunction)
+    public static ArrayList<BExpr> parseBExpr_r(int nestLevel, ArrayList<Token> tokens, ArrayList<BExpr> booleanList,String scope)
             throws ParsingException {
         Token possibleBool = tokens.get(TokenIndex.currentTokenIndex);
         boolean isBool = false;
@@ -108,10 +108,10 @@ public class BExpr extends Expr {
             TokenIndex.currentTokenIndex++;
             isBool = true;
         } else {
-            possibleExpr = NumExpr.parseNumExpr(tokens, nestLevel,insideOfFunction);
+            possibleExpr = NumExpr.parseNumExpr(tokens, nestLevel,scope);
 
             if (possibleExpr == null) {
-                possibleExpr = SExpr.parseSExpr(tokens, nestLevel,insideOfFunction);
+                possibleExpr = SExpr.parseSExpr(tokens, nestLevel,scope);
                 if (possibleExpr == null) {
                     String message = String.format("Syntax error\nInvalid token. Expected ;. Got: %s\n%s:%s",
                             possibleBool.getTokenType().toString(),
@@ -128,13 +128,13 @@ public class BExpr extends Expr {
                 TokenIndex.currentTokenIndex++;
 
                 //System.out.printf("bool op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
-                booleanList.add(new BExpr(possibleBool, possibleRelOp, insideOfFunction));
-                return parseBExpr_r(nestLevel, tokens, booleanList, insideOfFunction);
+                booleanList.add(new BExpr(possibleBool, possibleRelOp, scope));
+                return parseBExpr_r(nestLevel, tokens, booleanList, scope);
             }
 
             // lone bool
             //System.out.println("lone bool");
-            booleanList.add(new BExpr(possibleBool, insideOfFunction));
+            booleanList.add(new BExpr(possibleBool, scope));
             return booleanList;
 
         } else {
@@ -142,13 +142,13 @@ public class BExpr extends Expr {
                 TokenIndex.currentTokenIndex++;
 
                 //System.out.printf("expr op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
-                booleanList.add(new BExpr(possibleExpr, possibleRelOp, insideOfFunction));
-                return parseBExpr_r(nestLevel, tokens, booleanList, insideOfFunction);
+                booleanList.add(new BExpr(possibleExpr, possibleRelOp, scope));
+                return parseBExpr_r(nestLevel, tokens, booleanList, scope);
             }
             // lone expr
             //System.out.println("lone expr");
 
-            booleanList.add(new BExpr(possibleExpr, insideOfFunction));
+            booleanList.add(new BExpr(possibleExpr, scope));
             return booleanList;
         }
     }
@@ -161,13 +161,13 @@ public class BExpr extends Expr {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static Expr parseBExpr(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
+    public static Expr parseBExpr(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
 
         //System.out.println("-------------------- parsing bool expr --------------------");
 
-        ArrayList<BExpr> f = parseBExpr_r(nestLevel, tokens, new ArrayList<>(), insideOfFunction);
+        ArrayList<BExpr> f = parseBExpr_r(nestLevel, tokens, new ArrayList<>(), scope);
 
-        return new BExpr(f, insideOfFunction);
+        return new BExpr(f, scope);
     }
 
     /**

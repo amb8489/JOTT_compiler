@@ -19,7 +19,7 @@ public class Body {
     public ReturnStmt hasReturn;
     public boolean hasGuaranteedReturnFromIf;
     int nestLevel;
-    public String insideOfFunction;
+    public String scope;
 
     /**
      * This is the constructor for a body class.
@@ -29,12 +29,12 @@ public class Body {
      * @param nestLevel        how deep is this body
      * @param guaranteedReturn whether return is always possible? TODO
      */
-    public Body(ArrayList<BodyStmt> bodies, ReturnStmt returnStmt, int nestLevel, boolean guaranteedReturn,String insideOfFunction) {
+    public Body(ArrayList<BodyStmt> bodies, ReturnStmt returnStmt, int nestLevel, boolean guaranteedReturn,String scope) {
         this.hasReturn = returnStmt;
         this.bodies = bodies;
         this.nestLevel = nestLevel;
         this.hasGuaranteedReturnFromIf = guaranteedReturn;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
     }
 
     /**
@@ -45,7 +45,7 @@ public class Body {
      * @return the parsed result in form of a body object
      * @throws ParsingException throw an error if any
      */
-    public static Body ParseBody(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
+    public static Body ParseBody(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
         ArrayList<BodyStmt> bodies = new ArrayList<>();
 
         if (tokens.get(TokenIndex.currentTokenIndex).getTokenType() == TokenType.R_BRACKET) {
@@ -58,11 +58,11 @@ public class Body {
             //System.out.println("\tlooking for body");
             BodyStmt bodyStmt = null;
             if (!tokens.get(TokenIndex.currentTokenIndex).getToken().equals("return")) {
-                bodyStmt = BodyStmt.parseBodyStmt(tokens, nestLevel,insideOfFunction);
+                bodyStmt = BodyStmt.parseBodyStmt(tokens, nestLevel,scope);
             }
 
             if (bodyStmt == null) {
-                ReturnStmt returnStmt = ReturnStmt.parseReturnStmt(tokens, nestLevel,insideOfFunction);
+                ReturnStmt returnStmt = ReturnStmt.parseReturnStmt(tokens, nestLevel,scope);
 
                 boolean hasGuaranteedReturn = false;
                 for (BodyStmt bodyStmtElement : bodies) {
@@ -72,12 +72,12 @@ public class Body {
                     }
                 }
 
-                return new Body(bodies, returnStmt, nestLevel, hasGuaranteedReturn,insideOfFunction);
+                return new Body(bodies, returnStmt, nestLevel, hasGuaranteedReturn,scope);
             }
             bodies.add(bodyStmt);
         }
 
-        ReturnStmt returnStmt = ReturnStmt.parseReturnStmt(tokens, nestLevel,insideOfFunction);
+        ReturnStmt returnStmt = ReturnStmt.parseReturnStmt(tokens, nestLevel,scope);
 
         boolean hasGuaranteedReturn = false;
         for (BodyStmt b : bodies) {
@@ -87,7 +87,7 @@ public class Body {
             }
         }
 
-        return new Body(bodies, returnStmt, nestLevel, hasGuaranteedReturn,insideOfFunction);
+        return new Body(bodies, returnStmt, nestLevel, hasGuaranteedReturn,scope);
     }
 
     /**

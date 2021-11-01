@@ -21,7 +21,7 @@ public class Stmt {
     VarDec varDec;
     FuncCall funcCall;
     int nestLevel;
-    public String insideOfFunction;
+    public String scope;
 
     /**
      * This is the constructor for a statement.
@@ -31,12 +31,12 @@ public class Stmt {
      * @param varDec    TODO
      * @param funcCall  TODO
      */
-    public Stmt(int nestLevel, AsmtStmt asmtStmt, VarDec varDec, FuncCall funcCall,String insideOfFunction) {
+    public Stmt(int nestLevel, AsmtStmt asmtStmt, VarDec varDec, FuncCall funcCall,String scope) {
         this.nestLevel = nestLevel;
         this.asmtStmt = asmtStmt;
         this.varDec = varDec;
         this.funcCall = funcCall;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
     }
 
@@ -48,25 +48,25 @@ public class Stmt {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static Stmt parseStmt(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
+    public static Stmt parseStmt(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
         // trying asmtStmt
         TokenIndex.saveCurrentTokenIndex();
-        AsmtStmt asmtStmt = AsmtStmt.parseAsmtStmt(tokens, nestLevel,insideOfFunction);
+        AsmtStmt asmtStmt = AsmtStmt.parseAsmtStmt(tokens, nestLevel,scope);
 
         if (asmtStmt != null) {
             TokenIndex.popSavedTokenIndexStack();
-            return new Stmt(nestLevel, asmtStmt, null, null,insideOfFunction);
+            return new Stmt(nestLevel, asmtStmt, null, null,scope);
         } else {
             TokenIndex.restoreFromSavedTokenIndexStack();
         }
 
         // trying var dec
         TokenIndex.saveCurrentTokenIndex();
-        VarDec varDec = VarDec.parseVarDec(tokens, nestLevel,insideOfFunction);
+        VarDec varDec = VarDec.parseVarDec(tokens, nestLevel,scope);
 
         if (varDec != null) {
             TokenIndex.popSavedTokenIndexStack();
-            return new Stmt(nestLevel, null, varDec, null,insideOfFunction);
+            return new Stmt(nestLevel, null, varDec, null,scope);
         } else {
             TokenIndex.restoreFromSavedTokenIndexStack();
         }
@@ -74,7 +74,7 @@ public class Stmt {
         // trying func_call
         TokenIndex.saveCurrentTokenIndex();
 
-        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel,insideOfFunction);
+        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel,scope);
         if (funcCall != null) {
             // check for ;
             Token endStmt = tokens.get(TokenIndex.currentTokenIndex);
@@ -87,7 +87,7 @@ public class Stmt {
             }
             TokenIndex.currentTokenIndex++;
             TokenIndex.popSavedTokenIndexStack();
-            return new Stmt(nestLevel, null, null, funcCall,insideOfFunction);
+            return new Stmt(nestLevel, null, null, funcCall,scope);
         } else {
             TokenIndex.restoreFromSavedTokenIndexStack();
         }

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class Expr {
     public Expr expr;
     public String type;
-    public String insideOfFunction;
+    public String scope;
 
     /**
      * This is a constructor for an expression.
@@ -28,10 +28,10 @@ public class Expr {
      * @param expr an expression that could be BExpr, DExpr
      * @param type TODO
      */
-    public Expr(Expr expr, String type,String insideOfFunction) {
+    public Expr(Expr expr, String type,String scope) {
         this.expr = expr;
         this.type = type;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
     }
 
@@ -43,29 +43,29 @@ public class Expr {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static Expr parseExpr(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
+    public static Expr parseExpr(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
 
         // looking for a numExpr (either integer or double)
         if (tokens.get(TokenIndex.currentTokenIndex + 1).getTokenType() != TokenType.REL_OP) {
-            NumExpr numExpr = NumExpr.parseNumExpr(tokens, nestLevel, insideOfFunction);
+            NumExpr numExpr = NumExpr.parseNumExpr(tokens, nestLevel, scope);
 
             if (numExpr != null) {
-                return new Expr(numExpr, numExpr.exprType, insideOfFunction);
+                return new Expr(numExpr, numExpr.exprType, scope);
             }
 
             // looking for a string expression
 
             // determine whether this string is a literal id or a function call
-            Expr sExpr = SExpr.parseSExpr(tokens, nestLevel,insideOfFunction);
+            Expr sExpr = SExpr.parseSExpr(tokens, nestLevel,scope);
             if (sExpr != null) {
-                return new Expr(sExpr, "String",insideOfFunction);
+                return new Expr(sExpr, "String",scope);
             }
 
         }
 
         // looking  for a boolean expression
-        Expr bExpr = BExpr.parseBExpr(tokens, nestLevel,insideOfFunction);
-        return new Expr(bExpr, "Boolean",insideOfFunction);
+        Expr bExpr = BExpr.parseBExpr(tokens, nestLevel,scope);
+        return new Expr(bExpr, "Boolean",scope);
 
         // throw an error, no valid expression found
     }

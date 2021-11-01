@@ -14,23 +14,11 @@ import java.util.Map;
  */
 public class ValidateTable {
 
-
-
-    /**
-     * variables hashmap holds the variable type as well as its value.
-     * <p>
-     * note: value is null for uninitialized variables.
-     */
-    public static HashMap<String, ArrayList<String>> variables = new HashMap<>();
-
-    /**
-     * functions hashmap holds the variable type
-     */
+    //------------------a hashmap of all functions name to functions tables-----------------
+    public static HashMap<String, ValidateTable> Scopes = new HashMap<>();
     public static HashMap<String, ArrayList<String>> functions = new HashMap<>();
 
-    /**
-     * clear all hashmaps
-     */
+    // ----------------------- all built in funciton defs -----------------------------------
     public static Map<String, ArrayList<String>> BuiltInFunctions = new HashMap<>() {{
         put("print", new ArrayList<>() {{
             add("any");
@@ -48,7 +36,25 @@ public class ValidateTable {
         }});
     }};
 
-    public static boolean checkFunctionCall(Token funcName, Params parameters) throws ParsingException {
+
+
+    // this functions var and function defs
+    public HashMap<String, ArrayList<String>> variables = new HashMap<>();
+    public String funcName;
+
+    public ValidateTable(String funcName){
+        this.funcName = funcName;
+    }
+
+
+
+
+
+    /**
+     * clear all hashmaps
+     */
+
+    public static boolean checkFunctionCall(String scope,Token funcName, Params parameters) throws ParsingException {
         // check if function is a built in
         if (BuiltInFunctions.containsKey(funcName.getToken())) {
             System.out.println("BUILTIN FUNCTION");
@@ -109,11 +115,11 @@ public class ValidateTable {
 
 
         // check if function is a built in
-        if (functions.containsKey(funcName.getToken())) {
+        if (Scopes.containsKey(funcName.getToken())) {
             System.out.println("USER DEFINED FUNCTION");
 
             // get the parms types for that function
-            ArrayList<String> userDefinedParams = functions.get(funcName.getToken());
+            ArrayList<String> userDefinedParams = ValidateTable.functions.get(funcName.getToken());
 
             // check if there are even parameters passed in, all builtins take at least 1
             if (parameters != null) {
@@ -172,8 +178,37 @@ public class ValidateTable {
     }
 
     // clears the value and function tables
-    public static void clearTables() {
+
+
+    public static void clearAll() {
+        for (String key : Scopes.keySet()) {
+         Scopes.get(key).clearTables();
+        }
+        Scopes.clear();
+    }
+
+
+
+    public static void addVarToScope(String scopeName, String varName, String varType,String varVal) {
+        ArrayList<String> returnAndVal = new ArrayList<>() {{add(varType);add(varVal);}};
+        System.out.println(String.format("adding %s %s to scope %s",varType,varName,scopeName));
+        Scopes.get(scopeName).variables.put(varName,returnAndVal);
+    }
+
+    public static ValidateTable getScope(String scopeName) {
+        return Scopes.get(scopeName);
+    }
+
+    public void clearTables() {
         variables.clear();
         functions.clear();
     }
+
+    public static void newScope(String functionName) {
+        Scopes.put(functionName,new ValidateTable(functionName));
+    }
+
+
+
+
 }

@@ -17,7 +17,7 @@ public class NumType {
     public String varNumber;
     public Token number;
     public boolean isVar;
-    public String insideOfFunction;
+    public String scope;
 
 
     /**
@@ -25,10 +25,10 @@ public class NumType {
      *
      * @param number a numerical value whether it be a double or an integer
      */
-    public NumType(Token number,String insideOfFunction) {
+    public NumType(Token number,String scope) {
         this.number = number;
         String string = number.getToken();
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
         // is this a double?
         this.isVar = false;

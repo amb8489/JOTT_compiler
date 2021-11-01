@@ -108,13 +108,14 @@ public class FunctionList {
 
 
         for (FunctionDef functionDef : listOfFunctionDefs) {
+            String scope = functionDef.id.id.getToken();
 
 
             // make new table for function so that that table will have its own scope
-            //ValidateTable.newScope();
+            ValidateTable.newScope(scope);
 
 
-            ValidateTable.functions.put(functionDef.id.convertToJott(), new ArrayList<>() {
+            ValidateTable.getScope(scope).functions.put(functionDef.id.convertToJott(), new ArrayList<>() {
                 {
                     add(functionDef.returnType.type);
                 }
@@ -122,8 +123,8 @@ public class FunctionList {
             // setting functionDef params
             if (functionDef.funcDefParams != null) {
                 for (FuncDefParams params : functionDef.funcDefParams.functionParameterList) {
-                    ValidateTable.functions.get(functionDef.id.convertToJott()).add(params.identifier.convertToJott());
-                    ValidateTable.functions.get(functionDef.id.convertToJott()).add(params.type.getToken());
+                    ValidateTable.getScope(scope).functions.get(functionDef.id.convertToJott()).add(params.identifier.convertToJott());
+                    ValidateTable.getScope(scope).functions.get(functionDef.id.convertToJott()).add(params.type.getToken());
                 }
             }
 

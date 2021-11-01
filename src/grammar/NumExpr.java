@@ -19,7 +19,7 @@ public class NumExpr extends Expr {
     public Token mathOp;
     public ArrayList<NumExpr> finalExpr;
     public String exprType;
-    public String insideOfFunction;
+    public String scope;
 
     /**
      * A constructor to handle a numExpr with a number and a math operator.
@@ -27,12 +27,12 @@ public class NumExpr extends Expr {
      * @param numType the type of number
      * @param mathOp  the type of math operation done with the number
      */
-    public NumExpr(NumType numType, Token mathOp,String insideOfFunction) {
+    public NumExpr(NumType numType, Token mathOp,String scope) {
         super(null, null,null);
         this.numType = numType;
         this.mathOp = mathOp;
         this.functionCall = null;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
     }
 
@@ -41,12 +41,12 @@ public class NumExpr extends Expr {
      *
      * @param numType the type of number
      */
-    public NumExpr(NumType numType,String insideOfFunction) {
+    public NumExpr(NumType numType,String scope) {
         super(null, null,null);
         this.numType = numType;
         this.mathOp = null;
         this.functionCall = null;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
 
     }
@@ -57,12 +57,12 @@ public class NumExpr extends Expr {
      * @param funcCall the function call object
      * @param mathOp   the mathematical operation done with this function call object
      */
-    public NumExpr(FuncCall funcCall, Token mathOp,String insideOfFunction) {
+    public NumExpr(FuncCall funcCall, Token mathOp,String scope) {
         super(null, null,null);
         this.numType = null;
         this.functionCall = funcCall;
         this.mathOp = mathOp;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
     }
 
@@ -72,16 +72,16 @@ public class NumExpr extends Expr {
      * @param finalExpr finalExpr object
      * @param exprType  what type is this finalExpr object
      */
-    public NumExpr(ArrayList<NumExpr> finalExpr, String exprType,String insideOfFunction) {
+    public NumExpr(ArrayList<NumExpr> finalExpr, String exprType,String scope) {
         super(null, null,null);
         this.finalExpr = finalExpr;
         this.exprType = exprType;
         this.numType = null;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
     }
 
-    private static ArrayList<NumExpr> parseNumExprR(ArrayList<Token> tokens, int nestLevel, ArrayList<NumExpr> exprList,String insideOfFunction) throws ParsingException {
+    private static ArrayList<NumExpr> parseNumExprR(ArrayList<Token> tokens, int nestLevel, ArrayList<NumExpr> exprList,String scope) throws ParsingException {
 
         //  looking for id/int followed by math op
         Token possibleNumber = tokens.get(TokenIndex.currentTokenIndex);
@@ -91,33 +91,33 @@ public class NumExpr extends Expr {
             TokenIndex.currentTokenIndex += 2;
 
             // numExpr can be id, id op, num, or num op
-            exprList.add(new NumExpr(new NumType(possibleNumber,insideOfFunction), possibleOp,insideOfFunction));
+            exprList.add(new NumExpr(new NumType(possibleNumber,scope), possibleOp,scope));
 
             // trying to complete id/int op with valid follow
-            return parseNumExprR(tokens, nestLevel, exprList,insideOfFunction);
+            return parseNumExprR(tokens, nestLevel, exprList,scope);
         }
 
 
         //  check for function funcCall op
-        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel,insideOfFunction);
+        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel,scope);
         possibleOp = tokens.get(TokenIndex.currentTokenIndex);
 
         if (funcCall != null && possibleOp.getTokenType() == TokenType.MATH_OP) {
             TokenIndex.currentTokenIndex++;
-            exprList.add(new NumExpr(funcCall, possibleOp,insideOfFunction));
-            return parseNumExprR(tokens, nestLevel, exprList,insideOfFunction);
+            exprList.add(new NumExpr(funcCall, possibleOp,scope));
+            return parseNumExprR(tokens, nestLevel, exprList,scope);
         }
 
         // check for lone function funcCall
         if (funcCall != null) {
-            exprList.add(new NumExpr(funcCall, null,insideOfFunction));
+            exprList.add(new NumExpr(funcCall, null,scope));
             return exprList;
         }
 
         //  check for lone id or num
         if (possibleNumber.getTokenType() == TokenType.NUMBER || possibleNumber.getTokenType() == TokenType.ID_KEYWORD) {
             TokenIndex.currentTokenIndex++;
-            exprList.add(new NumExpr(new NumType(possibleNumber,insideOfFunction),insideOfFunction));
+            exprList.add(new NumExpr(new NumType(possibleNumber,scope),scope));
             return exprList;
         }
 
@@ -126,8 +126,8 @@ public class NumExpr extends Expr {
     }
 
 
-    public static NumExpr parseNumExpr(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
-        ArrayList<NumExpr> exprList = parseNumExprR(tokens, nestLevel, new ArrayList<>(), insideOfFunction);
+    public static NumExpr parseNumExpr(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
+        ArrayList<NumExpr> exprList = parseNumExprR(tokens, nestLevel, new ArrayList<>(), scope);
         if (exprList == null) {
             return null;
         }
@@ -163,7 +163,7 @@ public class NumExpr extends Expr {
         String ExprType = isIntExpr ? "Integer" : "Double";
 
 
-        return new NumExpr(exprList, ExprType, insideOfFunction);
+        return new NumExpr(exprList, ExprType, scope);
     }
 
     /**
@@ -246,12 +246,12 @@ public class NumExpr extends Expr {
             // getting that functions real return type from table
 
             // makes sure function exits
-            if (!ValidateTable.functions.containsKey(n.functionCall.name.getToken())) {
+            if (!ValidateTable.getScope(scope).functions.containsKey(n.functionCall.name.getToken())) {
                 throw new ParsingException("use of undefined Function : " + n.functionCall.name.getToken() + " line:" + n.functionCall.name.getLineNum());
             }
             n.functionCall.validateTree();
 
-            String funcType = ValidateTable.functions.get(n.functionCall.name.getToken()).get(0);
+            String funcType = ValidateTable.getScope(scope).functions.get(n.functionCall.name.getToken()).get(0);
             // if it's the first func call we've seen set the prev type to this type
             if (prevFunctionType == null) {
                 prevFunctionType = funcType;
@@ -259,7 +259,7 @@ public class NumExpr extends Expr {
                 // at this point our expr is only made of function falls like foo[] + boo[] +too[]... only functions
                 // all of these function return types should match to be a valid expr
                 if (!funcType.equals(prevFunctionType)) {
-                    throw new ParsingException("func mis match type: " + ValidateTable.functions.get(n.functionCall.name.getToken()).get(0));
+                    throw new ParsingException("func mis match type: " + ValidateTable.getScope(scope).functions.get(n.functionCall.name.getToken()).get(0));
                 }
         }
         // if we had an  expr of  function calls that all return types matched then we know that this expr type is really
@@ -277,8 +277,8 @@ public class NumExpr extends Expr {
             // this is checked above but im just keeping it for now
             if (n.functionCall != null) {
                 n.functionCall.validateTree();
-                if (!ValidateTable.functions.get(n.functionCall.name.getToken()).get(0).equals(this.exprType)) {
-                    throw new ParsingException("func Wrong type in exp: " + ValidateTable.functions.get(n.functionCall.name.getToken()).get(0));
+                if (!ValidateTable.getScope(scope).functions.get(n.functionCall.name.getToken()).get(0).equals(this.exprType)) {
+                    throw new ParsingException("func Wrong type in exp: " + ValidateTable.getScope(scope).functions.get(n.functionCall.name.getToken()).get(0));
                 }
             }
             // this checks for a var in an expr like : 1 + x that 1) x exists 2) it's been init and 3) its type is okay
@@ -288,8 +288,8 @@ public class NumExpr extends Expr {
 
                 ///1) var exits
 
-                if (ValidateTable.variables.containsKey(n.numType.varNumber)) {
-                    ArrayList<String> varProperties = ValidateTable.variables.get(n.numType.varNumber);
+                if (ValidateTable.getScope(scope).variables.containsKey(n.numType.varNumber)) {
+                    ArrayList<String> varProperties = ValidateTable.getScope(scope).variables.get(n.numType.varNumber);
 
                     ///2) var type matches expr type
                     if (prevFunctionType == null) {
@@ -304,7 +304,7 @@ public class NumExpr extends Expr {
                                 throw new ParsingException("use of un-init var: " + n.numType.varNumber + " line:" + n.numType.number.getLineNum());
                             }
                         } else {
-                            throw new ParsingException("bad var type in exp: " + ValidateTable.variables.get(n.numType.varNumber).get(0) + " " + n.numType.varNumber);
+                            throw new ParsingException("bad var type in exp: " + ValidateTable.getScope(scope).variables.get(n.numType.varNumber).get(0) + " " + n.numType.varNumber);
                         }
                     }
                 } else {

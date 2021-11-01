@@ -17,7 +17,7 @@ public class Type {
     String type;
     String filename;
     int lineNumber;
-    public String insideOfFunction;
+    public String scope;
 
     /**
      * This is the constructor for a Type that takes in a token, a filename, and a line number.
@@ -26,11 +26,11 @@ public class Type {
      * @param filename   this is the filename where the token comes from
      * @param lineNumber this is the line number in the filename where the token is from
      */
-    public Type(String token, String filename, int lineNumber,String insideOfFunction) {
+    public Type(String token, String filename, int lineNumber,String scope) {
         this.type = token;
         this.filename = filename;
         this.lineNumber = lineNumber;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
     }
 
@@ -39,8 +39,8 @@ public class Type {
      *
      * @param type tells
      */
-    public Type(String type,String insideOfFunction) {
-        this.insideOfFunction = insideOfFunction;
+    public Type(String type,String scope) {
+        this.scope = scope;
         this.type = type;
     }
 
@@ -64,11 +64,11 @@ public class Type {
      * @param tokens TODO
      * @return TODO
      */
-    public static Type parseFReturnStmt(ArrayList<Token> tokens,String insideOfFunction) {
+    public static Type parseFReturnStmt(ArrayList<Token> tokens,String scope) {
         Token funcReturnType = tokens.get(TokenIndex.currentTokenIndex);
         if (isType(funcReturnType) || funcReturnType.getToken().equals("Void")) {
             TokenIndex.currentTokenIndex++;
-            return new Type(funcReturnType.getToken(), funcReturnType.getFilename(), funcReturnType.getLineNum(),insideOfFunction);
+            return new Type(funcReturnType.getToken(), funcReturnType.getFilename(), funcReturnType.getLineNum(),scope);
         }
         return null;
 
@@ -81,13 +81,13 @@ public class Type {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public Type parseType(ArrayList<Token> tokens,String insideOfFunction) throws ParsingException {
+    public Type parseType(ArrayList<Token> tokens,String scope) throws ParsingException {
         // check for type
         Token typeToken = tokens.remove(0);
         if (typeToken.getTokenType() == TokenType.ID_KEYWORD) {
             if ("Integer".equals(typeToken.getToken()) || "Double".equals(typeToken.getToken()) ||
                     "String".equals(typeToken.getToken()) || "Boolean".equals(typeToken.getToken())) {
-                return new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum(),insideOfFunction);
+                return new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum(),scope);
             }
         }
 

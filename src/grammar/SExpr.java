@@ -18,7 +18,7 @@ public class SExpr extends Expr {
     private final Token token;
     private final FuncCall funcCall;
     int nestLevel;
-    public String insideOfFunction;
+    public String scope;
 
     /**
      * This is a constructor for a string expression.
@@ -28,13 +28,13 @@ public class SExpr extends Expr {
      * @param funcCall      TODO
      * @param nestLevel     TODO
      */
-    public SExpr(Token stringLiteral, Token token, FuncCall funcCall, int nestLevel,String insideOfFunction) {
+    public SExpr(Token stringLiteral, Token token, FuncCall funcCall, int nestLevel,String scope) {
         super(null, null,null);
         this.stringLiteral = stringLiteral;
         this.token = token;
         this.funcCall = funcCall;
         this.nestLevel = nestLevel;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
     }
 
@@ -46,7 +46,7 @@ public class SExpr extends Expr {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static SExpr parseSExpr(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
+    public static SExpr parseSExpr(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
         // parsing s_expr
         Token possibleString = tokens.get(TokenIndex.currentTokenIndex);
 
@@ -54,20 +54,20 @@ public class SExpr extends Expr {
         if (possibleString.getTokenType() == TokenType.STRING) {
 
             TokenIndex.currentTokenIndex++;
-            return new SExpr(possibleString, null, null, nestLevel,insideOfFunction);
+            return new SExpr(possibleString, null, null, nestLevel,scope);
         }
 
         // check for id
         if (possibleString.getTokenType() == TokenType.ID_KEYWORD) {
             TokenIndex.currentTokenIndex++;
-            return new SExpr(null, possibleString, null, nestLevel,insideOfFunction);
+            return new SExpr(null, possibleString, null, nestLevel,scope);
         }
 
         // check for func call
-        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel,insideOfFunction);
+        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel,scope);
         if (funcCall != null) {
             TokenIndex.currentTokenIndex++;
-            return new SExpr(null, null, funcCall, nestLevel,insideOfFunction);
+            return new SExpr(null, null, funcCall, nestLevel,scope);
         }
 
         return null;

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class VarDec {
     private final Type type;
     private final Identifier identifier;
-    public String insideOfFunction;
+    public String scope;
 
     /**
      * TODO
@@ -27,7 +27,7 @@ public class VarDec {
     public VarDec(Type type, Identifier identifier,String insideOfFunction) {
         this.type = type;
         this.identifier = identifier;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = insideOfFunction;
 
     }
 
@@ -118,10 +118,11 @@ public class VarDec {
      * @return whether code is valid or not
      */
     public boolean validateTree() {
-        ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
-            add(type.type);
-            add(null);
-        }});
+        // [function scope to add too ,  var name  , [type , val ] ]
+        ValidateTable.addVarToScope(scope,identifier.convertToJott(),type.type, null);
+
+
+
         return true;
     }
 }

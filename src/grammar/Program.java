@@ -33,7 +33,7 @@ public class Program implements JottTree {
      */
     public static Program parseProgram(ArrayList<Token> tokens) throws ParsingException {
         TokenIndex.reset();
-        ValidateTable.clearTables();
+        ValidateTable.clearAll();
         return new Program(FunctionList.parseFunctionList(tokens, 0));
     }
 

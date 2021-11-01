@@ -19,7 +19,7 @@ public class BodyStmt {
     public Stmt possibleStmt;
     public int nestLevel;
     public boolean hasGuaranteedReturn;
-    public String insideOfFunction;
+    public String scope;
 
     /**
      * This is a constructor for a body statement.
@@ -30,13 +30,13 @@ public class BodyStmt {
      * @param nestLevel           TODO
      * @param hasGuaranteedReturn TODO
      */
-    public BodyStmt(IfStmt possibleIf, WhileLoop possibleWhile, Stmt possibleStmt, int nestLevel, boolean hasGuaranteedReturn,String insideOfFunction) {
+    public BodyStmt(IfStmt possibleIf, WhileLoop possibleWhile, Stmt possibleStmt, int nestLevel, boolean hasGuaranteedReturn,String scope) {
         this.possibleIf = possibleIf;
         this.possibleWhile = possibleWhile;
         this.possibleStmt = possibleStmt;
         this.nestLevel = nestLevel;
         this.hasGuaranteedReturn = hasGuaranteedReturn;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
     }
 
@@ -47,23 +47,23 @@ public class BodyStmt {
      * @param nestLevel TODO
      * @throws ParsingException TODO
      */
-    public static BodyStmt parseBodyStmt(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
-        IfStmt possibleIf = IfStmt.parseIfStmt(tokens, nestLevel + 1,insideOfFunction);
+    public static BodyStmt parseBodyStmt(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
+        IfStmt possibleIf = IfStmt.parseIfStmt(tokens, nestLevel + 1,scope);
 
         if (possibleIf != null) {
-            return new BodyStmt(possibleIf, null, null, nestLevel, possibleIf.hasGuaranteedReturn,insideOfFunction);
+            return new BodyStmt(possibleIf, null, null, nestLevel, possibleIf.hasGuaranteedReturn,scope);
         }
 
-        WhileLoop possibleWhile = WhileLoop.parseWhile(tokens, nestLevel + 1,insideOfFunction);
+        WhileLoop possibleWhile = WhileLoop.parseWhile(tokens, nestLevel + 1,scope);
         if (possibleWhile != null) {
-            return new BodyStmt(null, possibleWhile, null, nestLevel, false,insideOfFunction);
+            return new BodyStmt(null, possibleWhile, null, nestLevel, false,scope);
         }
 
-        Stmt possibleStmt = Stmt.parseStmt(tokens, nestLevel,insideOfFunction);
+        Stmt possibleStmt = Stmt.parseStmt(tokens, nestLevel,scope);
 
         if (possibleStmt != null) {
             //System.out.println("statement found: " + possibleStmt.convertToJott());
-            return new BodyStmt(null, null, possibleStmt, nestLevel + 1, false,insideOfFunction);
+            return new BodyStmt(null, null, possibleStmt, nestLevel + 1, false,scope);
         }
 
         return null;

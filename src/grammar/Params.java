@@ -22,7 +22,7 @@ public class Params {
     public Expr expr;
     boolean hasComma = false;
     public ArrayList<Params> paramsList = null;
-    public String insideOfFunction;
+    public String scope;
 
     /**
      * This is a constructor for Params.
@@ -30,10 +30,10 @@ public class Params {
      * @param expr     this holds the param
      * @param hasComma whether if this expression has a comma or not
      */
-    public Params(Expr expr, boolean hasComma,String insideOfFunction) {
+    public Params(Expr expr, boolean hasComma,String scope) {
         this.expr = expr;
         this.hasComma = hasComma;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
     }
 
     /**
@@ -41,14 +41,14 @@ public class Params {
      *
      * @param params this is a list of params
      */
-    public Params(ArrayList<Params> params,String insideOfFunction) {
+    public Params(ArrayList<Params> params,String scope) {
 
         this.paramsList = params;
-        this.insideOfFunction = insideOfFunction;
+        this.scope = scope;
 
     }
 
-    public static ArrayList<Params> parseParams_r(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
+    public static ArrayList<Params> parseParams_r(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
         // a list of params
         ArrayList<Params> listOfParams = new ArrayList<>();
 
@@ -63,8 +63,8 @@ public class Params {
         }
 
         // looking for expr
-        Expr expr = Expr.parseExpr(tokens, nestLevel,insideOfFunction);
-        listOfParams.add(new Params(expr, false,insideOfFunction));
+        Expr expr = Expr.parseExpr(tokens, nestLevel,scope);
+        listOfParams.add(new Params(expr, false,scope));
 
         // checking for more params, comma started
         Token commaToken = tokens.get(TokenIndex.currentTokenIndex);
@@ -72,8 +72,8 @@ public class Params {
             TokenIndex.currentTokenIndex++;
 
             // check for expr
-            expr = Expr.parseExpr(tokens, nestLevel,insideOfFunction);
-            listOfParams.add(new Params(expr, true,insideOfFunction));
+            expr = Expr.parseExpr(tokens, nestLevel,scope);
+            listOfParams.add(new Params(expr, true,scope));
 
             // check for , and look for more
             commaToken = tokens.get(TokenIndex.currentTokenIndex);
@@ -83,13 +83,13 @@ public class Params {
         return listOfParams;
     }
 
-    public static Params parseParams(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
-        ArrayList<Params> params = parseParams_r(tokens, nestLevel,insideOfFunction);
+    public static Params parseParams(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
+        ArrayList<Params> params = parseParams_r(tokens, nestLevel,scope);
         if (params == null) {
             return null;
         }
         //System.out.println("->>>" + p.convertToJott() + "<<<-");
-        return new Params(params,insideOfFunction);
+        return new Params(params,scope);
 
     }
 

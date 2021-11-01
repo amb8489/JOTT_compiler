@@ -27,7 +27,7 @@ public class JottParser {
 
         try {
             Program tree = Program.parseProgram(tokens);
-            ValidateTable.clearTables();
+            ValidateTable.clearAll();
 
             tree.validateTree();
 
