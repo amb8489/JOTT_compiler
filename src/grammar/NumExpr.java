@@ -220,6 +220,16 @@ public class NumExpr extends Expr {
             return true;
         }
 
+        /////
+
+
+
+        ////
+
+
+
+        PrevFunctionType = null;
+
         // this will varify that function return types match the expr type
         for (NumExpr n : this.finalExpr) {
             // this is checked above but im just keeping it for now
@@ -240,23 +250,29 @@ public class NumExpr extends Expr {
                     ArrayList<String> varProperties = ValidateTable.variables.get(n.numType.varNumber);
 
                     ///2) var type matches expr type
-                    if (varProperties.get(0).equals(this.exprType)) {
+                    if (PrevFunctionType == null){
+                        PrevFunctionType = varProperties.get(0);
+                    }else {
 
-                        ///3) var has been init
+                        if (varProperties.get(0).equals(PrevFunctionType)) {
 
-                        if (varProperties.get(1) == null) {
-                            throw new ParsingException("use of un-init var: " + n.numType.varNumber + " line:" + n.numType.number.getLineNum());
+                            ///3) var has been init
+
+                            if (varProperties.get(1) == null) {
+                                throw new ParsingException("use of un-init var: " + n.numType.varNumber + " line:" + n.numType.number.getLineNum());
+                            }
+                        } else {
+                            throw new ParsingException("bad var type in exp: " + ValidateTable.variables.get(n.numType.varNumber).get(0) + " " + n.numType.varNumber);
                         }
-                    } else {
-                        throw new ParsingException("bad var type in exp: " + ValidateTable.variables.get(n.numType.varNumber).get(0) + " " + n.numType.varNumber);
                     }
                 } else {
                     throw new ParsingException("use of undefined var: " + n.numType.varNumber + " line:" + n.numType.number.getLineNum());
                 }
             }
         }
-
-        return false;
+        System.out.println("---|||"+PrevFunctionType);
+        this.type= PrevFunctionType;
+        return true;
     }
 
 }

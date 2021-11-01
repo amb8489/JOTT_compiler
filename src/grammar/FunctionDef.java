@@ -186,20 +186,24 @@ public class FunctionDef {
         if (!this.returnType.type.equals("Void")) {
             assert this.body != null;
             if (this.body.hasReturn != null && !this.body.hasGuaranteedReturnFromIf) {
-                if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expr.type)) {
-                    this.body.hasReturn.expr.validateTree();
-                    return true;
+                this.body.hasReturn.expr.validateTree();
+
+                this.body.hasReturn.expr.validateTree();
+
+                if(body.hasReturn.expr.expr.type != null) {
+                    this.body.hasReturn.expr.type = body.hasReturn.expr.expr.type;
                 }
 
+                if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expr.type)) {
+                    System.out.println(this.body.hasReturn.expr.type);
+
+                    return true;
+                }
+                System.out.println(this.body.hasReturn.expr.type);
                 throw new ParsingException("RETURNING WRONG TYPE in function: " + this.id.convertToJott() + " " + this.body.hasReturn.expr.type + " " + ValidateTable.functions.get(this.id.convertToJott()).get(0));
             }
 
             if (this.body.hasGuaranteedReturnFromIf) {
-
-
-
-
-
 
 //                if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expr.type)) {
 //                    this.body.hasReturn.expr.validateTree();

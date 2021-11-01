@@ -148,10 +148,11 @@ public class AsmtStmt {
                 // we had a change in type
                 // we change the type
                 if(expr.expr.type != null) {
-                    this.type = new Type(expr.expr.type);
+                    this.expr.type = expr.expr.type;
                 }
                 // see that type of left = type of right for function
 
+                System.out.println(this.type.type+" "+expr.type);
 
                 if (type.type.equals(expr.type)) {
                     ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
@@ -160,7 +161,6 @@ public class AsmtStmt {
                     }});
                     return true;
                 }
-
 
                 throw new ParsingException(String.format("var %s assigned wrong type: line %d", identifier.convertToJott(), identifier.id.getLineNum()));
 

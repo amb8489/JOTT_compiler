@@ -20,9 +20,9 @@ import java.util.ArrayList;
  */
 public class Params {
 
-    private Expr expr;
+    public Expr expr;
     boolean hasComma = false;
-    ArrayList<Params> paramsList = null;
+    public ArrayList<Params> paramsList = null;
 
 
     /**

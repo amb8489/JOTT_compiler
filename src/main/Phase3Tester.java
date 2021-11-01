@@ -24,6 +24,8 @@ public class Phase3Tester {
             }
         }
 
+
+
         private boolean tokensEqualNoFileData(Token t1, Token t2){
             return t1.getTokenType() == t2.getTokenType() &&
                     t1.getToken().equals(t2.getToken());

@@ -1,15 +1,12 @@
-#this will pass phase 3
+#this will pass phase 2 but fail phase 3 for foo param type not matching
+
+foo[y:Double]:Integer{
+    print[y];
+	return 3;
+}
 
 main[]:Integer{
-    Integer x = 5;
-    if[x > 5]{
-        x = x - 1;
-        return x;
-    }elseif[x == 4]{
-        x = 1;
-        return 4.0;
-    }else{
-        return x;
-    }
-
+    Integer x = foo[5];
+	concat[x,x];
+	return x;
 }
