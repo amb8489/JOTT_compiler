@@ -1,0 +1,26 @@
+#this will pass phase 3
+foo[x:Integer]:Void{
+    print[x];
+}
+baz[]:Void{
+    print["Hello World"];
+}
+bar[x:Double]:String{
+    if[x > 5.1]{
+        return "bar";
+    }
+    baz[];
+    return "foo";
+}
+main[]:Integer{
+    Double y = 1.0;
+    Integer x = 5;
+    while[x>0]{
+        foo[x];
+        print[bar[y]];
+        x=x-1;
+        y=y+1.1;
+    }
+    baz[];
+    return 1;
+}

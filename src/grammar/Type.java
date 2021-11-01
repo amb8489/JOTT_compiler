@@ -31,6 +31,10 @@ public class Type {
         this.lineNumber = lineNumber;
     }
 
+    public Type(String type) {
+        this.type = type;
+    }
+
     /**
      * TODO
      *

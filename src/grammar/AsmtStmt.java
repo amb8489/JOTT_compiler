@@ -102,7 +102,6 @@ public class AsmtStmt {
 
         //check for ;
         Token endStmt = tokens.get(TOKEN_IDX.index);
-        System.err.println(endStmt.getToken());
         if (endStmt.getTokenType() != TokenType.SEMICOLON) {
             String message = String.format("Syntax error\nInvalid token. Expected ;. Got: %s\n%s:%s",
                     endStmt.getTokenType().toString(),
@@ -146,18 +145,13 @@ public class AsmtStmt {
 
                 this.expr.validateTree();
 
-
+                // we had a change in type
+                // we change the type
+                if(expr.expr.type != null) {
+                    this.type = new Type(expr.expr.type);
+                }
                 // see that type of left = type of right for function
 
-                if (type.type.equals(expr.expr.type)) {
-                    ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
-                        add(type.type);
-                        add(expr.convertToJott());
-                    }});
-                    return true;
-                }
-
-                // see that type of left = type expr
 
                 if (type.type.equals(expr.type)) {
                     ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
@@ -166,6 +160,7 @@ public class AsmtStmt {
                     }});
                     return true;
                 }
+
 
                 throw new ParsingException(String.format("var %s assigned wrong type: line %d", identifier.convertToJott(), identifier.id.getLineNum()));
 
