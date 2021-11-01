@@ -35,12 +35,14 @@ public class IfStmt {
                   Body body1,
                   ArrayList<ElseifStmt> elseIfStatements,
                   int nestLevel,
-                  boolean hasGuaranteedReturn) {
+                  boolean hasGuaranteedReturn,String insideOfFunction) {
         this.expr = expr;
         this.body1 = body1;
         this.elseIfStatements = elseIfStatements;
         this.nestLevel = nestLevel;
         this.hasGuaranteedReturn = hasGuaranteedReturn;
+        this.insideOfFunction = insideOfFunction;
+
     }
 
     /**
@@ -58,7 +60,7 @@ public class IfStmt {
                   Body body2,
                   ArrayList<ElseifStmt> elseIfStatements,
                   int nestLevel,
-                  boolean hasGuaranteedReturn) {
+                  boolean hasGuaranteedReturn,String insideOfFunction) {
 
         this.expr = expr;
         this.body1 = body1;
@@ -66,9 +68,11 @@ public class IfStmt {
         this.body2 = body2;
         this.nestLevel = nestLevel;
         this.hasGuaranteedReturn = hasGuaranteedReturn;
+        this.insideOfFunction = insideOfFunction;
+
     }
 
-    public static IfStmt parseIfStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public static IfStmt parseIfStmt(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
         Token ifToken = tokens.get(TokenIndex.currentTokenIndex);
         //System.out.println("\t1st:" + ifToken.getToken());
         // check for if
@@ -88,7 +92,7 @@ public class IfStmt {
         TokenIndex.currentTokenIndex++;
 
         // checking for bool expression
-        Expr expression = Expr.parseExpr(tokens, nestLevel);
+        Expr expression = Expr.parseExpr(tokens, nestLevel,insideOfFunction);
 
         // checking for ]
         Token R_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
@@ -116,7 +120,7 @@ public class IfStmt {
 
         // checking for body
         boolean allBodiesHasReturn = true;
-        Body body1 = Body.ParseBody(tokens, nestLevel);
+        Body body1 = Body.ParseBody(tokens, nestLevel,insideOfFunction);
         if (body1 != null) {
             if (body1.hasReturn == null) {
                 allBodiesHasReturn = false;
@@ -138,7 +142,7 @@ public class IfStmt {
         TokenIndex.currentTokenIndex++;
 
         // checking for else ifs
-        ArrayList<ElseifStmt> elseIfList = ElseifStmt.ParseElsif_lst(tokens, nestLevel);
+        ArrayList<ElseifStmt> elseIfList = ElseifStmt.ParseElsif_lst(tokens, nestLevel,insideOfFunction);
         if (elseIfList != null) {
             for (ElseifStmt elif : elseIfList) {
                 if (elif.body.hasReturn == null) {
@@ -173,7 +177,7 @@ public class IfStmt {
             TokenIndex.currentTokenIndex++;
 
             // checking for body
-            Body body2 = Body.ParseBody(tokens, nestLevel);
+            Body body2 = Body.ParseBody(tokens, nestLevel,insideOfFunction);
             boolean hasGuaranteedReturn = false;
             if (body2 != null) {
                 if (body2.hasReturn != null) {
@@ -196,11 +200,11 @@ public class IfStmt {
             // all done
             hasGuaranteedReturn = hasGuaranteedReturn == allBodiesHasReturn;
 
-            return new IfStmt(expression, body1, body2, elseIfList, nestLevel, hasGuaranteedReturn);
+            return new IfStmt(expression, body1, body2, elseIfList, nestLevel, hasGuaranteedReturn,insideOfFunction);
         }
 
 
-        return new IfStmt(expression, body1, elseIfList, nestLevel, false);
+        return new IfStmt(expression, body1, elseIfList, nestLevel, false,insideOfFunction);
     }
 
     /**

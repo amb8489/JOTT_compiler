@@ -32,7 +32,7 @@ public class BExpr extends Expr {
      * @param finalExp TODO blah
      */
     public BExpr(ArrayList<BExpr> finalExp,String insideOfFunction) {
-        super(null, null);
+        super(null, null,null);
         this.finalExpr = finalExp;
         this.insideOfFunction = insideOfFunction;
 
@@ -44,7 +44,7 @@ public class BExpr extends Expr {
      * @param bool TODO blah
      */
     public BExpr(Token bool,String insideOfFunction) {
-        super(null, null);
+        super(null, null,null);
         this.bool = bool;
         this.insideOfFunction = insideOfFunction;
 
@@ -57,7 +57,7 @@ public class BExpr extends Expr {
      * @param relOp TODO blah
      */
     public BExpr(Token bool, Token relOp,String insideOfFunction) {
-        super(null, null);
+        super(null, null,null);
         this.bool = bool;
         this.relOp = relOp;
         this.insideOfFunction = insideOfFunction;
@@ -71,7 +71,7 @@ public class BExpr extends Expr {
      * @param relOP TODO blah
      */
     public BExpr(Expr expr, Token relOP,String insideOfFunction) {
-        super(null, null);
+        super(null, null,null);
         this.relOp = relOP;
         this.expr = expr;
         this.insideOfFunction = insideOfFunction;
@@ -84,7 +84,7 @@ public class BExpr extends Expr {
      * @param expr TODO blah
      */
     public BExpr(Expr expr,String insideOfFunction) {
-        super(null, null);
+        super(null, null,null);
         this.expr = expr;
         this.insideOfFunction = insideOfFunction;
     }
@@ -108,10 +108,10 @@ public class BExpr extends Expr {
             TokenIndex.currentTokenIndex++;
             isBool = true;
         } else {
-            possibleExpr = NumExpr.parseNumExpr(tokens, nestLevel);
+            possibleExpr = NumExpr.parseNumExpr(tokens, nestLevel,insideOfFunction);
 
             if (possibleExpr == null) {
-                possibleExpr = SExpr.parseSExpr(tokens, nestLevel);
+                possibleExpr = SExpr.parseSExpr(tokens, nestLevel,insideOfFunction);
                 if (possibleExpr == null) {
                     String message = String.format("Syntax error\nInvalid token. Expected ;. Got: %s\n%s:%s",
                             possibleBool.getTokenType().toString(),

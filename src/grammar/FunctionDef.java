@@ -38,6 +38,8 @@ public class FunctionDef {
         this.returnType = returnType;
         this.nestLevel = nestLevel;
         this.insideOfFunction = id.id.getToken();
+        this.insideOfFunction = insideOfFunction;
+
     }
 
     public static FunctionDef parseFunctionDef(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
@@ -91,7 +93,7 @@ public class FunctionDef {
         //System.out.println("Found } --> " + R_BRACE.getToken());
         TokenIndex.currentTokenIndex++;
 
-        return new FunctionDef(new Identifier(id), funcDefParams, body, return_, nestlevel);
+        return new FunctionDef(new Identifier(id,funcName), funcDefParams, body, return_, nestlevel);
     }
 
     /**

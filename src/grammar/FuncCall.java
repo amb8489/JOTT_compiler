@@ -22,9 +22,11 @@ public class FuncCall {
      * @param token      TODO
      * @param parameters TODO
      */
-    public FuncCall(Token token, Params parameters) {
+    public FuncCall(Token token, Params parameters,String insideOfFunction) {
         this.name = token;
         this.parameters = parameters;
+        this.insideOfFunction = insideOfFunction;
+
     }
 
     /**
@@ -35,7 +37,7 @@ public class FuncCall {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static FuncCall ParseFuncCall(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public static FuncCall ParseFuncCall(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
 
         // check if the function call starts with id
         Token id = tokens.get(TokenIndex.currentTokenIndex);
@@ -57,7 +59,7 @@ public class FuncCall {
         TokenIndex.currentTokenIndex++;
 
         // looking for function parameters
-        Params params = Params.parseParams(tokens, nestLevel);
+        Params params = Params.parseParams(tokens, nestLevel,insideOfFunction);
 
         // checking for ]
         Token R_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
@@ -71,7 +73,7 @@ public class FuncCall {
         TokenIndex.currentTokenIndex++;
 
         // we are all done
-        return new FuncCall(id, params);
+        return new FuncCall(id, params,insideOfFunction);
     }
 
     /**

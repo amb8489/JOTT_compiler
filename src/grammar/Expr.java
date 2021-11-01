@@ -28,9 +28,11 @@ public class Expr {
      * @param expr an expression that could be BExpr, DExpr
      * @param type TODO
      */
-    public Expr(Expr expr, String type) {
+    public Expr(Expr expr, String type,String insideOfFunction) {
         this.expr = expr;
         this.type = type;
+        this.insideOfFunction = insideOfFunction;
+
     }
 
     /**
@@ -41,29 +43,29 @@ public class Expr {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static Expr parseExpr(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public static Expr parseExpr(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
 
         // looking for a numExpr (either integer or double)
         if (tokens.get(TokenIndex.currentTokenIndex + 1).getTokenType() != TokenType.REL_OP) {
-            NumExpr numExpr = NumExpr.parseNumExpr(tokens, nestLevel);
+            NumExpr numExpr = NumExpr.parseNumExpr(tokens, nestLevel, insideOfFunction);
 
             if (numExpr != null) {
-                return new Expr(numExpr, numExpr.exprType);
+                return new Expr(numExpr, numExpr.exprType, insideOfFunction);
             }
 
             // looking for a string expression
 
             // determine whether this string is a literal id or a function call
-            Expr sExpr = SExpr.parseSExpr(tokens, nestLevel);
+            Expr sExpr = SExpr.parseSExpr(tokens, nestLevel,insideOfFunction);
             if (sExpr != null) {
-                return new Expr(sExpr, "String");
+                return new Expr(sExpr, "String",insideOfFunction);
             }
 
         }
 
         // looking  for a boolean expression
-        Expr bExpr = BExpr.parseBExpr(tokens, nestLevel);
-        return new Expr(bExpr, "Boolean");
+        Expr bExpr = BExpr.parseBExpr(tokens, nestLevel,insideOfFunction);
+        return new Expr(bExpr, "Boolean",insideOfFunction);
 
         // throw an error, no valid expression found
     }

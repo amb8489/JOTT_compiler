@@ -26,10 +26,12 @@ public class WhileLoop {
      * @param expr      TODO
      * @param body      TODO
      */
-    public WhileLoop(int nestLevel, Expr expr, Body body) {
+    public WhileLoop(int nestLevel, Expr expr, Body body,String insideOfFunction) {
         this.expr = expr;
         this.body = body;
         this.nestLevel = nestLevel;
+        this.insideOfFunction = insideOfFunction;
+
     }
 
     /**
@@ -40,7 +42,7 @@ public class WhileLoop {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static WhileLoop parseWhile(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public static WhileLoop parseWhile(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
         // checking while call starts with while
         Token whileToken = tokens.get(TokenIndex.currentTokenIndex);
         if (!whileToken.getToken().equals("while")) {
@@ -64,7 +66,7 @@ public class WhileLoop {
         TokenIndex.currentTokenIndex++;
 
         // checking for bool expr
-        Expr expr = BExpr.parseBExpr(tokens, nestLevel);
+        Expr expr = BExpr.parseBExpr(tokens, nestLevel,insideOfFunction);
 
         // checking for ]
         Token R_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
@@ -92,7 +94,7 @@ public class WhileLoop {
         TokenIndex.currentTokenIndex++;
 
         // checking for body
-        Body body1 = Body.ParseBody(tokens, nestLevel);
+        Body body1 = Body.ParseBody(tokens, nestLevel,insideOfFunction);
 
         // checking for }
         Token R_BRACE = tokens.get(TokenIndex.currentTokenIndex);
@@ -106,7 +108,7 @@ public class WhileLoop {
         }
         TokenIndex.currentTokenIndex++;
 
-        return new WhileLoop(nestLevel, expr, body1);
+        return new WhileLoop(nestLevel, expr, body1,insideOfFunction);
     }
 
     /**

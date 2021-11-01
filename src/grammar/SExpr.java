@@ -28,12 +28,14 @@ public class SExpr extends Expr {
      * @param funcCall      TODO
      * @param nestLevel     TODO
      */
-    public SExpr(Token stringLiteral, Token token, FuncCall funcCall, int nestLevel) {
-        super(null, null);
+    public SExpr(Token stringLiteral, Token token, FuncCall funcCall, int nestLevel,String insideOfFunction) {
+        super(null, null,null);
         this.stringLiteral = stringLiteral;
         this.token = token;
         this.funcCall = funcCall;
         this.nestLevel = nestLevel;
+        this.insideOfFunction = insideOfFunction;
+
     }
 
     /**
@@ -44,7 +46,7 @@ public class SExpr extends Expr {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static SExpr parseSExpr(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public static SExpr parseSExpr(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
         // parsing s_expr
         Token possibleString = tokens.get(TokenIndex.currentTokenIndex);
 
@@ -52,20 +54,20 @@ public class SExpr extends Expr {
         if (possibleString.getTokenType() == TokenType.STRING) {
 
             TokenIndex.currentTokenIndex++;
-            return new SExpr(possibleString, null, null, nestLevel);
+            return new SExpr(possibleString, null, null, nestLevel,insideOfFunction);
         }
 
         // check for id
         if (possibleString.getTokenType() == TokenType.ID_KEYWORD) {
             TokenIndex.currentTokenIndex++;
-            return new SExpr(null, possibleString, null, nestLevel);
+            return new SExpr(null, possibleString, null, nestLevel,insideOfFunction);
         }
 
         // check for func call
-        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel);
+        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel,insideOfFunction);
         if (funcCall != null) {
             TokenIndex.currentTokenIndex++;
-            return new SExpr(null, null, funcCall, nestLevel);
+            return new SExpr(null, null, funcCall, nestLevel,insideOfFunction);
         }
 
         return null;

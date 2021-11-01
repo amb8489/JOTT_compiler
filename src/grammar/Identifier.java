@@ -13,7 +13,7 @@ import java.util.Set;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class Identifier {
-    private static final Set<String> idBanList = Set.of("while", "for", "True", "False", "if", "elseif", "else", "print");
+    private static final Set<String> idBanList = Set.of("while", "for", "True", "False", "if", "elseif", "else", "print","concat","length","input");
 
     Token id;
     public String insideOfFunction;
@@ -22,9 +22,11 @@ public class Identifier {
      * This is the constructor for an identifier.
      *
      * @param id the name of this identifier
-     */
-    public Identifier(Token id) {
+
+    */
+    public Identifier(Token id, String insideOfFunction) {
         this.id = id;
+        this.insideOfFunction = insideOfFunction;
     }
 
     public static void check(Token id) throws ParsingException {

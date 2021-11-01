@@ -27,11 +27,13 @@ public class NumExpr extends Expr {
      * @param numType the type of number
      * @param mathOp  the type of math operation done with the number
      */
-    public NumExpr(NumType numType, Token mathOp) {
-        super(null, null);
+    public NumExpr(NumType numType, Token mathOp,String insideOfFunction) {
+        super(null, null,null);
         this.numType = numType;
         this.mathOp = mathOp;
         this.functionCall = null;
+        this.insideOfFunction = insideOfFunction;
+
     }
 
     /**
@@ -39,11 +41,13 @@ public class NumExpr extends Expr {
      *
      * @param numType the type of number
      */
-    public NumExpr(NumType numType) {
-        super(null, null);
+    public NumExpr(NumType numType,String insideOfFunction) {
+        super(null, null,null);
         this.numType = numType;
         this.mathOp = null;
         this.functionCall = null;
+        this.insideOfFunction = insideOfFunction;
+
 
     }
 
@@ -53,11 +57,13 @@ public class NumExpr extends Expr {
      * @param funcCall the function call object
      * @param mathOp   the mathematical operation done with this function call object
      */
-    public NumExpr(FuncCall funcCall, Token mathOp) {
-        super(null, null);
+    public NumExpr(FuncCall funcCall, Token mathOp,String insideOfFunction) {
+        super(null, null,null);
         this.numType = null;
         this.functionCall = funcCall;
         this.mathOp = mathOp;
+        this.insideOfFunction = insideOfFunction;
+
     }
 
     /**
@@ -66,14 +72,16 @@ public class NumExpr extends Expr {
      * @param finalExpr finalExpr object
      * @param exprType  what type is this finalExpr object
      */
-    public NumExpr(ArrayList<NumExpr> finalExpr, String exprType) {
-        super(null, null);
+    public NumExpr(ArrayList<NumExpr> finalExpr, String exprType,String insideOfFunction) {
+        super(null, null,null);
         this.finalExpr = finalExpr;
         this.exprType = exprType;
         this.numType = null;
+        this.insideOfFunction = insideOfFunction;
+
     }
 
-    private static ArrayList<NumExpr> parseNumExprR(ArrayList<Token> tokens, int nestLevel, ArrayList<NumExpr> exprList) throws ParsingException {
+    private static ArrayList<NumExpr> parseNumExprR(ArrayList<Token> tokens, int nestLevel, ArrayList<NumExpr> exprList,String insideOfFunction) throws ParsingException {
 
         //  looking for id/int followed by math op
         Token possibleNumber = tokens.get(TokenIndex.currentTokenIndex);
@@ -83,33 +91,33 @@ public class NumExpr extends Expr {
             TokenIndex.currentTokenIndex += 2;
 
             // numExpr can be id, id op, num, or num op
-            exprList.add(new NumExpr(new NumType(possibleNumber), possibleOp));
+            exprList.add(new NumExpr(new NumType(possibleNumber,insideOfFunction), possibleOp,insideOfFunction));
 
             // trying to complete id/int op with valid follow
-            return parseNumExprR(tokens, nestLevel, exprList);
+            return parseNumExprR(tokens, nestLevel, exprList,insideOfFunction);
         }
 
 
         //  check for function funcCall op
-        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel);
+        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel,insideOfFunction);
         possibleOp = tokens.get(TokenIndex.currentTokenIndex);
 
         if (funcCall != null && possibleOp.getTokenType() == TokenType.MATH_OP) {
             TokenIndex.currentTokenIndex++;
-            exprList.add(new NumExpr(funcCall, possibleOp));
-            return parseNumExprR(tokens, nestLevel, exprList);
+            exprList.add(new NumExpr(funcCall, possibleOp,insideOfFunction));
+            return parseNumExprR(tokens, nestLevel, exprList,insideOfFunction);
         }
 
         // check for lone function funcCall
         if (funcCall != null) {
-            exprList.add(new NumExpr(funcCall, null));
+            exprList.add(new NumExpr(funcCall, null,insideOfFunction));
             return exprList;
         }
 
         //  check for lone id or num
         if (possibleNumber.getTokenType() == TokenType.NUMBER || possibleNumber.getTokenType() == TokenType.ID_KEYWORD) {
             TokenIndex.currentTokenIndex++;
-            exprList.add(new NumExpr(new NumType(possibleNumber)));
+            exprList.add(new NumExpr(new NumType(possibleNumber,insideOfFunction),insideOfFunction));
             return exprList;
         }
 
@@ -118,8 +126,8 @@ public class NumExpr extends Expr {
     }
 
 
-    public static NumExpr parseNumExpr(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        ArrayList<NumExpr> exprList = parseNumExprR(tokens, nestLevel, new ArrayList<>());
+    public static NumExpr parseNumExpr(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
+        ArrayList<NumExpr> exprList = parseNumExprR(tokens, nestLevel, new ArrayList<>(), insideOfFunction);
         if (exprList == null) {
             return null;
         }
@@ -155,7 +163,7 @@ public class NumExpr extends Expr {
         String ExprType = isIntExpr ? "Integer" : "Double";
 
 
-        return new NumExpr(exprList, ExprType);
+        return new NumExpr(exprList, ExprType, insideOfFunction);
     }
 
     /**

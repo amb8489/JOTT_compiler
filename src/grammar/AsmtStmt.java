@@ -66,7 +66,7 @@ public class AsmtStmt {
 
         Token typeToken = tokens.get(TokenIndex.currentTokenIndex);
         //System.out.println("    FIRST:" + typeToken.getToken());
-        Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum());
+        Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum(),insideOfFunction);
         TokenIndex.currentTokenIndex++;
 
         Token idToken = tokens.get(TokenIndex.currentTokenIndex);

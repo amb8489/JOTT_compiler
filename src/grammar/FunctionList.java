@@ -25,7 +25,9 @@ public class FunctionList {
      * @param listOfFunctionDefs a list of function definitions
      */
     public FunctionList(ArrayList<FunctionDef> listOfFunctionDefs) {
+
         this.listOfFunctionDefs = listOfFunctionDefs;
+
     }
 
     public static FunctionList parseFunctionList(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
@@ -102,7 +104,16 @@ public class FunctionList {
      */
     public boolean validateTree() throws ParsingException {
 
+
+
+
         for (FunctionDef functionDef : listOfFunctionDefs) {
+
+
+            // make new table for function so that that table will have its own scope
+            //ValidateTable.newScope();
+
+
             ValidateTable.functions.put(functionDef.id.convertToJott(), new ArrayList<>() {
                 {
                     add(functionDef.returnType.type);

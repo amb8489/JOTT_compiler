@@ -77,7 +77,7 @@ public class Body {
             bodies.add(bodyStmt);
         }
 
-        ReturnStmt returnStmt = ReturnStmt.parseReturnStmt(tokens, nestLevel);
+        ReturnStmt returnStmt = ReturnStmt.parseReturnStmt(tokens, nestLevel,insideOfFunction);
 
         boolean hasGuaranteedReturn = false;
         for (BodyStmt b : bodies) {

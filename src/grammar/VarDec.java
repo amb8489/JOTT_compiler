@@ -24,9 +24,11 @@ public class VarDec {
      * @param type       TODO
      * @param identifier TODO
      */
-    public VarDec(Type type, Identifier identifier) {
+    public VarDec(Type type, Identifier identifier,String insideOfFunction) {
         this.type = type;
         this.identifier = identifier;
+        this.insideOfFunction = insideOfFunction;
+
     }
 
     /**
@@ -37,14 +39,14 @@ public class VarDec {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static VarDec parseVarDec(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public static VarDec parseVarDec(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
         // check for the correct type
 
         // removing and checking the first token
         // should be an IDkeyword type
 
         Token typeToken = tokens.get(TokenIndex.currentTokenIndex);
-        Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum());
+        Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum(),insideOfFunction);
         TokenIndex.currentTokenIndex++;
 
 
@@ -58,7 +60,7 @@ public class VarDec {
         Identifier.check(idToken);
         TokenIndex.currentTokenIndex++;
 
-        Identifier identifier = new Identifier(idToken);
+        Identifier identifier = new Identifier(idToken,insideOfFunction);
 
         // look for ;
         Token endStmt = tokens.get(TokenIndex.currentTokenIndex);
@@ -69,8 +71,7 @@ public class VarDec {
 
         TokenIndex.currentTokenIndex++;
 
-        // done
-        return new VarDec(type, identifier);
+        return new VarDec(type, identifier,insideOfFunction);
     }
 
     /**

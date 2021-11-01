@@ -30,9 +30,10 @@ public class Params {
      * @param expr     this holds the param
      * @param hasComma whether if this expression has a comma or not
      */
-    public Params(Expr expr, boolean hasComma) {
+    public Params(Expr expr, boolean hasComma,String insideOfFunction) {
         this.expr = expr;
         this.hasComma = hasComma;
+        this.insideOfFunction = insideOfFunction;
     }
 
     /**
@@ -40,11 +41,14 @@ public class Params {
      *
      * @param params this is a list of params
      */
-    public Params(ArrayList<Params> params) {
+    public Params(ArrayList<Params> params,String insideOfFunction) {
+
         this.paramsList = params;
+        this.insideOfFunction = insideOfFunction;
+
     }
 
-    public static ArrayList<Params> parseParams_r(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public static ArrayList<Params> parseParams_r(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
         // a list of params
         ArrayList<Params> listOfParams = new ArrayList<>();
 
@@ -59,8 +63,8 @@ public class Params {
         }
 
         // looking for expr
-        Expr expr = Expr.parseExpr(tokens, nestLevel);
-        listOfParams.add(new Params(expr, false));
+        Expr expr = Expr.parseExpr(tokens, nestLevel,insideOfFunction);
+        listOfParams.add(new Params(expr, false,insideOfFunction));
 
         // checking for more params, comma started
         Token commaToken = tokens.get(TokenIndex.currentTokenIndex);
@@ -68,8 +72,8 @@ public class Params {
             TokenIndex.currentTokenIndex++;
 
             // check for expr
-            expr = Expr.parseExpr(tokens, nestLevel);
-            listOfParams.add(new Params(expr, true));
+            expr = Expr.parseExpr(tokens, nestLevel,insideOfFunction);
+            listOfParams.add(new Params(expr, true,insideOfFunction));
 
             // check for , and look for more
             commaToken = tokens.get(TokenIndex.currentTokenIndex);
@@ -79,13 +83,13 @@ public class Params {
         return listOfParams;
     }
 
-    public static Params parseParams(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        ArrayList<Params> params = parseParams_r(tokens, nestLevel);
+    public static Params parseParams(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
+        ArrayList<Params> params = parseParams_r(tokens, nestLevel,insideOfFunction);
         if (params == null) {
             return null;
         }
         //System.out.println("->>>" + p.convertToJott() + "<<<-");
-        return new Params(params);
+        return new Params(params,insideOfFunction);
 
     }
 

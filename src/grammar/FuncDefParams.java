@@ -27,7 +27,7 @@ public class FuncDefParams {
      * @param type                  TODO
      * @param functionParameterList TODO
      */
-    public FuncDefParams(Identifier identifier, Token type, ArrayList<FuncDefParams> functionParameterList) {
+    public FuncDefParams(Identifier identifier, Token type, ArrayList<FuncDefParams> functionParameterList,String insideOfFunction) {
         this.identifier = identifier;
         this.type = type;
         this.functionParameterList = functionParameterList;
@@ -38,8 +38,9 @@ public class FuncDefParams {
      *
      * @param functionParameterList TODO
      */
-    public FuncDefParams(ArrayList<FuncDefParams> functionParameterList) {
+    public FuncDefParams(ArrayList<FuncDefParams> functionParameterList,String insideOfFunction) {
         this.functionParameterList = functionParameterList;
+        this.insideOfFunction = insideOfFunction;
     }
 
     /**
@@ -47,11 +48,11 @@ public class FuncDefParams {
      *
      * @param tokens    TODO
      * @param nestLevel TODO
-     * @param funcName
+     * @param insideOfFunction
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static FuncDefParams parseFunctionDefParams(ArrayList<Token> tokens, int nestLevel, String funcName) throws ParsingException {
+    public static FuncDefParams parseFunctionDefParams(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
 
         ArrayList<FuncDefParams> functionParameterList = new ArrayList<>();
 
@@ -75,7 +76,7 @@ public class FuncDefParams {
                         idd.getFilename() + ":" + idd.getLineNum();
                 throw new ParsingException(string);
             }
-            Identifier id = new Identifier(idd);
+            Identifier id = new Identifier(idd,insideOfFunction);
 
             TokenIndex.currentTokenIndex++;
 
@@ -96,7 +97,7 @@ public class FuncDefParams {
             TokenIndex.currentTokenIndex++;
 
             // look for extra parameters (parameters_t) for the function
-            functionParameterList.add(new FuncDefParams(id, type, null));
+            functionParameterList.add(new FuncDefParams(id, type, null,insideOfFunction));
 
 
             idd = tokens.get(TokenIndex.currentTokenIndex);
@@ -112,7 +113,7 @@ public class FuncDefParams {
             idd = tokens.get(TokenIndex.currentTokenIndex);
 
         }
-        return new FuncDefParams(functionParameterList);
+        return new FuncDefParams(functionParameterList,insideOfFunction);
     }
 
     /**

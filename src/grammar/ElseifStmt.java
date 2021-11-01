@@ -26,10 +26,12 @@ public class ElseifStmt {
      * @param body      TODO
      * @param nestLevel TODO
      */
-    public ElseifStmt(Expr expr, Body body, int nestLevel) {
+    public ElseifStmt(Expr expr, Body body, int nestLevel,String insideOfFunction) {
         this.expr = expr;
         this.body = body;
         this.nestLevel = nestLevel;
+        this.insideOfFunction = insideOfFunction;
+
     }
 
     /**
@@ -40,7 +42,7 @@ public class ElseifStmt {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static ArrayList<ElseifStmt> ParseElsif_lst(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public static ArrayList<ElseifStmt> ParseElsif_lst(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
         // list of all else if we will encounter if any
         ArrayList<ElseifStmt> elseIfList = new ArrayList<>();
 
@@ -71,7 +73,7 @@ public class ElseifStmt {
             TokenIndex.currentTokenIndex++;
 
             // looking for bool expr
-            Expr expr = Expr.parseExpr(tokens, nestLevel);
+            Expr expr = Expr.parseExpr(tokens, nestLevel,insideOfFunction);
 
             // looking for ]
             Token R_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
@@ -98,7 +100,7 @@ public class ElseifStmt {
             TokenIndex.currentTokenIndex++;
 
             // looking for a body
-            Body body = Body.ParseBody(tokens, nestLevel);
+            Body body = Body.ParseBody(tokens, nestLevel,insideOfFunction);
 
             // looking for a }
             Token R_BRACE = tokens.get(TokenIndex.currentTokenIndex);
@@ -114,7 +116,7 @@ public class ElseifStmt {
             TokenIndex.currentTokenIndex++;
 
             // adding what was found to the list of seen else if statements
-            elseIfList.add(new ElseifStmt(expr, body, nestLevel));
+            elseIfList.add(new ElseifStmt(expr, body, nestLevel,insideOfFunction));
 
             // looking for an else if statement
             elseif = tokens.get(TokenIndex.currentTokenIndex);

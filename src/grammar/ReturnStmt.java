@@ -25,15 +25,18 @@ public class ReturnStmt {
      *
      * @param expression an expression to be evaluated for return
      */
-    public ReturnStmt(Expr expression) {
+    public ReturnStmt(Expr expression,String insideOfFunction) {
+
         this.expr = expression;
+        this.insideOfFunction = insideOfFunction;
+
     }
 
     public String convertToJott() {
         return "\t".repeat(0) + "return " + expr.convertToJott() + ";\n";
     }
 
-    public static ReturnStmt parseReturnStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public static ReturnStmt parseReturnStmt(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
         // check for return
         Token returnToken = tokens.get(TokenIndex.currentTokenIndex);
         if (!returnToken.getToken().equals("return")) {
@@ -42,7 +45,7 @@ public class ReturnStmt {
         TokenIndex.currentTokenIndex++;
 
         // checking for expression
-        Expr expr = Expr.parseExpr(tokens, nestLevel);
+        Expr expr = Expr.parseExpr(tokens, nestLevel,insideOfFunction);
 
         //check for ;
         Token endStmt = tokens.get(TokenIndex.currentTokenIndex);
@@ -53,7 +56,7 @@ public class ReturnStmt {
         TokenIndex.currentTokenIndex++;
 
         // done
-        return new ReturnStmt(expr);
+        return new ReturnStmt(expr,insideOfFunction);
 
     }
 
