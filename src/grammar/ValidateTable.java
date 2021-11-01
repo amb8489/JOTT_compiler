@@ -24,7 +24,7 @@ public class ValidateTable {
     // name ---> [ReturnType, params.. ]     params = type
     public static HashMap<String, ArrayList<String>> functions = new HashMap<>();
 
-    public static void clearTables(){
+    public static void clearTables() {
         variables.clear();
         functions.clear();
     }

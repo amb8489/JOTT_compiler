@@ -45,7 +45,7 @@ public class JottParserTester {
         testCases.add(new TestCase("provided writeup example5 (error)", "providedExample5.jott", true ));
         testCases.add(new TestCase("hello world", "helloWorld.jott", false ));
         testCases.add(new TestCase("1foo error (error)", "1foo.jott", true ));
-        testCases.add(new TestCase("return <id> type mismatch", "returnId.jott", false ));
+        testCases.add(new TestCase("return <id> type mismatch", "returnid.jott", false ));
         testCases.add(new TestCase("type:var error (error)", "paramOrderSwapped.jott", true ));
         testCases.add(new TestCase("missing expr (error)", "missingExp.jott", true ));
         testCases.add(new TestCase("missingBrace (error)", "missingBrace.jott", true ));

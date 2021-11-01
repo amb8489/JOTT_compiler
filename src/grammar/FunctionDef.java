@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author Jake Peverly (jzp7326@rit.edu)
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
-public class FunctionDef  {
+public class FunctionDef {
     public Identifier id;
     public final FuncDefParams funcDefParams;
     private final Body body;
@@ -22,11 +22,12 @@ public class FunctionDef  {
 
     /**
      * Constructor TODO
-     * @param identifier TODO
+     *
+     * @param identifier    TODO
      * @param funcDefParams TODO
-     * @param body TODO
-     * @param returnType TODO
-     * @param nestLevel TODO
+     * @param body          TODO
+     * @param returnType    TODO
+     * @param nestLevel     TODO
      */
     public FunctionDef(Identifier identifier, FuncDefParams funcDefParams, Body body, Type returnType, int nestLevel) {
         this.id = identifier;
@@ -113,14 +114,14 @@ public class FunctionDef  {
 
         // ---------------------------look for body stmt -----------------------------
 
-        Body body = Body.ParseBody(tokens, nestlevel+1);
+        Body body = Body.ParseBody(tokens, nestlevel + 1);
 
         /**
-        if (body == null) {
-            //System.out.println("found empty body");
-        } else {
-            //System.out.println("Found body --> " + body.convertToJott());
-        }
+         if (body == null) {
+         //System.out.println("found empty body");
+         } else {
+         //System.out.println("Found body --> " + body.convertToJott());
+         }
          **/
 
         // ---------------------------look for } -----------------------------
@@ -134,8 +135,9 @@ public class FunctionDef  {
         //System.out.println("Found } --> " + R_BRACE.getToken());
         TOKEN_IDX.index++;
 
-        return new FunctionDef(new Identifier(id), funcDefParams, body, retrn ,nestlevel);
+        return new FunctionDef(new Identifier(id), funcDefParams, body, retrn, nestlevel);
     }
+
     public boolean validateJott() {
         return false;
     }
@@ -165,42 +167,41 @@ public class FunctionDef  {
 
 
         String SPACE = "    ".repeat(this.nestLevel);
-        jstr.append(SPACE+ id.convertToJott()+ " [ " + funcP+" ] ");
-        jstr.append(" : " + returnType.convertToJott()+" { \n" + bod + SPACE+"}");
+        jstr.append(SPACE + id.convertToJott() + " [ " + funcP + " ] ");
+        jstr.append(" : " + returnType.convertToJott() + " { \n" + bod + SPACE + "}");
 
         return jstr.toString();
     }
 
     public boolean validateTree() throws ParsingException {
-        if(funcDefParams !=null) {
+        if (funcDefParams != null) {
             funcDefParams.validateTree();
         }
 
-        if(body !=null) {
+        if (body != null) {
             body.validateTree();
         }
 
         // if return type is INT DOUBLE STRING BOOL
-        if (!this.returnType.type.equals("Void")){
-            if (this.body.hasReturn != null){
-                if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expression.Etype)){
+        if (!this.returnType.type.equals("Void")) {
+            if (this.body.hasReturn != null) {
+                if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expr.type)) {
                     this.body.hasReturn.expr.validateTree();
                     return true;
                 }
 
-                throw new ParsingException("RETURNING WRONG TYPE in function: "+this.id.convertToJott()+" "+this.body.hasReturn.expr.type+" "+ValidateTable.functions.get(this.id.convertToJott()).get(0));
+                throw new ParsingException("RETURNING WRONG TYPE in function: " + this.id.convertToJott() + " " + this.body.hasReturn.expr.type + " " + ValidateTable.functions.get(this.id.convertToJott()).get(0));
             }
-            throw new ParsingException("MISSING RETURN in function: "+this.id.convertToJott());
+            throw new ParsingException("MISSING RETURN in function: " + this.id.convertToJott());
         } else {
             // VOID HAS NO RETURN
-            if (this.body.hasReturn == null && !this.body.hasGuaranteedReturnFromIf){
+            if (this.body.hasReturn == null && !this.body.hasGuaranteedReturnFromIf) {
                 return true;
             } else {
                 throw new ParsingException("VOID function has return stmt");
             }
 
         }
-
 
 
     }

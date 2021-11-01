@@ -1,6 +1,7 @@
 package grammar;
 
 import main.Token;
+
 import java.util.ArrayList;
 
 /**
@@ -16,6 +17,7 @@ public class Program implements JottTree {
 
     /**
      * Constructor TODO
+     *
      * @param functionList TODO
      */
     public Program(FunctionList functionList) {
@@ -24,6 +26,7 @@ public class Program implements JottTree {
 
     /**
      * TODO
+     *
      * @param tokens TODO
      * @return TODO
      * @throws ParsingException TODO
@@ -40,17 +43,21 @@ public class Program implements JottTree {
 
     /**
      * TODO
+     *
      * @return TODO
      * @throws ParsingException TODO
      */
     @Override
-    public boolean validateTree() throws ParsingException{
-        if (!functionList.ListHasMain()) { throw new ParsingException("Program is missing or has an incorrectly spelled main"); }
+    public boolean validateTree() throws ParsingException {
+        if (!functionList.ListHasMain()) {
+            throw new ParsingException("Program is missing or has an incorrectly spelled main");
+        }
         return functionList.validateTree();
     }
 
     /**
      * TODO
+     *
      * @return TODO
      */
     @Override
@@ -60,6 +67,7 @@ public class Program implements JottTree {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     @Override
@@ -69,6 +77,7 @@ public class Program implements JottTree {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     @Override
@@ -78,6 +87,7 @@ public class Program implements JottTree {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     @Override

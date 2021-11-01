@@ -20,8 +20,9 @@ public class FuncDefParams {
 
     /**
      * Constructor TODO
-     * @param identifier TODO
-     * @param type TODO
+     *
+     * @param identifier            TODO
+     * @param type                  TODO
      * @param functionParameterList TODO
      */
     public FuncDefParams(Identifier identifier, Token type, ArrayList<FuncDefParams> functionParameterList) {
@@ -32,14 +33,17 @@ public class FuncDefParams {
 
     /**
      * Constructor TODO
+     *
      * @param functionParameterList TODO
      */
     public FuncDefParams(ArrayList<FuncDefParams> functionParameterList) {
         this.functionParameterList = functionParameterList;
     }
+
     /**
      * Constructor TODO
-     * @param tokens TODO
+     *
+     * @param tokens    TODO
      * @param nestLevel TODO
      * @return TODO
      * @throws ParsingException TODO
@@ -59,9 +63,8 @@ public class FuncDefParams {
         }
 
 
-
         while (idd.getTokenType() != TokenType.R_BRACKET) {
-            if (Type.isType(idd)){
+            if (Type.isType(idd)) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Syntax error\nInvalid token. <id>. Got: TYPE \n");
                 sb.append(idd.getFilename() + ":" + idd.getLineNum());
@@ -110,9 +113,9 @@ public class FuncDefParams {
 
 
             idd = tokens.get(TOKEN_IDX.index);
-            if (idd.getTokenType() !=TokenType.COMMA  && idd.getTokenType() == TokenType.R_BRACKET){
+            if (idd.getTokenType() != TokenType.COMMA && idd.getTokenType() == TokenType.R_BRACKET) {
                 break;
-            }else if(idd.getTokenType() !=TokenType.COMMA) {
+            } else if (idd.getTokenType() != TokenType.COMMA) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Syntax error\nInvalid token. Expected ,. Got: ");
                 sb.append(idd.getTokenType().toString()).append("\n");
@@ -129,6 +132,7 @@ public class FuncDefParams {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public String convertToJava() {
@@ -137,6 +141,7 @@ public class FuncDefParams {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public String convertToC() {
@@ -145,6 +150,7 @@ public class FuncDefParams {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public String convertToPython() {
@@ -153,14 +159,19 @@ public class FuncDefParams {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public boolean validateTree() throws ParsingException {
 
         // check that var is not a keyword, if it is it wil throw an error
-        for(FuncDefParams param: functionParameterList) {
-            if(param.identifier != null){ Identifier.check(param.identifier.id);}
-            if(param.type != null){ Type.isType(param.type);}
+        for (FuncDefParams param : functionParameterList) {
+            if (param.identifier != null) {
+                Identifier.check(param.identifier.id);
+            }
+            if (param.type != null) {
+                Type.isType(param.type);
+            }
         }
 
         return true;
@@ -176,12 +187,12 @@ public class FuncDefParams {
         functionParameterList.append("");
 
         if (this.functionParameterList != null) {
-            for(FuncDefParams FDP: this.functionParameterList) {
+            for (FuncDefParams FDP : this.functionParameterList) {
                 functionParameterList.append(FDP.convertToJott());
             }
-            return functionParameterList.substring(0, functionParameterList.length()-1);
+            return functionParameterList.substring(0, functionParameterList.length() - 1);
         } else {
-            jottString.append(identifier.convertToJott() + ":" + type.getToken() + functionParameterList+",");
+            jottString.append(identifier.convertToJott() + ":" + type.getToken() + functionParameterList + ",");
             return jottString.toString();
         }
     }

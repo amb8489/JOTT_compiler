@@ -1,6 +1,7 @@
 package grammar;
 
 import main.Token;
+
 import java.util.Set;
 
 /**
@@ -12,23 +13,30 @@ import java.util.Set;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class Identifier {
-    private static final Set<String> idBanList = Set.of("while", "for", "True", "False", "if", "elseif", "else","print");
+    private static final Set<String> idBanList = Set.of("while", "for", "True", "False", "if", "elseif", "else", "print");
 
     Token id;
 
     /**
      * Constructor TODO
+     *
      * @param id TODO
      */
-    public Identifier(Token id) { this.id = id; }
+    public Identifier(Token id) {
+        this.id = id;
+    }
 
     public static void check(Token id) throws ParsingException {
         if (idBanList.contains(id.getToken())) {
-            throw new ParsingException(String.format("can't use %s as id: line %d", id.getToken(),id.getLineNum()));
+            throw new ParsingException(String.format("can't use %s as id: line %d", id.getToken(), id.getLineNum()));
         }
     }
 
-    public String convertToJott() { return id.getToken(); }
+    public String convertToJott() {
+        return id.getToken();
+    }
 
-    public boolean validateTree() { return false; }
+    public boolean validateTree() {
+        return false;
+    }
 }

@@ -3,6 +3,7 @@ package grammar;
 
 import main.Token;
 import main.TokenType;
+
 import java.util.ArrayList;
 
 //  params -> expr param |
@@ -26,6 +27,7 @@ public class Params {
 
     /**
      * Constructor
+     *
      * @param expr
      * @param hasComma
      */
@@ -36,6 +38,7 @@ public class Params {
 
     /**
      * Constructor
+     *
      * @param params
      */
     public Params(ArrayList<Params> params) {
@@ -101,7 +104,9 @@ public class Params {
 
     public static Params parseParams(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         ArrayList<Params> params = parseParams_r(tokens, nestLevel);
-        if (params == null) { return null; }
+        if (params == null) {
+            return null;
+        }
         //System.out.println("->>>" + p.convertToJott() + "<<<-");
         return new Params(params);
 
@@ -111,12 +116,15 @@ public class Params {
         StringBuilder jottString = new StringBuilder();
 
         for (Params param : paramsList) {
-            if (param.hasComma) { jottString.append(","); }
-            jottString.append(param.expr.convertToJott() );
+            if (param.hasComma) {
+                jottString.append(",");
+            }
+            jottString.append(param.expr.convertToJott());
         }
 
         return jottString.toString();
     }
+
     public boolean validateTree() {
         return false;
     }

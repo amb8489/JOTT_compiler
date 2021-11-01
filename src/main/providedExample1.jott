@@ -3,4 +3,5 @@ main[]:Integer{
     print[5];
     #this is a comment
     print[ "foo bar"];
+    return 1;
 }

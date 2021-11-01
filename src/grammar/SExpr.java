@@ -23,13 +23,14 @@ public class SExpr extends Expr {
 
     /**
      * Constructor TODO
+     *
      * @param stringLiteral TODO
-     * @param token TODO
-     * @param funcCall TODO
-     * @param nestLevel TODO
+     * @param token         TODO
+     * @param funcCall      TODO
+     * @param nestLevel     TODO
      */
     public SExpr(Token stringLiteral, Token token, FuncCall funcCall, int nestLevel) {
-        super(null,null);
+        super(null, null);
         this.stringLiteral = stringLiteral;
         this.token = token;
         this.funcCall = funcCall;
@@ -38,7 +39,8 @@ public class SExpr extends Expr {
 
     /**
      * TODO
-     * @param tokens TODO
+     *
+     * @param tokens    TODO
      * @param nestLevel TODO
      * @return TODO
      * @throws ParsingException TODO
@@ -52,7 +54,7 @@ public class SExpr extends Expr {
         if (possibleString.getTokenType() == TokenType.STRING) {
 
             TOKEN_IDX.index++;
-        return new SExpr(possibleString, null, null, nestLevel);
+            return new SExpr(possibleString, null, null, nestLevel);
         }
 
         // ----------------------check for id------------------
@@ -73,17 +75,23 @@ public class SExpr extends Expr {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     @Override
     public String convertToJott() {
-        if (stringLiteral != null) { return stringLiteral.getToken(); }
-        if (token != null) { return token.getToken(); }
+        if (stringLiteral != null) {
+            return stringLiteral.getToken();
+        }
+        if (token != null) {
+            return token.getToken();
+        }
         return funcCall.convertToJott();
     }
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public boolean validateTree() {

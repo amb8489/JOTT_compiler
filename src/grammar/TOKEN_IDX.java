@@ -17,18 +17,25 @@ public class TOKEN_IDX {
     /**
      * Constructor TODO
      */
-    public TOKEN_IDX(){ index = 0; }
+    public TOKEN_IDX() {
+        index = 0;
+    }
 
     /**
      * TODO
+     *
      * @return TODO
      */
-    public static int getTokenIndex() { return index; }
+    public static int getTokenIndex() {
+        return index;
+    }
 
     /**
      * TODO
      */
-    public static void saveTokenIndex() { savedTokenIndex.add(0, index); }
+    public static void saveTokenIndex() {
+        savedTokenIndex.add(0, index);
+    }
 
     /**
      * TODO
@@ -42,10 +49,13 @@ public class TOKEN_IDX {
      * TODO
      */
     public static void popRestore() {
-        savedTokenIndex.remove(0);}
+        savedTokenIndex.remove(0);
+    }
 
     /**
      * TODO
      */
-    public static void reset() { index = 0; }
+    public static void reset() {
+        index = 0;
+    }
 }

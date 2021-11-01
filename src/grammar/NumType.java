@@ -21,7 +21,6 @@ public class NumType {
     public boolean isVar;
 
 
-
     public NumType(Token num) {
         this.number = num;
         String string = num.getToken();
@@ -45,14 +44,18 @@ public class NumType {
 
         } catch (NumberFormatException ignored) {
             // not a num but a var
-            if (this.numType==null) {
+            if (this.numType == null) {
                 this.isVar = true;
                 this.varNumber = string;
             }
         }
     }
 
-    public String getNumType() { return numType; }
+    public String getNumType() {
+        return numType;
+    }
 
-    public String convertToJott() { return number.getToken(); }
+    public String convertToJott() {
+        return number.getToken();
+    }
 }

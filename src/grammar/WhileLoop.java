@@ -2,6 +2,7 @@ package grammar;
 
 import main.Token;
 import main.TokenType;
+
 import java.util.ArrayList;
 
 /**
@@ -19,9 +20,10 @@ public class WhileLoop {
 
     /**
      * TODO
+     *
      * @param nestLevel TODO
-     * @param expr TODO
-     * @param body TODO
+     * @param expr      TODO
+     * @param body      TODO
      */
     public WhileLoop(int nestLevel, Expr expr, Body body) {
         this.expr = expr;
@@ -31,7 +33,8 @@ public class WhileLoop {
 
     /**
      * TODO
-     * @param tokens TODO
+     *
+     * @param tokens    TODO
      * @param nestLevel TODO
      * @return TODO
      * @throws ParsingException TODO
@@ -53,7 +56,7 @@ public class WhileLoop {
         Token L_BRACKET = tokens.get(TOKEN_IDX.index);
         //System.out.println("\t2nd:"+L_BRACKET.getToken());
         // check for if
-        if (L_BRACKET.getTokenType() != TokenType.L_BRACKET){
+        if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
             String stringBuilder = "Syntax error\nInvalid token. Expected [. Got: " +
                     L_BRACKET.getTokenType().toString() + "\n" +
                     L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum();
@@ -64,7 +67,7 @@ public class WhileLoop {
         TOKEN_IDX.index++;
 
         // ---------------------- checking for bool expr ------------------------------
-        Expr expr = BExpr.parseBExpr(tokens,nestLevel);
+        Expr expr = BExpr.parseBExpr(tokens, nestLevel);
 
 
         // ---------------------- checking for ] ----------------------------------
@@ -73,7 +76,7 @@ public class WhileLoop {
         //System.out.println("\t4th:"+R_BRACKET.getToken());
 
         // check for if
-        if (R_BRACKET.getTokenType() != TokenType.R_BRACKET){
+        if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
             String stringBuilder = "Syntax error\nInvalid token. Expected ]. Got: " +
                     R_BRACKET.getTokenType().toString() + "\n" +
                     R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum();
@@ -86,7 +89,7 @@ public class WhileLoop {
         Token L_BRACE = tokens.get(TOKEN_IDX.index);
         //System.out.println("\t5th:"+L_BRACE.getToken());
         // check for if
-        if (L_BRACE.getTokenType() != TokenType.L_BRACE){
+        if (L_BRACE.getTokenType() != TokenType.L_BRACE) {
             String stringBuilder = "Syntax error\nInvalid token. Expected {. Got: " +
                     L_BRACE.getTokenType().toString() + "\n" +
                     L_BRACE.getFilename() + ":" + L_BRACE.getLineNum();
@@ -105,7 +108,7 @@ public class WhileLoop {
         Token R_BRACE = tokens.get(TOKEN_IDX.index);
         //System.out.println("\t7th:"+R_BRACE.getToken());
         // check for if
-        if (R_BRACE.getTokenType() != TokenType.R_BRACE){
+        if (R_BRACE.getTokenType() != TokenType.R_BRACE) {
             String stringBuilder = "Syntax error\nInvalid token. Expected }. Got: " +
                     R_BRACE.getTokenType().toString() + "\n" +
                     R_BRACE.getFilename() + ":" + R_BRACE.getLineNum();
@@ -118,10 +121,11 @@ public class WhileLoop {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public String convertToJott() {
-        String space = "\t".repeat(this.nestLevel -1);
+        String space = "\t".repeat(this.nestLevel - 1);
 
         String jottString = "\t".repeat(0) +
                 "while [ " +
@@ -132,6 +136,7 @@ public class WhileLoop {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public boolean validateTree() {

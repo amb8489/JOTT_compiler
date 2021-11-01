@@ -2,6 +2,7 @@ package grammar;
 
 import main.Token;
 import main.TokenType;
+
 import java.util.ArrayList;
 
 /**
@@ -18,19 +19,21 @@ public class VarDec {
 
     /**
      * TODO
-     * @param type TODO
+     *
+     * @param type       TODO
      * @param identifier TODO
      */
-    public VarDec(Type type,Identifier identifier){
-            this.type = type;
-            this.identifier = identifier;
+    public VarDec(Type type, Identifier identifier) {
+        this.type = type;
+        this.identifier = identifier;
 
 
     }
 
     /**
      * TODO
-     * @param tokens TODO
+     *
+     * @param tokens    TODO
      * @param nestLevel TODO
      * @return TODO
      * @throws ParsingException TODO
@@ -45,7 +48,7 @@ public class VarDec {
 
         Token typeToken = tokens.get(TOKEN_IDX.index);
         //System.out.println("    FIRST:"+typeToken.getToken());
-        Type type = new Type(typeToken.getToken(), typeToken.getFilename(),typeToken.getLineNum());
+        Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum());
         TOKEN_IDX.index++;
 
         // ----------------------------- var name-----------------------------------
@@ -53,7 +56,7 @@ public class VarDec {
         // getting next token
         Token idToken = tokens.get(TOKEN_IDX.index);
         //System.out.println("    SECOND:"+idToken.getToken());
-        if (idToken.getTokenType() != TokenType.ID_KEYWORD){
+        if (idToken.getTokenType() != TokenType.ID_KEYWORD) {
             return null;
         }
         Identifier.check(idToken);
@@ -66,7 +69,7 @@ public class VarDec {
         Token endStmt = tokens.get(TOKEN_IDX.index);
         //System.out.println("    THIRD:"+endStmt.getToken());
 
-        if (endStmt.getTokenType() != TokenType.SEMICOLON){
+        if (endStmt.getTokenType() != TokenType.SEMICOLON) {
             return null;
         }
 
@@ -81,6 +84,7 @@ public class VarDec {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public String convertToJott() {
@@ -92,6 +96,7 @@ public class VarDec {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public boolean validateTree() {

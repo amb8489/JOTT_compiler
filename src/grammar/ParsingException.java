@@ -9,5 +9,7 @@ package grammar;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class ParsingException extends Throwable {
-    public ParsingException(String toString) { System.err.println(toString); }
+    public ParsingException(String toString) {
+        System.err.println(toString);
+    }
 }

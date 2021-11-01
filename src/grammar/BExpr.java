@@ -2,6 +2,7 @@ package grammar;
 
 import main.Token;
 import main.TokenType;
+
 import java.util.ArrayList;
 
 ////     * b_expr ->
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 //               b_expr rel_op b_expr| TODO: what are those
 
 /**
- * Description
+ * BExpr is a boolean expression.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
@@ -28,58 +29,64 @@ public class BExpr extends Expr {
 
     /**
      * Constructor TODO
+     *
      * @param finalExp TODO blah
      */
     public BExpr(ArrayList<BExpr> finalExp) {
-        super(null,null);
+        super(null, null);
         this.finalexp = finalExp;
     }
 
     /**
      * Constructor TODO
+     *
      * @param bool TODO blah
      */
     public BExpr(Token bool) {
-        super(null,null);
+        super(null, null);
         this.bool = bool;
     }
 
     /**
      * Constructor TODO
-     * @param bool TODO blah
+     *
+     * @param bool  TODO blah
      * @param relOp TODO blah
      */
     public BExpr(Token bool, Token relOp) {
-        super(null,null);
+        super(null, null);
         this.bool = bool;
         this.relOp = relOp;
     }
 
     /**
      * Constructor
-     * @param expr TODO blah
+     *
+     * @param expr  TODO blah
      * @param relOP TODO blah
      */
     public BExpr(Expr expr, Token relOP) {
-        super(null,null);
+        super(null, null);
         this.relOp = relOP;
         this.expr = expr;
     }
 
     /**
      * Constructor
+     *
      * @param expr TODO blah
      */
     public BExpr(Expr expr) {
-        super(null,null);
+        super(null, null);
         this.expr = expr;
     }
 
     /**
      * TODO
-     * @param tokens TODO
+     *
+     * @param tokens      TODO
      * @param booleanList TODO
-     * @param nestLevel TODO
+     * @param nestLevel   TODO
      * @return TODO
      * @throws ParsingException TODO
      */
@@ -100,7 +107,7 @@ public class BExpr extends Expr {
                 if (possibleExpr == null) {
                     String message = String.format("Syntax error\nInvalid token. Expected ;. Got: %s\n%s:%s",
                             possibleBool.getTokenType().toString(),
-                            possibleBool.getFilename(), 
+                            possibleBool.getFilename(),
                             possibleBool.getLineNum());
                     throw new ParsingException(message);
                 }
@@ -111,17 +118,17 @@ public class BExpr extends Expr {
         if (isBool) {
             if (possibleRelOp.getTokenType() == TokenType.REL_OP) {
                 TOKEN_IDX.index++;
-                
+
                 //System.out.printf("bool op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
                 booleanList.add(new BExpr(possibleBool, possibleRelOp));
                 return parseBExpr_r(nestLevel, tokens, booleanList);
             }
-            
+
             // lone bool
             //System.out.println("lone bool");
             booleanList.add(new BExpr(possibleBool));
             return booleanList;
-            
+
         } else {
             if (possibleRelOp.getTokenType() == TokenType.REL_OP) {
                 TOKEN_IDX.index++;
@@ -140,7 +147,8 @@ public class BExpr extends Expr {
 
     /**
      * TODO
-     * @param tokens TODO
+     *
+     * @param tokens    TODO
      * @param nestLevel TODO
      * @return TODO
      * @throws ParsingException TODO
@@ -156,6 +164,7 @@ public class BExpr extends Expr {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     @Override
@@ -189,7 +198,10 @@ public class BExpr extends Expr {
 
     /**
      * TODO
+     *
      * @return
      */
-    public boolean validateTree() { return false; }
+    public boolean validateTree() {
+        return false;
+    }
 }

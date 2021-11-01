@@ -23,6 +23,7 @@ public class IfStmt {
 
     /**
      * Constructor
+     *
      * @param expr
      * @param body1
      * @param elseIfStatements
@@ -30,10 +31,10 @@ public class IfStmt {
      * @param hasGuaranteedReturn
      */
     public IfStmt(Expr expr,
-                      Body body1,
-                      ArrayList<ElseifStmt> elseIfStatements,
-                      int nestLevel,
-                      boolean hasGuaranteedReturn) {
+                  Body body1,
+                  ArrayList<ElseifStmt> elseIfStatements,
+                  int nestLevel,
+                  boolean hasGuaranteedReturn) {
         this.expr = expr;
         this.body1 = body1;
         this.elseIfStatements = elseIfStatements;
@@ -43,19 +44,20 @@ public class IfStmt {
 
     /**
      * Constructor
-     * @param expr TODO
-     * @param body1 TODO
-     * @param body2 TODO
-     * @param elseIfStatements TODO
-     * @param nestLevel TODO
+     *
+     * @param expr                TODO
+     * @param body1               TODO
+     * @param body2               TODO
+     * @param elseIfStatements    TODO
+     * @param nestLevel           TODO
      * @param hasGuaranteedReturn TODO
      */
     public IfStmt(Expr expr,
-                      Body body1,
-                      Body body2,
-                      ArrayList<ElseifStmt> elseIfStatements,
-                      int nestLevel,
-                      boolean hasGuaranteedReturn) {
+                  Body body1,
+                  Body body2,
+                  ArrayList<ElseifStmt> elseIfStatements,
+                  int nestLevel,
+                  boolean hasGuaranteedReturn) {
 
         this.expr = expr;
         this.body1 = body1;
@@ -67,20 +69,20 @@ public class IfStmt {
 
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
-        String SPACE = "\t".repeat(this.nestLevel -1);
+        String SPACE = "\t".repeat(this.nestLevel - 1);
 
         jstr.append("if [ ");
         jstr.append(this.expr.convertToJott() + " ] { \n");
-        jstr.append(body1.convertToJott() +SPACE+ "}");
+        jstr.append(body1.convertToJott() + SPACE + "}");
 
-        if (elseIfStatements != null){
-            for(ElseifStmt e: elseIfStatements){
-                jstr.append(e.convertToJott()+"");
+        if (elseIfStatements != null) {
+            for (ElseifStmt e : elseIfStatements) {
+                jstr.append(e.convertToJott() + "");
             }
         }
-        if (body2 != null){
+        if (body2 != null) {
             jstr.append("else{\n");
-            jstr.append(body2.convertToJott() +SPACE+"}\n");
+            jstr.append(body2.convertToJott() + SPACE + "}\n");
 
         }
         return jstr.toString();
@@ -206,7 +208,7 @@ public class IfStmt {
 
             //System.out.println("\t11th:body");
             Body body2 = Body.ParseBody(tokens, nestLevel);
-            boolean hasGuaranteedReturn= false;
+            boolean hasGuaranteedReturn = false;
             if (body2 != null) {
                 if (body2.hasReturn != null) {
                     hasGuaranteedReturn = true;

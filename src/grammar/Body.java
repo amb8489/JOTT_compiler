@@ -4,11 +4,8 @@ import main.Token;
 import main.TokenType;
 import java.util.ArrayList;
 
-
-// body -> body_stmt body|return_stmt|ε                                                                             <-- DONE
-
 /**
- * Description
+ * Body holds the nested code within statements like if, while, and such.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
@@ -49,7 +46,7 @@ public class Body  {
         while (tokens.get(TOKEN_IDX.index).getTokenType() != TokenType.R_BRACE) {
             //System.out.println("\tlooking for body");
             BodyStmt bodyStmt = null;
-            if(!tokens.get(TOKEN_IDX.index).getToken().equals("return")){
+            if (!tokens.get(TOKEN_IDX.index).getToken().equals("return")) {
                  bodyStmt = BodyStmt.parseBodyStmt(tokens, nestLevel);
             }
             //System.out.println("\t--->>>>>>>looking for body");
@@ -111,12 +108,12 @@ public class Body  {
      */
     public boolean validateTree() throws ParsingException {
 
-        if(bodies != null) {
+        if (bodies != null) {
             for (BodyStmt bodyStmt : bodies) {
                 bodyStmt.validateTree();
             }
         }
-        if(hasReturn != null) {
+        if (hasReturn != null) {
             hasReturn.validateTree();
         }
         return true;

@@ -41,7 +41,7 @@ public class Expr {
             NumExpr numExpr = NumExpr.parseNumExpr(tokens, nestLevel);
 
             if (numExpr != null) {
-                return new Expr(numExpr, numExpr.expType);
+                return new Expr(numExpr, numExpr.exprType);
             }
 
             // ---------------------------looking for sExpr (string expr)----------------------------------------

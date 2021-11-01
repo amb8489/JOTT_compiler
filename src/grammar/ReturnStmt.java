@@ -3,6 +3,7 @@ package grammar;
 
 import main.Token;
 import main.TokenType;
+
 import java.util.ArrayList;
 
 //     return_stmt -> return expr end_stmt
@@ -15,11 +16,12 @@ import java.util.ArrayList;
  * @author Jake Peverly (jzp7326@rit.edu)
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
-public class ReturnStmt  {
+public class ReturnStmt {
     public Expr expr;
 
     /**
      * Constructor TODO
+     *
      * @param expression TODO
      */
     public ReturnStmt(Expr expression) {
@@ -63,6 +65,7 @@ public class ReturnStmt  {
         return new ReturnStmt(expr);
 
     }
+
     public boolean validateTree() {
         return false;
     }

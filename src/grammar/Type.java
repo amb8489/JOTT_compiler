@@ -20,8 +20,9 @@ public class Type {
 
     /**
      * TODO
-     * @param token TODO
-     * @param filename TODO
+     *
+     * @param token      TODO
+     * @param filename   TODO
      * @param lineNumber TODO
      */
     public Type(String token, String filename, int lineNumber) {
@@ -32,6 +33,7 @@ public class Type {
 
     /**
      * TODO
+     *
      * @param token TODO
      * @return TODO
      */
@@ -45,6 +47,7 @@ public class Type {
 
     /**
      * TODO
+     *
      * @param tokens TODO
      * @return TODO
      */
@@ -54,12 +57,13 @@ public class Type {
             TOKEN_IDX.index++;
             return new Type(funcReturnType.getToken(), funcReturnType.getFilename(), funcReturnType.getLineNum());
         }
-            return null;
+        return null;
 
     }
 
     /**
      * TODO
+     *
      * @param tokens TODO
      * @return TODO
      * @throws ParsingException TODO
@@ -72,8 +76,8 @@ public class Type {
 
         Token typeToken = tokens.remove(0);
         if (typeToken.getTokenType() == TokenType.ID_KEYWORD) {
-            if ("Integer".equals(typeToken.getToken()) ||"Double".equals(typeToken.getToken()) ||
-                "String".equals(typeToken.getToken())  || "Boolean".equals(typeToken.getToken())) {
+            if ("Integer".equals(typeToken.getToken()) || "Double".equals(typeToken.getToken()) ||
+                    "String".equals(typeToken.getToken()) || "Boolean".equals(typeToken.getToken())) {
                 return new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum());
             }
         }
@@ -87,14 +91,20 @@ public class Type {
 
     /**
      * TODO
+     *
      * @return TODO
      */
-    public String convertToJott() { return type; }
+    public String convertToJott() {
+        return type;
+    }
 
     /**
      * TODO
+     *
      * @return TODO
      */
-    public boolean validateTree() { return false;}
+    public boolean validateTree() {
+        return false;
+    }
 
 }

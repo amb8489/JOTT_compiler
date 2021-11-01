@@ -2,6 +2,7 @@ package grammar;
 
 import main.Token;
 import main.TokenType;
+
 import java.util.ArrayList;
 
 /**
@@ -18,7 +19,8 @@ public class FuncCall {
 
     /**
      * Constructor TODO
-     * @param token TODO
+     *
+     * @param token      TODO
      * @param parameters TODO
      */
     public FuncCall(Token token, Params parameters) {
@@ -28,7 +30,8 @@ public class FuncCall {
 
     /**
      * TODO
-     * @param tokens TODO
+     *
+     * @param tokens    TODO
      * @param nestLevel TODO
      * @return TODO
      * @throws ParsingException TODO
@@ -89,6 +92,7 @@ public class FuncCall {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public String convertToJott() {
@@ -97,7 +101,7 @@ public class FuncCall {
 
         jstr.append(name.getToken() + "[");
 
-        if (parameters == null){
+        if (parameters == null) {
             jstr.append("]");
             return jstr.toString();
         }
@@ -108,6 +112,7 @@ public class FuncCall {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public boolean validateTree() {

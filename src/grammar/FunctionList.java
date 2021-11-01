@@ -51,10 +51,11 @@ public class FunctionList {
         return new FunctionList(listOfFunctionDefs);
 
     }
+
     public boolean ListHasMain() throws ParsingException {
-        for(FunctionDef func: this.listOfFunctionDefs){
-            if(func.id.convertToJott().equals("main")){
-                if (! func.returnType.type.equals("Integer")){
+        for (FunctionDef func : this.listOfFunctionDefs) {
+            if (func.id.convertToJott().equals("main")) {
+                if (!func.returnType.type.equals("Integer")) {
                     throw new ParsingException("MAIN DOES NOT RETURN INT");
                 }
                 return true;
@@ -78,11 +79,14 @@ public class FunctionList {
 
     public boolean validateTree() throws ParsingException {
 
-        for (FunctionDef function: listOfFunctionDefs) {
-            ValidateTable.functions.put(function.id.convertToJott(),new ArrayList<>() {
-                {add(function.returnType.type);}});
+        for (FunctionDef function : listOfFunctionDefs) {
+            ValidateTable.functions.put(function.id.convertToJott(), new ArrayList<>() {
+                {
+                    add(function.returnType.type);
+                }
+            });
             // setting function params
-            if(function.funcDefParams !=null) {
+            if (function.funcDefParams != null) {
                 for (FuncDefParams params : function.funcDefParams.functionParameterList) {
                     ValidateTable.functions.get(function.id.convertToJott()).add(params.identifier.convertToJott());
                     ValidateTable.functions.get(function.id.convertToJott()).add(params.type.getToken());
@@ -93,9 +97,7 @@ public class FunctionList {
             // setting function id and its return type
 
 
-
-
-            if (!r){
+            if (!r) {
                 return false;
             }
         }
@@ -105,8 +107,8 @@ public class FunctionList {
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
 
-        for (FunctionDef fd: listOfFunctionDefs) {
-            jstr.append(fd.convertToJott()+"\n");
+        for (FunctionDef fd : listOfFunctionDefs) {
+            jstr.append(fd.convertToJott() + "\n");
         }
         return jstr.toString();
     }

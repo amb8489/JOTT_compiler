@@ -23,7 +23,7 @@ public class NumExpr extends Expr {
     // ---------------------- constructors for different cases --------------------------------
 
     public NumExpr(NumType numType, Token mathOp) {
-        super(null,null);
+        super(null, null);
         this.numType = numType;
         this.mathOp = mathOp;
         this.functionCall = null;
@@ -43,9 +43,9 @@ public class NumExpr extends Expr {
         this.functionCall = call;
         this.mathOp = mathOp;
     }
-    
+
     public NumExpr(ArrayList<NumExpr> finalExpr, String ExpType) {
-        super(null,null);
+        super(null, null);
         this.finalExpr = finalExpr;
         this.exprType = ExpType;
         this.numType = null;
@@ -121,9 +121,9 @@ public class NumExpr extends Expr {
         }
 
         boolean isINTexp = true;
-        
 
-        for(NumExpr exp : expLst){
+
+        for (NumExpr exp : expLst) {
             if (exp.numType != null && exp.numType.getNumType() != null) {
                 if (!exp.numType.numType.equals("Integer")) {
                     isINTexp = false;
@@ -199,8 +199,8 @@ public class NumExpr extends Expr {
             // gettting that functions real return type from table
 
             // makes sure function exits
-            if(! ValidateTable.functions.containsKey(n.functionCall.name.getToken())) {
-                throw new ParsingException("use of undefined Function : " + n.functionCall.name.getToken() +" line:"+n.functionCall.name.getLineNum());
+            if (!ValidateTable.functions.containsKey(n.functionCall.name.getToken())) {
+                throw new ParsingException("use of undefined Function : " + n.functionCall.name.getToken() + " line:" + n.functionCall.name.getLineNum());
             }
             String funcType = ValidateTable.functions.get(n.functionCall.name.getToken()).get(0);
             // if its the first func call we've seen set the prev type to this type
@@ -247,7 +247,7 @@ public class NumExpr extends Expr {
                         if (varProperties.get(1) == null) {
                             throw new ParsingException("use of un-init var: " + n.numType.varNumber + " line:" + n.numType.number.getLineNum());
                         }
-                    }else {
+                    } else {
                         throw new ParsingException("bad var type in exp: " + ValidateTable.variables.get(n.numType.varNumber).get(0) + " " + n.numType.varNumber);
                     }
                 } else {

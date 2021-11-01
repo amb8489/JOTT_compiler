@@ -24,10 +24,11 @@ public class Stmt {
 
     /**
      * Constructor TODO
+     *
      * @param nestLevel TODO
-     * @param asmtStmt TODO
-     * @param varDec TODO
-     * @param funcCall TODO
+     * @param asmtStmt  TODO
+     * @param varDec    TODO
+     * @param funcCall  TODO
      */
     public Stmt(int nestLevel, AsmtStmt asmtStmt, VarDec varDec, FuncCall funcCall) {
         this.nestLevel = nestLevel;
@@ -38,7 +39,8 @@ public class Stmt {
 
     /**
      * TODO
-     * @param tokens TODO
+     *
+     * @param tokens    TODO
      * @param nestLevel TODO
      * @return TODO
      * @throws ParsingException TODO
@@ -81,8 +83,8 @@ public class Stmt {
         TOKEN_IDX.saveTokenIndex();
 
 
-            FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel);
-            if(funcCall != null){
+        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel);
+        if (funcCall != null) {
             // ---------------------- check for end statement ------------------------------------
 
             //check for ;
@@ -111,23 +113,37 @@ public class Stmt {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public String convertToJott() {
-        if (asmtStmt != null) { return asmtStmt.convertToJott(); }
-        if (varDec != null) { return varDec.convertToJott(); }
-        if (funcCall != null) { return funcCall.convertToJott() + ";"; }
+        if (asmtStmt != null) {
+            return asmtStmt.convertToJott();
+        }
+        if (varDec != null) {
+            return varDec.convertToJott();
+        }
+        if (funcCall != null) {
+            return funcCall.convertToJott() + ";";
+        }
         return null;
     }
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public boolean validateTree() throws ParsingException {
-        if (asmtStmt != null) { return asmtStmt.validateTree(); }
-        if (varDec != null) { return varDec.validateTree(); }
-        if (funcCall != null) { return funcCall.validateTree(); }
+        if (asmtStmt != null) {
+            return asmtStmt.validateTree();
+        }
+        if (varDec != null) {
+            return varDec.validateTree();
+        }
+        if (funcCall != null) {
+            return funcCall.validateTree();
+        }
         return true;
     }
 

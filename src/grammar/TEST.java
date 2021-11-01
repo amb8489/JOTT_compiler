@@ -17,6 +17,7 @@ public class TEST {
 
     /**
      * Used for testing purposes
+     *
      * @param args arguments that can be passed into the program
      * @throws ParsingException error!
      */
@@ -37,7 +38,7 @@ public class TEST {
             String type = ValidateTable.variables.get(key).get(0);
             String val = ValidateTable.variables.get(key).get(1);
 
-            System.out.println(type+" "+key + " = "+val);
+            System.out.println(type + " " + key + " = " + val);
         }
 
         System.out.println("-----final func table-----");
@@ -45,14 +46,13 @@ public class TEST {
         for (String key : ValidateTable.functions.keySet()) {
             String type = ValidateTable.functions.get(key).get(0);
 
-            System.out.print(key + " returns "+type + " with args: [ ");
-            for(String s : ValidateTable.functions.get(key).subList(1,ValidateTable.functions.get(key).size())) {
-                System.out.print(s+" ");
+            System.out.print(key + " returns " + type + " with args: [ ");
+            for (String s : ValidateTable.functions.get(key).subList(1, ValidateTable.functions.get(key).size())) {
+                System.out.print(s + " ");
             }
             System.out.println(" ]");
 
         }
-
 
 
     }

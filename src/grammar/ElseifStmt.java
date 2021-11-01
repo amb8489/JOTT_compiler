@@ -20,8 +20,9 @@ public class ElseifStmt {
 
     /**
      * Constructor
-     * @param expr TODO
-     * @param body TODO
+     *
+     * @param expr      TODO
+     * @param body      TODO
      * @param nestLevel TODO
      */
     public ElseifStmt(Expr expr, Body body, int nestLevel) {
@@ -35,7 +36,8 @@ public class ElseifStmt {
 
     /**
      * TODO
-     * @param tokens TODO
+     *
+     * @param tokens    TODO
      * @param nestLevel TODO
      * @return TODO
      * @throws ParsingException TODO
@@ -133,7 +135,7 @@ public class ElseifStmt {
             TOKEN_IDX.index++;
             // -----------------------adding what was found to list of seen elif stmts-----------------------
 
-            elif_lists.add(new ElseifStmt(expr, body,nestLevel));
+            elif_lists.add(new ElseifStmt(expr, body, nestLevel));
 
             // ---------------------------looking for elif----------------------------------------
 
@@ -150,10 +152,11 @@ public class ElseifStmt {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public String convertToJott() {
-        String SPACE = "    ".repeat(this.nestLevel -1);
+        String SPACE = "    ".repeat(this.nestLevel - 1);
 
         String jottString = "elseif[ " +
                 expr.convertToJott() + "]{ \n" +
@@ -163,6 +166,7 @@ public class ElseifStmt {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public String convertToJava() {
@@ -171,6 +175,7 @@ public class ElseifStmt {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public String convertToC() {
@@ -179,6 +184,7 @@ public class ElseifStmt {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public String convertToPython() {
@@ -187,6 +193,7 @@ public class ElseifStmt {
 
     /**
      * TODO
+     *
      * @return TODO
      */
     public boolean validateTree() {

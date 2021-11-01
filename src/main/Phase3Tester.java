@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class Phase3Tester {
-    
- 
         ArrayList<main.Phase3Tester.TestCase> testCases;
 
         private static class TestCase{
@@ -52,17 +50,11 @@ public class Phase3Tester {
             testCases.add(new main.Phase3Tester.TestCase("validLoop.jott", "validLoop.jott", false ));
             testCases.add(new main.Phase3Tester.TestCase("voidReturn.jott", "voidReturn.jott", true ));
             testCases.add(new main.Phase3Tester.TestCase("whileKeyword.jott", "whileKeyword.jott", true ));
-
-
-
-
-
-
         }
 
         private boolean parserTest(main.Phase3Tester.TestCase test, String orginalJottCode){
             try {
-                ArrayList<Token> tokens = JottTokenizer.tokenize("src/phase3TestCases/" + test.fileName);
+                ArrayList<Token> tokens = JottTokenizer.tokenize("src/main/" + test.fileName);
 
                 if (tokens == null) {
                     System.err.println("\tFailed Test: " + test.testName);
@@ -169,7 +161,7 @@ public class Phase3Tester {
             String orginalJottCode;
             try {
                 orginalJottCode = new String(
-                        Files.readAllBytes(Paths.get("src/phase3TestCases/" + test.fileName)));
+                        Files.readAllBytes(Paths.get("src/main/" + test.fileName).toAbsolutePath()));
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;

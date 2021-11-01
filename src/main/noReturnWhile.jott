@@ -1,4 +1,5 @@
-#this will pass phase 2 and phase 3
+#this will fail phase 3 for no return
+#the loop does not have to run.
 
 foo[x:Integer]:Integer{
     return x + 1;
@@ -9,6 +10,6 @@ main[]:Integer{
 	while[x<10]{
 	    x = foo[x];
 		print[x];
+		return x;
 	}
-	return x;
 }
