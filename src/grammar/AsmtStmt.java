@@ -143,7 +143,7 @@ public class AsmtStmt {
                 // we had a change in type
                 // we change the type
                 if (expr.expr.type != null) {
-                    this.expr.type = expr.expr.type;
+                    expr.type = expr.expr.type;
                 }
                 // see that type of left = type of right for function
 

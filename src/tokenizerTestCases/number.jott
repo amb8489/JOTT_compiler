@@ -6,7 +6,8 @@ foo[y:Double]:Integer{
 }
 
 main[]:Integer{
-    Integer x = foo[5];
-	concat[x,x];
+    Integer x = foo[5.0];
+    foo[5.0];
+	print[x];
 	return x;
 }

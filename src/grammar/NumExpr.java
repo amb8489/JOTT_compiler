@@ -240,6 +240,8 @@ public class NumExpr extends Expr {
             if (!ValidateTable.functions.containsKey(n.functionCall.name.getToken())) {
                 throw new ParsingException("use of undefined Function : " + n.functionCall.name.getToken() + " line:" + n.functionCall.name.getLineNum());
             }
+            n.functionCall.validateTree();
+
             String funcType = ValidateTable.functions.get(n.functionCall.name.getToken()).get(0);
             // if it's the first func call we've seen set the prev type to this type
             if (prevFunctionType == null) {
@@ -265,7 +267,7 @@ public class NumExpr extends Expr {
         for (NumExpr n : this.finalExpr) {
             // this is checked above but im just keeping it for now
             if (n.functionCall != null) {
-
+                n.functionCall.validateTree();
                 if (!ValidateTable.functions.get(n.functionCall.name.getToken()).get(0).equals(this.exprType)) {
                     throw new ParsingException("func Wrong type in exp: " + ValidateTable.functions.get(n.functionCall.name.getToken()).get(0));
                 }

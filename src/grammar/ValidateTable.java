@@ -11,8 +11,6 @@ import java.util.Map;
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
- * @author Jake Peverly (jzp7326@rit.edu)
- * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class ValidateTable {
     /**
@@ -50,50 +48,50 @@ public class ValidateTable {
     public static boolean checkFunctionCall(Token funcName, Params parameters) throws ParsingException {
         // check if function is a built in
         if (BuiltInFunctions.containsKey(funcName.getToken())) {
+            System.out.println("BUILTIN FUNCTION");
+
             // get the parms types for that function
             ArrayList<String> builtinParams = BuiltInFunctions.get(funcName.getToken());
 
             // check if there are even parameters passed in, all builtins take at least 1
-            if (parameters != null) {
+            if (parameters.paramsList != null) {
 
 //                System.out.println(parameters.paramsList.size()+" "+builtinParams.size());
 
                 // check that the params list is not null (can refoactor this, possibly un needed )
-                if (parameters.paramsList != null) {
 
-                    // check correct number of params given for that function
-                    if (parameters.paramsList.size() == builtinParams.size()) {
+                // check correct number of params given for that function
+                if (parameters.paramsList.size() == builtinParams.size()) {
 
-                        // print can take any type so if we have 1 param we know we are set for PRINT
-                        if (funcName.getToken().equals("print")) {
-                            return true;
-                        }
-
-                        // index just to know what param we are on in loop
-                        int index = 0;
-
-                        // loop through all params and make sure that each param is the correct type for func
-                        for (Params param : parameters.paramsList) {
-                            // check expr type
-                            param.expr.validateTree();
-                            // update if expr is changed (this can be better in the future)
-                            if (param.expr.type != null) {
-                                param.expr.type = param.expr.expr.type;
-                            }
-
-                            // if given param at index matches type of function param at index
-                            if (param.expr.type != null && !param.expr.type.equals(builtinParams.get(index))) {
-
-                                //error if type for param is wrong
-                                String msg = "function: " + funcName.getToken() + " def takes " + builtinParams + " was given:" + param.expr.type + "| line:" + funcName.getLineNum();
-                                throw new ParsingException(msg);
-                            }
-
-                            // onto the next param to check
-                            index++;
-                        }
+                    // print can take any type so if we have 1 param we know we are set for PRINT
+                    if (funcName.getToken().equals("print")) {
                         return true;
                     }
+
+                    // index just to know what param we are on in loop
+                    int index = 0;
+
+                    // loop through all params and make sure that each param is the correct type for func
+                    for (Params param : parameters.paramsList) {
+                        // check expr type
+                        param.expr.validateTree();
+                        // update if expr is changed (this can be better in the future)
+                        if (param.expr.expr.type != null) {
+                            param.expr.type = param.expr.expr.type;
+                        }
+
+                        // if given param at index matches type of function param at index
+                        if (param.expr.type != null && !param.expr.type.equals(builtinParams.get(index))) {
+
+                            //error if type for param is wrong
+                            String msg = "function: " + funcName.getToken() + " def takes " + builtinParams + " was given:" + param.expr.type + "| line:" + funcName.getLineNum();
+                            throw new ParsingException(msg);
+                        }
+
+                        // onto the next param to check
+                        index++;
+                    }
+                    return true;
                 }
             } else {
 
@@ -107,7 +105,66 @@ public class ValidateTable {
         }
 
 
-        return true;
+        // check if function is a built in
+        if (functions.containsKey(funcName.getToken())) {
+            System.out.println("USER DEFINED FUNCTION");
+
+            // get the parms types for that function
+            ArrayList<String> userDefinedParams = functions.get(funcName.getToken());
+
+            // check if there are even parameters passed in, all builtins take at least 1
+            if (parameters != null) {
+
+//                System.out.println(parameters.paramsList.size()+" "+userDefinedParams.size());
+
+                // check that the params list is not null (can refoactor this, possibly un needed )
+                if (parameters.paramsList != null) {
+
+                    // check correct number of params given for that function
+                    if (parameters.paramsList.size() == (userDefinedParams.size()-1)/2) {
+
+                        // index just to know what param we are on in loop
+                        int index = 0;
+
+                        // loop through all params and make sure that each param is the correct type for func
+                        for (Params param : parameters.paramsList) {
+                            // check expr type
+                            param.expr.validateTree();
+                            // update if expr is changed (this can be better in the future)
+                            if (param.expr.expr.type != null) {
+                                param.expr.type = param.expr.expr.type;
+                            }
+
+                            // if given param at index matches type of function param at index type for defined param is 1 + 2*idx
+                            System.out.println("("+param.expr.type+")"+ "("+userDefinedParams.get((2*index+2))+")");
+                            if (param.expr.type != null && !param.expr.type.equals(userDefinedParams.get(2+(2*index)))) {
+
+                                //error if type for param is wrong
+                                String msg = "function: " + funcName.getToken() + " def takes " + userDefinedParams.subList(1,userDefinedParams.size()) + " was given:" + param.expr.type + "| line:" + funcName.getLineNum();
+                                throw new ParsingException(msg);
+                            }
+
+                            // onto the next param to check
+                            index++;
+                        }
+                        return true;
+                    }
+                }
+            } else {
+                // if function has no params and more than 0 where given
+                if ((userDefinedParams.size()-1)/2 !=0) {
+                    //error is number of params passed in where wrong
+                    String message = "function: " + funcName.getToken() + " takes " + (userDefinedParams.size() - 1) / 2 + " params but 0 were given, line " + funcName.getLineNum();
+                    throw new ParsingException(message);
+                }
+                return true;
+            }
+            //error is number of params passed in where wrong
+            String message = "function: " + funcName.getToken() + " takes " + (userDefinedParams.size()-1)/2  + " params but " + parameters.paramsList.size() + " were given, line " + funcName.getLineNum();
+            throw new ParsingException(message);
+        }
+
+        throw new ParsingException("undefined function: line "+ funcName.getLineNum());
 
     }
 
