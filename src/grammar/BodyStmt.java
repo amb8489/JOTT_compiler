@@ -5,7 +5,8 @@ import main.Token;
 import java.util.ArrayList;
 
 /**
- * Description
+ * Body statements are descendents of a body class. Those hold statements such as an if statement, a while loop, or a
+ * plain statement.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
@@ -20,7 +21,7 @@ public class BodyStmt {
     public boolean hasGuaranteedReturn;
 
     /**
-     * Constructor TODO
+     * This is a constructor for a body statement.
      *
      * @param possibleIf          TODO
      * @param possibleWhile       TODO
@@ -32,7 +33,6 @@ public class BodyStmt {
         this.possibleIf = possibleIf;
         this.possibleWhile = possibleWhile;
         this.possibleStmt = possibleStmt;
-        //System.out.println(convertToJott());
         this.nestLevel = nestLevel;
         this.hasGuaranteedReturn = hasGuaranteedReturn;
     }
@@ -45,30 +45,16 @@ public class BodyStmt {
      * @throws ParsingException TODO
      */
     public static BodyStmt parseBodyStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        //System.out.println("----------------parsing body stmt---------------------");
-
-        // ----------------------check for one of these three----------------------------------;
-
-        //System.out.println("first::::" + tokens.get(TOKEN_IDX.index).getToken());
-
         IfStmt possibleIf = IfStmt.parseIfStmt(tokens, nestLevel + 1);
 
-        //System.out.println("first::::" + tokens.get(TOKEN_IDX.index).getToken());
         if (possibleIf != null) {
             return new BodyStmt(possibleIf, null, null, nestLevel, possibleIf.hasGuaranteedReturn);
         }
-
-
-        //System.out.println("first again::::" + tokens.get(TOKEN_IDX.index).getToken());
-
 
         WhileLoop possibleWhile = WhileLoop.parseWhile(tokens, nestLevel + 1);
         if (possibleWhile != null) {
             return new BodyStmt(null, possibleWhile, null, nestLevel, false);
         }
-
-        //System.out.println("first again::::" + tokens.get(TOKEN_IDX.index).getToken());
-
 
         Stmt possibleStmt = Stmt.parseStmt(tokens, nestLevel);
 
@@ -77,18 +63,15 @@ public class BodyStmt {
             return new BodyStmt(null, null, possibleStmt, nestLevel + 1, false);
         }
 
-
         return null;
     }
 
     /**
-     * TODO
+     * Return this object as a Jott code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Jott code
      */
     public String convertToJott() {
-        String Space = "\t".repeat(this.nestLevel);
-
         if (this.possibleIf != null) {
             return this.possibleIf.convertToJott();
         }
@@ -103,12 +86,38 @@ public class BodyStmt {
     }
 
     /**
-     * TODO
+     * Return this object as a Java code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Java code
+     */
+    public String convertToJava() {
+        return null;
+    }
+
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
+    public String convertToC() {
+        return null;
+    }
+
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
+    public String convertToPython() {
+        return null;
+    }
+
+    /**
+     * Ensure the code within the body is valid
+     *
+     * @return whether code is valid or not
      */
     public boolean validateTree() throws ParsingException {
-
         if (this.possibleIf != null) {
             return possibleIf.validateTree();
         }
@@ -118,7 +127,6 @@ public class BodyStmt {
         if (this.possibleStmt != null) {
             return possibleStmt.validateTree();
         }
-
         return true;
     }
 }

@@ -10,14 +10,13 @@ import java.util.ArrayList;
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
-
  */
 public class FuncCall {
     Token name; // function name
     Params parameters; // function parameters
 
     /**
-     * Constructor TODO
+     * This is the constructor for a function call.
      *
      * @param token      TODO
      * @param parameters TODO
@@ -36,89 +35,99 @@ public class FuncCall {
      * @throws ParsingException TODO
      */
     public static FuncCall ParseFuncCall(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        //System.out.println("---------------------------- PARSING FUNCTION CALL ----------------------------");
-        //System.out.println(tokens.get(TOKEN_IDX.index).getToken());
 
-        // ---------------- checking function call starts with id [----------------------
-
-        Token id = tokens.get(TOKEN_IDX.index);
-        Token lb = tokens.get(TOKEN_IDX.index + 1);
-        if (id.getTokenType() != TokenType.ID_KEYWORD || lb.getTokenType() != TokenType.L_BRACKET) {
+        // check if the function call starts with id
+        Token id = tokens.get(TokenIndex.currentTokenIndex);
+        Token leftBracket = tokens.get(TokenIndex.currentTokenIndex + 1);
+        if (id.getTokenType() != TokenType.ID_KEYWORD || leftBracket.getTokenType() != TokenType.L_BRACKET) {
             return null;
         }
-        //System.out.println("    1st:" + id.getToken());
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
-
-        // ---------------- checking for [ (redundant check)----------------------
-
-        Token L_BRACKET = tokens.get(TOKEN_IDX.index);
+        // checking for [ (redundant check)
+        Token L_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
         // check for if
         if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected [. Got: ");
-            sb.append(L_BRACKET.getTokenType().toString()).append("\n");
-            sb.append(L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum());
-            throw new ParsingException(sb.toString());
+            String string = "Syntax error\nInvalid token. Expected [. Got: " +
+                    L_BRACKET.getTokenType().toString() + "\n" +
+                    L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum();
+            throw new ParsingException(string);
         }
-        TOKEN_IDX.index++;
-        //System.out.println("    2nd:" + L_BRACKET.getToken());
+        TokenIndex.currentTokenIndex++;
 
-        // ---------------- looking for params for functions----------------------
+        // looking for function parameters
+        Params params = Params.parseParams(tokens, nestLevel);
 
-        Params parms = Params.parseParams(tokens, nestLevel);
-
-        // ---------------------- checking for ] ----------------------------------
-
-        Token R_BRACKET = tokens.get(TOKEN_IDX.index);
+        // checking for ]
+        Token R_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
 
         if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected [. Got: ");
-            sb.append(R_BRACKET.getTokenType().toString()).append("\n");
-            sb.append(R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum());
-            throw new ParsingException(sb.toString());
+            String stringBuilder = "Syntax error\nInvalid token. Expected [. Got: " +
+                    R_BRACKET.getTokenType().toString() + "\n" +
+                    R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum();
+            throw new ParsingException(stringBuilder);
         }
-        TOKEN_IDX.index++;
-        //System.out.println("    4th:" + R_BRACKET.getToken());
+        TokenIndex.currentTokenIndex++;
 
-        // ---------------------- all done ----------------------------------
-
-        //System.out.println("function call done");
-
-        return new FuncCall(id, parms);
+        // we are all done
+        return new FuncCall(id, params);
     }
 
     /**
-     * TODO
+     * Ensure the code in the function call is valid.
      *
-     * @return TODO
+     * @return a stringified version of this object as Jott code
      */
     public String convertToJott() {
-        StringBuilder jstr = new StringBuilder();
+        StringBuilder jottString = new StringBuilder();
 
-
-        jstr.append(name.getToken() + "[");
+        jottString.append(String.format("%s[", name.getToken()));
 
         if (parameters == null) {
-            jstr.append("]");
-            return jstr.toString();
+            jottString.append("]");
+            return jottString.toString();
         }
-        jstr.append(parameters.convertToJott() + "]");
+        jottString.append(String.format("%s]", parameters.convertToJott()));
 
-        return jstr.toString();
+        return jottString.toString();
     }
 
     /**
-     * TODO
+     * Return this object as a Java code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Java code
+     */
+    public String convertToJava() {
+        return null;
+    }
+
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
+    public String convertToC() {
+        return null;
+    }
+
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
+    public String convertToPython() {
+        return null;
+    }
+
+    /**
+     * Return this object as a Jott code.
+     *
+     * @return whether code is valid or not
      */
     public boolean validateTree() throws ParsingException {
-        ValidateTable.cheekFunctionCall(name,parameters);
+        ValidateTable.checkFunctionCall(name, parameters);
         return true;
 
 
     }
-
 }

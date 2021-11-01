@@ -6,7 +6,7 @@ import main.TokenType;
 import java.util.ArrayList;
 
 /**
- * Description
+ * Type tells us what a given token is.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
@@ -19,11 +19,11 @@ public class Type {
     int lineNumber;
 
     /**
-     * TODO
+     * This is the constructor for a Type that takes in a token, a filename, and a line number.
      *
-     * @param token      TODO
-     * @param filename   TODO
-     * @param lineNumber TODO
+     * @param token      this is the token this type object is attributed to
+     * @param filename   this is the filename where the token comes from
+     * @param lineNumber this is the line number in the filename where the token is from
      */
     public Type(String token, String filename, int lineNumber) {
         this.type = token;
@@ -31,15 +31,20 @@ public class Type {
         this.lineNumber = lineNumber;
     }
 
+    /**
+     * This is the constructor for a Type that just takes in a type.
+     *
+     * @param type tells
+     */
     public Type(String type) {
         this.type = type;
     }
 
     /**
-     * TODO
+     * isType returns whether token is a type (Integer, Double, Boolean, or String) or not
      *
-     * @param token TODO
-     * @return TODO
+     * @param token the token to observe
+     * @return whether the token is a type or not
      */
     public static boolean isType(Token token) {
         String tokenString = token.getToken();
@@ -56,9 +61,9 @@ public class Type {
      * @return TODO
      */
     public static Type parseFReturnStmt(ArrayList<Token> tokens) {
-        Token funcReturnType = tokens.get(TOKEN_IDX.index);
+        Token funcReturnType = tokens.get(TokenIndex.currentTokenIndex);
         if (isType(funcReturnType) || funcReturnType.getToken().equals("Void")) {
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
             return new Type(funcReturnType.getToken(), funcReturnType.getFilename(), funcReturnType.getLineNum());
         }
         return null;
@@ -72,12 +77,8 @@ public class Type {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public Type ParseType(ArrayList<Token> tokens) throws ParsingException {
-        //System.out.println("-------------------PARSING TYPE-----------------");
-
-
-        // ---------------------- check for type ------------------------------------
-
+    public Type parseType(ArrayList<Token> tokens) throws ParsingException {
+        // check for type
         Token typeToken = tokens.remove(0);
         if (typeToken.getTokenType() == TokenType.ID_KEYWORD) {
             if ("Integer".equals(typeToken.getToken()) || "Double".equals(typeToken.getToken()) ||
@@ -85,8 +86,8 @@ public class Type {
                 return new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum());
             }
         }
-        // ---------------------- error what was passed in not a valid type ---------
 
+        // error, what was passed in is not a valid type
         String string = "Syntax error\nInvalid token. Expected Integer||Double||String||Boolean. Got: " +
                 typeToken.getTokenType().toString() + "\n" +
                 typeToken.getFilename() + ":" + typeToken.getLineNum();
@@ -94,21 +95,47 @@ public class Type {
     }
 
     /**
-     * TODO
+     * Return this object as a Jott code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Jott code
      */
     public String convertToJott() {
         return type;
     }
 
     /**
-     * TODO
+     * Return this object as a Java code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Java code
+     */
+    public String convertToJava() {
+        return null;
+    }
+
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
+    public String convertToC() {
+        return null;
+    }
+
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
+    public String convertToPython() {
+        return null;
+    }
+
+    /**
+     * Ensure the code is valid
+     *
+     * @return whether code is valid or not
      */
     public boolean validateTree() {
         return false;
     }
-
 }

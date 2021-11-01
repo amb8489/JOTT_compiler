@@ -6,7 +6,7 @@ import main.TokenType;
 import java.util.ArrayList;
 
 /**
- * Description
+ * Else if statement is a continuation of the larger if statement.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
@@ -31,9 +31,6 @@ public class ElseifStmt {
         this.nestLevel = nestLevel;
     }
 
-
-    //      elseif_lst -> elseif [ b_expr ] { body } elseif_lst | ε TODO <-- what is this
-
     /**
      * TODO
      *
@@ -43,14 +40,11 @@ public class ElseifStmt {
      * @throws ParsingException TODO
      */
     public static ArrayList<ElseifStmt> ParseElsif_lst(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        //System.out.println("------------------------PARSING elif------------------------");
-
         // list of all else if we will encounter if any
-        ArrayList<ElseifStmt> elif_lists = new ArrayList<>();
-
+        ArrayList<ElseifStmt> elseIfList = new ArrayList<>();
 
         // looking if there is an "elseif"
-        Token elseif = tokens.get(TOKEN_IDX.index);
+        Token elseif = tokens.get(TokenIndex.currentTokenIndex);
 
         // if no elseif then : ε case and return, this is not an error
         if (!elseif.getToken().equals("elseif")) {
@@ -59,109 +53,87 @@ public class ElseifStmt {
 
         // while we did encounter an elseif in the tokens we will keep serching for elseif
         while (elseif.getToken().equals("elseif")) {
-            //System.out.println("    elif found:" + elseif.getToken());
-
             // removing elseif
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
 
-            // ---------------------------looking for [----------------------------------------
+            // looking for [
+            Token L_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
 
-            Token L_BRACKET = tokens.get(TOKEN_IDX.index);
-            //System.out.println("    2nd:" + L_BRACKET.getToken());
             // check for if
             if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Syntax error\nInvalid token. Expected [. Got: ");
-                sb.append(L_BRACKET.getTokenType().toString()).append("\n");
-                sb.append(L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum());
-                throw new ParsingException(sb.toString());
+                String string = "Syntax error\nInvalid token. Expected [. Got: " +
+                        L_BRACKET.getTokenType().toString() + "\n" +
+                        L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum();
+                throw new ParsingException(string);
             }
-            //System.out.println("    3rd:" + L_BRACKET.getToken());
-            TOKEN_IDX.index++;
-            // -----------------------looking for bool expr-------------------------------------------
 
+            TokenIndex.currentTokenIndex++;
 
+            // looking for bool expr
             Expr expr = Expr.parseExpr(tokens, nestLevel);
 
-            //System.out.println("    XPR FOUND:" + expr.convertToJott());
-
-            // ---------------------------looking for ]----------------------------------------
-
-            Token R_BRACKET = tokens.get(TOKEN_IDX.index);
+            // looking for ]
+            Token R_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
             //System.out.println("    4th:" + R_BRACKET.getToken());
             // check for if
             if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Syntax error\nInvalid token. Expected ]. Got: ");
-                sb.append(R_BRACKET.getTokenType().toString()).append("\n");
-                sb.append(R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum());
-                throw new ParsingException(sb.toString());
+                String string = "Syntax error\nInvalid token. Expected ]. Got: " +
+                        R_BRACKET.getTokenType().toString() + "\n" +
+                        R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum();
+                throw new ParsingException(string);
             }
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
 
-            // ---------------------------looking for {----------------------------------------
+            // looking for {
+            Token L_BRACE = tokens.get(TokenIndex.currentTokenIndex);
 
-            Token L_BRACE = tokens.get(TOKEN_IDX.index);
-            //System.out.println("    5th:" + L_BRACE.getToken());
             // check for if
             if (L_BRACE.getTokenType() != TokenType.L_BRACE) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Syntax error\nInvalid token. Expected {. Got: ");
-                sb.append(L_BRACE.getTokenType().toString()).append("\n");
-                sb.append(L_BRACE.getFilename() + ":" + L_BRACE.getLineNum());
-                throw new ParsingException(sb.toString());
+                String string = "Syntax error\nInvalid token. Expected {. Got: " +
+                        L_BRACE.getTokenType().toString() + "\n" +
+                        L_BRACE.getFilename() + ":" + L_BRACE.getLineNum();
+                throw new ParsingException(string);
             }
-            //System.out.println("    6th:" + L_BRACE.getToken());
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
 
-
-            // ---------------------------looking for body----------------------------------------
-
+            // looking for a body
             Body body = Body.ParseBody(tokens, nestLevel);
 
-            // ---------------------------looking for }----------------------------------------
+            // looking for a }
+            Token R_BRACE = tokens.get(TokenIndex.currentTokenIndex);
 
-            Token R_BRACE = tokens.get(TOKEN_IDX.index);
-            //System.out.println("    7th:" + R_BRACE.getToken());
             // check for if
             if (R_BRACE.getTokenType() != TokenType.R_BRACE) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Syntax error\nInvalid token. Expected }. Got: ");
-                sb.append(R_BRACE.getTokenType().toString()).append("\n");
-                sb.append(R_BRACE.getFilename() + ":" + R_BRACE.getLineNum());
-                throw new ParsingException(sb.toString());
+                String string = "Syntax error\nInvalid token. Expected }. Got: " +
+                        R_BRACE.getTokenType().toString() + "\n" +
+                        R_BRACE.getFilename() + ":" + R_BRACE.getLineNum();
+                throw new ParsingException(string);
             }
-            //System.out.println("    8th:" + R_BRACE.getToken());
-            TOKEN_IDX.index++;
-            // -----------------------adding what was found to list of seen elif stmts-----------------------
 
-            elif_lists.add(new ElseifStmt(expr, body, nestLevel));
+            TokenIndex.currentTokenIndex++;
 
-            // ---------------------------looking for elif----------------------------------------
+            // adding what was found to the list of seen else if statements
+            elseIfList.add(new ElseifStmt(expr, body, nestLevel));
 
-            elseif = tokens.get(TOKEN_IDX.index);
+            // looking for an else if statement
+            elseif = tokens.get(TokenIndex.currentTokenIndex);
         }
 
-        // ---------------------------all done finding elif's----------------------------------------
-
-        return elif_lists;
+        // finished with finding else ifs
+        return elseIfList;
     }
 
-
-    // elseif [ b_expr ] { body } TODO <--- what is this
-
     /**
-     * TODO
+     * Return this object as a Jott code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Jott code
      */
     public String convertToJott() {
         String SPACE = "    ".repeat(this.nestLevel - 1);
 
-        String jottString = "elseif[ " +
+        return "elseif[ " +
                 expr.convertToJott() + "]{ \n" +
                 body.convertToJott() + SPACE + "}";
-        return jottString;
     }
 
     /**
@@ -192,9 +164,9 @@ public class ElseifStmt {
     }
 
     /**
-     * TODO
+     * Ensure the code in the else if statement is valid.
      *
-     * @return TODO
+     * @return whether code is valid or not
      */
     public boolean validateTree() {
         return false;

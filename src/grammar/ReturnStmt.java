@@ -9,7 +9,7 @@ import java.util.ArrayList;
 //     return_stmt -> return expr end_stmt
 
 /**
- * Description
+ * ReturnStmt holds a return statement.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
@@ -20,52 +20,74 @@ public class ReturnStmt {
     public Expr expr;
 
     /**
-     * Constructor TODO
+     * This is a constructor for a return expression.
      *
-     * @param expression TODO
+     * @param expression an expression to be evaluated for return
      */
     public ReturnStmt(Expr expression) {
         this.expr = expression;
     }
 
     public String convertToJott() {
-        String jottString = "\t".repeat(0) + "return " + expr.convertToJott() + ";\n";
-        return jottString;
+        return "\t".repeat(0) + "return " + expr.convertToJott() + ";\n";
     }
 
     public static ReturnStmt parseReturnStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        //System.out.println("------------------------PARSING Return Stmt------------------------");
-
-        // ---------------------- check for return ------------------------------------
-        Token returnToken = tokens.get(TOKEN_IDX.index);
-        //System.out.println("\tFIRST:" + returnToken.getToken());
+        // check for return
+        Token returnToken = tokens.get(TokenIndex.currentTokenIndex);
         if (!returnToken.getToken().equals("return")) {
             return null;
         }
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
-        // ---------------------- check for expr ------------------------------------
         // checking for expression
-        //System.out.println("\tLOOKING FOR EXPR");
-
         Expr expr = Expr.parseExpr(tokens, nestLevel);
-        // ---------------------- check for end statment ------------------------------------
 
         //check for ;
-        Token endStmt = tokens.get(TOKEN_IDX.index);
+        Token endStmt = tokens.get(TokenIndex.currentTokenIndex);
 
         if (endStmt.getTokenType() != TokenType.SEMICOLON) {
             return null;
         }
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
-        // ---------------------- DONE ------------------------------------
-
-        //System.out.println("return found: return " + expr.convertToJott());
+        // done
         return new ReturnStmt(expr);
 
     }
 
+    /**
+     * Return this object as a Java code.
+     *
+     * @return a stringified version of this object as Java code
+     */
+    public String convertToJava() {
+        return null;
+    }
+
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
+    public String convertToC() {
+        return null;
+    }
+
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
+    public String convertToPython() {
+        return null;
+    }
+
+    /**
+     * Ensure the code is valid
+     *
+     * @return whether code is valid or not
+     */
     public boolean validateTree() {
         return false;
     }

@@ -19,17 +19,15 @@ import java.util.ArrayList;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class Params {
-
     public Expr expr;
     boolean hasComma = false;
     public ArrayList<Params> paramsList = null;
 
-
     /**
-     * Constructor
+     * This is a constructor for Params.
      *
-     * @param expr
-     * @param hasComma
+     * @param expr     this holds the param
+     * @param hasComma whether if this expression has a comma or not
      */
     public Params(Expr expr, boolean hasComma) {
         this.expr = expr;
@@ -37,68 +35,46 @@ public class Params {
     }
 
     /**
-     * Constructor
+     * This is the constructor for params.
      *
-     * @param params
+     * @param params this is a list of params
      */
     public Params(ArrayList<Params> params) {
         this.paramsList = params;
     }
 
-
     public static ArrayList<Params> parseParams_r(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        //System.out.println("------------------------PARSING Params------------------------");
-
-
-        // ---------------------- list of params --------------------------------
-
+        // a list of params
         ArrayList<Params> listOfParams = new ArrayList<>();
 
-
-        // ---------------------- check for empty list  (epsilon)----------------
+        // check for an empty list (epsilon)
 
         // check for next token == ], this means no params
-        Token firstToken = tokens.get(TOKEN_IDX.index);
-        //System.out.println("    1st:" + first.getToken());
+        Token firstToken = tokens.get(TokenIndex.currentTokenIndex);
 
         // epsilon case
         if (firstToken.getTokenType() == TokenType.R_BRACKET) {
             return null;
         }
 
-
-        // ---------------------- check for expr ------------------------------------
-
         // looking for expr
         Expr expr = Expr.parseExpr(tokens, nestLevel);
-        //System.out.println("    2nd- expr found :" + exp.convertToJott());
         listOfParams.add(new Params(expr, false));
 
-
-        // ---------------------- checking for more params, comma started-----------------------
-
-        Token commaToken = tokens.get(TOKEN_IDX.index);
+        // checking for more params, comma started
+        Token commaToken = tokens.get(TokenIndex.currentTokenIndex);
         while (commaToken.getTokenType() == TokenType.COMMA) {
-            //System.out.println("        looking for new param:" + comma.getToken());
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
 
-            // ---------------------- check for expr ------------------------------------
-
+            // check for expr
             expr = Expr.parseExpr(tokens, nestLevel);
             listOfParams.add(new Params(expr, true));
 
-            // ---------------------- check for , and look for more ----------------------
-
-            commaToken = tokens.get(TOKEN_IDX.index);
-
-
-            //System.out.println("        new param found:" + exp.convertToJott());
-            //System.out.println("        looking for new param...:" + comma.getToken());
+            // check for , and look for more
+            commaToken = tokens.get(TokenIndex.currentTokenIndex);
         }
 
-        //System.out.println("        looking DONE:" + comma.getToken());
-        // ---------------------- done ------------------------------------
-
+        // done
         return listOfParams;
     }
 
@@ -112,6 +88,11 @@ public class Params {
 
     }
 
+    /**
+     * Return this object as a Jott code.
+     *
+     * @return a stringified version of this object as Jott code
+     */
     public String convertToJott() {
         StringBuilder jottString = new StringBuilder();
 
@@ -125,9 +106,39 @@ public class Params {
         return jottString.toString();
     }
 
+    /**
+     * Return this object as a Java code.
+     *
+     * @return a stringified version of this object as Java code
+     */
+    public String convertToJava() {
+        return null;
+    }
+
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
+    public String convertToC() {
+        return null;
+    }
+
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
+    public String convertToPython() {
+        return null;
+    }
+
+    /**
+     * Ensure the code is valid
+     *
+     * @return whether code is valid or not
+     */
     public boolean validateTree() {
         return false;
     }
-
-
 }

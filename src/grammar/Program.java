@@ -5,7 +5,7 @@ import main.Token;
 import java.util.ArrayList;
 
 /**
- * Description
+ * A program holds a list of functions.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
@@ -16,7 +16,7 @@ public class Program implements JottTree {
     FunctionList functionList;
 
     /**
-     * Constructor TODO
+     * This is the constructor for the program.
      *
      * @param functionList TODO
      */
@@ -25,73 +25,64 @@ public class Program implements JottTree {
     }
 
     /**
-     * TODO
+     * Parse the code for a list of functions and return it as a Program object.
      *
      * @param tokens TODO
-     * @return TODO
+     * @return a Program object with a list of functions
      * @throws ParsingException TODO
      */
     public static Program parseProgram(ArrayList<Token> tokens) throws ParsingException {
-        //System.out.println("------------------------PARSING program------------------------");
-        TOKEN_IDX.reset();
+        TokenIndex.reset();
         ValidateTable.clearTables();
-
-        FunctionList functionList = FunctionList.parseFunctionList(tokens, 0);
-
-        return new Program(functionList);
+        return new Program(FunctionList.parseFunctionList(tokens, 0));
     }
 
     /**
-     * TODO
+     * Return this object as a Jott code.
      *
-     * @return TODO
-     * @throws ParsingException TODO
+     * @return a stringified version of this object as Jott code
      */
-    @Override
-    public boolean validateTree() throws ParsingException {
-        if (!functionList.ListHasMain()) {
-            throw new ParsingException("Program is missing or has an incorrectly spelled main");
-        }
-        return functionList.validateTree();
-    }
-
-    /**
-     * TODO
-     *
-     * @return TODO
-     */
-    @Override
     public String convertToJott() {
         return functionList.convertToJott();
     }
 
     /**
-     * TODO
+     * Return this object as a Java code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Java code
      */
-    @Override
     public String convertToJava() {
         return null;
     }
 
     /**
-     * TODO
+     * Return this object as a C code.
      *
-     * @return TODO
+     * @return a stringified version of this object as C code
      */
-    @Override
     public String convertToC() {
         return null;
     }
 
     /**
-     * TODO
+     * Return this object as a Python code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Python code
      */
-    @Override
     public String convertToPython() {
         return null;
+    }
+
+    /**
+     * Ensure the code is valid
+     *
+     * @return whether code is valid or not
+     * @throws ParsingException throw an error if the code is not valid
+     */
+    public boolean validateTree() throws ParsingException {
+        if (!functionList.ListHasMain()) {
+            throw new ParsingException("Program is missing or has an incorrectly spelled main");
+        }
+        return functionList.validateTree();
     }
 }

@@ -19,7 +19,7 @@ public class FuncDefParams {
     public final ArrayList<FuncDefParams> functionParameterList;
 
     /**
-     * Constructor TODO
+     * This is the constructor for function definition parameters.
      *
      * @param identifier            TODO
      * @param type                  TODO
@@ -52,115 +52,118 @@ public class FuncDefParams {
 
         ArrayList<FuncDefParams> functionParameterList = new ArrayList<>();
 
-        // ---------------------------look for id -----------------------------
-
-
-        Token idd = tokens.get(TOKEN_IDX.index);
+        // look for an id
+        Token idd = tokens.get(TokenIndex.currentTokenIndex);
 
         if (idd.getTokenType() == TokenType.R_BRACKET) {
-            //System.out.println("empty params");
             return null;
         }
 
-
         while (idd.getTokenType() != TokenType.R_BRACKET) {
             if (Type.isType(idd)) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Syntax error\nInvalid token. <id>. Got: TYPE \n");
-                sb.append(idd.getFilename() + ":" + idd.getLineNum());
-                throw new ParsingException(sb.toString());
+                String string = "Syntax error\nInvalid token. <id>. Got: TYPE \n" +
+                        idd.getFilename() + ":" + idd.getLineNum();
+                throw new ParsingException(string);
             }
 
-            //System.out.println("    found id ???:" + idd.getToken());
-
             if (idd.getTokenType() != TokenType.ID_KEYWORD) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Syntax error\nInvalid token. <id>. Got:");
-                sb.append(idd.getTokenType().toString()).append("\n");
-                sb.append(idd.getFilename() + ":" + idd.getLineNum());
-                throw new ParsingException(sb.toString());
+                String string = "Syntax error\nInvalid token. <id>. Got:" +
+                        idd.getTokenType().toString() + "\n" +
+                        idd.getFilename() + ":" + idd.getLineNum();
+                throw new ParsingException(string);
             }
             Identifier id = new Identifier(idd);
 
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
 
-            // ---------------------------look for : -----------------------------
-            Token col = tokens.get(TOKEN_IDX.index);
+            // look for :
+            Token column = tokens.get(TokenIndex.currentTokenIndex);
 
-            if (col.getTokenType() != TokenType.COLON) {
-                //System.out.println("TODO ERROR 1");
-            }
+            TokenIndex.currentTokenIndex++;
 
-            TOKEN_IDX.index++;
-
-
-            // ---------------------------look for type -----------------------------
-            Token type = tokens.get(TOKEN_IDX.index);
+            // look for a type
+            Token type = tokens.get(TokenIndex.currentTokenIndex);
 
             if (!Type.isType(type)) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Syntax error\nInvalid token. Expected <Type>. Got: ");
-                sb.append(type.getToken().toString()).append("\n");
-                sb.append(type.getFilename() + ":" + type.getLineNum());
-                throw new ParsingException(sb.toString());
+                String string = "Syntax error\nInvalid token. Expected <Type>. Got: " +
+                        type.getToken() + "\n" +
+                        type.getFilename() + ":" + type.getLineNum();
+                throw new ParsingException(string);
             }
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
 
-
-            // ---------------------------look for func def parm t -----------------------------
-
+            // look for extra parameters (parameters_t) for the function
             functionParameterList.add(new FuncDefParams(id, type, null));
 
 
-            idd = tokens.get(TOKEN_IDX.index);
+            idd = tokens.get(TokenIndex.currentTokenIndex);
             if (idd.getTokenType() != TokenType.COMMA && idd.getTokenType() == TokenType.R_BRACKET) {
                 break;
             } else if (idd.getTokenType() != TokenType.COMMA) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Syntax error\nInvalid token. Expected ,. Got: ");
-                sb.append(idd.getTokenType().toString()).append("\n");
-                sb.append(idd.getFilename() + ":" + idd.getLineNum());
-                throw new ParsingException(sb.toString());
+                String string = "Syntax error\nInvalid token. Expected ,. Got: " +
+                        idd.getTokenType().toString() + "\n" +
+                        idd.getFilename() + ":" + idd.getLineNum();
+                throw new ParsingException(string);
             }
-            TOKEN_IDX.index++;
-            idd = tokens.get(TOKEN_IDX.index);
+            TokenIndex.currentTokenIndex++;
+            idd = tokens.get(TokenIndex.currentTokenIndex);
 
         }
-        //System.out.println("+++++++++++++++++++++++++++"+tokens.get(TOKEN_IDX.index));
         return new FuncDefParams(functionParameterList);
     }
 
     /**
-     * TODO
+     * Return this object as a Jott code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Jott code
+     */
+    public String convertToJott() {
+        StringBuilder jottString = new StringBuilder();
+
+        StringBuilder functionParameterList = new StringBuilder();
+
+        if (this.functionParameterList != null) {
+            for (FuncDefParams FDP : this.functionParameterList) {
+                functionParameterList.append(FDP.convertToJott());
+            }
+            return functionParameterList.substring(0, functionParameterList.length() - 1);
+        } else {
+            jottString.append(String.format("%s:%s,", identifier.convertToJott(), type.getToken()));
+            return jottString.toString();
+        }
+    }
+
+    /**
+     * Return this object as a Java code.
+     *
+     * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
         return null;
     }
 
     /**
-     * TODO
+     * Return this object as a C code.
      *
-     * @return TODO
+     * @return a stringified version of this object as C code
      */
     public String convertToC() {
         return null;
     }
 
     /**
-     * TODO
+     * Return this object as a Python code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
         return null;
     }
 
     /**
-     * TODO
+     * Ensure the code in the function definition parameters are valid.
      *
-     * @return TODO
+     * @return whether code is valid or not
      */
     public boolean validateTree() throws ParsingException {
 
@@ -175,25 +178,5 @@ public class FuncDefParams {
         }
 
         return true;
-    }
-
-    //   func_def_params -> id : type func_def_params_t|ε                                                                 <-- DONE
-
-    public String convertToJott() {
-        StringBuilder jottString = new StringBuilder();
-
-        StringBuilder functionParameterList = new StringBuilder();
-
-        functionParameterList.append("");
-
-        if (this.functionParameterList != null) {
-            for (FuncDefParams FDP : this.functionParameterList) {
-                functionParameterList.append(FDP.convertToJott());
-            }
-            return functionParameterList.substring(0, functionParameterList.length() - 1);
-        } else {
-            jottString.append(identifier.convertToJott() + ":" + type.getToken() + functionParameterList + ",");
-            return jottString.toString();
-        }
     }
 }

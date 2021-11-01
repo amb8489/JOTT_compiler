@@ -14,7 +14,6 @@ import java.util.ArrayList;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class AsmtStmt {
-
     public Type type;                       // what variable type is this?
     private final Identifier identifier;    // what variable name (id) is this?
     public Expr expr;                       //
@@ -33,10 +32,9 @@ public class AsmtStmt {
     }
 
     /**
-     * The format of asmt is {INDENT}TYPE NAME = EXPR ;
-     * where indent is the number of tabs
+     * Return this object as a Jott code.
      *
-     * @return Jott version of the code
+     * @return a stringified version of this object as Jott code
      */
     public String convertToJott() {
         StringBuilder jottString = new StringBuilder();
@@ -64,15 +62,15 @@ public class AsmtStmt {
         // removing and checking the first token
         // should be an IDkeyword type
 
-        Token typeToken = tokens.get(TOKEN_IDX.index);
+        Token typeToken = tokens.get(TokenIndex.currentTokenIndex);
         //System.out.println("    FIRST:" + typeToken.getToken());
         Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum());
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
-        Token idToken = tokens.get(TOKEN_IDX.index);
+        Token idToken = tokens.get(TokenIndex.currentTokenIndex);
 
         if (Type.isType(typeToken)) {
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
 
             // getting next token
             //System.out.println("    SECOND:" + idToken.getToken());
@@ -84,8 +82,7 @@ public class AsmtStmt {
         }
 
         Identifier id = new Identifier(idToken); // making id
-        Token equalsToken = tokens.get(TOKEN_IDX.index); // looking for = token
-
+        Token equalsToken = tokens.get(TokenIndex.currentTokenIndex); // looking for = token
 
         // checking for =
         //System.out.println("    THIRD:" + equalsToken.getToken());
@@ -93,15 +90,14 @@ public class AsmtStmt {
             return null;
 
         }
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
         // checking for expression
         //System.out.println("\tLOOKING FOR EXPR");
         Expr expr = NumExpr.parseExpr(tokens, nestLevel);
 
-
         //check for ;
-        Token endStmt = tokens.get(TOKEN_IDX.index);
+        Token endStmt = tokens.get(TokenIndex.currentTokenIndex);
         if (endStmt.getTokenType() != TokenType.SEMICOLON) {
             String message = String.format("Syntax error\nInvalid token. Expected ;. Got: %s\n%s:%s",
                     endStmt.getTokenType().toString(),
@@ -109,7 +105,7 @@ public class AsmtStmt {
                     endStmt.getLineNum());
             throw new ParsingException(message);
         }
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
         // if successful assignment statement
         if (Type.isType(typeToken)) {
@@ -119,9 +115,9 @@ public class AsmtStmt {
     }
 
     /**
-     * TODO: need to implement this in phase 3
+     * Ensure the assignment statement code is valid
      *
-     * @return something
+     * @return whether code is valid or not
      */
     public boolean validateTree() throws ParsingException {
 
@@ -129,7 +125,6 @@ public class AsmtStmt {
         // check that expr is good aka that function return types are = to expr type
         // and that vars in the expr 1) exist and 2) are the type of the expr type
         // check that ids for vars are ok use Identifier.check(identifier.id);
-
 
         // 1) check that id for var is good
         Identifier.check(identifier.id);
@@ -147,12 +142,12 @@ public class AsmtStmt {
 
                 // we had a change in type
                 // we change the type
-                if(expr.expr.type != null) {
+                if (expr.expr.type != null) {
                     this.expr.type = expr.expr.type;
                 }
                 // see that type of left = type of right for function
 
-                System.out.println(this.type.type+" "+expr.type);
+                System.out.println(this.type.type + " " + expr.type);
 
                 if (type.type.equals(expr.type)) {
                     ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
@@ -163,17 +158,12 @@ public class AsmtStmt {
                 }
 
                 throw new ParsingException(String.format("var %s assigned wrong type: line %d", identifier.convertToJott(), identifier.id.getLineNum()));
-
             } else {
                 throw new ParsingException(String.format("var %s dose already exist: line %d", identifier.convertToJott(), identifier.id.getLineNum()));
-
             }
         } else {
             // ELSE if we have:    id = val;
-
-
             // updating value already in table
-
             //1) check that the var in question exists
             String varId = identifier.convertToJott();
             if (!ValidateTable.variables.containsKey(varId)) {
@@ -185,14 +175,12 @@ public class AsmtStmt {
             String varType = ValidateTable.variables.get(identifier.convertToJott()).get(0);
 
             if (expr.type.equals(varType)) {
-
                 ValidateTable.variables.get(identifier.convertToJott()).set(1, expr.convertToJott());
                 return true;
             }
 
             // Failure
             throw new ParsingException(String.format("var %s assigned wrong type: line %d", varId, identifier.id.getLineNum()));
-
         }
     }
 }

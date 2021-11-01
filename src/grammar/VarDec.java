@@ -26,8 +26,6 @@ public class VarDec {
     public VarDec(Type type, Identifier identifier) {
         this.type = type;
         this.identifier = identifier;
-
-
     }
 
     /**
@@ -39,73 +37,89 @@ public class VarDec {
      * @throws ParsingException TODO
      */
     public static VarDec parseVarDec(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        //System.out.println("------------------------PARSING Var-Dec------------------------");
-
-        // ---------------------- check for correct type ---------------------------
+        // check for the correct type
 
         // removing and checking the first token
         // should be an IDkeyword type
 
-        Token typeToken = tokens.get(TOKEN_IDX.index);
-        //System.out.println("    FIRST:"+typeToken.getToken());
+        Token typeToken = tokens.get(TokenIndex.currentTokenIndex);
         Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum());
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
-        // ----------------------------- var name-----------------------------------
+
+        // look for var name
 
         // getting next token
-        Token idToken = tokens.get(TOKEN_IDX.index);
-        //System.out.println("    SECOND:"+idToken.getToken());
+        Token idToken = tokens.get(TokenIndex.currentTokenIndex);
         if (idToken.getTokenType() != TokenType.ID_KEYWORD) {
             return null;
         }
         Identifier.check(idToken);
-
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
         Identifier identifier = new Identifier(idToken);
 
-        // --------------------------------- check for ; ---------------------------
-        Token endStmt = tokens.get(TOKEN_IDX.index);
-        //System.out.println("    THIRD:"+endStmt.getToken());
+        // look for ;
+        Token endStmt = tokens.get(TokenIndex.currentTokenIndex);
 
         if (endStmt.getTokenType() != TokenType.SEMICOLON) {
             return null;
         }
 
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
-        // --------------------------------- DONE------- ---------------------------
+        // done
         return new VarDec(type, identifier);
     }
 
-    // the format of asmt is {INDENT}TYPE NAME;
-    // where indent is the number of tabs
-
     /**
-     * TODO
+     * Return this object as a Jott code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Jott code
      */
     public String convertToJott() {
-        String jottString = "     ".repeat(0) +
+        return "\t".repeat(0) +
                 type.convertToJott() + " " +
                 identifier.convertToJott() + ";";
-        return jottString;
     }
 
     /**
-     * TODO
+     * Return this object as a Java code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Java code
+     */
+    public String convertToJava() {
+        return null;
+    }
+
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
+    public String convertToC() {
+        return null;
+    }
+
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
+    public String convertToPython() {
+        return null;
+    }
+
+    /**
+     * Ensure the code is valid
+     *
+     * @return whether code is valid or not
      */
     public boolean validateTree() {
-        // name ---> type null
         ValidateTable.variables.put(identifier.convertToJott(), new ArrayList<>() {{
             add(type.type);
             add(null);
         }});
         return true;
     }
-
 }

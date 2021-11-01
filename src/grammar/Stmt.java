@@ -5,11 +5,11 @@ import main.TokenType;
 
 import java.util.ArrayList;
 
-
-// stmt -> asmt|var_dec|func_call ;                                                                          <-- DONE
-
 /**
- * Description
+ * This is a statement which holds any of those:
+ * 1) assign statement (asmt)
+ * 2) var declaration (varDec)
+ * 3) function call (funcCall)
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
@@ -23,7 +23,7 @@ public class Stmt {
     int nestLevel;
 
     /**
-     * Constructor TODO
+     * This is the constructor for a statement.
      *
      * @param nestLevel TODO
      * @param asmtStmt  TODO
@@ -46,75 +46,55 @@ public class Stmt {
      * @throws ParsingException TODO
      */
     public static Stmt parseStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        //System.out.println("-------------------PARSING STMT------------------");
-
-        //----------------------------trying asmtStmt TODO HERE ISSUE
-        TOKEN_IDX.saveTokenIndex();
-
-        //System.out.println("Statment first again::::" + tokens.get(TOKEN_IDX.index).getToken());
-
+        // trying asmtStmt
+        TokenIndex.saveCurrentTokenIndex();
         AsmtStmt asmtStmt = AsmtStmt.parseAsmtStmt(tokens, nestLevel);
 
         if (asmtStmt != null) {
-            TOKEN_IDX.popRestore();
+            TokenIndex.popSavedTokenIndexStack();
             return new Stmt(nestLevel, asmtStmt, null, null);
         } else {
-            TOKEN_IDX.restoreTokenIndex();
+            TokenIndex.restoreFromSavedTokenIndexStack();
         }
 
-        //----------------------------trying var_dec
-        //System.out.println("first again::::" + tokens.get(TOKEN_IDX.index).getToken());
-        TOKEN_IDX.saveTokenIndex();
-
+        // trying var dec
+        TokenIndex.saveCurrentTokenIndex();
         VarDec varDec = VarDec.parseVarDec(tokens, nestLevel);
 
         if (varDec != null) {
-            TOKEN_IDX.popRestore();
-
+            TokenIndex.popSavedTokenIndexStack();
             return new Stmt(nestLevel, null, varDec, null);
-
         } else {
-            TOKEN_IDX.restoreTokenIndex();
+            TokenIndex.restoreFromSavedTokenIndexStack();
         }
 
-
-        //----------------------------trying func_call
-        //System.out.println("first again::::" + tokens.get(TOKEN_IDX.index).getToken());
-        TOKEN_IDX.saveTokenIndex();
-
+        // trying func_call
+        TokenIndex.saveCurrentTokenIndex();
 
         FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel);
         if (funcCall != null) {
-            // ---------------------- check for end statement ------------------------------------
-
-            //check for ;
-            Token endStmt = tokens.get(TOKEN_IDX.index);
+            // check for ;
+            Token endStmt = tokens.get(TokenIndex.currentTokenIndex);
 
             if (endStmt.getTokenType() != TokenType.SEMICOLON) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Syntax error\nInvalid token. Expected ;. Got: ");
-                stringBuilder.append(endStmt.getTokenType().toString()).append("\n");
-                stringBuilder.append(endStmt.getFilename() + ":" + endStmt.getLineNum());
-                throw new ParsingException(stringBuilder.toString());
+                String stringBuilder = "Syntax error\nInvalid token. Expected ;. Got: " +
+                        endStmt.getTokenType().toString() + "\n" +
+                        endStmt.getFilename() + ":" + endStmt.getLineNum();
+                throw new ParsingException(stringBuilder);
             }
-            TOKEN_IDX.index++;
-
-
-            TOKEN_IDX.popRestore();
-            //System.out.println("-------------->>>>>>"+funcCall.convertToJott());
-
+            TokenIndex.currentTokenIndex++;
+            TokenIndex.popSavedTokenIndexStack();
             return new Stmt(nestLevel, null, null, funcCall);
-
         } else {
-            TOKEN_IDX.restoreTokenIndex();
+            TokenIndex.restoreFromSavedTokenIndexStack();
         }
         return null;
     }
 
     /**
-     * TODO
+     * Return this object as a Jott code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Jott code
      */
     public String convertToJott() {
         if (asmtStmt != null) {
@@ -130,9 +110,36 @@ public class Stmt {
     }
 
     /**
-     * TODO
+     * Return this object as a Java code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Java code
+     */
+    public String convertToJava() {
+        return null;
+    }
+
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
+    public String convertToC() {
+        return null;
+    }
+
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
+    public String convertToPython() {
+        return null;
+    }
+
+    /**
+     * Ensure the code is valid
+     *
+     * @return whether code is valid or not
      */
     public boolean validateTree() throws ParsingException {
         if (asmtStmt != null) {
@@ -146,6 +153,4 @@ public class Stmt {
         }
         return true;
     }
-
-
 }

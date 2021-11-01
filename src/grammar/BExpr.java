@@ -5,14 +5,14 @@ import main.TokenType;
 
 import java.util.ArrayList;
 
-////     * b_expr ->
-//                 bool|
-//               numexp rel_op numexp|
-//               s_expr rel_op s_expr|
-//               b_expr rel_op b_expr| TODO: what are those
-
 /**
  * BExpr is a boolean expression.
+ * <p>
+ * BExpr can be
+ * 1) bool
+ * 2) numExpr rel_op numExpr
+ * 3) sExpr rel_op sExpr
+ * 4) bExpr rel_op bExpr
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
@@ -20,21 +20,19 @@ import java.util.ArrayList;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class BExpr extends Expr {
-    private ArrayList<BExpr> finalexp = null;
-
+    private ArrayList<BExpr> finalExpr = null;
     private Expr expr;
     private Token bool;
     private Token relOp;
-    // ---------------------- constructors for different cases --------------------------------
 
     /**
-     * Constructor TODO
+     * This is the constructor for a boolean expression class.
      *
      * @param finalExp TODO blah
      */
     public BExpr(ArrayList<BExpr> finalExp) {
         super(null, null);
-        this.finalexp = finalExp;
+        this.finalExpr = finalExp;
     }
 
     /**
@@ -92,12 +90,12 @@ public class BExpr extends Expr {
      */
     public static ArrayList<BExpr> parseBExpr_r(int nestLevel, ArrayList<Token> tokens, ArrayList<BExpr> booleanList)
             throws ParsingException {
-        Token possibleBool = tokens.get(TOKEN_IDX.index);
+        Token possibleBool = tokens.get(TokenIndex.currentTokenIndex);
         boolean isBool = false;
         Expr possibleExpr = null;
 
         if ("true false".contains(possibleBool.getToken())) {
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
             isBool = true;
         } else {
             possibleExpr = NumExpr.parseNumExpr(tokens, nestLevel);
@@ -113,11 +111,11 @@ public class BExpr extends Expr {
                 }
             }
         }
-        Token possibleRelOp = tokens.get(TOKEN_IDX.index);
+        Token possibleRelOp = tokens.get(TokenIndex.currentTokenIndex);
 
         if (isBool) {
             if (possibleRelOp.getTokenType() == TokenType.REL_OP) {
-                TOKEN_IDX.index++;
+                TokenIndex.currentTokenIndex++;
 
                 //System.out.printf("bool op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
                 booleanList.add(new BExpr(possibleBool, possibleRelOp));
@@ -131,7 +129,7 @@ public class BExpr extends Expr {
 
         } else {
             if (possibleRelOp.getTokenType() == TokenType.REL_OP) {
-                TOKEN_IDX.index++;
+                TokenIndex.currentTokenIndex++;
 
                 //System.out.printf("expr op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
                 booleanList.add(new BExpr(possibleExpr, possibleRelOp));
@@ -157,21 +155,21 @@ public class BExpr extends Expr {
 
         //System.out.println("-------------------- parsing bool expr --------------------");
 
-        ArrayList<BExpr> f = parseBExpr_r(nestLevel, tokens, new ArrayList<BExpr>());
+        ArrayList<BExpr> f = parseBExpr_r(nestLevel, tokens, new ArrayList<>());
 
         return new BExpr(f);
     }
 
     /**
-     * TODO
+     * Return this object as a Jott code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Jott code
      */
     @Override
     public String convertToJott() {
         StringBuilder jottString = new StringBuilder();
 
-        for (BExpr n : finalexp) {
+        for (BExpr n : finalExpr) {
             // bool relOp
             if (n.bool != null && n.relOp != null) {
                 jottString.append(String.format("%s %s", n.bool.getToken(), n.relOp.getToken()));
@@ -197,9 +195,36 @@ public class BExpr extends Expr {
     }
 
     /**
-     * TODO
+     * Return this object as a Java code.
      *
-     * @return
+     * @return a stringified version of this object as Java code
+     */
+    public String convertToJava() {
+        return null;
+    }
+
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
+    public String convertToC() {
+        return null;
+    }
+
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
+    public String convertToPython() {
+        return null;
+    }
+
+    /**
+     * Ensure the boolean expression code is valid
+     *
+     * @return whether code is valid or not
      */
     public boolean validateTree() {
         return false;

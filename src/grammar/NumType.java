@@ -11,39 +11,42 @@ import main.Token;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class NumType {
-
     public String numType;
     public double doubleNumber;
     public int integerNumber;
     public String varNumber;
-
     public Token number;
     public boolean isVar;
 
 
-    public NumType(Token num) {
-        this.number = num;
-        String string = num.getToken();
+    /**
+     * A constructor for a NumType.
+     *
+     * @param number a numerical value whether it be a double or an integer
+     */
+    public NumType(Token number) {
+        this.number = number;
+        String string = number.getToken();
 
         // is this a double?
         this.isVar = false;
 
         try {
-            double number = Double.parseDouble(string);
+            double doubleNumber = Double.parseDouble(string);
             this.numType = "Double";
-            this.doubleNumber = number;
+            this.doubleNumber = doubleNumber;
         } catch (NumberFormatException ignored) {
             // hmm, so this must be something else
         }
 
         // is this an integer?
         try {
-            int number = Integer.parseInt(string);
+            int integerNumber = Integer.parseInt(string);
             this.numType = "Integer";
-            this.integerNumber = number;
+            this.integerNumber = integerNumber;
 
         } catch (NumberFormatException ignored) {
-            // not a num but a var
+            // not a number but a var
             if (this.numType == null) {
                 this.isVar = true;
                 this.varNumber = string;
@@ -55,7 +58,39 @@ public class NumType {
         return numType;
     }
 
+    /**
+     * Return this object as a Jott code.
+     *
+     * @return a stringified version of this object as Jott code
+     */
     public String convertToJott() {
         return number.getToken();
+    }
+
+    /**
+     * Return this object as a Java code.
+     *
+     * @return a stringified version of this object as Java code
+     */
+    public String convertToJava() {
+        return null;
+    }
+
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
+    public String convertToC() {
+        return null;
+    }
+
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
+    public String convertToPython() {
+        return null;
     }
 }

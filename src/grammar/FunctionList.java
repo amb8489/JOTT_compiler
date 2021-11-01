@@ -8,7 +8,7 @@ import java.util.ArrayList;
 // function_def function_list | E
 
 /**
- * Description
+ * A function list holds a list of function definitions.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
@@ -19,34 +19,24 @@ public class FunctionList {
 
     private final ArrayList<FunctionDef> listOfFunctionDefs;
 
+    /**
+     * This is the constructor for a function list.
+     *
+     * @param listOfFunctionDefs a list of function definitions
+     */
     public FunctionList(ArrayList<FunctionDef> listOfFunctionDefs) {
         this.listOfFunctionDefs = listOfFunctionDefs;
     }
 
     public static FunctionList parseFunctionList(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
-        //System.out.println("------------------------PARSING FunctionList------------------------");
-
         ArrayList<FunctionDef> listOfFunctionDefs = new ArrayList<>();
-        //System.out.println("looking for function def");
 
         FunctionDef functionDef = FunctionDef.parseFunctionDef(tokens, 0);
 
-        if (functionDef == null) {
-            //System.out.println(" NO init function def");
-            return null;
-        }
         listOfFunctionDefs.add(functionDef);
 
-        while (TOKEN_IDX.index < tokens.size()) {
-            //System.out.println(" looking for more function def");
-            functionDef = FunctionDef.parseFunctionDef(tokens, nestlevel);
-
-            if (functionDef == null) {
-                //System.out.println("no more function def found ");
-                return new FunctionList(listOfFunctionDefs);
-            }
-            listOfFunctionDefs.add(functionDef);
-
+        while (TokenIndex.currentTokenIndex < tokens.size()) {
+            listOfFunctionDefs.add(FunctionDef.parseFunctionDef(tokens, nestlevel));
         }
         return new FunctionList(listOfFunctionDefs);
 
@@ -64,37 +54,70 @@ public class FunctionList {
         return false;
     }
 
+    /**
+     * Return this object as a Jott code.
+     *
+     * @return a stringified version of this object as Jott code
+     */
+    public String convertToJott() {
+        StringBuilder jottString = new StringBuilder();
+
+        for (FunctionDef fd : listOfFunctionDefs) {
+            jottString.append(String.format("%s\n", fd.convertToJott()));
+        }
+        return jottString.toString();
+    }
+
+    /**
+     * Return this object as a Java code.
+     *
+     * @return a stringified version of this object as Java code
+     */
     public String convertToJava() {
         return null;
     }
 
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
     public String convertToC() {
         return null;
     }
 
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
     public String convertToPython() {
         return null;
     }
 
-
+    /**
+     * Ensure the code in the function definition parameters are valid.
+     *
+     * @return whether code is valid or not
+     */
     public boolean validateTree() throws ParsingException {
 
-        for (FunctionDef function : listOfFunctionDefs) {
-            ValidateTable.functions.put(function.id.convertToJott(), new ArrayList<>() {
+        for (FunctionDef functionDef : listOfFunctionDefs) {
+            ValidateTable.functions.put(functionDef.id.convertToJott(), new ArrayList<>() {
                 {
-                    add(function.returnType.type);
+                    add(functionDef.returnType.type);
                 }
             });
-            // setting function params
-            if (function.funcDefParams != null) {
-                for (FuncDefParams params : function.funcDefParams.functionParameterList) {
-                    ValidateTable.functions.get(function.id.convertToJott()).add(params.identifier.convertToJott());
-                    ValidateTable.functions.get(function.id.convertToJott()).add(params.type.getToken());
+            // setting functionDef params
+            if (functionDef.funcDefParams != null) {
+                for (FuncDefParams params : functionDef.funcDefParams.functionParameterList) {
+                    ValidateTable.functions.get(functionDef.id.convertToJott()).add(params.identifier.convertToJott());
+                    ValidateTable.functions.get(functionDef.id.convertToJott()).add(params.type.getToken());
                 }
             }
 
-            boolean r = function.validateTree();
-            // setting function id and its return type
+            boolean r = functionDef.validateTree();
+            // setting functionDef id and its return type
 
 
             if (!r) {
@@ -103,14 +126,4 @@ public class FunctionList {
         }
         return true;
     }
-
-    public String convertToJott() {
-        StringBuilder jstr = new StringBuilder();
-
-        for (FunctionDef fd : listOfFunctionDefs) {
-            jstr.append(fd.convertToJott() + "\n");
-        }
-        return jstr.toString();
-    }
-
 }

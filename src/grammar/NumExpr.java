@@ -6,7 +6,7 @@ import main.TokenType;
 import java.util.ArrayList;
 
 /**
- * Description
+ * This is an expression that can automatically handle both integer and double expressions.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
@@ -14,14 +14,18 @@ import java.util.ArrayList;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class NumExpr extends Expr {
-
     public FuncCall functionCall;
     public NumType numType;
     public Token mathOp;
     public ArrayList<NumExpr> finalExpr;
     public String exprType;
-    // ---------------------- constructors for different cases --------------------------------
 
+    /**
+     * A constructor to handle a numExpr with a number and a math operator.
+     *
+     * @param numType the type of number
+     * @param mathOp  the type of math operation done with the number
+     */
     public NumExpr(NumType numType, Token mathOp) {
         super(null, null);
         this.numType = numType;
@@ -29,6 +33,11 @@ public class NumExpr extends Expr {
         this.functionCall = null;
     }
 
+    /**
+     * A constructor to handle a numExpr with just a number.
+     *
+     * @param numType the type of number
+     */
     public NumExpr(NumType numType) {
         super(null, null);
         this.numType = numType;
@@ -37,143 +46,172 @@ public class NumExpr extends Expr {
 
     }
 
-    public NumExpr(FuncCall call, Token mathOp) {
+    /**
+     * A constructor to handle a numExpr with just a number.
+     *
+     * @param funcCall the function call object
+     * @param mathOp   the mathematical operation done with this function call object
+     */
+    public NumExpr(FuncCall funcCall, Token mathOp) {
         super(null, null);
         this.numType = null;
-        this.functionCall = call;
+        this.functionCall = funcCall;
         this.mathOp = mathOp;
     }
 
-    public NumExpr(ArrayList<NumExpr> finalExpr, String ExpType) {
+    /**
+     * A constructor to handle a numExpr with a final expression and an expr type.
+     *
+     * @param finalExpr finalExpr object
+     * @param exprType  what type is this finalExpr object
+     */
+    public NumExpr(ArrayList<NumExpr> finalExpr, String exprType) {
         super(null, null);
         this.finalExpr = finalExpr;
-        this.exprType = ExpType;
+        this.exprType = exprType;
         this.numType = null;
     }
 
-    //i_expr ->            id|int|
-    //                    int op int|
-    //                    int op i_expr|
-    //                    i_expr op int|
-    //                    i_expr op i_expr|
-    //                    func_call
+    private static ArrayList<NumExpr> parseNumExprR(ArrayList<Token> tokens, int nestLevel, ArrayList<NumExpr> exprList) throws ParsingException {
 
-    private static ArrayList<NumExpr> parseNumExpr_r(ArrayList<Token> tokens, int nestLevel, ArrayList<NumExpr> expLst) throws ParsingException {
+        //  looking for id/int followed by math op
+        Token possibleNumber = tokens.get(TokenIndex.currentTokenIndex);
+        Token possibleOp = tokens.get(TokenIndex.currentTokenIndex + 1);
 
-        // ---------------------- looking for id/int followed by math op --------------------------------
-        Token possible_num = tokens.get(TOKEN_IDX.index);
-        Token possible_op = tokens.get(TOKEN_IDX.index + 1);
+        if ((possibleNumber.getTokenType() == TokenType.NUMBER || possibleNumber.getTokenType() == TokenType.ID_KEYWORD) && possibleOp.getTokenType() == TokenType.MATH_OP) {
+            TokenIndex.currentTokenIndex += 2;
 
-        if ((possible_num.getTokenType() == TokenType.NUMBER || possible_num.getTokenType() == TokenType.ID_KEYWORD) && possible_op.getTokenType() == TokenType.MATH_OP) {
-            TOKEN_IDX.index += 2;
+            // numExpr can be id, id op, num, or num op
+            exprList.add(new NumExpr(new NumType(possibleNumber), possibleOp));
 
-            // ---------------------- numExpr can be id,id op, num,num op --------------------
-
-            expLst.add(new NumExpr(new NumType(possible_num), possible_op));
-
-            // ---------------------- trying to complete id/int op with valid follow ---------
-            ////System.out.println("    going again int/id op");
-            return parseNumExpr_r(tokens, nestLevel, expLst);
+            // trying to complete id/int op with valid follow
+            return parseNumExprR(tokens, nestLevel, exprList);
         }
 
 
-        // ---------------------- check for function call op --------------------------------
-        FuncCall call = FuncCall.ParseFuncCall(tokens, nestLevel);
-        possible_op = tokens.get(TOKEN_IDX.index);
+        //  check for function funcCall op
+        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel);
+        possibleOp = tokens.get(TokenIndex.currentTokenIndex);
 
-        if (call != null && possible_op.getTokenType() == TokenType.MATH_OP) {
-            TOKEN_IDX.index++;
-            expLst.add(new NumExpr(call, possible_op));
-            ////System.out.println("    going again f(x)");
-            return parseNumExpr_r(tokens, nestLevel, expLst);
-        }
-        // ---------------------- check for lone function call ------------------------------
-
-        // check for lone function call
-        if (call != null) {
-//            System.out.println("    Function call found: " + call.convertToJott());
-            expLst.add(new NumExpr(call, null));
-            return expLst;
+        if (funcCall != null && possibleOp.getTokenType() == TokenType.MATH_OP) {
+            TokenIndex.currentTokenIndex++;
+            exprList.add(new NumExpr(funcCall, possibleOp));
+            return parseNumExprR(tokens, nestLevel, exprList);
         }
 
-        // ---------------------- check for lone id or num ---------------------------------
-
-        if (possible_num.getTokenType() == TokenType.NUMBER || possible_num.getTokenType() == TokenType.ID_KEYWORD) {
-            TOKEN_IDX.index++;
-            expLst.add(new NumExpr(new NumType(possible_num)));
-            return expLst;
+        // check for lone function funcCall
+        if (funcCall != null) {
+            exprList.add(new NumExpr(funcCall, null));
+            return exprList;
         }
-        // ---------------------error, goes on to try another expr in expr-----------------
 
-        // error
-        ////System.out.println("INCORRECT NUM EXPR");
+        //  check for lone id or num
+        if (possibleNumber.getTokenType() == TokenType.NUMBER || possibleNumber.getTokenType() == TokenType.ID_KEYWORD) {
+            TokenIndex.currentTokenIndex++;
+            exprList.add(new NumExpr(new NumType(possibleNumber)));
+            return exprList;
+        }
+
+        // error, goes on to try another expr in expr
         return null;
     }
 
 
     public static NumExpr parseNumExpr(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-
-        ////System.out.println("-------------------- parsing num expr --------------------");
-
-        ArrayList<NumExpr> expLst = parseNumExpr_r(tokens, nestLevel, new ArrayList<NumExpr>());
-        if (expLst == null) {
+        ArrayList<NumExpr> exprList = parseNumExprR(tokens, nestLevel, new ArrayList<>());
+        if (exprList == null) {
             return null;
         }
 
-        boolean isINTexp = true;
+        boolean isIntExpr = true;
 
 
-        for (NumExpr exp : expLst) {
+        for (NumExpr exp : exprList) {
             if (exp.numType != null && exp.numType.getNumType() != null) {
                 if (!exp.numType.numType.equals("Integer")) {
-                    isINTexp = false;
+                    isIntExpr = false;
                     break;
                 }
             }
         }
 
-        if (!isINTexp) {
+        if (!isIntExpr) {
             int i = 0;
-            for (NumExpr exp : expLst) {
+            for (NumExpr exp : exprList) {
                 if (exp.numType != null && exp.numType.getNumType() != null) {
                     if (!exp.numType.numType.equals("Double")) {
-                        isINTexp = true;
+                        isIntExpr = true;
                         break;
                     }
                 }
                 i++;
             }
-            if (isINTexp) {
-                throw new ParsingException("expression with int op double not allowed, line: " + expLst.get(i).numType.number.getLineNum());
+            if (isIntExpr) {
+                throw new ParsingException("expression with int op double not allowed, line: " + exprList.get(i).numType.number.getLineNum());
             }
         }
 
-        String ExpType = isINTexp ? "Integer" : "Double";
+        String ExprType = isIntExpr ? "Integer" : "Double";
 
 
-        return new NumExpr(expLst, ExpType);
+        return new NumExpr(exprList, ExprType);
     }
 
-    @Override
+    /**
+     * Return this object as a Jott code.
+     *
+     * @return a stringified version of this object as Jott code
+     */
     public String convertToJott() {
-        StringBuilder jstr = new StringBuilder();
+        StringBuilder jottString = new StringBuilder();
 
         for (NumExpr n : finalExpr) {
             if (n.numType != null && n.mathOp != null) {
-                jstr.append(n.numType.convertToJott() + "" + n.mathOp.getToken() + "");
+                jottString.append(String.format("%s%s", n.numType.convertToJott(), n.mathOp.getToken()));
             } else if (n.functionCall != null && n.mathOp != null) {
-                jstr.append(n.functionCall.convertToJott() + "" + n.mathOp.getToken() + "");
-            } else if (n.functionCall == null && n.mathOp == null) {
-                jstr.append(n.numType.convertToJott() + "");
+                jottString.append(String.format("%s%s", n.functionCall.convertToJott(), n.mathOp.getToken()));
+            } else if (n.functionCall == null && n.mathOp == null && n.numType != null) {
+                jottString.append(n.numType.convertToJott());
             } else if (n.functionCall != null) {
-                jstr.append(n.functionCall.convertToJott() + "");
+                jottString.append(n.functionCall.convertToJott());
             }
         }
 
-        return jstr.toString();
+        return jottString.toString();
     }
 
-    @Override
+    /**
+     * Return this object as a Java code.
+     *
+     * @return a stringified version of this object as Java code
+     */
+    public String convertToJava() {
+        return null;
+    }
+
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
+    public String convertToC() {
+        return null;
+    }
+
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
+    public String convertToPython() {
+        return null;
+    }
+
+    /**
+     * Ensure the code is valid
+     *
+     * @return whether code is valid or not
+     */
     public boolean validateTree() throws ParsingException {
         // a single function or a change of only functions call can be any type, we dont know yet their so we gotta varify the function type
         // because int epr will take all single function calls made even if that fuction returns a string itll think it returns an int
@@ -182,53 +220,46 @@ public class NumExpr extends Expr {
         int isSingleFunctionCall = 0;
 
         // keep track of the function call type (its real type looked up in the table)
-        String PrevFunctionType = null;
+        String prevFunctionType = null;
 
         // going through all the exprs looking for a lone function call
         for (NumExpr n : this.finalExpr) {
 
-            // if we have a number or a var then we know its a number expr and can be varified
+            // if we have a number or a var then we know it's a number expr and can be verified
             // for int expr or dbl exp below this for loop
             if (n.functionCall == null) {
                 isSingleFunctionCall = 0;
                 break;
             }
 
-            // how many function calls weve seen
+            // how many function calls we've seen
             isSingleFunctionCall++;
-            // gettting that functions real return type from table
+            // getting that functions real return type from table
 
             // makes sure function exits
             if (!ValidateTable.functions.containsKey(n.functionCall.name.getToken())) {
                 throw new ParsingException("use of undefined Function : " + n.functionCall.name.getToken() + " line:" + n.functionCall.name.getLineNum());
             }
             String funcType = ValidateTable.functions.get(n.functionCall.name.getToken()).get(0);
-            // if its the first func call we've seen set the prev type to this type
-            if (PrevFunctionType == null) {
-                PrevFunctionType = funcType;
+            // if it's the first func call we've seen set the prev type to this type
+            if (prevFunctionType == null) {
+                prevFunctionType = funcType;
             } else
                 // at this point our expr is only made of function falls like foo[] + boo[] +too[]... only functions
                 // all of these function return types should match to be a valid expr
-                if (!funcType.equals(PrevFunctionType)) {
+                if (!funcType.equals(prevFunctionType)) {
                     throw new ParsingException("func mis match type: " + ValidateTable.functions.get(n.functionCall.name.getToken()).get(0));
                 }
         }
         // if we had an  expr of  function calls that all return types matched then we know that this expr type is really
-        // what we were seeing in the table and not just the assumed catch all int expr for a function
+        // what we were seeing in the table and not just the assumed catch-all int expr for a function
         if (isSingleFunctionCall > 0) {
-            this.setType(PrevFunctionType);
+            this.setType(prevFunctionType);
             return true;
         }
 
-        /////
-
-
-
-        ////
-
-
-
-        PrevFunctionType = null;
+        // this will verify that function return types match the expr type
+        prevFunctionType = null;
 
         // this will varify that function return types match the expr type
         for (NumExpr n : this.finalExpr) {
@@ -239,7 +270,7 @@ public class NumExpr extends Expr {
                     throw new ParsingException("func Wrong type in exp: " + ValidateTable.functions.get(n.functionCall.name.getToken()).get(0));
                 }
             }
-            // this checks for a var in an expr like : 1 + x that 1) x exists 2) its been init and 3) its type is okay
+            // this checks for a var in an expr like : 1 + x that 1) x exists 2) it's been init and 3) its type is okay
 
             // is a var and not a number ex: is x and NOT like 1 or .2
             if (n.numType != null && n.numType.isVar) {
@@ -250,11 +281,11 @@ public class NumExpr extends Expr {
                     ArrayList<String> varProperties = ValidateTable.variables.get(n.numType.varNumber);
 
                     ///2) var type matches expr type
-                    if (PrevFunctionType == null){
-                        PrevFunctionType = varProperties.get(0);
-                    }else {
+                    if (prevFunctionType == null) {
+                        prevFunctionType = varProperties.get(0);
+                    } else {
 
-                        if (varProperties.get(0).equals(PrevFunctionType)) {
+                        if (varProperties.get(0).equals(prevFunctionType)) {
 
                             ///3) var has been init
 
@@ -270,9 +301,8 @@ public class NumExpr extends Expr {
                 }
             }
         }
-        System.out.println("---|||"+PrevFunctionType);
-        this.type= PrevFunctionType;
+        System.out.println("---|||" + prevFunctionType);
+        this.type = prevFunctionType;
         return true;
     }
-
 }

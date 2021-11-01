@@ -9,6 +9,12 @@ package grammar;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class ParsingException extends Throwable {
+
+    /**
+     * This is the constructor to make a parse exception.
+     *
+     * @param toString the reason for this exception
+     */
     public ParsingException(String toString) {
         System.err.println(toString);
     }

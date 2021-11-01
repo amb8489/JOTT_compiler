@@ -5,10 +5,8 @@ import main.TokenType;
 
 import java.util.ArrayList;
 
-// s_expr -> str_literal|id|func_call
-
 /**
- * Description
+ * SExpr is a string expression.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
@@ -22,7 +20,7 @@ public class SExpr extends Expr {
     int nestLevel;
 
     /**
-     * Constructor TODO
+     * This is a constructor for a string expression.
      *
      * @param stringLiteral TODO
      * @param token         TODO
@@ -46,27 +44,26 @@ public class SExpr extends Expr {
      * @throws ParsingException TODO
      */
     public static SExpr parseSExpr(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        //////System.out.println("-------------------parsing s_expr--------------------------");
+        // parsing s_expr
+        Token possibleString = tokens.get(TokenIndex.currentTokenIndex);
 
-        Token possibleString = tokens.get(TOKEN_IDX.index);
-
-        // ----------------------check for string------------------
+        // check for string
         if (possibleString.getTokenType() == TokenType.STRING) {
 
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
             return new SExpr(possibleString, null, null, nestLevel);
         }
 
-        // ----------------------check for id------------------
-
+        // check for id
         if (possibleString.getTokenType() == TokenType.ID_KEYWORD) {
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
             return new SExpr(null, possibleString, null, nestLevel);
         }
-        // ----------------------check for func call------------------
+
+        // check for func call
         FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel);
         if (funcCall != null) {
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
             return new SExpr(null, null, funcCall, nestLevel);
         }
 
@@ -74,11 +71,10 @@ public class SExpr extends Expr {
     }
 
     /**
-     * TODO
+     * Return this object as a Jott code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Jott code
      */
-    @Override
     public String convertToJott() {
         if (stringLiteral != null) {
             return stringLiteral.getToken();
@@ -90,12 +86,38 @@ public class SExpr extends Expr {
     }
 
     /**
-     * TODO
+     * Return this object as a Java code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Java code
+     */
+    public String convertToJava() {
+        return null;
+    }
+
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
+    public String convertToC() {
+        return null;
+    }
+
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
+    public String convertToPython() {
+        return null;
+    }
+
+    /**
+     * Ensure the code is valid
+     *
+     * @return whether code is valid or not
      */
     public boolean validateTree() {
         return false;
     }
-
 }

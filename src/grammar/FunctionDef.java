@@ -21,7 +21,7 @@ public class FunctionDef {
     private final int nestLevel;
 
     /**
-     * Constructor TODO
+     * This is the constructor for a function definition.
      *
      * @param identifier    TODO
      * @param funcDefParams TODO
@@ -38,141 +38,112 @@ public class FunctionDef {
     }
 
     public static FunctionDef parseFunctionDef(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
-        //System.out.println("------------------------PARSING Function DEF------------------------");
 
-        // ---------------------------look for id -----------------------------
-        Token id = tokens.get(TOKEN_IDX.index);
+        // look for an id
+        Token id = tokens.get(TokenIndex.currentTokenIndex);
 
         if (id.getTokenType() != TokenType.ID_KEYWORD) {
             //System.out.println("TODO ERROR -1");
-            StringBuilder sb = new StringBuilder();
-            sb.append("Syntax error\nInvalid token. Expected <id>. Got: ");
-            sb.append(id.getTokenType().toString()).append("\n");
-            sb.append(id.getFilename() + ":" + id.getLineNum());
-            throw new ParsingException(sb.toString());
+            String string = "Syntax error\nInvalid token. Expected <id>. Got: " +
+                    id.getTokenType().toString() + "\n" +
+                    id.getFilename() + ":" + id.getLineNum();
+            throw new ParsingException(string);
         }
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
-        //System.out.println("    found id:" + id.getToken());
-        // ---------------------------look for [ -----------------------------
-        Token leftBracketToken = tokens.get(TOKEN_IDX.index);
-        //System.out.println("    found [???:" + leftBracketToken.getToken());
+        // look for [
+        Token leftBracketToken = tokens.get(TokenIndex.currentTokenIndex);
 
-        if (leftBracketToken.getTokenType() != TokenType.L_BRACKET) {
-            //System.out.println("TODO ERROR 99");
-        }
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
-
-        // ---------------------------look for funcDefParams ---------------
-
+        // look for funcDefParams
         FuncDefParams funcDefParams = FuncDefParams.parseFunctionDefParams(tokens, nestlevel);
-        if (funcDefParams == null) {
-            //System.out.println("empty params");
-        }
+
+        // look for ]
+        Token rightBracketToken = tokens.get(TokenIndex.currentTokenIndex);
+
+        TokenIndex.currentTokenIndex++;
+
+        // look for :
+        Token colonToken = tokens.get(TokenIndex.currentTokenIndex);
+
+        TokenIndex.currentTokenIndex++;
 
 
-        // ---------------------------look for ] -----------------------------
-        Token rightBracketToken = tokens.get(TOKEN_IDX.index);
+        // look for function returns (aka type or void)
+        Type return_ = Type.parseFReturnStmt(tokens);
 
-        if (rightBracketToken.getTokenType() != TokenType.R_BRACKET) {
-            //System.out.println("TODO ERROR 2");
-        }
-        //System.out.println("found rightBracketToken ? --> " + rightBracketToken.getToken());
+        // look for {
+        Token L_BRACE = tokens.get(TokenIndex.currentTokenIndex);
 
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
-        // ---------------------------look for : -----------------------------
-        Token colonToken = tokens.get(TOKEN_IDX.index);
-
-        if (colonToken.getTokenType() != TokenType.COLON) {
-            //System.out.println("TODO ERROR 3");
-        }
-        TOKEN_IDX.index++;
-        //System.out.println("found colon --> " + colonToken.getToken());
-
-        // ---------------------------look for function return AKA type or void -----------------------------
-
-        Type retrn = Type.parseFReturnStmt(tokens);
-        //System.out.println("found return --> " + retrn.convertToJott());
-
-        if (retrn == null) {
-            //System.out.println("TODO ERROR 4");
-        }
-
-        // ---------------------------look for { -----------------------------
-
-
-        Token L_BRACE = tokens.get(TOKEN_IDX.index);
-
-        if (L_BRACE.getTokenType() != TokenType.L_BRACE) {
-            //System.out.println("TODO ERROR 5");
-        }
-        TOKEN_IDX.index++;
-        //System.out.println("found { --> " + L_BRACE.getToken());
-
-
-        // ---------------------------look for body stmt -----------------------------
-
+        // look for body statement
         Body body = Body.ParseBody(tokens, nestlevel + 1);
 
-        /**
-         if (body == null) {
-         //System.out.println("found empty body");
-         } else {
-         //System.out.println("Found body --> " + body.convertToJott());
-         }
-         **/
+        // look for }
+        Token R_BRACE = tokens.get(TokenIndex.currentTokenIndex);
 
-        // ---------------------------look for } -----------------------------
-
-
-        Token R_BRACE = tokens.get(TOKEN_IDX.index);
-
-        if (R_BRACE.getTokenType() != TokenType.R_BRACE) {
-            //System.out.println("TODO ERROR 7");
-        }
+        //System.out.println("TODO ERROR 7");
         //System.out.println("Found } --> " + R_BRACE.getToken());
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
-        return new FunctionDef(new Identifier(id), funcDefParams, body, retrn, nestlevel);
+        return new FunctionDef(new Identifier(id), funcDefParams, body, return_, nestlevel);
     }
 
-    public boolean validateJott() {
-        return false;
+    /**
+     * Return this object as a Jott code.
+     *
+     * @return a stringified version of this object as Jott code
+     */
+    public String convertToJott() {
+
+        StringBuilder jottString = new StringBuilder();
+
+        String funcP = (funcDefParams == null) ? "" : funcDefParams.convertToJott();
+
+        String body = (this.body == null) ? "" : this.body.convertToJott();
+
+
+        String space = "    ".repeat(this.nestLevel);
+        jottString.append(String.format("%s%s [ %s ] ", space, id.convertToJott(), funcP));
+        jottString.append(String.format(" : %s { \n%s%s}", returnType.convertToJott(), body, space));
+
+        return jottString.toString();
     }
 
-
+    /**
+     * Return this object as a Java code.
+     *
+     * @return a stringified version of this object as Java code
+     */
     public String convertToJava() {
         return null;
     }
 
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
     public String convertToC() {
         return null;
     }
 
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
     public String convertToPython() {
         return null;
     }
 
-    // function_def -> id [ func_def_params ] : function_return { body }                                                <-- DONE
-
-    public String convertToJott() {
-
-        StringBuilder jstr = new StringBuilder();
-
-        String funcP = (funcDefParams == null) ? "" : funcDefParams.convertToJott();
-
-        String bod = (body == null) ? "" : body.convertToJott();
-
-
-        String SPACE = "    ".repeat(this.nestLevel);
-        jstr.append(SPACE + id.convertToJott() + " [ " + funcP + " ] ");
-        jstr.append(" : " + returnType.convertToJott() + " { \n" + bod + SPACE + "}");
-
-        return jstr.toString();
-    }
-
+    /**
+     * Ensure the code in the function definition parameters are valid.
+     *
+     * @return whether code is valid or not
+     */
     public boolean validateTree() throws ParsingException {
         if (funcDefParams != null) {
             funcDefParams.validateTree();
@@ -190,7 +161,7 @@ public class FunctionDef {
 
                 this.body.hasReturn.expr.validateTree();
 
-                if(body.hasReturn.expr.expr.type != null) {
+                if (body.hasReturn.expr.expr.type != null) {
                     this.body.hasReturn.expr.type = body.hasReturn.expr.expr.type;
                 }
 
@@ -204,34 +175,17 @@ public class FunctionDef {
             }
 
             if (this.body.hasGuaranteedReturnFromIf) {
-
-//                if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expr.type)) {
-//                    this.body.hasReturn.expr.validateTree();
-//                    return true;
-//                }
-                    return true;
-//                throw new ParsingException("RETURNING WRONG TYPE in function: " + this.id.convertToJott() + " " + this.body.hasReturn.expr.type + " " + ValidateTable.functions.get(this.id.convertToJott()).get(0));
+                return true;
             }
-
-
-
-
-
-
 
             throw new ParsingException("MISSING RETURN in function: " + this.id.convertToJott());
         } else {
             // VOID HAS NO RETURN
-            if (this.body.hasReturn == null && !this.body.hasGuaranteedReturnFromIf) {
+            if (this.body != null && this.body.hasReturn == null && !this.body.hasGuaranteedReturnFromIf) {
                 return true;
             } else {
                 throw new ParsingException("VOID function has return stmt");
             }
-
         }
-
-
     }
-
-
 }

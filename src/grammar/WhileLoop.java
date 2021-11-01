@@ -40,21 +40,17 @@ public class WhileLoop {
      * @throws ParsingException TODO
      */
     public static WhileLoop parseWhile(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        //System.out.println("---------------------------- PARSING while loop ----------------------------");
-
-        // ---------------- checking while call starts with while----------------------
-
-        Token whileToken = tokens.get(TOKEN_IDX.index);
+        // checking while call starts with while
+        Token whileToken = tokens.get(TokenIndex.currentTokenIndex);
         if (!whileToken.getToken().equals("while")) {
             return null;
         }
-        //System.out.println("\t1st:" + whileToken.getToken());
-        TOKEN_IDX.index++;
 
-        // ---------------------- checking for [ ----------------------------------
+        TokenIndex.currentTokenIndex++;
 
-        Token L_BRACKET = tokens.get(TOKEN_IDX.index);
-        //System.out.println("\t2nd:"+L_BRACKET.getToken());
+        // checking for [
+        Token L_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
+
         // check for if
         if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
             String stringBuilder = "Syntax error\nInvalid token. Expected [. Got: " +
@@ -63,17 +59,14 @@ public class WhileLoop {
             throw new ParsingException(stringBuilder);
 
         }
-        //System.out.println("\t3rd:"+L_BRACKET.getToken());
-        TOKEN_IDX.index++;
 
-        // ---------------------- checking for bool expr ------------------------------
+        TokenIndex.currentTokenIndex++;
+
+        // checking for bool expr
         Expr expr = BExpr.parseBExpr(tokens, nestLevel);
 
-
-        // ---------------------- checking for ] ----------------------------------
-
-        Token R_BRACKET = tokens.get(TOKEN_IDX.index);
-        //System.out.println("\t4th:"+R_BRACKET.getToken());
+        // checking for ]
+        Token R_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
 
         // check for if
         if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
@@ -83,11 +76,11 @@ public class WhileLoop {
             throw new ParsingException(stringBuilder);
 
         }
-        TOKEN_IDX.index++;
-        // ---------------------- checking for { ----------------------------------
+        TokenIndex.currentTokenIndex++;
 
-        Token L_BRACE = tokens.get(TOKEN_IDX.index);
-        //System.out.println("\t5th:"+L_BRACE.getToken());
+        // checking for {
+        Token L_BRACE = tokens.get(TokenIndex.currentTokenIndex);
+
         // check for if
         if (L_BRACE.getTokenType() != TokenType.L_BRACE) {
             String stringBuilder = "Syntax error\nInvalid token. Expected {. Got: " +
@@ -95,18 +88,14 @@ public class WhileLoop {
                     L_BRACE.getFilename() + ":" + L_BRACE.getLineNum();
             throw new ParsingException(stringBuilder);
         }
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
-        //System.out.println("\t6th:"+L_BRACE.getToken());
-        // ---------------------- checking for body -------------------------------
-
+        // checking for body
         Body body1 = Body.ParseBody(tokens, nestLevel);
 
-        // ---------------------- checking for } ----------------------------------
+        // checking for }
+        Token R_BRACE = tokens.get(TokenIndex.currentTokenIndex);
 
-
-        Token R_BRACE = tokens.get(TOKEN_IDX.index);
-        //System.out.println("\t7th:"+R_BRACE.getToken());
         // check for if
         if (R_BRACE.getTokenType() != TokenType.R_BRACE) {
             String stringBuilder = "Syntax error\nInvalid token. Expected }. Got: " +
@@ -114,33 +103,58 @@ public class WhileLoop {
                     R_BRACE.getFilename() + ":" + R_BRACE.getLineNum();
             throw new ParsingException(stringBuilder);
         }
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
         return new WhileLoop(nestLevel, expr, body1);
     }
 
     /**
-     * TODO
+     * Return this object as a Jott code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Jott code
      */
     public String convertToJott() {
         String space = "\t".repeat(this.nestLevel - 1);
 
-        String jottString = "\t".repeat(0) +
+        return "\t".repeat(0) +
                 "while [ " +
                 this.expr.convertToJott() + " ] { \n" +
                 body.convertToJott() + space + "}\n";
-        return jottString;
     }
 
     /**
-     * TODO
+     * Return this object as a Java code.
      *
-     * @return TODO
+     * @return a stringified version of this object as Java code
+     */
+    public String convertToJava() {
+        return null;
+    }
+
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
+    public String convertToC() {
+        return null;
+    }
+
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
+    public String convertToPython() {
+        return null;
+    }
+
+    /**
+     * Ensure the code is valid
+     *
+     * @return whether code is valid or not
      */
     public boolean validateTree() {
         return false;
     }
-
 }

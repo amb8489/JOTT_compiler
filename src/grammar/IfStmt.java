@@ -22,13 +22,13 @@ public class IfStmt {
     public boolean hasGuaranteedReturn;
 
     /**
-     * Constructor
+     * This is the constructor for an if statement.
      *
-     * @param expr
-     * @param body1
-     * @param elseIfStatements
-     * @param nestLevel
-     * @param hasGuaranteedReturn
+     * @param expr                an expression to be evaluated in the if statement
+     * @param body1               the body nested in an if statement
+     * @param elseIfStatements    are there any else if statements?
+     * @param nestLevel           how far deep is this if statement
+     * @param hasGuaranteedReturn will there always be a return value?
      */
     public IfStmt(Expr expr,
                   Body body1,
@@ -43,14 +43,14 @@ public class IfStmt {
     }
 
     /**
-     * Constructor
+     * This is a constructor for an if statement with extra bodies.
      *
-     * @param expr                TODO
-     * @param body1               TODO
-     * @param body2               TODO
-     * @param elseIfStatements    TODO
-     * @param nestLevel           TODO
-     * @param hasGuaranteedReturn TODO
+     * @param expr                an expression to be evaluated in the if statement
+     * @param body1               the body nested in an if statement
+     * @param body2               the second body nested in an if statement
+     * @param elseIfStatements    are there any else if statements?
+     * @param nestLevel           how far deep is this if statement
+     * @param hasGuaranteedReturn will there always be a return value?
      */
     public IfStmt(Expr expr,
                   Body body1,
@@ -67,71 +67,31 @@ public class IfStmt {
         this.hasGuaranteedReturn = hasGuaranteedReturn;
     }
 
-
-
-    public String convertToJott() {
-        StringBuilder jstr = new StringBuilder();
-        String SPACE = "\t".repeat(this.nestLevel - 1);
-
-        jstr.append("if [ ");
-        jstr.append(this.expr.convertToJott() + " ] { \n");
-        jstr.append(body1.convertToJott() + SPACE + "}");
-
-        if (elseIfStatements != null) {
-            for (ElseifStmt e : elseIfStatements) {
-                jstr.append(e.convertToJott() + "");
-            }
-        }
-        if (body2 != null) {
-            jstr.append("else{\n");
-            jstr.append(body2.convertToJott() + SPACE + "}\n");
-
-        }
-        return jstr.toString();
-
-    }
-
-    //     * if_stmt ->  if [ b_expr ] { body } elseif_lst
-//     *           | if [ b_expr ] { body } elseif_lst else { body }
     public static IfStmt parseIfStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
-        //System.out.println("------------------------PARSING IF STMT------------------------");
-
-        // **if a body thats not else does NOT have a return then we need one outside of the if stmt
-
-        // ---------------------- checking for if ----------------------------------
-
-        Token IfToken = tokens.get(TOKEN_IDX.index);
-        //System.out.println("\t1st:" + IfToken.getToken());
+        Token ifToken = tokens.get(TokenIndex.currentTokenIndex);
+        //System.out.println("\t1st:" + ifToken.getToken());
         // check for if
-        if (!IfToken.getToken().equals("if")) {
+        if (!ifToken.getToken().equals("if")) {
             return null;
         }
-        TOKEN_IDX.index++;
-        // ---------------------- checking for [ ----------------------------------
+        TokenIndex.currentTokenIndex++;
 
-        Token L_BRACKET = tokens.get(TOKEN_IDX.index);
-        //System.out.println("\t2nd:" + L_BRACKET.getToken());
-        // check for if
+        // checking for [
+        Token L_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
         if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
             String sb = "Syntax error\nInvalid token. Expected [. Got: " +
                     L_BRACKET.getTokenType().toString() + "\n" +
                     L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum();
             throw new ParsingException(sb);
         }
-        TOKEN_IDX.index++;
-        // ---------------------- checking for bool expression ------------------------------
-//        //System.out.println("    3rd EXPR FOUND:"+tokens.get(0).getToken());
+        TokenIndex.currentTokenIndex++;
 
+        // checking for bool expression
         Expr expression = Expr.parseExpr(tokens, nestLevel);
 
-        //System.out.println("\t3rd EXPR FOUND:" + expression.convertToJott());
-        //System.out.println("------>" + tokens.get(TOKEN_IDX.index).getToken());
+        // checking for ]
+        Token R_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
 
-
-        // ---------------------- checking for ] ----------------------------------
-
-        Token R_BRACKET = tokens.get(TOKEN_IDX.index);
-        //System.out.println("\t4th:" + R_BRACKET.getToken());
         // check for if
         if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
             String sb = "Syntax error\nInvalid token. Expected ]. Got: " +
@@ -139,11 +99,11 @@ public class IfStmt {
                     R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum();
             throw new ParsingException(sb);
         }
-        TOKEN_IDX.index++;
-        // ---------------------- checking for { ----------------------------------
+        TokenIndex.currentTokenIndex++;
 
-        Token L_BRACE = tokens.get(TOKEN_IDX.index);
-        //System.out.println("\t5th:" + L_BRACE.getToken());
+        // checking for {
+        Token L_BRACE = tokens.get(TokenIndex.currentTokenIndex);
+
         // check for if
         if (L_BRACE.getTokenType() != TokenType.L_BRACE) {
             String sb = "Syntax error\nInvalid token. Expected {. Got: " +
@@ -151,25 +111,21 @@ public class IfStmt {
                     L_BRACE.getFilename() + ":" + L_BRACE.getLineNum();
             throw new ParsingException(sb);
         }
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
-        // ---------------------- checking for body -------------------------------
-        boolean AllBodiesHasReturn = true;
+        // checking for body
+        boolean allBodiesHasReturn = true;
         Body body1 = Body.ParseBody(tokens, nestLevel);
         if (body1 != null) {
-            if (body1.hasReturn == null){
-                AllBodiesHasReturn = false;
+            if (body1.hasReturn == null) {
+                allBodiesHasReturn = false;
             }
         } else {
-            //System.out.println("\t6th EMPTY BODY");
-            TOKEN_IDX.index--;
+            TokenIndex.currentTokenIndex--;
         }
 
-
-        // ---------------------- checking for } ----------------------------------
-
-
-        Token R_BRACE = tokens.get(TOKEN_IDX.index);
+        // checking for }
+        Token R_BRACE = tokens.get(TokenIndex.currentTokenIndex);
         //System.out.println("\t7th:" + R_BRACE.getToken());
         // check for if
         if (R_BRACE.getTokenType() != TokenType.R_BRACE) {
@@ -178,15 +134,15 @@ public class IfStmt {
                     R_BRACE.getFilename() + ":" + R_BRACE.getLineNum();
             throw new ParsingException(sb);
         }
-        TOKEN_IDX.index++;
+        TokenIndex.currentTokenIndex++;
 
-        //System.out.println("first============: "+tokens.get(TOKEN_IDX.index).getToken());
-        // ---------------------- checking for elif's --------------------------------
+        // checking for else ifs
         ArrayList<ElseifStmt> elseIfList = ElseifStmt.ParseElsif_lst(tokens, nestLevel);
         if (elseIfList != null) {
             for (ElseifStmt elif : elseIfList) {
                 if (elif.body.hasReturn == null) {
-                    AllBodiesHasReturn = false;
+                    allBodiesHasReturn = false;
+                    break;
                 }
             }
         }
@@ -197,30 +153,25 @@ public class IfStmt {
         // ---------------------- checking for else --------------------------------
 
         // check for else token
-        Token elseToken = tokens.get(TOKEN_IDX.index);
-        //System.out.println("\t9th:" + elseToken.getToken());
+        Token elseToken = tokens.get(TokenIndex.currentTokenIndex);
+
         // check for if
         if (elseToken.getToken().equals("else")) {
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
 
+            // checking for {
+            Token LL_BRACE = tokens.get(TokenIndex.currentTokenIndex);
 
-            // ---------------------- checking for { --------------------------------
-
-            Token LL_BRACE = tokens.get(TOKEN_IDX.index);
-            //System.out.println("\t10th:" + LL_BRACE.getToken());
             // check for if
             if (LL_BRACE.getTokenType() != TokenType.L_BRACE) {
-                String sb = "Syntax error\nInvalid token. Expected {. Got: " +
+                String string = "Syntax error\nInvalid token. Expected {. Got: " +
                         LL_BRACE.getTokenType().toString() + "\n" +
                         LL_BRACE.getFilename() + ":" + LL_BRACE.getLineNum();
-                throw new ParsingException(sb);
+                throw new ParsingException(string);
             }
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
 
-
-            // ---------------------- checking for body -------------------------------
-
-            //System.out.println("\t11th:body");
+            // checking for body
             Body body2 = Body.ParseBody(tokens, nestLevel);
             boolean hasGuaranteedReturn = false;
             if (body2 != null) {
@@ -228,10 +179,9 @@ public class IfStmt {
                     hasGuaranteedReturn = true;
                 }
             }
-            // ---------------------- checking for } --------------------------------
 
-
-            Token RR_BRACE = tokens.get(TOKEN_IDX.index);
+            // checking for }
+            Token RR_BRACE = tokens.get(TokenIndex.currentTokenIndex);
             //System.out.println("\t12th:" + RR_BRACE.getToken());
             // check for if
             if (RR_BRACE.getTokenType() != TokenType.R_BRACE) {
@@ -240,42 +190,79 @@ public class IfStmt {
                         RR_BRACE.getFilename() + ":" + RR_BRACE.getLineNum();
                 throw new ParsingException(sb);
             }
-            TOKEN_IDX.index++;
+            TokenIndex.currentTokenIndex++;
 
-            // ---------------------- all done with else --------------------------------
+            // all done
+            hasGuaranteedReturn = hasGuaranteedReturn == allBodiesHasReturn;
 
-
-//
-//            if (body1 != null) {
-//                if (body1.hasReturn != null){
-//                    System.out.println("HAS RETURN");
-//                    bodyHasReturn = true;
-//                }else{
-//                    System.out.println("HAS NO RETURN");
-//                    bodyHasReturn = false;
-//                }
-                hasGuaranteedReturn = hasGuaranteedReturn == AllBodiesHasReturn;
-
-                return new IfStmt(expression, body1, body2, elseIfList, nestLevel, hasGuaranteedReturn);
+            return new IfStmt(expression, body1, body2, elseIfList, nestLevel, hasGuaranteedReturn);
         }
-        // ---------------------- all done no else --------------------------------
 
 
         return new IfStmt(expression, body1, elseIfList, nestLevel, false);
     }
 
+    /**
+     * Return this object as a Jott code.
+     *
+     * @return a stringified version of this object as Jott code
+     */
+    public String convertToJott() {
+        StringBuilder jottString = new StringBuilder();
+        String space = "\t".repeat(this.nestLevel - 1);
+
+        jottString.append("if [ ");
+        jottString.append(String.format("%s ] { \n", this.expr.convertToJott()));
+        jottString.append(String.format("%s%s}", body1.convertToJott(), space));
+
+        if (elseIfStatements != null) {
+            for (ElseifStmt elseifStmt : elseIfStatements) {
+                jottString.append(elseifStmt.convertToJott());
+            }
+        }
+
+        if (body2 != null) {
+            jottString.append("else{\n");
+            jottString.append(String.format("%s%s}\n", body2.convertToJott(), space));
+
+        }
+
+        return jottString.toString();
+
+    }
+
+    /**
+     * Return this object as a Java code.
+     *
+     * @return a stringified version of this object as Java code
+     */
     public String convertToJava() {
         return null;
     }
 
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
     public String convertToC() {
         return null;
     }
 
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
     public String convertToPython() {
         return null;
     }
 
+    /**
+     * Ensure the code in the function definition parameters are valid.
+     *
+     * @return whether code is valid or not
+     */
     public boolean validateTree() {
         return false;
     }

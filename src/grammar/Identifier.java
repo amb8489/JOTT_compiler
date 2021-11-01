@@ -18,9 +18,9 @@ public class Identifier {
     Token id;
 
     /**
-     * Constructor TODO
+     * This is the constructor for an identifier.
      *
-     * @param id TODO
+     * @param id the name of this identifier
      */
     public Identifier(Token id) {
         this.id = id;
@@ -32,10 +32,47 @@ public class Identifier {
         }
     }
 
+    /**
+     * Return this object as a Jott code.
+     *
+     * @return a stringified version of this object as Jott code
+     */
     public String convertToJott() {
         return id.getToken();
     }
 
+    /**
+     * Return this object as a Java code.
+     *
+     * @return a stringified version of this object as Java code
+     */
+    public String convertToJava() {
+        return null;
+    }
+
+    /**
+     * Return this object as a C code.
+     *
+     * @return a stringified version of this object as C code
+     */
+    public String convertToC() {
+        return null;
+    }
+
+    /**
+     * Return this object as a Python code.
+     *
+     * @return a stringified version of this object as Python code
+     */
+    public String convertToPython() {
+        return null;
+    }
+
+    /**
+     * Ensure the code in the function definition parameters are valid.
+     *
+     * @return whether code is valid or not
+     */
     public boolean validateTree() {
         return false;
     }
