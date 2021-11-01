@@ -97,10 +97,10 @@ public class AsmtStmt {
         //System.out.println("\tLOOKING FOR EXPR");
         Expr expr = NumExpr.parseExpr(tokens, nestLevel);
 
-        //System.out.println("----------------22----"+expr);
 
         //check for ;
         Token endStmt = tokens.get(TOKEN_IDX.index);
+        System.err.println(endStmt.getToken());
         if (endStmt.getTokenType() != TokenType.SEMICOLON) {
             String message = String.format("Syntax error\nInvalid token. Expected ;. Got: %s\n%s:%s",
                     endStmt.getTokenType().toString(),

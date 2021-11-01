@@ -38,7 +38,7 @@ public class JottTokenizer {
 			{ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, 22, ER, ER, ER, ER, ER, ER, ER, ER, F},	// 12  . state
 			{F, F, F, F, F, F, F, F, F, F, F, F, 12, 13, F, F, F, F, F, F, F, ER, F},     					// 13  0123456789 state
 			{ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, 22, ER, ER, ER, ER, ER, ER, F, ER, F},		// 14  decimal state
-			{F, F, F, F, F, F, F, F, F, F, F, F, F, 15, F, 15, F, F, F, F, F, ER, F,F},     					// 15  letter state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, 15, F, 15, F, F, F, F, F, ER, F,F,},     					// 15  letter state
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},     					// 16  : state
 			{ER, ER, ER, ER, ER, ER, ER, 19,ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, F},		// 17  ! state
 			{18, ER, F, ER, ER, ER, ER, ER, ER, ER, ER, F, ER, 18, ER, 18, ER, ER, 20 ,ER, ER, ER, F},		// 18  " state
@@ -46,7 +46,7 @@ public class JottTokenizer {
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 20  string state
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, 0, F},     						// 21  error state
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, 22, F, F, F, F, F, F, F, 0, F,22},							// 22  bad state
-			{10, F, F, F, F, F, F, F, F, F, F, F, 12, 13, F, F, F, F, F, F, F, ER,22}};     					// 23  helper
+			{F, F, F, F, F, F, F, F, F, F, F, F, 12, 13, F, F, F, F, F, F, F, ER,22}};     					// 23  helper
 
 	// look up table is used to map chars to their respective class in the dfa
 	private static final Map<String, Integer> lookUpTable =
@@ -99,7 +99,7 @@ public class JottTokenizer {
 			case 6 			-> new Token(tokenString, file, lineNumber, TokenType.R_BRACE);
 			case 7 			-> new Token(tokenString, file, lineNumber, TokenType.ASSIGN);
 			case 8, 9, 19 	-> new Token(tokenString, file, lineNumber, TokenType.REL_OP);
-			case 10 		-> new Token(tokenString, file, lineNumber, TokenType.MATH_OP);
+			case 10,23 		-> new Token(tokenString, file, lineNumber, TokenType.MATH_OP);
 			case 11 		-> new Token(tokenString, file, lineNumber, TokenType.SEMICOLON);
 			case 22, 12, 13 -> new Token(tokenString, file, lineNumber, TokenType.NUMBER);
 			case 15 		-> new Token(tokenString, file, lineNumber, TokenType.ID_KEYWORD);
@@ -182,7 +182,6 @@ public class JottTokenizer {
 //									currentState = 0; // restart the state machine on finish of tokenString
 //									i++;
 								} else if ( currentState == 10 && nextCharacter == '-') {
-									System.err.println("dsds");
 									Token token = tokenClass(tokenString.toString(), filename, currentState, currentLineNumber);
 
 									if (token != null) {
