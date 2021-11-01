@@ -17,6 +17,7 @@ public class AsmtStmt {
     public Type type;                       // what variable type is this?
     private final Identifier identifier;    // what variable name (id) is this?
     public Expr expr;                       //
+    public String insideOfFunction;
 
     /**
      * This is the constructor for AsmtStmt.
@@ -25,10 +26,11 @@ public class AsmtStmt {
      * @param identifier what variable name is this?
      * @param expr       the expression object that holds
      */
-    public AsmtStmt(Type type, Identifier identifier, Expr expr) {
+    public AsmtStmt(Type type, Identifier identifier, Expr expr,String insideOfFunction) {
         this.type = type;
         this.identifier = identifier;
         this.expr = expr;
+        this.insideOfFunction = insideOfFunction;
     }
 
     /**
@@ -56,7 +58,7 @@ public class AsmtStmt {
      * @return TODO: blah
      * @throws ParsingException TODO: blah
      */
-    public static AsmtStmt parseAsmtStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public static AsmtStmt parseAsmtStmt(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
         //System.out.println("------------------------PARSING ASMT-STMT------------------------");
 
         // removing and checking the first token
@@ -81,7 +83,7 @@ public class AsmtStmt {
             idToken = typeToken;
         }
 
-        Identifier id = new Identifier(idToken); // making id
+        Identifier id = new Identifier(idToken, insideOfFunction); // making id
         Token equalsToken = tokens.get(TokenIndex.currentTokenIndex); // looking for = token
 
         // checking for =
@@ -94,7 +96,7 @@ public class AsmtStmt {
 
         // checking for expression
         //System.out.println("\tLOOKING FOR EXPR");
-        Expr expr = NumExpr.parseExpr(tokens, nestLevel);
+        Expr expr = NumExpr.parseExpr(tokens, nestLevel, insideOfFunction);
 
         //check for ;
         Token endStmt = tokens.get(TokenIndex.currentTokenIndex);
@@ -109,9 +111,9 @@ public class AsmtStmt {
 
         // if successful assignment statement
         if (Type.isType(typeToken)) {
-            return new AsmtStmt(type, id, expr);
+            return new AsmtStmt(type, id, expr,insideOfFunction);
         }
-        return new AsmtStmt(null, id, expr);
+        return new AsmtStmt(null, id, expr,insideOfFunction);
     }
 
     /**

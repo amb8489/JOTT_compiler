@@ -17,6 +17,7 @@ public class WhileLoop {
     private final Expr expr;
     private final Body body;
     private final int nestLevel;
+    public String insideOfFunction;
 
     /**
      * TODO

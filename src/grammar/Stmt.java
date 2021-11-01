@@ -21,6 +21,7 @@ public class Stmt {
     VarDec varDec;
     FuncCall funcCall;
     int nestLevel;
+    public String insideOfFunction;
 
     /**
      * This is the constructor for a statement.

@@ -20,6 +20,7 @@ public class IfStmt {
     private final ArrayList<ElseifStmt> elseIfStatements;
     private final int nestLevel;
     public boolean hasGuaranteedReturn;
+    public String insideOfFunction;
 
     /**
      * This is the constructor for an if statement.

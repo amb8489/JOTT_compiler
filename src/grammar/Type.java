@@ -17,6 +17,7 @@ public class Type {
     String type;
     String filename;
     int lineNumber;
+    public String insideOfFunction;
 
     /**
      * This is the constructor for a Type that takes in a token, a filename, and a line number.

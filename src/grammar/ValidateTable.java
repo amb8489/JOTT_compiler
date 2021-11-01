@@ -13,6 +13,9 @@ import java.util.Map;
  * @author Connor Switenky (cs4331@rit.edu)
  */
 public class ValidateTable {
+
+
+
     /**
      * variables hashmap holds the variable type as well as its value.
      * <p>

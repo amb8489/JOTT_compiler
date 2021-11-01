@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class VarDec {
     private final Type type;
     private final Identifier identifier;
+    public String insideOfFunction;
 
     /**
      * TODO

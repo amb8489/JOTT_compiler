@@ -16,6 +16,7 @@ public class Identifier {
     private static final Set<String> idBanList = Set.of("while", "for", "True", "False", "if", "elseif", "else", "print");
 
     Token id;
+    public String insideOfFunction;
 
     /**
      * This is the constructor for an identifier.

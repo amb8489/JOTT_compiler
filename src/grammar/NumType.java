@@ -17,6 +17,7 @@ public class NumType {
     public String varNumber;
     public Token number;
     public boolean isVar;
+    public String insideOfFunction;
 
 
     /**

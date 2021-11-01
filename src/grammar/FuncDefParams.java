@@ -17,6 +17,8 @@ public class FuncDefParams {
     public Identifier identifier;
     public Token type;
     public final ArrayList<FuncDefParams> functionParameterList;
+    public String insideOfFunction;
+
 
     /**
      * This is the constructor for function definition parameters.
@@ -45,10 +47,11 @@ public class FuncDefParams {
      *
      * @param tokens    TODO
      * @param nestLevel TODO
+     * @param funcName
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static FuncDefParams parseFunctionDefParams(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
+    public static FuncDefParams parseFunctionDefParams(ArrayList<Token> tokens, int nestLevel, String funcName) throws ParsingException {
 
         ArrayList<FuncDefParams> functionParameterList = new ArrayList<>();
 

@@ -17,6 +17,7 @@ public class ElseifStmt {
     public final Expr expr;
     public final Body body;
     private final int nestLevel;
+    public String insideOfFunction;
 
     /**
      * Constructor

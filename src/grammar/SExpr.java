@@ -18,6 +18,7 @@ public class SExpr extends Expr {
     private final Token token;
     private final FuncCall funcCall;
     int nestLevel;
+    public String insideOfFunction;
 
     /**
      * This is a constructor for a string expression.

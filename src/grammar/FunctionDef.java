@@ -19,6 +19,8 @@ public class FunctionDef {
     private final Body body;
     public final Type returnType;
     private final int nestLevel;
+    public String insideOfFunction;
+
 
     /**
      * This is the constructor for a function definition.
@@ -35,6 +37,7 @@ public class FunctionDef {
         this.body = body;
         this.returnType = returnType;
         this.nestLevel = nestLevel;
+        this.insideOfFunction = id.id.getToken();
     }
 
     public static FunctionDef parseFunctionDef(ArrayList<Token> tokens, int nestlevel) throws ParsingException {
@@ -50,14 +53,14 @@ public class FunctionDef {
             throw new ParsingException(string);
         }
         TokenIndex.currentTokenIndex++;
-
         // look for [
         Token leftBracketToken = tokens.get(TokenIndex.currentTokenIndex);
 
         TokenIndex.currentTokenIndex++;
 
         // look for funcDefParams
-        FuncDefParams funcDefParams = FuncDefParams.parseFunctionDefParams(tokens, nestlevel);
+        String funcName = id.getToken();
+        FuncDefParams funcDefParams = FuncDefParams.parseFunctionDefParams(tokens, nestlevel,funcName);
 
         // look for ]
         Token rightBracketToken = tokens.get(TokenIndex.currentTokenIndex);
@@ -71,7 +74,7 @@ public class FunctionDef {
 
 
         // look for function returns (aka type or void)
-        Type return_ = Type.parseFReturnStmt(tokens);
+        Type return_ = Type.parseFReturnStmt(tokens,funcName);
 
         // look for {
         Token L_BRACE = tokens.get(TokenIndex.currentTokenIndex);
@@ -79,7 +82,7 @@ public class FunctionDef {
         TokenIndex.currentTokenIndex++;
 
         // look for body statement
-        Body body = Body.ParseBody(tokens, nestlevel + 1);
+        Body body = Body.ParseBody(tokens, nestlevel + 1,funcName);
 
         // look for }
         Token R_BRACE = tokens.get(TokenIndex.currentTokenIndex);

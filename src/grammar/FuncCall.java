@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class FuncCall {
     Token name; // function name
     Params parameters; // function parameters
+    public String insideOfFunction;
 
     /**
      * This is the constructor for a function call.

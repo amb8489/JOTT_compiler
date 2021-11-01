@@ -19,6 +19,7 @@ public class BodyStmt {
     public Stmt possibleStmt;
     public int nestLevel;
     public boolean hasGuaranteedReturn;
+    public String insideOfFunction;
 
     /**
      * This is a constructor for a body statement.

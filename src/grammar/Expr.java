@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class Expr {
     public Expr expr;
     public String type;
+    public String insideOfFunction;
 
     /**
      * This is a constructor for an expression.

@@ -18,6 +18,7 @@ import java.util.ArrayList;
  */
 public class ReturnStmt {
     public Expr expr;
+    public String insideOfFunction;
 
     /**
      * This is a constructor for a return expression.

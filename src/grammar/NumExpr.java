@@ -19,6 +19,7 @@ public class NumExpr extends Expr {
     public Token mathOp;
     public ArrayList<NumExpr> finalExpr;
     public String exprType;
+    public String insideOfFunction;
 
     /**
      * A constructor to handle a numExpr with a number and a math operator.

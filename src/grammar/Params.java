@@ -22,6 +22,7 @@ public class Params {
     public Expr expr;
     boolean hasComma = false;
     public ArrayList<Params> paramsList = null;
+    public String insideOfFunction;
 
     /**
      * This is a constructor for Params.
