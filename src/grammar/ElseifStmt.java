@@ -14,8 +14,8 @@ import java.util.ArrayList;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class ElseifStmt {
-    private final Expr expr;
-    private final Body body;
+    public final Expr expr;
+    public final Body body;
     private final int nestLevel;
 
     /**

@@ -184,7 +184,8 @@ public class FunctionDef {
 
         // if return type is INT DOUBLE STRING BOOL
         if (!this.returnType.type.equals("Void")) {
-            if (this.body.hasReturn != null) {
+            assert this.body != null;
+            if (this.body.hasReturn != null && !this.body.hasGuaranteedReturnFromIf) {
                 if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expr.type)) {
                     this.body.hasReturn.expr.validateTree();
                     return true;
@@ -192,6 +193,28 @@ public class FunctionDef {
 
                 throw new ParsingException("RETURNING WRONG TYPE in function: " + this.id.convertToJott() + " " + this.body.hasReturn.expr.type + " " + ValidateTable.functions.get(this.id.convertToJott()).get(0));
             }
+
+            if (this.body.hasGuaranteedReturnFromIf) {
+
+
+
+
+
+
+//                if (ValidateTable.functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expr.type)) {
+//                    this.body.hasReturn.expr.validateTree();
+//                    return true;
+//                }
+                    return true;
+//                throw new ParsingException("RETURNING WRONG TYPE in function: " + this.id.convertToJott() + " " + this.body.hasReturn.expr.type + " " + ValidateTable.functions.get(this.id.convertToJott()).get(0));
+            }
+
+
+
+
+
+
+
             throw new ParsingException("MISSING RETURN in function: " + this.id.convertToJott());
         } else {
             // VOID HAS NO RETURN

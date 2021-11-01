@@ -67,6 +67,8 @@ public class IfStmt {
         this.hasGuaranteedReturn = hasGuaranteedReturn;
     }
 
+
+
     public String convertToJott() {
         StringBuilder jstr = new StringBuilder();
         String SPACE = "\t".repeat(this.nestLevel - 1);
@@ -94,6 +96,7 @@ public class IfStmt {
     public static IfStmt parseIfStmt(ArrayList<Token> tokens, int nestLevel) throws ParsingException {
         //System.out.println("------------------------PARSING IF STMT------------------------");
 
+        // **if a body thats not else does NOT have a return then we need one outside of the if stmt
 
         // ---------------------- checking for if ----------------------------------
 
@@ -151,14 +154,17 @@ public class IfStmt {
         TOKEN_IDX.index++;
 
         // ---------------------- checking for body -------------------------------
-
+        boolean AllBodiesHasReturn = true;
         Body body1 = Body.ParseBody(tokens, nestLevel);
         if (body1 != null) {
-            //System.out.println("\t6th BODY :" + body1.convertToJott());
+            if (body1.hasReturn == null){
+                AllBodiesHasReturn = false;
+            }
         } else {
             //System.out.println("\t6th EMPTY BODY");
             TOKEN_IDX.index--;
         }
+
 
         // ---------------------- checking for } ----------------------------------
 
@@ -177,6 +183,13 @@ public class IfStmt {
         //System.out.println("first============: "+tokens.get(TOKEN_IDX.index).getToken());
         // ---------------------- checking for elif's --------------------------------
         ArrayList<ElseifStmt> elseIfList = ElseifStmt.ParseElsif_lst(tokens, nestLevel);
+        if (elseIfList != null) {
+            for (ElseifStmt elif : elseIfList) {
+                if (elif.body.hasReturn == null) {
+                    AllBodiesHasReturn = false;
+                }
+            }
+        }
         //System.out.println("first============: "+tokens.get(TOKEN_IDX.index).getToken());
 
 
@@ -230,15 +243,23 @@ public class IfStmt {
 
             // ---------------------- all done with else --------------------------------
 
-//            if (elseTok == null){
-//                //System.out.println("else if IS NULLLL");
-//                TOKEN_IDX.IDX++;
-//            }
-            return new IfStmt(expression, body1, body2, elseIfList, nestLevel, hasGuaranteedReturn);
+
+//
+//            if (body1 != null) {
+//                if (body1.hasReturn != null){
+//                    System.out.println("HAS RETURN");
+//                    bodyHasReturn = true;
+//                }else{
+//                    System.out.println("HAS NO RETURN");
+//                    bodyHasReturn = false;
+//                }
+                hasGuaranteedReturn = hasGuaranteedReturn == AllBodiesHasReturn;
+
+                return new IfStmt(expression, body1, body2, elseIfList, nestLevel, hasGuaranteedReturn);
         }
         // ---------------------- all done no else --------------------------------
 
-        // need to add somthing about elif being null <---------------------------TODO
+
         return new IfStmt(expression, body1, elseIfList, nestLevel, false);
     }
 
