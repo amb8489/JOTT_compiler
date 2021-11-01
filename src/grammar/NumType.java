@@ -25,7 +25,7 @@ public class NumType {
      *
      * @param number a numerical value whether it be a double or an integer
      */
-    public NumType(Token number,String scope) {
+    public NumType(Token number, String scope) {
         this.number = number;
         String string = number.getToken();
         this.scope = scope;

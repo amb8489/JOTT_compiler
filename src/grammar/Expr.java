@@ -28,7 +28,7 @@ public class Expr {
      * @param expr an expression that could be BExpr, DExpr
      * @param type TODO
      */
-    public Expr(Expr expr, String type,String scope) {
+    public Expr(Expr expr, String type, String scope) {
         this.expr = expr;
         this.type = type;
         this.scope = scope;
@@ -43,7 +43,7 @@ public class Expr {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static Expr parseExpr(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
+    public static Expr parseExpr(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
 
         // looking for a numExpr (either integer or double)
         if (tokens.get(TokenIndex.currentTokenIndex + 1).getTokenType() != TokenType.REL_OP) {
@@ -56,16 +56,16 @@ public class Expr {
             // looking for a string expression
 
             // determine whether this string is a literal id or a function call
-            Expr sExpr = SExpr.parseSExpr(tokens, nestLevel,scope);
+            Expr sExpr = SExpr.parseSExpr(tokens, nestLevel, scope);
             if (sExpr != null) {
-                return new Expr(sExpr, "String",scope);
+                return new Expr(sExpr, "String", scope);
             }
 
         }
 
         // looking  for a boolean expression
-        Expr bExpr = BExpr.parseBExpr(tokens, nestLevel,scope);
-        return new Expr(bExpr, "Boolean",scope);
+        Expr bExpr = BExpr.parseBExpr(tokens, nestLevel, scope);
+        return new Expr(bExpr, "Boolean", scope);
 
         // throw an error, no valid expression found
     }

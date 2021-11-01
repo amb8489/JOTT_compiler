@@ -31,8 +31,8 @@ public class BExpr extends Expr {
      *
      * @param finalExp TODO blah
      */
-    public BExpr(ArrayList<BExpr> finalExp,String scope) {
-        super(null, null,null);
+    public BExpr(ArrayList<BExpr> finalExp, String scope) {
+        super(null, null, null);
         this.finalExpr = finalExp;
         this.scope = scope;
 
@@ -43,8 +43,8 @@ public class BExpr extends Expr {
      *
      * @param bool TODO blah
      */
-    public BExpr(Token bool,String scope) {
-        super(null, null,null);
+    public BExpr(Token bool, String scope) {
+        super(null, null, null);
         this.bool = bool;
         this.scope = scope;
 
@@ -56,8 +56,8 @@ public class BExpr extends Expr {
      * @param bool  TODO blah
      * @param relOp TODO blah
      */
-    public BExpr(Token bool, Token relOp,String scope) {
-        super(null, null,null);
+    public BExpr(Token bool, Token relOp, String scope) {
+        super(null, null, null);
         this.bool = bool;
         this.relOp = relOp;
         this.scope = scope;
@@ -70,8 +70,8 @@ public class BExpr extends Expr {
      * @param expr  TODO blah
      * @param relOP TODO blah
      */
-    public BExpr(Expr expr, Token relOP,String scope) {
-        super(null, null,null);
+    public BExpr(Expr expr, Token relOP, String scope) {
+        super(null, null, null);
         this.relOp = relOP;
         this.expr = expr;
         this.scope = scope;
@@ -83,8 +83,8 @@ public class BExpr extends Expr {
      *
      * @param expr TODO blah
      */
-    public BExpr(Expr expr,String scope) {
-        super(null, null,null);
+    public BExpr(Expr expr, String scope) {
+        super(null, null, null);
         this.expr = expr;
         this.scope = scope;
     }
@@ -98,7 +98,7 @@ public class BExpr extends Expr {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static ArrayList<BExpr> parseBExpr_r(int nestLevel, ArrayList<Token> tokens, ArrayList<BExpr> booleanList,String scope)
+    public static ArrayList<BExpr> parseBExpr_r(int nestLevel, ArrayList<Token> tokens, ArrayList<BExpr> booleanList, String scope)
             throws ParsingException {
         Token possibleBool = tokens.get(TokenIndex.currentTokenIndex);
         boolean isBool = false;
@@ -108,10 +108,10 @@ public class BExpr extends Expr {
             TokenIndex.currentTokenIndex++;
             isBool = true;
         } else {
-            possibleExpr = NumExpr.parseNumExpr(tokens, nestLevel,scope);
+            possibleExpr = NumExpr.parseNumExpr(tokens, nestLevel, scope);
 
             if (possibleExpr == null) {
-                possibleExpr = SExpr.parseSExpr(tokens, nestLevel,scope);
+                possibleExpr = SExpr.parseSExpr(tokens, nestLevel, scope);
                 if (possibleExpr == null) {
                     String message = String.format("Syntax error\nInvalid token. Expected ;. Got: %s\n%s:%s",
                             possibleBool.getTokenType().toString(),
@@ -161,7 +161,7 @@ public class BExpr extends Expr {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static Expr parseBExpr(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
+    public static Expr parseBExpr(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
 
         //System.out.println("-------------------- parsing bool expr --------------------");
 

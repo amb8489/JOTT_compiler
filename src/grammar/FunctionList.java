@@ -105,8 +105,6 @@ public class FunctionList {
     public boolean validateTree() throws ParsingException {
 
 
-
-
         for (FunctionDef functionDef : listOfFunctionDefs) {
             String scope = functionDef.id.id.getToken();
 

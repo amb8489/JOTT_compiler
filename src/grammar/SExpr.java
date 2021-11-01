@@ -28,8 +28,8 @@ public class SExpr extends Expr {
      * @param funcCall      TODO
      * @param nestLevel     TODO
      */
-    public SExpr(Token stringLiteral, Token token, FuncCall funcCall, int nestLevel,String scope) {
-        super(null, null,null);
+    public SExpr(Token stringLiteral, Token token, FuncCall funcCall, int nestLevel, String scope) {
+        super(null, null, null);
         this.stringLiteral = stringLiteral;
         this.token = token;
         this.funcCall = funcCall;
@@ -46,7 +46,7 @@ public class SExpr extends Expr {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static SExpr parseSExpr(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
+    public static SExpr parseSExpr(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
         // parsing s_expr
         Token possibleString = tokens.get(TokenIndex.currentTokenIndex);
 
@@ -54,20 +54,20 @@ public class SExpr extends Expr {
         if (possibleString.getTokenType() == TokenType.STRING) {
 
             TokenIndex.currentTokenIndex++;
-            return new SExpr(possibleString, null, null, nestLevel,scope);
+            return new SExpr(possibleString, null, null, nestLevel, scope);
         }
 
         // check for id
         if (possibleString.getTokenType() == TokenType.ID_KEYWORD) {
             TokenIndex.currentTokenIndex++;
-            return new SExpr(null, possibleString, null, nestLevel,scope);
+            return new SExpr(null, possibleString, null, nestLevel, scope);
         }
 
         // check for func call
-        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel,scope);
+        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel, scope);
         if (funcCall != null) {
             TokenIndex.currentTokenIndex++;
-            return new SExpr(null, null, funcCall, nestLevel,scope);
+            return new SExpr(null, null, funcCall, nestLevel, scope);
         }
 
         return null;

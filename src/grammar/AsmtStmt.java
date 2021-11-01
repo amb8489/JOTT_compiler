@@ -26,7 +26,7 @@ public class AsmtStmt {
      * @param identifier what variable name is this?
      * @param expr       the expression object that holds
      */
-    public AsmtStmt(Type type, Identifier identifier, Expr expr,String scope) {
+    public AsmtStmt(Type type, Identifier identifier, Expr expr, String scope) {
         this.type = type;
         this.identifier = identifier;
         this.expr = expr;
@@ -58,7 +58,7 @@ public class AsmtStmt {
      * @return TODO: blah
      * @throws ParsingException TODO: blah
      */
-    public static AsmtStmt parseAsmtStmt(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
+    public static AsmtStmt parseAsmtStmt(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
         //System.out.println("------------------------PARSING ASMT-STMT------------------------");
 
         // removing and checking the first token
@@ -66,7 +66,7 @@ public class AsmtStmt {
 
         Token typeToken = tokens.get(TokenIndex.currentTokenIndex);
         //System.out.println("    FIRST:" + typeToken.getToken());
-        Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum(),scope);
+        Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum(), scope);
         TokenIndex.currentTokenIndex++;
 
         Token idToken = tokens.get(TokenIndex.currentTokenIndex);
@@ -111,9 +111,9 @@ public class AsmtStmt {
 
         // if successful assignment statement
         if (Type.isType(typeToken)) {
-            return new AsmtStmt(type, id, expr,scope);
+            return new AsmtStmt(type, id, expr, scope);
         }
-        return new AsmtStmt(null, id, expr,scope);
+        return new AsmtStmt(null, id, expr, scope);
     }
 
     /**

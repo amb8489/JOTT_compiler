@@ -24,7 +24,7 @@ public class VarDec {
      * @param type       TODO
      * @param identifier TODO
      */
-    public VarDec(Type type, Identifier identifier,String insideOfFunction) {
+    public VarDec(Type type, Identifier identifier, String insideOfFunction) {
         this.type = type;
         this.identifier = identifier;
         this.scope = insideOfFunction;
@@ -39,14 +39,14 @@ public class VarDec {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static VarDec parseVarDec(ArrayList<Token> tokens, int nestLevel,String insideOfFunction) throws ParsingException {
+    public static VarDec parseVarDec(ArrayList<Token> tokens, int nestLevel, String insideOfFunction) throws ParsingException {
         // check for the correct type
 
         // removing and checking the first token
         // should be an IDkeyword type
 
         Token typeToken = tokens.get(TokenIndex.currentTokenIndex);
-        Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum(),insideOfFunction);
+        Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum(), insideOfFunction);
         TokenIndex.currentTokenIndex++;
 
 
@@ -60,7 +60,7 @@ public class VarDec {
         Identifier.check(idToken);
         TokenIndex.currentTokenIndex++;
 
-        Identifier identifier = new Identifier(idToken,insideOfFunction);
+        Identifier identifier = new Identifier(idToken, insideOfFunction);
 
         // look for ;
         Token endStmt = tokens.get(TokenIndex.currentTokenIndex);
@@ -71,7 +71,7 @@ public class VarDec {
 
         TokenIndex.currentTokenIndex++;
 
-        return new VarDec(type, identifier,insideOfFunction);
+        return new VarDec(type, identifier, insideOfFunction);
     }
 
     /**
@@ -119,8 +119,7 @@ public class VarDec {
      */
     public boolean validateTree() {
         // [function scope to add too ,  var name  , [type , val ] ]
-        ValidateTable.addVarToScope(scope,identifier.convertToJott(),type.type, null);
-
+        ValidateTable.addVarToScope(scope, identifier.convertToJott(), type.type, null);
 
 
         return true;

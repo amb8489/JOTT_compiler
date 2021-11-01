@@ -22,7 +22,7 @@ public class FuncCall {
      * @param token      TODO
      * @param parameters TODO
      */
-    public FuncCall(Token token, Params parameters,String scope) {
+    public FuncCall(Token token, Params parameters, String scope) {
         this.name = token;
         this.parameters = parameters;
         this.scope = scope;
@@ -37,7 +37,7 @@ public class FuncCall {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static FuncCall ParseFuncCall(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
+    public static FuncCall ParseFuncCall(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
 
         // check if the function call starts with id
         Token id = tokens.get(TokenIndex.currentTokenIndex);
@@ -59,7 +59,7 @@ public class FuncCall {
         TokenIndex.currentTokenIndex++;
 
         // looking for function parameters
-        Params params = Params.parseParams(tokens, nestLevel,scope);
+        Params params = Params.parseParams(tokens, nestLevel, scope);
 
         // checking for ]
         Token R_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
@@ -73,7 +73,7 @@ public class FuncCall {
         TokenIndex.currentTokenIndex++;
 
         // we are all done
-        return new FuncCall(id, params,scope);
+        return new FuncCall(id, params, scope);
     }
 
     /**
@@ -128,7 +128,7 @@ public class FuncCall {
      * @return whether code is valid or not
      */
     public boolean validateTree() throws ParsingException {
-        ValidateTable.checkFunctionCall(scope,name, parameters);
+        ValidateTable.checkFunctionCall(scope, name, parameters);
         return true;
 
 

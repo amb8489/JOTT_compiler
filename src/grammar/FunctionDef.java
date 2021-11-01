@@ -61,7 +61,7 @@ public class FunctionDef {
 
         // look for funcDefParams
         String funcName = id.getToken();
-        FuncDefParams funcDefParams = FuncDefParams.parseFunctionDefParams(tokens, nestlevel,funcName);
+        FuncDefParams funcDefParams = FuncDefParams.parseFunctionDefParams(tokens, nestlevel, funcName);
 
         // look for ]
         Token rightBracketToken = tokens.get(TokenIndex.currentTokenIndex);
@@ -75,7 +75,7 @@ public class FunctionDef {
 
 
         // look for function returns (aka type or void)
-        Type return_ = Type.parseFReturnStmt(tokens,funcName);
+        Type return_ = Type.parseFReturnStmt(tokens, funcName);
 
         // look for {
         Token L_BRACE = tokens.get(TokenIndex.currentTokenIndex);
@@ -83,7 +83,7 @@ public class FunctionDef {
         TokenIndex.currentTokenIndex++;
 
         // look for body statement
-        Body body = Body.ParseBody(tokens, nestlevel + 1,funcName);
+        Body body = Body.ParseBody(tokens, nestlevel + 1, funcName);
 
         // look for }
         Token R_BRACE = tokens.get(TokenIndex.currentTokenIndex);
@@ -92,7 +92,7 @@ public class FunctionDef {
         //System.out.println("Found } --> " + R_BRACE.getToken());
         TokenIndex.currentTokenIndex++;
 
-        return new FunctionDef(new Identifier(id,funcName), funcDefParams, body, return_, nestlevel);
+        return new FunctionDef(new Identifier(id, funcName), funcDefParams, body, return_, nestlevel);
     }
 
     /**

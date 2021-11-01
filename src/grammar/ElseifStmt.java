@@ -26,7 +26,7 @@ public class ElseifStmt {
      * @param body      TODO
      * @param nestLevel TODO
      */
-    public ElseifStmt(Expr expr, Body body, int nestLevel,String scope) {
+    public ElseifStmt(Expr expr, Body body, int nestLevel, String scope) {
         this.expr = expr;
         this.body = body;
         this.nestLevel = nestLevel;
@@ -42,7 +42,7 @@ public class ElseifStmt {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static ArrayList<ElseifStmt> ParseElsif_lst(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
+    public static ArrayList<ElseifStmt> ParseElsif_lst(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
         // list of all else if we will encounter if any
         ArrayList<ElseifStmt> elseIfList = new ArrayList<>();
 
@@ -73,7 +73,7 @@ public class ElseifStmt {
             TokenIndex.currentTokenIndex++;
 
             // looking for bool expr
-            Expr expr = Expr.parseExpr(tokens, nestLevel,scope);
+            Expr expr = Expr.parseExpr(tokens, nestLevel, scope);
 
             // looking for ]
             Token R_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
@@ -100,7 +100,7 @@ public class ElseifStmt {
             TokenIndex.currentTokenIndex++;
 
             // looking for a body
-            Body body = Body.ParseBody(tokens, nestLevel,scope);
+            Body body = Body.ParseBody(tokens, nestLevel, scope);
 
             // looking for a }
             Token R_BRACE = tokens.get(TokenIndex.currentTokenIndex);
@@ -116,7 +116,7 @@ public class ElseifStmt {
             TokenIndex.currentTokenIndex++;
 
             // adding what was found to the list of seen else if statements
-            elseIfList.add(new ElseifStmt(expr, body, nestLevel,scope));
+            elseIfList.add(new ElseifStmt(expr, body, nestLevel, scope));
 
             // looking for an else if statement
             elseif = tokens.get(TokenIndex.currentTokenIndex);
