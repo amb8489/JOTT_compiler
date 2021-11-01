@@ -30,13 +30,6 @@ public class ValidateTable {
     /**
      * clear all hashmaps
      */
-
-    // built-in functions and there params
-
-    // print takes 1 param of any type
-    // input takes 2 params , first is string the second is int
-    // concat takes 2 params , first is string the second is string
-    // length takes 1 param of type String
     public static Map<String, ArrayList<String>> BuiltInFunctions = new HashMap<>() {{
         put("print", new ArrayList<>() {{
             add("any");
