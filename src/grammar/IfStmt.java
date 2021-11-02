@@ -271,23 +271,22 @@ public class IfStmt {
     public boolean validateTree() throws ParsingException {
 
 
-
         expr.validateTree();
-        if(elseIfStatements != null) {
+        if (elseIfStatements != null) {
             for (ElseifStmt elif : elseIfStatements) {
                 System.out.println(elif.expr.validateTree());
                 elif.expr.validateTree();
 
-                if(elif.body!=null){
+                if (elif.body != null) {
                     elif.body.validateTree();
                 }
             }
         }
 
-        if(body1!=null){
+        if (body1 != null) {
             body1.validateTree();
         }
-        if(body2!=null){
+        if (body2 != null) {
             body2.validateTree();
         }
         return true;

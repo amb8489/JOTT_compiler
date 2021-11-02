@@ -7,19 +7,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ValidateTable holds
+ * ValidateTable is responsible for validating the tables including list of functions, scopes, variables, etc
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
  */
 public class ValidateTable {
-
-    //------------------a hashmap of all functions name to functions tables-----------------
-    public static HashMap<String, ValidateTable> Scopes = new HashMap<>();
+    public static HashMap<String, ValidateTable> scopes = new HashMap<>();
     public static HashMap<String, ArrayList<String>> functions = new HashMap<>();
 
-    // ----------------------- all built in funciton defs -----------------------------------
-    public static Map<String, ArrayList<String>> BuiltInFunctions = new HashMap<>() {{
+    // ----------------------- all built in function defs -----------------------------------
+    public static Map<String, ArrayList<String>> builtInFunctions = new HashMap<>() {{
         put("print", new ArrayList<>() {{
             add("any");
         }});
@@ -37,31 +35,31 @@ public class ValidateTable {
     }};
 
 
-
     // this functions var and function defs
     public HashMap<String, ArrayList<String>> variables = new HashMap<>();
-    public String funcName;
+    public String functionName;
 
-    public ValidateTable(String funcName){
-        this.funcName = funcName;
+    public ValidateTable(String functionName) {
+        this.functionName = functionName;
     }
 
-
-
-
-
     /**
-     * clear all hashmaps
+     * check the function call
+     *
+     * @param scope        the name of scope
+     * @param functionName the name of function to check
+     * @param parameters   parameters for the function to be checked
+     * @return whether it's valid or not
+     * @throws ParsingException if something is wrong, an exception is thrown
      */
-
-    public static boolean checkFunctionCall(String scope,Token funcName, Params parameters) throws ParsingException {
+    public static boolean checkFunctionCall(String scope, Token functionName, Params parameters) throws ParsingException {
         // check if function is a built in
 
-        if (BuiltInFunctions.containsKey(funcName.getToken())) {
+        if (builtInFunctions.containsKey(functionName.getToken())) {
             System.out.println("BUILTIN FUNCTION");
 
             // get the parms types for that function
-            ArrayList<String> builtinParams = BuiltInFunctions.get(funcName.getToken());
+            ArrayList<String> builtinParams = builtInFunctions.get(functionName.getToken());
 
             // check if there are even parameters passed in, all builtins take at least 1
             if (parameters.paramsList != null) {
@@ -86,10 +84,10 @@ public class ValidateTable {
                         }
 
                         // if given param at index matches type of function param at index
-                        if ((param.expr.type != null && !param.expr.type.equals(builtinParams.get(index)) )) {
-                            if(! builtinParams.get(index).equals("any")) {
+                        if ((param.expr.type != null && !param.expr.type.equals(builtinParams.get(index)))) {
+                            if (!builtinParams.get(index).equals("any")) {
                                 //error if type for param is wrong
-                                String msg = "function: " + funcName.getToken() + " def takes " + builtinParams + " was given:" + param.expr.type + "| line:" + funcName.getLineNum();
+                                String msg = "function: " + functionName.getToken() + " def takes " + builtinParams + " was given:" + param.expr.type + "| line:" + functionName.getLineNum();
                                 throw new ParsingException(msg);
                             }
                         }
@@ -102,21 +100,21 @@ public class ValidateTable {
             } else {
 
                 //error is number of params passed in where wrong
-                String message = "function: " + funcName.getToken() + " takes " + builtinParams.size() + " params but 0 were given, line " + funcName.getLineNum();
+                String message = "function: " + functionName.getToken() + " takes " + builtinParams.size() + " params but 0 were given, line " + functionName.getLineNum();
                 throw new ParsingException(message);
             }
             //error is number of params passed in where wrong
-            String message = "function: " + funcName.getToken() + " takes " + builtinParams.size() + " params but " + parameters.paramsList.size() + " were given, line " + funcName.getLineNum();
+            String message = "function: " + functionName.getToken() + " takes " + builtinParams.size() + " params but " + parameters.paramsList.size() + " were given, line " + functionName.getLineNum();
             throw new ParsingException(message);
         }
 
 
         // check if function is a built in
-        if (Scopes.containsKey(funcName.getToken())) {
+        if (scopes.containsKey(functionName.getToken())) {
             System.out.println("USER DEFINED FUNCTION");
 
             // get the parms types for that function
-            ArrayList<String> userDefinedParams = ValidateTable.functions.get(funcName.getToken());
+            ArrayList<String> userDefinedParams = ValidateTable.functions.get(functionName.getToken());
 
             // check if there are even parameters passed in, all builtins take at least 1
             if (parameters != null) {
@@ -127,9 +125,9 @@ public class ValidateTable {
                 if (parameters.paramsList != null) {
 
                     // check correct number of params given for that function
-                    System.out.println(String.format("should be %d :: given size = %d",parameters.paramsList.size(),(userDefinedParams.size()-1)/2));
+                    System.out.printf("should be %d :: given size = %d%n", parameters.paramsList.size(), (userDefinedParams.size() - 1) / 2);
 
-                    if (parameters.paramsList.size() == (userDefinedParams.size()-1)/2) {
+                    if (parameters.paramsList.size() == (userDefinedParams.size() - 1) / 2) {
 
                         // index just to know what param we are on in loop
                         int index = 0;
@@ -144,11 +142,11 @@ public class ValidateTable {
                             }
 
                             // if given param at index matches type of function param at index type for defined param is 1 + 2*idx
-                            System.out.println("("+param.expr.type+")"+ "("+userDefinedParams.get((2*index+2))+")");
-                            if (param.expr.type != null && !param.expr.type.equals(userDefinedParams.get(2+(2*index)))) {
+                            System.out.println("(" + param.expr.type + ")" + "(" + userDefinedParams.get((2 * index + 2)) + ")");
+                            if (param.expr.type != null && !param.expr.type.equals(userDefinedParams.get(2 + (2 * index)))) {
 
                                 //error if type for param is wrong
-                                String msg = "function: " + funcName.getToken() + " def takes " + userDefinedParams.subList(1,userDefinedParams.size()) + " was given:" + param.expr.type + "| line:" + funcName.getLineNum();
+                                String msg = "function: " + functionName.getToken() + " def takes " + userDefinedParams.subList(1, userDefinedParams.size()) + " was given:" + param.expr.type + "| line:" + functionName.getLineNum();
                                 throw new ParsingException(msg);
                             }
 
@@ -160,44 +158,53 @@ public class ValidateTable {
                 }
             } else {
                 // if function has no params and more than 0 where given
-                System.out.println(String.format("GIVEN %d",5));
+                System.out.printf("GIVEN %d%n", 5);
 
-                if ((userDefinedParams.size()-1)/2 !=0) {
+                if ((userDefinedParams.size() - 1) / 2 != 0) {
                     //error is number of params passed in where wrong
-                    String message = "function: " + funcName.getToken() + " takes " + (userDefinedParams.size() - 1) / 2 + " params but 0 were given, line " + funcName.getLineNum();
+                    String message = "function: " + functionName.getToken() + " takes " + (userDefinedParams.size() - 1) / 2 + " params but 0 were given, line " + functionName.getLineNum();
                     throw new ParsingException(message);
                 }
                 return true;
             }
             //error is number of params passed in where wrong
-            String message = "function: " + funcName.getToken() + " takes " + (userDefinedParams.size()-1)/2  + " params but " + parameters.paramsList.size() + " were given, line " + funcName.getLineNum();
+            String message = "function: " + functionName.getToken() + " takes " + (userDefinedParams.size() - 1) / 2 + " params but " + parameters.paramsList.size() + " were given, line " + functionName.getLineNum();
             throw new ParsingException(message);
         }
 
-        throw new ParsingException("undefined function: line "+ funcName.getLineNum());
+        throw new ParsingException("undefined function: line " + functionName.getLineNum());
 
     }
 
-    // clears the value and function tables
-
-
+    /**
+     * clears the value and function tables
+     */
     public static void clearAll() {
-        for (String key : Scopes.keySet()) {
-         Scopes.get(key).clearTables();
+        for (String key : scopes.keySet()) {
+            scopes.get(key).clearTables();
         }
-        Scopes.clear();
+        scopes.clear();
     }
 
-
-
-    public static void addVarToScope(String scopeName, String varName, String varType,String varVal) {
-        ArrayList<String> returnAndVal = new ArrayList<>() {{add(varType);add(varVal);}};
-        System.out.println(String.format("adding %s %s to scope %s",varType,varName,scopeName));
-        Scopes.get(scopeName).variables.put(varName,returnAndVal);
+    /**
+     * add a variable to the scope
+     *
+     * @param scopeName the name of scope
+     * @param varName   the name of the variable to be added
+     * @param varType   the type of the variable to be added
+     * @param varVal    the value of the variable to be added
+     */
+    public static void addVarToScope(String scopeName, String varName, String varType, String varVal) {
+        ArrayList<String> returnAndVal = new ArrayList<>() {{
+            add(varType);
+            add(varVal);
+        }};
+        System.out.printf("adding %s %s to scope %s%n", varType, varName, scopeName);
+        scopes.get(scopeName).variables.put(varName, returnAndVal);
     }
 
     public static ValidateTable getScope(String scopeName) {
-        return Scopes.get(scopeName);
+        return scopes.get(scopeName);
     }
 
     public void clearTables() {
@@ -206,15 +213,10 @@ public class ValidateTable {
     }
 
     public static void newScope(String functionName) {
-        Scopes.put(functionName,new ValidateTable(functionName));
+        scopes.put(functionName, new ValidateTable(functionName));
     }
 
-
-    public static boolean isVarDefinedInScope(String scopeName,String varName){
-
-        return Scopes.get(scopeName).variables.containsKey(varName);
+    public static boolean isVarDefinedInScope(String scopeName, String varName) {
+        return scopes.get(scopeName).variables.containsKey(varName);
     }
-
-
-
 }

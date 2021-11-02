@@ -171,30 +171,30 @@ public class FunctionDef {
                 if (ValidateTable.getScope(scope).functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expr.type)) {
                     return true;
                 }
-                String msg = "function "+this.id.convertToJott()+" should return "+ValidateTable.functions.get(this.id.convertToJott()).get(0);
+                String msg = "function " + this.id.convertToJott() + " should return " + ValidateTable.functions.get(this.id.convertToJott()).get(0);
                 String fileName = this.id.id.getFilename();
                 int lineNum = this.id.id.getLineNum();
-                throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
+                throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
             }
 
             if (this.body.hasGuaranteedReturnFromIf) {
                 return true;
             }
 
-            String msg = "function "+this.id.convertToJott()+" missing return for Non void function";
+            String msg = "function " + this.id.convertToJott() + " missing return for Non void function";
             String fileName = this.id.id.getFilename();
             int lineNum = this.id.id.getLineNum();
-            throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d",msg,fileName,lineNum)));
+            throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum)));
 
         } else {
             // VOID HAS NO RETURN
             if (this.body != null && this.body.hasReturn == null && !this.body.hasGuaranteedReturnFromIf) {
                 return true;
             } else {
-                String msg = "function "+this.id.convertToJott()+" should return VOID ";
+                String msg = "function " + this.id.convertToJott() + " should return VOID ";
                 String fileName = this.id.id.getFilename();
                 int lineNum = this.id.id.getLineNum();
-                throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d",msg,fileName,lineNum)));
+                throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum)));
 
             }
         }

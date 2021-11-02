@@ -155,16 +155,17 @@ public class AsmtStmt {
                     return true;
                 }
                 // Failure
-                String msg = "variable "+identifier.convertToJott()+" being assigned wrong type";
+                String msg = "variable " + identifier.convertToJott() + " being assigned wrong type";
                 String fileName = identifier.id.getFilename();
                 int lineNum = identifier.id.getLineNum();
-                throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d",msg,fileName,lineNum)));
+                throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum)));
             } else {
                 // Failure
-                String msg = "variable "+identifier.convertToJott()+" is already defined in scope";
+                String msg = "variable " + identifier.convertToJott() + " is already defined in scope";
                 String fileName = identifier.id.getFilename();
                 int lineNum = identifier.id.getLineNum();
-                throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d",msg,fileName,lineNum)));            }
+                throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum)));
+            }
         } else {
             // ELSE if we have:    id = val;
             // updating value already in table
@@ -173,10 +174,10 @@ public class AsmtStmt {
 
             if (!ValidateTable.getScope(scope).variables.containsKey(varId)) {
                 // Failure
-                String msg = "variable "+varId+" does not exist";
+                String msg = "variable " + varId + " does not exist";
                 String fileName = identifier.id.getFilename();
                 int lineNum = identifier.id.getLineNum();
-                String SemanticErrorMsg = String.format("SemanticError:\n %s\n%s:%d",msg,fileName,lineNum);
+                String SemanticErrorMsg = String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum);
                 throw new ParsingException(String.format(SemanticErrorMsg));
             }
 
@@ -195,10 +196,10 @@ public class AsmtStmt {
             }
 
             // Failure
-            String msg = "variable "+varId+" being assigned wrong type";
+            String msg = "variable " + varId + " being assigned wrong type";
             String fileName = identifier.id.getFilename();
             int lineNum = identifier.id.getLineNum();
-            String SemanticErrorMsg = String.format("SemanticError:\n %s\n%s:%d",msg,fileName,lineNum);
+            String SemanticErrorMsg = String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum);
             throw new ParsingException(String.format(SemanticErrorMsg));
 
         }
