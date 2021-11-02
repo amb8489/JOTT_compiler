@@ -59,10 +59,10 @@ public class Type {
     }
 
     /**
-     * TODO
+     * Parse return statement.
      *
-     * @param tokens TODO
-     * @return TODO
+     * @param tokens the list of tokens to be parsed
+     * @return the type
      */
     public static Type parseFReturnStmt(ArrayList<Token> tokens, String scope) {
         Token funcReturnType = tokens.get(TokenIndex.currentTokenIndex);
@@ -75,11 +75,11 @@ public class Type {
     }
 
     /**
-     * TODO
+     * Parse the return type
      *
-     * @param tokens TODO
-     * @return TODO
-     * @throws ParsingException TODO
+     * @param tokens the list of tokens to be parsed
+     * @return parsed type
+     * @throws ParsingException if something goes wrong, an exception is thrown
      */
     public Type parseType(ArrayList<Token> tokens, String scope) throws ParsingException {
         // check for type

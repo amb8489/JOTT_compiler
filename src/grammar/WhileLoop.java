@@ -20,11 +20,11 @@ public class WhileLoop {
     public String insideOfFunction;
 
     /**
-     * TODO
+     * This is the constructor for the while loop.
      *
-     * @param nestLevel TODO
-     * @param expr      TODO
-     * @param body      TODO
+     * @param nestLevel how deep is this while loop
+     * @param expr      the while expression
+     * @param body      the code to run while the expression is true
      */
     public WhileLoop(int nestLevel, Expr expr, Body body, String insideOfFunction) {
         this.expr = expr;
@@ -35,11 +35,11 @@ public class WhileLoop {
     }
 
     /**
-     * TODO
+     * Parse the while loop.
      *
-     * @param tokens    TODO
-     * @param nestLevel TODO
-     * @return TODO
+     * @param tokens    an array of tokens to parse
+     * @param nestLevel how deep is this?
+     * @return the parse result in the form of a WhileLoop object
      * @throws ParsingException TODO
      */
     public static WhileLoop parseWhile(ArrayList<Token> tokens, int nestLevel, String insideOfFunction) throws ParsingException {

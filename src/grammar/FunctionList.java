@@ -51,7 +51,7 @@ public class FunctionList {
                     String msg = "function main should return Integer";
                     String fileName = func.id.id.getFilename();
                     int lineNum = func.id.id.getLineNum();
-                    throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
+                    throw new ParsingException(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum));
                 }
                 return true;
             }
@@ -130,19 +130,16 @@ public class FunctionList {
                     // adding functin params to scope:
 
 
-                    if(params.type.getToken().equals("Integer")){
-                        ValidateTable.addVarToScope(scope,params.identifier.convertToJott(),params.type.getToken(), "1");
-                    }else
-                    if(params.type.getToken().equals("Double")){
+                    if (params.type.getToken().equals("Integer")) {
+                        ValidateTable.addVarToScope(scope, params.identifier.convertToJott(), params.type.getToken(), "1");
+                    } else if (params.type.getToken().equals("Double")) {
 
-                        ValidateTable.addVarToScope(scope,params.identifier.convertToJott(),params.type.getToken(), "1.0");
-                    }else
-                    if(params.type.getToken().equals("String")){
-                        ValidateTable.addVarToScope(scope,params.identifier.convertToJott(),params.type.getToken(), "str");
-                    }else {
-                        ValidateTable.addVarToScope(scope,params.identifier.convertToJott(),params.type.getToken(), "1==1");
+                        ValidateTable.addVarToScope(scope, params.identifier.convertToJott(), params.type.getToken(), "1.0");
+                    } else if (params.type.getToken().equals("String")) {
+                        ValidateTable.addVarToScope(scope, params.identifier.convertToJott(), params.type.getToken(), "str");
+                    } else {
+                        ValidateTable.addVarToScope(scope, params.identifier.convertToJott(), params.type.getToken(), "1==1");
                     }
-
 
 
                 }

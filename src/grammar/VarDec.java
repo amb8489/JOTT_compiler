@@ -6,7 +6,7 @@ import main.TokenType;
 import java.util.ArrayList;
 
 /**
- * Description
+ * This is a variable declaration.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
@@ -19,10 +19,10 @@ public class VarDec {
     public String scope;
 
     /**
-     * TODO
+     * This is the constructor for a
      *
-     * @param type       TODO
-     * @param identifier TODO
+     * @param type       variable type
+     * @param identifier variable name
      */
     public VarDec(Type type, Identifier identifier, String insideOfFunction) {
         this.type = type;
@@ -32,18 +32,17 @@ public class VarDec {
     }
 
     /**
-     * TODO
+     * Parse variable declaration
      *
-     * @param tokens    TODO
-     * @param nestLevel TODO
-     * @return TODO
+     * @param tokens tokens to parse
+     * @return a parsed result in the form of a VarDec object
      * @throws ParsingException TODO
      */
-    public static VarDec parseVarDec(ArrayList<Token> tokens, int nestLevel, String insideOfFunction) throws ParsingException {
+    public static VarDec parseVarDec(ArrayList<Token> tokens, String insideOfFunction) throws ParsingException {
         // check for the correct type
 
         // removing and checking the first token
-        // should be an IDkeyword type
+        // should be an id keyword type
 
         Token typeToken = tokens.get(TokenIndex.currentTokenIndex);
         Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum(), insideOfFunction);

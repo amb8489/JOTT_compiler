@@ -27,8 +27,8 @@ public class NumExpr extends Expr {
      * @param numType the type of number
      * @param mathOp  the type of math operation done with the number
      */
-    public NumExpr(NumType numType, Token mathOp,String scope) {
-        super(null, null,null);
+    public NumExpr(NumType numType, Token mathOp, String scope) {
+        super(null, null, null);
         this.numType = numType;
         this.mathOp = mathOp;
         this.functionCall = null;
@@ -41,8 +41,8 @@ public class NumExpr extends Expr {
      *
      * @param numType the type of number
      */
-    public NumExpr(NumType numType,String scope) {
-        super(null, null,null);
+    public NumExpr(NumType numType, String scope) {
+        super(null, null, null);
         this.numType = numType;
         this.mathOp = null;
         this.functionCall = null;
@@ -57,8 +57,8 @@ public class NumExpr extends Expr {
      * @param funcCall the function call object
      * @param mathOp   the mathematical operation done with this function call object
      */
-    public NumExpr(FuncCall funcCall, Token mathOp,String scope) {
-        super(null, null,null);
+    public NumExpr(FuncCall funcCall, Token mathOp, String scope) {
+        super(null, null, null);
         this.numType = null;
         this.functionCall = funcCall;
         this.mathOp = mathOp;
@@ -72,8 +72,8 @@ public class NumExpr extends Expr {
      * @param finalExpr finalExpr object
      * @param exprType  what type is this finalExpr object
      */
-    public NumExpr(ArrayList<NumExpr> finalExpr, String exprType,String scope) {
-        super(null, null,null);
+    public NumExpr(ArrayList<NumExpr> finalExpr, String exprType, String scope) {
+        super(null, null, null);
         this.finalExpr = finalExpr;
         this.exprType = exprType;
         this.numType = null;
@@ -81,7 +81,7 @@ public class NumExpr extends Expr {
 
     }
 
-    private static ArrayList<NumExpr> parseNumExprR(ArrayList<Token> tokens, int nestLevel, ArrayList<NumExpr> exprList,String scope) throws ParsingException {
+    private static ArrayList<NumExpr> parseNumExprR(ArrayList<Token> tokens, int nestLevel, ArrayList<NumExpr> exprList, String scope) throws ParsingException {
 
         //  looking for id/int followed by math op
         Token possibleNumber = tokens.get(TokenIndex.currentTokenIndex);
@@ -91,33 +91,33 @@ public class NumExpr extends Expr {
             TokenIndex.currentTokenIndex += 2;
 
             // numExpr can be id, id op, num, or num op
-            exprList.add(new NumExpr(new NumType(possibleNumber,scope), possibleOp,scope));
+            exprList.add(new NumExpr(new NumType(possibleNumber, scope), possibleOp, scope));
 
             // trying to complete id/int op with valid follow
-            return parseNumExprR(tokens, nestLevel, exprList,scope);
+            return parseNumExprR(tokens, nestLevel, exprList, scope);
         }
 
 
         //  check for function funcCall op
-        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel,scope);
+        FuncCall funcCall = FuncCall.ParseFuncCall(tokens, nestLevel, scope);
         possibleOp = tokens.get(TokenIndex.currentTokenIndex);
 
         if (funcCall != null && possibleOp.getTokenType() == TokenType.MATH_OP) {
             TokenIndex.currentTokenIndex++;
-            exprList.add(new NumExpr(funcCall, possibleOp,scope));
-            return parseNumExprR(tokens, nestLevel, exprList,scope);
+            exprList.add(new NumExpr(funcCall, possibleOp, scope));
+            return parseNumExprR(tokens, nestLevel, exprList, scope);
         }
 
         // check for lone function funcCall
         if (funcCall != null) {
-            exprList.add(new NumExpr(funcCall, null,scope));
+            exprList.add(new NumExpr(funcCall, null, scope));
             return exprList;
         }
 
         //  check for lone id or num
         if (possibleNumber.getTokenType() == TokenType.NUMBER || possibleNumber.getTokenType() == TokenType.ID_KEYWORD) {
             TokenIndex.currentTokenIndex++;
-            exprList.add(new NumExpr(new NumType(possibleNumber,scope),scope));
+            exprList.add(new NumExpr(new NumType(possibleNumber, scope), scope));
             return exprList;
         }
 
@@ -126,7 +126,7 @@ public class NumExpr extends Expr {
     }
 
 
-    public static NumExpr parseNumExpr(ArrayList<Token> tokens, int nestLevel,String scope) throws ParsingException {
+    public static NumExpr parseNumExpr(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
 
         ArrayList<NumExpr> exprList = parseNumExprR(tokens, nestLevel, new ArrayList<>(), scope);
         if (exprList == null) {
@@ -251,7 +251,7 @@ public class NumExpr extends Expr {
                 String msg = "call to undefined function: " + n.functionCall.name.getToken();
                 String fileName = n.functionCall.name.getFilename();
                 int lineNum = n.functionCall.name.getLineNum();
-                throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
+                throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
             }
             n.functionCall.validateTree();
 
@@ -263,10 +263,10 @@ public class NumExpr extends Expr {
                 // at this point our expr is only made of function falls like foo[] + boo[] +too[]... only functions
                 // all of these function return types should match to be a valid expr
                 if (!funcType.equals(prevFunctionType)) {
-                    String msg = "mis match types in expr: "+this.convertToJott();
+                    String msg = "mis match types in expr: " + this.convertToJott();
                     String fileName = n.functionCall.name.getFilename();
                     int lineNum = n.functionCall.name.getLineNum();
-                    throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
+                    throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
                 }
         }
         // if we had an  expr of  function calls that all return types matched then we know that this expr type is really
@@ -286,10 +286,10 @@ public class NumExpr extends Expr {
                 n.functionCall.validateTree();
                 if (!ValidateTable.getScope(scope).functions.get(n.functionCall.name.getToken()).get(0).equals(this.exprType)) {
 
-                    String msg = "mis match types in expr: "+this.convertToJott();
+                    String msg = "mis match types in expr: " + this.convertToJott();
                     String fileName = n.functionCall.name.getFilename();
                     int lineNum = n.functionCall.name.getLineNum();
-                    throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
+                    throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
 
                 }
             }
@@ -299,7 +299,7 @@ public class NumExpr extends Expr {
             if (n.numType != null && n.numType.isVar) {
 
                 ///1) var exits
-                if (ValidateTable.isVarDefinedInScope(scope,n.numType.varNumber)) {
+                if (ValidateTable.isVarDefinedInScope(scope, n.numType.varNumber)) {
                     ArrayList<String> varProperties = ValidateTable.getScope(scope).variables.get(n.numType.varNumber);
 
                     ///2) var type matches expr type
@@ -312,8 +312,8 @@ public class NumExpr extends Expr {
 
                             String msg = "use of un-init variable: " + n.numType.varNumber;
                             String fileName = n.numType.number.getFilename();
-                            int lineNum =n.numType.number.getLineNum();
-                            throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
+                            int lineNum = n.numType.number.getLineNum();
+                            throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
 
                         }
                     } else {
@@ -326,16 +326,16 @@ public class NumExpr extends Expr {
 
                                 String msg = "use of un-init variable: " + n.numType.varNumber;
                                 String fileName = n.numType.number.getFilename();
-                                int lineNum =n.numType.number.getLineNum();
-                                throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
+                                int lineNum = n.numType.number.getLineNum();
+                                throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
 
                             }
                         } else {
 
                             String msg = "bad var type in exp: " + n.numType.varNumber;
                             String fileName = n.numType.number.getFilename();
-                            int lineNum =n.numType.number.getLineNum();
-                            throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
+                            int lineNum = n.numType.number.getLineNum();
+                            throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
 
                         }
                     }

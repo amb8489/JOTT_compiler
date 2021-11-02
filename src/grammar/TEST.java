@@ -33,7 +33,7 @@ public class TEST {
 
         System.out.println("-----final var table-----");
 
-        for (String scope : ValidateTable.Scopes.keySet()) {
+        for (String scope : ValidateTable.scopes.keySet()) {
             System.out.println("    >>>>>>scope "+scope+"<<<<<<");
             for (String key : ValidateTable.getScope(scope).variables.keySet()) {
                 String type = ValidateTable.getScope(scope).variables.get(key).get(0);

@@ -41,11 +41,11 @@ public class Stmt {
     }
 
     /**
-     * TODO
+     * Parse a statement.
      *
-     * @param tokens    TODO
-     * @param nestLevel TODO
-     * @return TODO
+     * @param tokens    an array of tokens to be parsed
+     * @param nestLevel how deep
+     * @return parse result in form of a statement object
      * @throws ParsingException TODO
      */
     public static Stmt parseStmt(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
@@ -62,7 +62,7 @@ public class Stmt {
 
         // trying var dec
         TokenIndex.saveCurrentTokenIndex();
-        VarDec varDec = VarDec.parseVarDec(tokens, nestLevel, scope);
+        VarDec varDec = VarDec.parseVarDec(tokens, scope);
 
         if (varDec != null) {
             TokenIndex.popSavedTokenIndexStack();
