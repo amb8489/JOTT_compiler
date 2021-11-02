@@ -20,22 +20,23 @@ import java.util.ArrayList;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class BExpr extends Expr {
-    private ArrayList<BExpr> finalExpr = null;
-    private Expr expr;
-    private Token bool;
-    private Token relOp;
+    public ArrayList<BExpr> finalExpr;
+    public Expr expr;
+    public Token bool;
+    public Token relOp;
     public String scope;
-
+    public String exprType;
+    public int linenum;
     /**
      * This is the constructor for a boolean expression class.
      *
      * @param finalExp TODO blah
      */
-    public BExpr(ArrayList<BExpr> finalExp, String scope) {
+    public BExpr(ArrayList<BExpr> finalExp, String scope,int linenum) {
         super(null, null, null);
         this.finalExpr = finalExp;
         this.scope = scope;
-
+        this.linenum = linenum;
     }
 
     /**
@@ -43,10 +44,12 @@ public class BExpr extends Expr {
      *
      * @param bool TODO blah
      */
-    public BExpr(Token bool, String scope) {
+    public BExpr(Token bool, String scope,String exprType) {
         super(null, null, null);
         this.bool = bool;
         this.scope = scope;
+        this.exprType = exprType;
+
 
     }
 
@@ -56,11 +59,12 @@ public class BExpr extends Expr {
      * @param bool  TODO blah
      * @param relOp TODO blah
      */
-    public BExpr(Token bool, Token relOp, String scope) {
+    public BExpr(Token bool, Token relOp, String scope,String exprType) {
         super(null, null, null);
         this.bool = bool;
         this.relOp = relOp;
         this.scope = scope;
+        this.exprType = exprType;
 
     }
 
@@ -70,11 +74,12 @@ public class BExpr extends Expr {
      * @param expr  TODO blah
      * @param relOP TODO blah
      */
-    public BExpr(Expr expr, Token relOP, String scope) {
+    public BExpr(Expr expr, Token relOP, String scope,String exprType) {
         super(null, null, null);
         this.relOp = relOP;
         this.expr = expr;
         this.scope = scope;
+        this.exprType = exprType;
 
     }
 
@@ -83,10 +88,11 @@ public class BExpr extends Expr {
      *
      * @param expr TODO blah
      */
-    public BExpr(Expr expr, String scope) {
+    public BExpr(Expr expr, String scope,String exprType) {
         super(null, null, null);
         this.expr = expr;
         this.scope = scope;
+        this.exprType = exprType;
     }
 
     /**
@@ -100,6 +106,10 @@ public class BExpr extends Expr {
      */
     public static ArrayList<BExpr> parseBExpr_r(int nestLevel, ArrayList<Token> tokens, ArrayList<BExpr> booleanList, String scope)
             throws ParsingException {
+
+
+        String exprType;
+
         Token possibleBool = tokens.get(TokenIndex.currentTokenIndex);
         boolean isBool = false;
         Expr possibleExpr = null;
@@ -107,11 +117,22 @@ public class BExpr extends Expr {
         if ("true false".contains(possibleBool.getToken())) {
             TokenIndex.currentTokenIndex++;
             isBool = true;
+            exprType = "bool";
+
         } else {
-            possibleExpr = NumExpr.parseNumExpr(tokens, nestLevel, scope);
+            NumExpr possibleNumExpr = NumExpr.parseNumExpr(tokens, nestLevel, scope);
+            exprType = possibleNumExpr.exprType;
+
+
+
+
+            possibleExpr = possibleNumExpr;
+
+
 
             if (possibleExpr == null) {
                 possibleExpr = SExpr.parseSExpr(tokens, nestLevel, scope);
+                exprType = "String";
                 if (possibleExpr == null) {
                     String message = String.format("Syntax error\nInvalid token. Expected ;. Got: %s\n%s:%s",
                             possibleBool.getTokenType().toString(),
@@ -120,6 +141,8 @@ public class BExpr extends Expr {
                     throw new ParsingException(message);
                 }
             }
+            System.out.println(exprType);
+
         }
         Token possibleRelOp = tokens.get(TokenIndex.currentTokenIndex);
 
@@ -128,13 +151,13 @@ public class BExpr extends Expr {
                 TokenIndex.currentTokenIndex++;
 
                 //System.out.printf("bool op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
-                booleanList.add(new BExpr(possibleBool, possibleRelOp, scope));
+                booleanList.add(new BExpr(possibleBool, possibleRelOp, scope,exprType));
                 return parseBExpr_r(nestLevel, tokens, booleanList, scope);
             }
 
             // lone bool
             //System.out.println("lone bool");
-            booleanList.add(new BExpr(possibleBool, scope));
+            booleanList.add(new BExpr(possibleBool, scope,exprType));
             return booleanList;
 
         } else {
@@ -142,13 +165,13 @@ public class BExpr extends Expr {
                 TokenIndex.currentTokenIndex++;
 
                 //System.out.printf("expr op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
-                booleanList.add(new BExpr(possibleExpr, possibleRelOp, scope));
+                booleanList.add(new BExpr(possibleExpr, possibleRelOp, scope,exprType));
                 return parseBExpr_r(nestLevel, tokens, booleanList, scope);
             }
             // lone expr
             //System.out.println("lone expr");
 
-            booleanList.add(new BExpr(possibleExpr, scope));
+            booleanList.add(new BExpr(possibleExpr, scope,exprType));
             return booleanList;
         }
     }
@@ -164,10 +187,10 @@ public class BExpr extends Expr {
     public static Expr parseBExpr(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
 
         //System.out.println("-------------------- parsing bool expr --------------------");
-
+        int linenum = tokens.get(TokenIndex.currentTokenIndex).getLineNum();
         ArrayList<BExpr> f = parseBExpr_r(nestLevel, tokens, new ArrayList<>(), scope);
 
-        return new BExpr(f, scope);
+        return new BExpr(f, scope,linenum);
     }
 
     /**
@@ -236,7 +259,28 @@ public class BExpr extends Expr {
      *
      * @return whether code is valid or not
      */
-    public boolean validateTree() {
+    public boolean validateTree() throws ParsingException {
+
+        String prevType = null;
+        if(finalExpr != null) {
+            for (BExpr bexp : finalExpr) {
+
+                bexp.expr.validateTree();
+                if (bexp.expr.type != null) {
+                    bexp.exprType = bexp.expr.type;
+                }
+
+
+                if (prevType == null) {
+                    prevType = bexp.exprType;
+                }
+                if (!prevType.equals(bexp.exprType)) {
+
+                    throw new ParsingException("line " + bexp.linenum + " mis matched types in bool expr got:" + prevType + " relOP " + bexp.exprType);
+                }
+                prevType = bexp.exprType;
+            }
+        }
         return false;
     }
 }

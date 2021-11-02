@@ -123,6 +123,25 @@ public class FunctionList {
                 for (FuncDefParams params : functionDef.funcDefParams.functionParameterList) {
                     ValidateTable.getScope(scope).functions.get(functionDef.id.convertToJott()).add(params.identifier.convertToJott());
                     ValidateTable.getScope(scope).functions.get(functionDef.id.convertToJott()).add(params.type.getToken());
+
+                    // adding functin params to scope:
+
+
+                    if(params.type.getToken().equals("Integer")){
+                        ValidateTable.addVarToScope(scope,params.identifier.convertToJott(),params.type.getToken(), "1");
+                    }else
+                    if(params.type.getToken().equals("Double")){
+
+                        ValidateTable.addVarToScope(scope,params.identifier.convertToJott(),params.type.getToken(), "1.0");
+                    }else
+                    if(params.type.getToken().equals("String")){
+                        ValidateTable.addVarToScope(scope,params.identifier.convertToJott(),params.type.getToken(), "str");
+                    }else {
+                        ValidateTable.addVarToScope(scope,params.identifier.convertToJott(),params.type.getToken(), "1==1");
+                    }
+
+
+
                 }
             }
 

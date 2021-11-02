@@ -1,36 +1,23 @@
-#this will pass phase 3
+#this will pass phase 2 but fail phase 3
+#<i_expr> <rel_op> <d_expr>
+#does not know the return off foo until phase 3
 
-foo[x:Integer]:Void{
-        Double y = 1.0;
-        Integer x = 5;
-         print[x];
-
-
+foo[x:Double]:Double{
+    return x + 1;
 }
 
-baz[]:Void{
-    print["Hello World"];
-}
 
-bar[x:Double]:String{
-    if[x > 5.1]{
-        return "bar";
-    }
-    baz[];
-    return "foo";
-}
+
+
+
 
 main[]:Integer{
-    Double y = 1.0;
-    Integer b = 5;
-
-    while[x>0]{
-        foo[x];
-        print[bar[y]];
-        x=x-1;
-        y=y+1.1;
-    }
-    baz[];
-
-    return 1;
+    Integer x = 0;
+	if[ 1 < 1]{
+	    x = foo[x];
+		print[x];
+	}elseif[foo[2.2] < 1.0]{
+        		print[x];
+	}
+	return x;
 }

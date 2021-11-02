@@ -157,7 +157,11 @@ public class WhileLoop {
      *
      * @return whether code is valid or not
      */
-    public boolean validateTree() {
+    public boolean validateTree() throws ParsingException {
+
+        expr.validateTree();
+        body.validateTree();
         return false;
+
     }
 }

@@ -73,7 +73,7 @@ public class ElseifStmt {
             TokenIndex.currentTokenIndex++;
 
             // looking for bool expr
-            Expr expr = Expr.parseExpr(tokens, nestLevel, scope);
+            Expr expr = BExpr.parseBExpr(tokens, nestLevel, scope);
 
             // looking for ]
             Token R_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
@@ -172,6 +172,7 @@ public class ElseifStmt {
      * @return whether code is valid or not
      */
     public boolean validateTree() {
+
         return false;
     }
 }

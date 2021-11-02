@@ -92,7 +92,7 @@ public class IfStmt {
         TokenIndex.currentTokenIndex++;
 
         // checking for bool expression
-        Expr expression = Expr.parseExpr(tokens, nestLevel, scope);
+        Expr expression = BExpr.parseBExpr(tokens, nestLevel, scope);
 
         // checking for ]
         Token R_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
@@ -268,7 +268,16 @@ public class IfStmt {
      *
      * @return whether code is valid or not
      */
-    public boolean validateTree() {
-        return false;
+    public boolean validateTree() throws ParsingException {
+
+
+        expr.validateTree();
+        if(elseIfStatements != null) {
+            for (ElseifStmt elif : elseIfStatements) {
+                System.out.println(elif.expr.validateTree());
+                elif.expr.validateTree();
+            }
+        }
+        return true;
     }
 }

@@ -119,6 +119,8 @@ public class VarDec {
      */
     public boolean validateTree() {
         // [function scope to add too ,  var name  , [type , val ] ]
+
+
         ValidateTable.addVarToScope(scope, identifier.convertToJott(), type.type, null);
 
 

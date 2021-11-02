@@ -26,17 +26,15 @@ public class TEST {
         ArrayList<Token> tokens = JottTokenizer.tokenize(filename);
 
         Program p = Program.parseProgram(tokens);
-        System.out.println(p.convertToJott());
         p.validateTree();
 
-        System.out.println("---------------------------------------------------------------------------------------------------");
         System.out.print(p.convertToJott());
+        System.out.println("---------------------------------------------------------------------------------------------------");
 
         System.out.println("-----final var table-----");
 
         for (String scope : ValidateTable.Scopes.keySet()) {
             System.out.println("    >>>>>>scope "+scope+"<<<<<<");
-
             for (String key : ValidateTable.getScope(scope).variables.keySet()) {
                 String type = ValidateTable.getScope(scope).variables.get(key).get(0);
                 String val = ValidateTable.getScope(scope).variables.get(key).get(1);
@@ -44,6 +42,7 @@ public class TEST {
             }
         }
 
+        System.out.println();
 
 
         System.out.println("-----final func table-----");

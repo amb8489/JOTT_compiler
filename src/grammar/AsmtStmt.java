@@ -123,10 +123,6 @@ public class AsmtStmt {
      */
     public boolean validateTree() throws ParsingException {
 
-        //TODO
-        // check that expr is good aka that function return types are = to expr type
-        // and that vars in the expr 1) exist and 2) are the type of the expr type
-        // check that ids for vars are ok use Identifier.check(identifier.id);
 
         // 1) check that id for var is good
         Identifier.check(identifier.id);
@@ -168,6 +164,7 @@ public class AsmtStmt {
             // updating value already in table
             //1) check that the var in question exists
             String varId = identifier.convertToJott();
+
             if (!ValidateTable.getScope(scope).variables.containsKey(varId)) {
                 throw new ParsingException(String.format("var %s dose not exist: line %d", varId, identifier.id.getLineNum()));
             }
@@ -175,6 +172,11 @@ public class AsmtStmt {
             //2) get type var tpye and check its being assigned the same type
             // get type var tpye and check its being assigned the same type
             String varType = ValidateTable.getScope(scope).variables.get(identifier.convertToJott()).get(0);
+
+            expr.validateTree();
+            if (expr.expr.type != null) {
+                expr.type = expr.expr.type;
+            }
 
             if (expr.type.equals(varType)) {
                 ValidateTable.getScope(scope).variables.get(identifier.convertToJott()).set(1, expr.convertToJott());
