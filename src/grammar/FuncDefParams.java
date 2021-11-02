@@ -19,7 +19,6 @@ public class FuncDefParams {
     public final ArrayList<FuncDefParams> functionParameterList;
     public String scope;
 
-
     /**
      * This is the constructor for function definition parameters.
      *
@@ -65,16 +64,13 @@ public class FuncDefParams {
 
         while (idd.getTokenType() != TokenType.R_BRACKET) {
             if (Type.isType(idd)) {
-                String string = "Syntax error\nInvalid token. <id>. Got: TYPE \n" +
-                        idd.getFilename() + ":" + idd.getLineNum();
-                throw new ParsingException(string);
+                throw new ParsingException(String.format("Syntax error\nInvalid token. <id>. Got: TYPE \n%s:%s",
+                        idd.getFilename(), idd.getLineNum()));
             }
 
             if (idd.getTokenType() != TokenType.ID_KEYWORD) {
-                String string = "Syntax error\nInvalid token. <id>. Got:" +
-                        idd.getTokenType().toString() + "\n" +
-                        idd.getFilename() + ":" + idd.getLineNum();
-                throw new ParsingException(string);
+                throw new ParsingException(String.format("Syntax error\nInvalid token. <id>. Got:%s\n%s:%s",
+                        idd.getTokenType().toString(), idd.getFilename(), idd.getLineNum()));
             }
             Identifier id = new Identifier(idd, scope);
 
@@ -89,10 +85,8 @@ public class FuncDefParams {
             Token type = tokens.get(TokenIndex.currentTokenIndex);
 
             if (!Type.isType(type)) {
-                String string = "Syntax error\nInvalid token. Expected <Type>. Got: " +
-                        type.getToken() + "\n" +
-                        type.getFilename() + ":" + type.getLineNum();
-                throw new ParsingException(string);
+                throw new ParsingException(String.format("Syntax error\nInvalid token. Expected <Type>. Got:%s\n%s:%s",
+                        type.getTokenType().toString(), type.getFilename(), type.getLineNum()));
             }
             TokenIndex.currentTokenIndex++;
 
@@ -104,10 +98,8 @@ public class FuncDefParams {
             if (idd.getTokenType() != TokenType.COMMA && idd.getTokenType() == TokenType.R_BRACKET) {
                 break;
             } else if (idd.getTokenType() != TokenType.COMMA) {
-                String string = "Syntax error\nInvalid token. Expected ,. Got: " +
-                        idd.getTokenType().toString() + "\n" +
-                        idd.getFilename() + ":" + idd.getLineNum();
-                throw new ParsingException(string);
+                throw new ParsingException(String.format("Syntax error\nInvalid token. Expected ,. Got:%s\n%s:%s",
+                        idd.getTokenType().toString(), idd.getFilename(), idd.getLineNum()));
             }
             TokenIndex.currentTokenIndex++;
             idd = tokens.get(TokenIndex.currentTokenIndex);

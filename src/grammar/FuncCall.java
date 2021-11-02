@@ -51,7 +51,8 @@ public class FuncCall {
         Token L_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
         // check for if
         if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
-            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected [. Got: %s\n%s:%s", L_BRACKET.getTokenType().toString(), L_BRACKET.getFilename(), L_BRACKET.getLineNum()));
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected [. Got: %s\n%s:%s",
+                    L_BRACKET.getTokenType().toString(), L_BRACKET.getFilename(), L_BRACKET.getLineNum()));
         }
         TokenIndex.currentTokenIndex++;
 
@@ -62,7 +63,8 @@ public class FuncCall {
         Token R_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
 
         if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
-            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected ]. Got: %s\n%s:%s", R_BRACKET.getTokenType().toString(), R_BRACKET.getFilename(), R_BRACKET.getLineNum()));
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected ]. Got: %s\n%s:%s",
+                    R_BRACKET.getTokenType().toString(), R_BRACKET.getFilename(), R_BRACKET.getLineNum()));
         }
         TokenIndex.currentTokenIndex++;
 

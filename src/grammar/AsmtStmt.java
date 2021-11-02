@@ -59,13 +59,10 @@ public class AsmtStmt {
      * @throws ParsingException TODO: blah
      */
     public static AsmtStmt parseAsmtStmt(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
-        //System.out.println("------------------------PARSING ASMT-STMT------------------------");
-
         // removing and checking the first token
-        // should be an IDkeyword type
+        // should be an id keyword type
 
         Token typeToken = tokens.get(TokenIndex.currentTokenIndex);
-        //System.out.println("    FIRST:" + typeToken.getToken());
         Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum(), scope);
         TokenIndex.currentTokenIndex++;
 
@@ -101,11 +98,10 @@ public class AsmtStmt {
         //check for ;
         Token endStmt = tokens.get(TokenIndex.currentTokenIndex);
         if (endStmt.getTokenType() != TokenType.SEMICOLON) {
-            String message = String.format("Syntax error\nInvalid token. Expected ;. Got: %s\n%s:%s",
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected ;. Got: %s\n%s:%s",
                     endStmt.getTokenType().toString(),
                     endStmt.getFilename(),
-                    endStmt.getLineNum());
-            throw new ParsingException(message);
+                    endStmt.getLineNum()));
         }
         TokenIndex.currentTokenIndex++;
 
@@ -134,8 +130,6 @@ public class AsmtStmt {
 
             // check that we have already defined this var ??????????????? scope??????
             if (!ValidateTable.getScope(scope).variables.containsKey(identifier.convertToJott())) {
-
-
                 this.expr.validateTree();
 
                 // we had a change in type
@@ -145,8 +139,6 @@ public class AsmtStmt {
                 }
                 // see that type of left = type of right for function
 
-                System.out.println(this.type.type + " " + expr.type);
-
                 if (type.type.equals(expr.type)) {
                     ValidateTable.getScope(scope).variables.put(identifier.convertToJott(), new ArrayList<>() {{
                         add(type.type);
@@ -155,16 +147,16 @@ public class AsmtStmt {
                     return true;
                 }
                 // Failure
-                String msg = "variable " + identifier.convertToJott() + " being assigned wrong type";
+                String message = String.format("variable %s being assigned wrong type", identifier.convertToJott());
                 String fileName = identifier.id.getFilename();
                 int lineNum = identifier.id.getLineNum();
-                throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum)));
+                throw new ParsingException(String.format("SemanticError:\n %s\n%s:%d", message, fileName, lineNum));
             } else {
                 // Failure
-                String msg = "variable " + identifier.convertToJott() + " is already defined in scope";
+                String message = String.format("variable %s", identifier.convertToJott());
                 String fileName = identifier.id.getFilename();
                 int lineNum = identifier.id.getLineNum();
-                throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum)));
+                throw new ParsingException(String.format("SemanticError:\n %s\n%s:%d", message, fileName, lineNum));
             }
         } else {
             // ELSE if we have:    id = val;
@@ -174,15 +166,14 @@ public class AsmtStmt {
 
             if (!ValidateTable.getScope(scope).variables.containsKey(varId)) {
                 // Failure
-                String msg = "variable " + varId + " does not exist";
+                String message = String.format("variable %s does not exist", varId);
                 String fileName = identifier.id.getFilename();
                 int lineNum = identifier.id.getLineNum();
-                String SemanticErrorMsg = String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum);
-                throw new ParsingException(String.format(SemanticErrorMsg));
+                throw new ParsingException(String.format("SemanticError:\n %s\n%s:%d", message, fileName, lineNum));
             }
 
-            //2) get type var tpye and check its being assigned the same type
-            // get type var tpye and check its being assigned the same type
+            //2) get type var type and check its being assigned the same type
+            // get type var type and check its being assigned the same type
             String varType = ValidateTable.getScope(scope).variables.get(identifier.convertToJott()).get(0);
 
             expr.validateTree();
@@ -196,11 +187,10 @@ public class AsmtStmt {
             }
 
             // Failure
-            String msg = "variable " + varId + " being assigned wrong type";
+            String message = String.format("variable %s being assigned wrong type", varId);
             String fileName = identifier.id.getFilename();
             int lineNum = identifier.id.getLineNum();
-            String SemanticErrorMsg = String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum);
-            throw new ParsingException(String.format(SemanticErrorMsg));
+            throw new ParsingException(String.format("SemanticError:\n %s\n%s:%d", message, fileName, lineNum));
 
         }
     }

@@ -126,9 +126,7 @@ public class BExpr extends Expr {
             NumExpr possibleNumExpr = NumExpr.parseNumExpr(tokens, nestLevel, scope);
             exprType = possibleNumExpr.exprType;
 
-
             possibleExpr = possibleNumExpr;
-
 
             if (possibleExpr == null) {
                 possibleExpr = SExpr.parseSExpr(tokens, nestLevel, scope);
@@ -149,28 +147,21 @@ public class BExpr extends Expr {
         if (isBool) {
             if (possibleRelOp.getTokenType() == TokenType.REL_OP) {
                 TokenIndex.currentTokenIndex++;
-
-                //System.out.printf("bool op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
                 booleanList.add(new BExpr(possibleBool, possibleRelOp, scope, exprType));
                 return parseBExpr_r(nestLevel, tokens, booleanList, scope);
             }
 
             // lone bool
-            //System.out.println("lone bool");
             booleanList.add(new BExpr(possibleBool, scope, exprType));
             return booleanList;
 
         } else {
             if (possibleRelOp.getTokenType() == TokenType.REL_OP) {
                 TokenIndex.currentTokenIndex++;
-
-                //System.out.printf("expr op, going again: %s%n", tokens.get(TOKEN_IDX.index).getToken());
                 booleanList.add(new BExpr(possibleExpr, possibleRelOp, scope, exprType));
                 return parseBExpr_r(nestLevel, tokens, booleanList, scope);
             }
             // lone expr
-            //System.out.println("lone expr");
-
             booleanList.add(new BExpr(possibleExpr, scope, exprType));
             return booleanList;
         }
@@ -185,15 +176,11 @@ public class BExpr extends Expr {
      * @throws ParsingException TODO
      */
     public static Expr parseBExpr(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
-
-        //System.out.println("-------------------- parsing bool expr --------------------");
-
-
         ArrayList<BExpr> f = parseBExpr_r(nestLevel, tokens, new ArrayList<>(), scope);
-        int linenum = tokens.get(TokenIndex.currentTokenIndex).getLineNum();
+        int lineNum = tokens.get(TokenIndex.currentTokenIndex).getLineNum();
         String fileName = tokens.get(TokenIndex.currentTokenIndex).getFilename();
 
-        return new BExpr(f, scope, linenum, fileName);
+        return new BExpr(f, scope, lineNum, fileName);
     }
 
     /**
@@ -264,29 +251,29 @@ public class BExpr extends Expr {
      */
     public boolean validateTree() throws ParsingException {
 
-        String prevType = null;
+        String previousType = null;
         if (finalExpr != null) {
-            for (BExpr bexp : finalExpr) {
+            for (BExpr bExpr : finalExpr) {
 
-                bexp.expr.validateTree();
-                if (bexp.expr.type != null) {
-                    bexp.exprType = bexp.expr.type;
+                bExpr.expr.validateTree();
+                if (bExpr.expr.type != null) {
+                    bExpr.exprType = bExpr.expr.type;
                 }
 
 
-                if (prevType == null) {
-                    prevType = bexp.exprType;
+                if (previousType == null) {
+                    previousType = bExpr.exprType;
                 }
-                if (!prevType.equals(bexp.exprType)) {
+                if (!previousType.equals(bExpr.exprType)) {
                     // Failure
-                    String msg = "mis matched types in bool expr: " + prevType + " relOP " + bexp.exprType;
+                    String message = String.format("mis matched types in bool expr: %s relOp %s", previousType, bExpr.exprType);
                     String fileName = this.fileName;
                     int lineNum = this.linenum;
-                    throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum)));
+                    throw new ParsingException(String.format("SemanticError:\n %s\n%s:%d", message, fileName, lineNum));
 
 
                 }
-                prevType = bexp.exprType;
+                previousType = bExpr.exprType;
             }
         }
         return false;

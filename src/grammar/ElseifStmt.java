@@ -64,10 +64,8 @@ public class ElseifStmt {
 
             // check for if
             if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
-                String string = "Syntax error\nInvalid token. Expected [. Got: " +
-                        L_BRACKET.getTokenType().toString() + "\n" +
-                        L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum();
-                throw new ParsingException(string);
+                throw new ParsingException(String.format("Syntax error\nInvalid token. Expected [. Got:%s\n%s:%s",
+                        L_BRACKET.getTokenType().toString(), L_BRACKET.getFilename(), L_BRACKET.getLineNum()));
             }
 
             TokenIndex.currentTokenIndex++;
@@ -80,10 +78,8 @@ public class ElseifStmt {
             //System.out.println("    4th:" + R_BRACKET.getToken());
             // check for if
             if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
-                String string = "Syntax error\nInvalid token. Expected ]. Got: " +
-                        R_BRACKET.getTokenType().toString() + "\n" +
-                        R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum();
-                throw new ParsingException(string);
+                throw new ParsingException(String.format("Syntax error\nInvalid token. Expected ]. Got:%s\n%s:%s",
+                        R_BRACKET.getTokenType().toString(), R_BRACKET.getFilename(), R_BRACKET.getLineNum()));
             }
             TokenIndex.currentTokenIndex++;
 
@@ -92,10 +88,8 @@ public class ElseifStmt {
 
             // check for if
             if (L_BRACE.getTokenType() != TokenType.L_BRACE) {
-                String string = "Syntax error\nInvalid token. Expected {. Got: " +
-                        L_BRACE.getTokenType().toString() + "\n" +
-                        L_BRACE.getFilename() + ":" + L_BRACE.getLineNum();
-                throw new ParsingException(string);
+                throw new ParsingException(String.format("Syntax error\nInvalid token. Expected {. Got:%s\n%s:%s",
+                        L_BRACE.getTokenType().toString(), L_BRACE.getFilename(), L_BRACE.getLineNum()));
             }
             TokenIndex.currentTokenIndex++;
 
@@ -107,10 +101,8 @@ public class ElseifStmt {
 
             // check for if
             if (R_BRACE.getTokenType() != TokenType.R_BRACE) {
-                String string = "Syntax error\nInvalid token. Expected }. Got: " +
-                        R_BRACE.getTokenType().toString() + "\n" +
-                        R_BRACE.getFilename() + ":" + R_BRACE.getLineNum();
-                throw new ParsingException(string);
+                throw new ParsingException(String.format("Syntax error\nInvalid token. Expected }. Got:%s\n%s:%s",
+                        R_BRACE.getTokenType().toString(), R_BRACE.getFilename(), R_BRACE.getLineNum()));
             }
 
             TokenIndex.currentTokenIndex++;
@@ -132,11 +124,8 @@ public class ElseifStmt {
      * @return a stringified version of this object as Jott code
      */
     public String convertToJott() {
-        String SPACE = "    ".repeat(this.nestLevel - 1);
-
-        return "elseif[ " +
-                expr.convertToJott() + "]{ \n" +
-                body.convertToJott() + SPACE + "}";
+        String space = "    ".repeat(this.nestLevel - 1);
+        return String.format("elseif[ %s]{ \n%s%s}", expr.convertToJott(), body.convertToJott(), space);
     }
 
     /**
