@@ -271,6 +271,7 @@ public class IfStmt {
     public boolean validateTree() throws ParsingException {
 
 
+
         expr.validateTree();
         if(elseIfStatements != null) {
             for (ElseifStmt elif : elseIfStatements) {

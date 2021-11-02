@@ -299,13 +299,23 @@ public class NumExpr extends Expr {
             if (n.numType != null && n.numType.isVar) {
 
                 ///1) var exits
-
-                if (ValidateTable.isVarDefinedInScope(scope,n.numType.varNumber)) {  // ****************************
+                if (ValidateTable.isVarDefinedInScope(scope,n.numType.varNumber)) {
                     ArrayList<String> varProperties = ValidateTable.getScope(scope).variables.get(n.numType.varNumber);
 
                     ///2) var type matches expr type
                     if (prevFunctionType == null) {
+
                         prevFunctionType = varProperties.get(0);
+
+                        if (varProperties.get(1) == null) {
+
+
+                            String msg = "use of un-init variable: " + n.numType.varNumber;
+                            String fileName = n.numType.number.getFilename();
+                            int lineNum =n.numType.number.getLineNum();
+                            throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
+
+                        }
                     } else {
 
                         if (varProperties.get(0).equals(prevFunctionType)) {
