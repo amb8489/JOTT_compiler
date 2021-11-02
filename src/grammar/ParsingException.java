@@ -1,7 +1,7 @@
 package grammar;
 
 /**
- * Description
+ * This class represents a parsing exception.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)

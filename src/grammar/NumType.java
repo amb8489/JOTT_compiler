@@ -3,7 +3,7 @@ package grammar;
 import main.Token;
 
 /**
- * Description
+ * This class represents a number type (could be a double or an integer)
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)

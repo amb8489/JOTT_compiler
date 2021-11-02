@@ -6,7 +6,7 @@ import main.TokenType;
 import java.util.ArrayList;
 
 /**
- * Description
+ * This function represents function parameters.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)

@@ -5,7 +5,7 @@ import main.Token;
 import java.util.Set;
 
 /**
- * Description
+ * This class represents an identifier.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)

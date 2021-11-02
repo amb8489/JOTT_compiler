@@ -4,9 +4,6 @@ import main.Token;
 
 import java.util.ArrayList;
 
-
-// function_def function_list | E
-
 /**
  * A function list holds a list of function definitions.
  *
