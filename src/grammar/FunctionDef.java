@@ -47,11 +47,8 @@ public class FunctionDef {
         Token id = tokens.get(TokenIndex.currentTokenIndex);
 
         if (id.getTokenType() != TokenType.ID_KEYWORD) {
-            //System.out.println("TODO ERROR -1");
-            String string = "Syntax error\nInvalid token. Expected <id>. Got: " +
-                    id.getTokenType().toString() + "\n" +
-                    id.getFilename() + ":" + id.getLineNum();
-            throw new ParsingException(string);
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected <id>. Got: %s\n%s:%s",
+                    id.getTokenType(), id.getFilename(), id.getLineNum()));
         }
         TokenIndex.currentTokenIndex++;
         // look for [
@@ -171,10 +168,13 @@ public class FunctionDef {
                 if (ValidateTable.getScope(scope).functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expr.type)) {
                     return true;
                 }
-                String msg = "function " + this.id.convertToJott() + " should return " + ValidateTable.functions.get(this.id.convertToJott()).get(0);
+
+                String msg = String.format("function %s should return %s",
+                        this.id.convertToJott(),
+                        ValidateTable.functions.get(this.id.convertToJott()).get(0));
                 String fileName = this.id.id.getFilename();
                 int lineNum = this.id.id.getLineNum();
-                throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
+                throw new ParsingException(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum));
             }
 
             if (this.body.hasGuaranteedReturnFromIf) {
@@ -184,7 +184,7 @@ public class FunctionDef {
             String msg = "function " + this.id.convertToJott() + " missing return for Non void function";
             String fileName = this.id.id.getFilename();
             int lineNum = this.id.id.getLineNum();
-            throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum)));
+            throw new ParsingException(String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum));
 
         } else {
             // VOID HAS NO RETURN
@@ -194,7 +194,7 @@ public class FunctionDef {
                 String msg = "function " + this.id.convertToJott() + " should return VOID ";
                 String fileName = this.id.id.getFilename();
                 int lineNum = this.id.id.getLineNum();
-                throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum)));
+                throw new ParsingException(String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum));
 
             }
         }

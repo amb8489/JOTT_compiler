@@ -13,8 +13,8 @@ import java.util.ArrayList;
  */
 public class FuncCall {
     Token name; // function name
-    Params parameters; // function parameters
-    public String scope;
+    private final Params parameters; // function parameters
+    private String scope;
 
     /**
      * This is the constructor for a function call.
@@ -51,10 +51,7 @@ public class FuncCall {
         Token L_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
         // check for if
         if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
-            String string = "Syntax error\nInvalid token. Expected [. Got: " +
-                    L_BRACKET.getTokenType().toString() + "\n" +
-                    L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum();
-            throw new ParsingException(string);
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected [. Got: %s\n%s:%s", L_BRACKET.getTokenType().toString(), L_BRACKET.getFilename(), L_BRACKET.getLineNum()));
         }
         TokenIndex.currentTokenIndex++;
 
@@ -65,10 +62,7 @@ public class FuncCall {
         Token R_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
 
         if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
-            String stringBuilder = "Syntax error\nInvalid token. Expected [. Got: " +
-                    R_BRACKET.getTokenType().toString() + "\n" +
-                    R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum();
-            throw new ParsingException(stringBuilder);
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected ]. Got: %s\n%s:%s", R_BRACKET.getTokenType().toString(), R_BRACKET.getFilename(), R_BRACKET.getLineNum()));
         }
         TokenIndex.currentTokenIndex++;
 
@@ -128,7 +122,7 @@ public class FuncCall {
      * @return whether code is valid or not
      */
     public boolean validateTree() throws ParsingException {
-        ValidateTable.checkFunctionCall(scope, name, parameters);
+        ValidateTable.checkFunctionCall(name, parameters);
         return true;
 
 

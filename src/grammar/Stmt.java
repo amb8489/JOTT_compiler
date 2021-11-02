@@ -37,7 +37,6 @@ public class Stmt {
         this.varDec = varDec;
         this.funcCall = funcCall;
         this.scope = scope;
-
     }
 
     /**
@@ -46,7 +45,7 @@ public class Stmt {
      * @param tokens    an array of tokens to be parsed
      * @param nestLevel how deep
      * @return parse result in form of a statement object
-     * @throws ParsingException TODO
+     * @throws ParsingException throw an error if something is wrong
      */
     public static Stmt parseStmt(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
         // trying asmtStmt
@@ -80,10 +79,8 @@ public class Stmt {
             Token endStmt = tokens.get(TokenIndex.currentTokenIndex);
 
             if (endStmt.getTokenType() != TokenType.SEMICOLON) {
-                String stringBuilder = "Syntax error\nInvalid token. Expected ;. Got: " +
-                        endStmt.getTokenType().toString() + "\n" +
-                        endStmt.getFilename() + ":" + endStmt.getLineNum();
-                throw new ParsingException(stringBuilder);
+                throw new ParsingException(String.format("Syntax error\nInvalid token. Expected ;. Got: %s\n%s:%s",
+                        endStmt.getTokenType().toString(), endStmt.getFilename(), endStmt.getLineNum()));
             }
             TokenIndex.currentTokenIndex++;
             TokenIndex.popSavedTokenIndexStack();

@@ -6,10 +6,6 @@ import main.TokenType;
 
 import java.util.ArrayList;
 
-//  params -> expr param |
-//  params -> , expr params | ε
-
-
 /**
  * Description
  *

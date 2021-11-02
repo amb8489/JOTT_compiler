@@ -46,19 +46,16 @@ public class ValidateTable {
     /**
      * check the function call
      *
-     * @param scope        the name of scope
      * @param functionName the name of function to check
      * @param parameters   parameters for the function to be checked
      * @return whether it's valid or not
      * @throws ParsingException if something is wrong, an exception is thrown
      */
-    public static boolean checkFunctionCall(String scope, Token functionName, Params parameters) throws ParsingException {
+    public static boolean checkFunctionCall(Token functionName, Params parameters) throws ParsingException {
         // check if function is a built in
 
         if (builtInFunctions.containsKey(functionName.getToken())) {
-            System.out.println("BUILTIN FUNCTION");
-
-            // get the parms types for that function
+            // get the params types for that function
             ArrayList<String> builtinParams = builtInFunctions.get(functionName.getToken());
 
             // check if there are even parameters passed in, all builtins take at least 1
@@ -87,8 +84,12 @@ public class ValidateTable {
                         if ((param.expr.type != null && !param.expr.type.equals(builtinParams.get(index)))) {
                             if (!builtinParams.get(index).equals("any")) {
                                 //error if type for param is wrong
-                                String msg = "function: " + functionName.getToken() + " def takes " + builtinParams + " was given:" + param.expr.type + "| line:" + functionName.getLineNum();
-                                throw new ParsingException(msg);
+                                String message = String.format("function: %s def takes %s was given:%s| line:%s",
+                                        functionName.getToken(),
+                                        builtinParams,
+                                        param.expr.type,
+                                        functionName.getLineNum());
+                                throw new ParsingException(message);
                             }
                         }
 
