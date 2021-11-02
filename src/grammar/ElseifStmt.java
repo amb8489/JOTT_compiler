@@ -20,11 +20,11 @@ public class ElseifStmt {
     public String scope;
 
     /**
-     * Constructor
+     * This is a constructor for an else if statement.
      *
-     * @param expr      TODO
-     * @param body      TODO
-     * @param nestLevel TODO
+     * @param expr      an expression to be evaluated
+     * @param body      the body for this else if statement
+     * @param nestLevel how deep is this else if
      */
     public ElseifStmt(Expr expr, Body body, int nestLevel, String scope) {
         this.expr = expr;
@@ -37,7 +37,7 @@ public class ElseifStmt {
     /**
      * TODO
      *
-     * @param tokens    TODO
+     * @param tokens    a lisdhes=
      * @param nestLevel TODO
      * @return TODO
      * @throws ParsingException TODO

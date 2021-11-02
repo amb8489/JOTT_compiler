@@ -27,7 +27,7 @@ public class Body {
      * @param bodies           can hold nothing, a single class, or multiple classes
      * @param returnStmt       return statement, if any
      * @param nestLevel        how deep is this body
-     * @param guaranteedReturn whether return is always possible? TODO
+     * @param guaranteedReturn whether return is always possible?
      */
     public Body(ArrayList<BodyStmt> bodies, ReturnStmt returnStmt, int nestLevel, boolean guaranteedReturn,
                 String scope) {

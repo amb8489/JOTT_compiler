@@ -26,7 +26,7 @@ public class BExpr extends Expr {
     public Token relOp;
     public String scope;
     public String exprType;
-    public int linenum;
+    public int lineNum;
     public String fileName;
 
     /**
@@ -34,11 +34,11 @@ public class BExpr extends Expr {
      *
      * @param finalExp TODO blah
      */
-    public BExpr(ArrayList<BExpr> finalExp, String scope, int linenum, String fileName) {
+    public BExpr(ArrayList<BExpr> finalExp, String scope, int lineNum, String fileName) {
         super(null, null, null);
         this.finalExpr = finalExp;
         this.scope = scope;
-        this.linenum = linenum;
+        this.lineNum = lineNum;
         this.fileName = fileName;
     }
 
@@ -99,13 +99,13 @@ public class BExpr extends Expr {
     }
 
     /**
-     * TODO
+     * Parse boolean expressions
      *
-     * @param tokens      TODO
-     * @param booleanList TODO
-     * @param nestLevel   TODO
-     * @return TODO
-     * @throws ParsingException TODO
+     * @param tokens      a list of tokens to parse
+     * @param booleanList a list of booleans to look through
+     * @param nestLevel   how deep is this?
+     * @return an array of parsed boolean expressions
+     * @throws ParsingException if anything went wrong, an exception with details will be thrown
      */
     public static ArrayList<BExpr> parseBExpr_r(int nestLevel,
                                                 ArrayList<Token> tokens,
@@ -272,7 +272,7 @@ public class BExpr extends Expr {
                     String message = String.format("mis matched types in bool expr: %s relOp %s",
                             previousType, bExpr.exprType);
                     String fileName = this.fileName;
-                    int lineNum = this.linenum;
+                    int lineNum = this.lineNum;
                     throw new ParsingException(String.format("SemanticError:\n %s\n%s:%d", message, fileName, lineNum));
 
 

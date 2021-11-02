@@ -52,11 +52,11 @@ public class AsmtStmt {
     }
 
     /**
-     * TODO: blah
+     * Parse an assignment statement.
      *
-     * @param tokens TODO: blah
-     * @return TODO: blah
-     * @throws ParsingException TODO: blah
+     * @param tokens a list of tokens to parse
+     * @return a parsed object
+     * @throws ParsingException if anything went wrong, an exception with details will be thrown
      */
     public static AsmtStmt parseAsmtStmt(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
         // removing and checking the first token

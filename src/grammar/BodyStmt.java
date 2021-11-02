@@ -42,11 +42,11 @@ public class BodyStmt {
     }
 
     /**
-     * TODO
+     * Parse a body statement
      *
-     * @param tokens    TODO
-     * @param nestLevel TODO
-     * @throws ParsingException TODO
+     * @param tokens    a list of tokens to parse
+     * @param nestLevel how deep
+     * @throws ParsingException if anything went wrong, throw an exception with details in it
      */
     public static BodyStmt parseBodyStmt(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
         IfStmt possibleIf = IfStmt.parseIfStmt(tokens, nestLevel + 1, scope);
