@@ -165,7 +165,9 @@ public class FunctionDef {
                     this.body.hasReturn.expr.type = body.hasReturn.expr.expr.type;
                 }
 
-                if (ValidateTable.getScope(scope).functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expr.type)) {
+                if (ValidateTable.getScope(scope).functions.get(this.id.convertToJott()).get(0).equals(
+                                                                                        this.body.hasReturn.expr.type
+                                                                                    )) {
                     return true;
                 }
 

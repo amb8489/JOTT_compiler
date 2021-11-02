@@ -77,13 +77,16 @@ public class NumExpr extends Expr {
         this.scope = scope;
     }
 
-    private static ArrayList<NumExpr> parseNumExprR(ArrayList<Token> tokens, int nestLevel, ArrayList<NumExpr> exprList, String scope) throws ParsingException {
+    private static ArrayList<NumExpr> parseNumExprR(ArrayList<Token> tokens, int nestLevel,
+                                                    ArrayList<NumExpr> exprList, String scope) throws ParsingException {
 
         //  looking for id/int followed by math op
         Token possibleNumber = tokens.get(TokenIndex.currentTokenIndex);
         Token possibleOp = tokens.get(TokenIndex.currentTokenIndex + 1);
 
-        if ((possibleNumber.getTokenType() == TokenType.NUMBER || possibleNumber.getTokenType() == TokenType.ID_KEYWORD) && possibleOp.getTokenType() == TokenType.MATH_OP) {
+        if ((possibleNumber.getTokenType() == TokenType.NUMBER ||
+                possibleNumber.getTokenType() == TokenType.ID_KEYWORD) &&
+                possibleOp.getTokenType() == TokenType.MATH_OP) {
             TokenIndex.currentTokenIndex += 2;
 
             // numExpr can be id, id op, num, or num op
@@ -110,7 +113,8 @@ public class NumExpr extends Expr {
         }
 
         //  check for lone id or num
-        if (possibleNumber.getTokenType() == TokenType.NUMBER || possibleNumber.getTokenType() == TokenType.ID_KEYWORD) {
+        if (possibleNumber.getTokenType() == TokenType.NUMBER ||
+                possibleNumber.getTokenType() == TokenType.ID_KEYWORD) {
             TokenIndex.currentTokenIndex++;
             exprList.add(new NumExpr(new NumType(possibleNumber, scope), scope));
             return exprList;
@@ -219,8 +223,10 @@ public class NumExpr extends Expr {
      * @return whether code is valid or not
      */
     public boolean validateTree() throws ParsingException {
-        // a single function or a change of only functions call can be any type, we dont know yet their so we gotta varify the function type
-        // because int epr will take all single function calls made even if that fuction returns a string itll think it returns an int
+        // a single function or a change of only functions call can be any type, we don't know yet their, so we
+        // have to verify the function type
+        // because int expr will take all single function calls made even if that function returns a string it'll
+        // think it returns an int
 
         // see how many function call are in the expr
         int isSingleFunctionCall = 0;
@@ -265,8 +271,8 @@ public class NumExpr extends Expr {
                     throw new ParsingException(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum));
                 }
         }
-        // if we had an  expr of  function calls that all return types matched then we know that this expr type is really
-        // what we were seeing in the table and not just the assumed catch-all int expr for a function
+        // if we had an  expr of  function calls that all return types matched then we know that this expr type is
+        // really what we were seeing in the table and not just the assumed catch-all int expr for a function
         if (isSingleFunctionCall > 0) {
             this.setType(prevFunctionType);
             return true;
@@ -280,7 +286,9 @@ public class NumExpr extends Expr {
             // this is checked above but im just keeping it for now
             if (n.functionCall != null) {
                 n.functionCall.validateTree();
-                if (!ValidateTable.getScope(scope).functions.get(n.functionCall.name.getToken()).get(0).equals(this.exprType)) {
+                if (!ValidateTable.getScope(scope).functions.get(n.functionCall.name.getToken()).get(0).equals(
+                                                                                                    this.exprType
+                                                                                                    )) {
 
                     String msg = "mis match types in expr: " + this.convertToJott();
                     String fileName = n.functionCall.name.getFilename();
@@ -309,7 +317,8 @@ public class NumExpr extends Expr {
                             String msg = "use of un-init variable: " + n.numType.varNumber;
                             String fileName = n.numType.number.getFilename();
                             int lineNum = n.numType.number.getLineNum();
-                            throw new ParsingException(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum));
+                            throw new ParsingException(String.format("SemanticError:\n%s\n%s:%d",
+                                    msg, fileName, lineNum));
 
                         }
                     } else {
@@ -323,7 +332,8 @@ public class NumExpr extends Expr {
                                 String msg = "use of un-init variable: " + n.numType.varNumber;
                                 String fileName = n.numType.number.getFilename();
                                 int lineNum = n.numType.number.getLineNum();
-                                throw new ParsingException(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum));
+                                throw new ParsingException(String.format("SemanticError:\n%s\n%s:%d",
+                                        msg, fileName, lineNum));
 
                             }
                         } else {
@@ -331,7 +341,8 @@ public class NumExpr extends Expr {
                             String msg = "bad var type in exp: " + n.numType.varNumber;
                             String fileName = n.numType.number.getFilename();
                             int lineNum = n.numType.number.getLineNum();
-                            throw new ParsingException(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum));
+                            throw new ParsingException(String.format("SemanticError:\n%s\n%s:%d",
+                                    msg, fileName, lineNum));
 
                         }
                     }
@@ -339,7 +350,8 @@ public class NumExpr extends Expr {
                     String msg = "use of undefined var: " + n.numType.varNumber;
                     String fileName = n.numType.number.getFilename();
                     int lineNum =n.numType.number.getLineNum();
-                    throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
+                    throw new ParsingException(String.format("SemanticError:\n%s\n%s:%d",
+                            msg, fileName, lineNum));
                 }
             }
         }

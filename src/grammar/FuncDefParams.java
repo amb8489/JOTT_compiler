@@ -26,7 +26,8 @@ public class FuncDefParams {
      * @param type                  TODO
      * @param functionParameterList TODO
      */
-    public FuncDefParams(Identifier identifier, Token type, ArrayList<FuncDefParams> functionParameterList, String scope) {
+    public FuncDefParams(Identifier identifier, Token type, ArrayList<FuncDefParams> functionParameterList,
+                         String scope) {
         this.identifier = identifier;
         this.type = type;
         this.functionParameterList = functionParameterList;
@@ -51,7 +52,8 @@ public class FuncDefParams {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static FuncDefParams parseFunctionDefParams(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
+    public static FuncDefParams parseFunctionDefParams(ArrayList<Token> tokens, int nestLevel, String scope)
+            throws ParsingException {
 
         ArrayList<FuncDefParams> functionParameterList = new ArrayList<>();
 

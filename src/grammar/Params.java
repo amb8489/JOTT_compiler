@@ -44,7 +44,8 @@ public class Params {
 
     }
 
-    public static ArrayList<Params> parseParams_r(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
+    public static ArrayList<Params> parseParams_r(ArrayList<Token> tokens, int nestLevel, String scope)
+            throws ParsingException {
         // a list of params
         ArrayList<Params> listOfParams = new ArrayList<>();
 

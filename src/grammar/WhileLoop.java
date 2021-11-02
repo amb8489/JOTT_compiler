@@ -42,7 +42,8 @@ public class WhileLoop {
      * @return the parse result in the form of a WhileLoop object
      * @throws ParsingException TODO
      */
-    public static WhileLoop parseWhile(ArrayList<Token> tokens, int nestLevel, String insideOfFunction) throws ParsingException {
+    public static WhileLoop parseWhile(ArrayList<Token> tokens, int nestLevel, String insideOfFunction)
+            throws ParsingException {
         // checking while call starts with while
         Token whileToken = tokens.get(TokenIndex.currentTokenIndex);
         if (!whileToken.getToken().equals("while")) {

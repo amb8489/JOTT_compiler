@@ -34,7 +34,8 @@ public class ReturnStmt {
         return "\t".repeat(0) + "return " + expr.convertToJott() + ";\n";
     }
 
-    public static ReturnStmt parseReturnStmt(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
+    public static ReturnStmt parseReturnStmt(ArrayList<Token> tokens, int nestLevel, String scope)
+            throws ParsingException {
         // check for return
         Token returnToken = tokens.get(TokenIndex.currentTokenIndex);
         if (!returnToken.getToken().equals("return")) {

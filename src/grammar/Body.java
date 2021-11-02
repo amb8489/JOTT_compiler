@@ -29,7 +29,8 @@ public class Body {
      * @param nestLevel        how deep is this body
      * @param guaranteedReturn whether return is always possible? TODO
      */
-    public Body(ArrayList<BodyStmt> bodies, ReturnStmt returnStmt, int nestLevel, boolean guaranteedReturn, String scope) {
+    public Body(ArrayList<BodyStmt> bodies, ReturnStmt returnStmt, int nestLevel, boolean guaranteedReturn,
+                String scope) {
         this.hasReturn = returnStmt;
         this.bodies = bodies;
         this.nestLevel = nestLevel;

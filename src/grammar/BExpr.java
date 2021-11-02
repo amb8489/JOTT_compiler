@@ -107,7 +107,10 @@ public class BExpr extends Expr {
      * @return TODO
      * @throws ParsingException TODO
      */
-    public static ArrayList<BExpr> parseBExpr_r(int nestLevel, ArrayList<Token> tokens, ArrayList<BExpr> booleanList, String scope)
+    public static ArrayList<BExpr> parseBExpr_r(int nestLevel,
+                                                ArrayList<Token> tokens,
+                                                ArrayList<BExpr> booleanList,
+                                                String scope)
             throws ParsingException {
 
 
@@ -266,7 +269,8 @@ public class BExpr extends Expr {
                 }
                 if (!previousType.equals(bExpr.exprType)) {
                     // Failure
-                    String message = String.format("mis matched types in bool expr: %s relOp %s", previousType, bExpr.exprType);
+                    String message = String.format("mis matched types in bool expr: %s relOp %s",
+                            previousType, bExpr.exprType);
                     String fileName = this.fileName;
                     int lineNum = this.linenum;
                     throw new ParsingException(String.format("SemanticError:\n %s\n%s:%d", message, fileName, lineNum));
