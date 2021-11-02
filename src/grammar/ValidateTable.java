@@ -46,18 +46,18 @@ public class ValidateTable {
     /**
      * check the function call
      *
-     * @param scope        the name of scope
      * @param functionName the name of function to check
      * @param parameters   parameters for the function to be checked
      * @return whether it's valid or not
      * @throws ParsingException if something is wrong, an exception is thrown
      */
-    public static boolean checkFunctionCall(String scope, Token functionName, Params parameters) throws ParsingException {
+    public static boolean checkFunctionCall(Token functionName, Params parameters) throws ParsingException {
         // check if function is a built in
 
         if (builtInFunctions.containsKey(functionName.getToken())) {
 
             // get the parms types for that function
+            // get the params types for that function
             ArrayList<String> builtinParams = builtInFunctions.get(functionName.getToken());
 
             // check if there are even parameters passed in, all builtins take at least 1
@@ -90,6 +90,7 @@ public class ValidateTable {
                                 String fileName = functionName.getFilename();
                                 int lineNum = functionName.getLineNum();
                                 throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
+
 
                             }
                         }
