@@ -56,7 +56,7 @@ public class FunctionList {
             }
         }
         String msg = "program is missing a function called \"main\"";
-        throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s",msg,filename)));
+        throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s", msg, filename)));
     }
 
     /**

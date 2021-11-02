@@ -2,7 +2,6 @@ package grammar;
 
 import main.Token;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -90,7 +89,7 @@ public class ValidateTable {
                             if (!builtinParams.get(index).equals("any")) {
                                 //error if type for param is wrong
                                 String message = String.format("function %s params takes %s was given wrong " +
-                                        "type in params:%s %s", functionName.getToken(),
+                                                "type in params:%s %s", functionName.getToken(),
                                         builtinParams, param.expr.type, param.expr.convertToJott());
                                 String fileName = functionName.getFilename();
                                 int lineNum = functionName.getLineNum();
@@ -162,7 +161,7 @@ public class ValidateTable {
 
                                 //error if type for param is wrong
                                 String message = String.format("function %s params takes %s was given wrong type in" +
-                                        " params:%s %s", functionName.getToken(),
+                                                " params:%s %s", functionName.getToken(),
                                         userDefinedParams.subList(1, userDefinedParams.size()),
                                         param.expr.type, param.expr.convertToJott());
                                 String fileName = functionName.getFilename();

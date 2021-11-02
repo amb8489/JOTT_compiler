@@ -93,7 +93,7 @@ public class Type {
 
         // error, what was passed in is not a valid type
         throw new ParsingException(String.format("Syntax error\nInvalid token. " +
-                "Expected Integer||Double||String||Boolean. Got: %s\n%s:%s",
+                        "Expected Integer||Double||String||Boolean. Got: %s\n%s:%s",
                 typeToken.getTokenType().toString(), typeToken.getFilename(), typeToken.getLineNum()));
     }
 

@@ -166,8 +166,8 @@ public class FunctionDef {
                 }
 
                 if (ValidateTable.getScope(scope).functions.get(this.id.convertToJott()).get(0).equals(
-                                                                                        this.body.hasReturn.expr.type
-                                                                                    )) {
+                        this.body.hasReturn.expr.type
+                )) {
                     return true;
                 }
 

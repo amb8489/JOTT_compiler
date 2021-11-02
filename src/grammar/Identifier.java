@@ -14,8 +14,8 @@ import java.util.Set;
  */
 public class Identifier {
     private static final Set<String> idBanList = Set.of("while", "for", "True", "False", "if",
-                                                            "elseif", "else", "print", "concat", "length",
-                                                            "input");
+            "elseif", "else", "print", "concat", "length",
+            "input");
 
     Token id;
     public String scope;

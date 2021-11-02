@@ -287,8 +287,8 @@ public class NumExpr extends Expr {
             if (n.functionCall != null) {
                 n.functionCall.validateTree();
                 if (!ValidateTable.getScope(scope).functions.get(n.functionCall.name.getToken()).get(0).equals(
-                                                                                                    this.exprType
-                                                                                                    )) {
+                        this.exprType
+                )) {
 
                     String msg = "mis match types in expr: " + this.convertToJott();
                     String fileName = n.functionCall.name.getFilename();
@@ -349,7 +349,7 @@ public class NumExpr extends Expr {
                 } else {
                     String msg = "use of undefined var: " + n.numType.varNumber;
                     String fileName = n.numType.number.getFilename();
-                    int lineNum =n.numType.number.getLineNum();
+                    int lineNum = n.numType.number.getLineNum();
                     throw new ParsingException(String.format("SemanticError:\n%s\n%s:%d",
                             msg, fileName, lineNum));
                 }
