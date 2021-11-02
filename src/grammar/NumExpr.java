@@ -263,7 +263,7 @@ public class NumExpr extends Expr {
                 // at this point our expr is only made of function falls like foo[] + boo[] +too[]... only functions
                 // all of these function return types should match to be a valid expr
                 if (!funcType.equals(prevFunctionType)) {
-                    String msg = "mis match type in expr: "+this.convertToJott();
+                    String msg = "mis match types in expr: "+this.convertToJott();
                     String fileName = n.functionCall.name.getFilename();
                     int lineNum = n.functionCall.name.getLineNum();
                     throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
@@ -285,7 +285,12 @@ public class NumExpr extends Expr {
             if (n.functionCall != null) {
                 n.functionCall.validateTree();
                 if (!ValidateTable.getScope(scope).functions.get(n.functionCall.name.getToken()).get(0).equals(this.exprType)) {
-                    throw new ParsingException("func Wrong type in exp: " + ValidateTable.getScope(scope).functions.get(n.functionCall.name.getToken()).get(0));
+
+                    String msg = "mis match types in expr: "+this.convertToJott();
+                    String fileName = n.functionCall.name.getFilename();
+                    int lineNum = n.functionCall.name.getLineNum();
+                    throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
+
                 }
             }
             // this checks for a var in an expr like : 1 + x that 1) x exists 2) it's been init and 3) its type is okay
@@ -306,12 +311,22 @@ public class NumExpr extends Expr {
                         if (varProperties.get(0).equals(prevFunctionType)) {
 
                             ///3) var has been init
-
                             if (varProperties.get(1) == null) {
-                                throw new ParsingException("use of un-init var: " + n.numType.varNumber + " line:" + n.numType.number.getLineNum());
+
+
+                                String msg = "use of un-init variable: " + n.numType.varNumber;
+                                String fileName = n.numType.number.getFilename();
+                                int lineNum =n.numType.number.getLineNum();
+                                throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
+
                             }
                         } else {
-                            throw new ParsingException("bad var type in exp: " + ValidateTable.getScope(scope).variables.get(n.numType.varNumber).get(0) + " " + n.numType.varNumber);
+
+                            String msg = "bad var type in exp: " + n.numType.varNumber;
+                            String fileName = n.numType.number.getFilename();
+                            int lineNum =n.numType.number.getLineNum();
+                            throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
+
                         }
                     }
                 } else {
