@@ -56,7 +56,6 @@ public class ValidateTable {
         // check if function is a built in
 
         if (builtInFunctions.containsKey(functionName.getToken())) {
-            System.out.println("BUILTIN FUNCTION");
 
             // get the parms types for that function
             ArrayList<String> builtinParams = builtInFunctions.get(functionName.getToken());
@@ -87,8 +86,11 @@ public class ValidateTable {
                         if ((param.expr.type != null && !param.expr.type.equals(builtinParams.get(index)))) {
                             if (!builtinParams.get(index).equals("any")) {
                                 //error if type for param is wrong
-                                String msg = "function: " + functionName.getToken() + " def takes " + builtinParams + " was given:" + param.expr.type + "| line:" + functionName.getLineNum();
-                                throw new ParsingException(msg);
+                                String msg = "function " + functionName.getToken() + " params takes " + builtinParams+ " was given wrong type in params:" + param.expr.type +" "+param.expr.convertToJott();
+                                String fileName = functionName.getFilename();
+                                int lineNum = functionName.getLineNum();
+                                throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
+
                             }
                         }
 
@@ -100,18 +102,22 @@ public class ValidateTable {
             } else {
 
                 //error is number of params passed in where wrong
-                String message = "function: " + functionName.getToken() + " takes " + builtinParams.size() + " params but 0 were given, line " + functionName.getLineNum();
-                throw new ParsingException(message);
+                String msg = "function " + functionName.getToken() + " takes " + builtinParams.size() + " params but 0 were given";
+                String fileName = functionName.getFilename();
+                int lineNum = functionName.getLineNum();
+                throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
             }
             //error is number of params passed in where wrong
-            String message = "function: " + functionName.getToken() + " takes " + builtinParams.size() + " params but " + parameters.paramsList.size() + " were given, line " + functionName.getLineNum();
-            throw new ParsingException(message);
+            //error is number of params passed in where wrong
+            String msg = "function " + functionName.getToken() + " takes " + builtinParams.size() + " params but " + parameters.paramsList.size() + " were given";
+            String fileName = functionName.getFilename();
+            int lineNum = functionName.getLineNum();
+            throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
         }
 
 
         // check if function is a built in
         if (scopes.containsKey(functionName.getToken())) {
-            System.out.println("USER DEFINED FUNCTION");
 
             // get the parms types for that function
             ArrayList<String> userDefinedParams = ValidateTable.functions.get(functionName.getToken());
@@ -125,7 +131,6 @@ public class ValidateTable {
                 if (parameters.paramsList != null) {
 
                     // check correct number of params given for that function
-                    System.out.printf("should be %d :: given size = %d%n", parameters.paramsList.size(), (userDefinedParams.size() - 1) / 2);
 
                     if (parameters.paramsList.size() == (userDefinedParams.size() - 1) / 2) {
 
@@ -142,12 +147,14 @@ public class ValidateTable {
                             }
 
                             // if given param at index matches type of function param at index type for defined param is 1 + 2*idx
-                            System.out.println("(" + param.expr.type + ")" + "(" + userDefinedParams.get((2 * index + 2)) + ")");
                             if (param.expr.type != null && !param.expr.type.equals(userDefinedParams.get(2 + (2 * index)))) {
 
                                 //error if type for param is wrong
-                                String msg = "function: " + functionName.getToken() + " def takes " + userDefinedParams.subList(1, userDefinedParams.size()) + " was given:" + param.expr.type + "| line:" + functionName.getLineNum();
-                                throw new ParsingException(msg);
+                                String msg = "function " + functionName.getToken() + " params takes " + userDefinedParams.subList(1, userDefinedParams.size()) + " was given wrong type in params:" + param.expr.type +" "+param.expr.convertToJott();
+                                String fileName = functionName.getFilename();
+                                int lineNum = functionName.getLineNum();
+                                throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
+
                             }
 
                             // onto the next param to check
@@ -158,21 +165,32 @@ public class ValidateTable {
                 }
             } else {
                 // if function has no params and more than 0 where given
-                System.out.printf("GIVEN %d%n", 5);
 
                 if ((userDefinedParams.size() - 1) / 2 != 0) {
                     //error is number of params passed in where wrong
-                    String message = "function: " + functionName.getToken() + " takes " + (userDefinedParams.size() - 1) / 2 + " params but 0 were given, line " + functionName.getLineNum();
-                    throw new ParsingException(message);
+                    String msg = "function: " + functionName.getToken() + " takes " + (userDefinedParams.size() - 1) / 2 + " params but 0 were given";
+                    String fileName = functionName.getFilename();
+                    int lineNum = functionName.getLineNum();
+                    throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
+
+
                 }
                 return true;
             }
             //error is number of params passed in where wrong
-            String message = "function: " + functionName.getToken() + " takes " + (userDefinedParams.size() - 1) / 2 + " params but " + parameters.paramsList.size() + " were given, line " + functionName.getLineNum();
-            throw new ParsingException(message);
+
+            String msg = "function " + functionName.getToken() + " takes " + (userDefinedParams.size() - 1) / 2 + " params but " + parameters.paramsList.size() + " were given";
+            String fileName = functionName.getFilename();
+            int lineNum = functionName.getLineNum();
+            throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
+
+
         }
 
-        throw new ParsingException("undefined function: line " + functionName.getLineNum());
+        String msg = "function " + functionName.getToken() + "is undefined";
+        String fileName = functionName.getFilename();
+        int lineNum = functionName.getLineNum();
+        throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum)));
 
     }
 
@@ -199,7 +217,6 @@ public class ValidateTable {
             add(varType);
             add(varVal);
         }};
-        System.out.printf("adding %s %s to scope %s%n", varType, varName, scopeName);
         scopes.get(scopeName).variables.put(varName, returnAndVal);
     }
 

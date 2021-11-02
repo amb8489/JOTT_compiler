@@ -2,10 +2,18 @@
 #<i_expr> <rel_op> <d_expr>
 #does not know the return off foo until phase 3
 
+foo[x:Double]:Integer{
+     Double b = x;
+     return 1;
+}
 
+foo2[]:String{
+
+     return "2";
+}
 main[]:Integer{
-    Integer x;
-    Integer y = x ;
+    Integer x = 1;
+    Integer y = foo[x];
 
 	return 1;
 }
