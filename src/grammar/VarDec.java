@@ -43,14 +43,11 @@ public class VarDec {
 
         // removing and checking the first token
         // should be an id keyword type
-
         Token typeToken = tokens.get(TokenIndex.currentTokenIndex);
         Type type = new Type(typeToken.getToken(), typeToken.getFilename(), typeToken.getLineNum(), insideOfFunction);
         TokenIndex.currentTokenIndex++;
 
-
         // look for var name
-
         // getting next token
         Token idToken = tokens.get(TokenIndex.currentTokenIndex);
         if (idToken.getTokenType() != TokenType.ID_KEYWORD) {
@@ -79,9 +76,7 @@ public class VarDec {
      * @return a stringified version of this object as Jott code
      */
     public String convertToJott() {
-        return "\t".repeat(0) +
-                type.convertToJott() + " " +
-                identifier.convertToJott() + ";";
+        return String.format("%s%s %s;", "\t".repeat(0), type.convertToJott(), identifier.convertToJott());
     }
 
     /**
@@ -118,11 +113,7 @@ public class VarDec {
      */
     public boolean validateTree() {
         // [function scope to add too ,  var name  , [type , val ] ]
-
-
         ValidateTable.addVarToScope(scope, identifier.convertToJott(), type.type, null);
-
-
         return true;
     }
 }

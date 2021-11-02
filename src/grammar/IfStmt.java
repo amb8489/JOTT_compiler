@@ -84,10 +84,7 @@ public class IfStmt {
         // checking for [
         Token L_BRACKET = tokens.get(TokenIndex.currentTokenIndex);
         if (L_BRACKET.getTokenType() != TokenType.L_BRACKET) {
-            String sb = "Syntax error\nInvalid token. Expected [. Got: " +
-                    L_BRACKET.getTokenType().toString() + "\n" +
-                    L_BRACKET.getFilename() + ":" + L_BRACKET.getLineNum();
-            throw new ParsingException(sb);
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected [. Got: %s\n%s:%s", L_BRACKET.getTokenType().toString(), L_BRACKET.getFilename(), L_BRACKET.getLineNum()));
         }
         TokenIndex.currentTokenIndex++;
 
@@ -99,10 +96,7 @@ public class IfStmt {
 
         // check for if
         if (R_BRACKET.getTokenType() != TokenType.R_BRACKET) {
-            String sb = "Syntax error\nInvalid token. Expected ]. Got: " +
-                    R_BRACKET.getTokenType().toString() + "\n" +
-                    R_BRACKET.getFilename() + ":" + R_BRACKET.getLineNum();
-            throw new ParsingException(sb);
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected ]. Got: %s\n%s:%s", R_BRACKET.getTokenType().toString(), R_BRACKET.getFilename(), R_BRACKET.getLineNum()));
         }
         TokenIndex.currentTokenIndex++;
 
@@ -111,10 +105,7 @@ public class IfStmt {
 
         // check for if
         if (L_BRACE.getTokenType() != TokenType.L_BRACE) {
-            String sb = "Syntax error\nInvalid token. Expected {. Got: " +
-                    L_BRACE.getTokenType().toString() + "\n" +
-                    L_BRACE.getFilename() + ":" + L_BRACE.getLineNum();
-            throw new ParsingException(sb);
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected {. Got: %s\n%s:%s", L_BRACE.getTokenType().toString(), L_BRACE.getFilename(), L_BRACE.getLineNum()));
         }
         TokenIndex.currentTokenIndex++;
 
@@ -134,10 +125,8 @@ public class IfStmt {
         //System.out.println("\t7th:" + R_BRACE.getToken());
         // check for if
         if (R_BRACE.getTokenType() != TokenType.R_BRACE) {
-            String sb = "Syntax error\nInvalid token. Expected }. Got: " +
-                    R_BRACE.getTokenType().toString() + "\n" +
-                    R_BRACE.getFilename() + ":" + R_BRACE.getLineNum();
-            throw new ParsingException(sb);
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected }. Got: %s\n%s:%s",
+                    R_BRACE.getTokenType().toString(), R_BRACE.getFilename(), R_BRACE.getLineNum()));
         }
         TokenIndex.currentTokenIndex++;
 
@@ -169,10 +158,8 @@ public class IfStmt {
 
             // check for if
             if (LL_BRACE.getTokenType() != TokenType.L_BRACE) {
-                String string = "Syntax error\nInvalid token. Expected {. Got: " +
-                        LL_BRACE.getTokenType().toString() + "\n" +
-                        LL_BRACE.getFilename() + ":" + LL_BRACE.getLineNum();
-                throw new ParsingException(string);
+                throw new ParsingException(String.format("Syntax error\nInvalid token. Expected {. Got: %s\n%s:%s",
+                        LL_BRACE.getTokenType().toString(), LL_BRACE.getFilename(), LL_BRACE.getLineNum()));
             }
             TokenIndex.currentTokenIndex++;
 
@@ -190,10 +177,8 @@ public class IfStmt {
             //System.out.println("\t12th:" + RR_BRACE.getToken());
             // check for if
             if (RR_BRACE.getTokenType() != TokenType.R_BRACE) {
-                String sb = "Syntax error\nInvalid token. Expected }. Got: " +
-                        RR_BRACE.getTokenType().toString() + "\n" +
-                        RR_BRACE.getFilename() + ":" + RR_BRACE.getLineNum();
-                throw new ParsingException(sb);
+                throw new ParsingException(String.format("Syntax error\nInvalid token. Expected }. Got: %s\n%s:%s",
+                        RR_BRACE.getTokenType().toString(), RR_BRACE.getFilename(), RR_BRACE.getLineNum()));
             }
             TokenIndex.currentTokenIndex++;
 

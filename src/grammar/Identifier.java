@@ -13,7 +13,9 @@ import java.util.Set;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class Identifier {
-    private static final Set<String> idBanList = Set.of("while", "for", "True", "False", "if", "elseif", "else", "print", "concat", "length", "input");
+    private static final Set<String> idBanList = Set.of("while", "for", "True", "False", "if",
+                                                            "elseif", "else", "print", "concat", "length",
+                                                            "input");
 
     Token id;
     public String scope;
@@ -30,7 +32,8 @@ public class Identifier {
 
     public static void check(Token id) throws ParsingException {
         if (idBanList.contains(id.getToken())) {
-            throw new ParsingException(String.format("use of keyword \"%s\" as variable name: line %d", id.getToken(), id.getLineNum()));
+            throw new ParsingException(String.format("use of keyword \"%s\" as variable name: line %d",
+                    id.getToken(), id.getLineNum()));
         }
     }
 

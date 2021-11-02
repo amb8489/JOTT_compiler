@@ -6,8 +6,6 @@ import main.TokenType;
 
 import java.util.ArrayList;
 
-//     return_stmt -> return expr end_stmt
-
 /**
  * ReturnStmt holds a return statement.
  *
