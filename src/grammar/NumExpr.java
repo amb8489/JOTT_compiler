@@ -340,8 +340,10 @@ public class NumExpr extends Expr {
                         }
                     }
                 } else {
-
-                    throw new ParsingException("use of undefined var: " + n.numType.varNumber + " line:" + n.numType.number.getLineNum());
+                    String msg = "use of undefined var: " + n.numType.varNumber;
+                    String fileName = n.numType.number.getFilename();
+                    int lineNum =n.numType.number.getLineNum();
+                    throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
                 }
             }
         }

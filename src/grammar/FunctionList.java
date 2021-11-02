@@ -45,7 +45,9 @@ public class FunctionList {
     }
 
     public boolean ListHasMain() throws ParsingException {
+        String filename = "program";
         for (FunctionDef func : this.listOfFunctionDefs) {
+            filename = func.id.id.getFilename();
             if (func.id.convertToJott().equals("main")) {
                 if (!func.returnType.type.equals("Integer")) {
                     String msg = "function main should return Integer";
@@ -56,7 +58,8 @@ public class FunctionList {
                 return true;
             }
         }
-        return false;
+        String msg = "program is missing a function called \"main\"";
+        throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s",msg,filename)));
     }
 
     /**

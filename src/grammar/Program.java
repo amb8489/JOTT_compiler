@@ -80,9 +80,8 @@ public class Program implements JottTree {
      * @throws ParsingException throw an error if the code is not valid
      */
     public boolean validateTree() throws ParsingException {
-        if (!functionList.ListHasMain()) {
-            throw new ParsingException("Program is missing or has an incorrectly spelled main");
-        }
+        functionList.ListHasMain();
+
         return functionList.validateTree();
     }
 }
