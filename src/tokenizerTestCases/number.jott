@@ -2,22 +2,17 @@
 #<i_expr> <rel_op> <d_expr>
 #does not know the return off foo until phase 3
 
-foo[x:Double]:Double{
-    return x + 1;
+foo[x:Double]:Integer{
+     Double b = x;
+     return 1;
 }
 
+foo2[]:String{
 
-
-
-
-
+     return "2";
+}
 main[]:Integer{
-    Integer x = 0;
-	if[ 1 < 1]{
-	    x = foo[x];
-		print[x];
-	}elseif[foo[2.2] < 1.0]{
-        		print[x];
-	}
-	return x;
+    Integer y = foo[3.3]+foo2[];
+
+	return 1.1;
 }

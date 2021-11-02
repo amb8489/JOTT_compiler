@@ -27,16 +27,18 @@ public class BExpr extends Expr {
     public String scope;
     public String exprType;
     public int linenum;
+    public String fileName;
     /**
      * This is the constructor for a boolean expression class.
      *
      * @param finalExp TODO blah
      */
-    public BExpr(ArrayList<BExpr> finalExp, String scope,int linenum) {
+    public BExpr(ArrayList<BExpr> finalExp, String scope,int linenum,String fileName) {
         super(null, null, null);
         this.finalExpr = finalExp;
         this.scope = scope;
         this.linenum = linenum;
+        this.fileName = fileName;
     }
 
     /**
@@ -187,10 +189,13 @@ public class BExpr extends Expr {
     public static Expr parseBExpr(ArrayList<Token> tokens, int nestLevel, String scope) throws ParsingException {
 
         //System.out.println("-------------------- parsing bool expr --------------------");
-        int linenum = tokens.get(TokenIndex.currentTokenIndex).getLineNum();
-        ArrayList<BExpr> f = parseBExpr_r(nestLevel, tokens, new ArrayList<>(), scope);
 
-        return new BExpr(f, scope,linenum);
+
+        ArrayList<BExpr> f = parseBExpr_r(nestLevel, tokens, new ArrayList<>(), scope);
+        int linenum = tokens.get(TokenIndex.currentTokenIndex).getLineNum();
+        String fileName = tokens.get(TokenIndex.currentTokenIndex).getFilename();
+
+        return new BExpr(f, scope,linenum,fileName);
     }
 
     /**
@@ -275,8 +280,13 @@ public class BExpr extends Expr {
                     prevType = bexp.exprType;
                 }
                 if (!prevType.equals(bexp.exprType)) {
+                    // Failure
+                    String msg = "mis matched types in bool expr: " + prevType + " relOP " + bexp.exprType;
+                    String fileName = this.fileName;
+                    int lineNum = this.linenum;
+                    throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d",msg,fileName,lineNum)));
 
-                    throw new ParsingException("line " + bexp.linenum + " mis matched types in bool expr got:" + prevType + " relOP " + bexp.exprType);
+
                 }
                 prevType = bexp.exprType;
             }

@@ -248,7 +248,10 @@ public class NumExpr extends Expr {
 
             // makes sure function exits
             if (!ValidateTable.getScope(scope).functions.containsKey(n.functionCall.name.getToken())) {
-                throw new ParsingException("use of undefined Function : " + n.functionCall.name.getToken() + " line:" + n.functionCall.name.getLineNum());
+                String msg = "call to undefined function: " + n.functionCall.name.getToken();
+                String fileName = n.functionCall.name.getFilename();
+                int lineNum = n.functionCall.name.getLineNum();
+                throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
             }
             n.functionCall.validateTree();
 
@@ -260,7 +263,10 @@ public class NumExpr extends Expr {
                 // at this point our expr is only made of function falls like foo[] + boo[] +too[]... only functions
                 // all of these function return types should match to be a valid expr
                 if (!funcType.equals(prevFunctionType)) {
-                    throw new ParsingException("func mis match type: " + ValidateTable.getScope(scope).functions.get(n.functionCall.name.getToken()).get(0));
+                    String msg = "mis match type in expr: "+this.convertToJott();
+                    String fileName = n.functionCall.name.getFilename();
+                    int lineNum = n.functionCall.name.getLineNum();
+                    throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
                 }
         }
         // if we had an  expr of  function calls that all return types matched then we know that this expr type is really

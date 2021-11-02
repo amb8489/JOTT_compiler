@@ -159,7 +159,6 @@ public class FunctionDef {
 
         // if return type is INT DOUBLE STRING BOOL
         if (!this.returnType.type.equals("Void")) {
-            assert this.body != null;
             if (this.body.hasReturn != null && !this.body.hasGuaranteedReturnFromIf) {
                 this.body.hasReturn.expr.validateTree();
 
@@ -170,25 +169,33 @@ public class FunctionDef {
                 }
 
                 if (ValidateTable.getScope(scope).functions.get(this.id.convertToJott()).get(0).equals(this.body.hasReturn.expr.type)) {
-                    System.out.println(this.body.hasReturn.expr.type);
-
                     return true;
                 }
-                System.out.println(this.body.hasReturn.expr.type);
-                throw new ParsingException("RETURNING WRONG TYPE in function: " + this.id.convertToJott() + " " + this.body.hasReturn.expr.type + " " + ValidateTable.getScope(scope).functions.get(this.id.convertToJott()).get(0));
+                String msg = "function "+this.id.convertToJott()+" should return "+ValidateTable.functions.get(this.id.convertToJott()).get(0);
+                String fileName = this.id.id.getFilename();
+                int lineNum = this.id.id.getLineNum();
+                throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
             }
 
             if (this.body.hasGuaranteedReturnFromIf) {
                 return true;
             }
 
-            throw new ParsingException("MISSING RETURN in function: " + this.id.convertToJott());
+            String msg = "function "+this.id.convertToJott()+" missing return for Non void function";
+            String fileName = this.id.id.getFilename();
+            int lineNum = this.id.id.getLineNum();
+            throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d",msg,fileName,lineNum)));
+
         } else {
             // VOID HAS NO RETURN
             if (this.body != null && this.body.hasReturn == null && !this.body.hasGuaranteedReturnFromIf) {
                 return true;
             } else {
-                throw new ParsingException("VOID function has return stmt");
+                String msg = "function "+this.id.convertToJott()+" should return VOID ";
+                String fileName = this.id.id.getFilename();
+                int lineNum = this.id.id.getLineNum();
+                throw new ParsingException(String.format(String.format("SemanticError:\n %s\n%s:%d",msg,fileName,lineNum)));
+
             }
         }
     }

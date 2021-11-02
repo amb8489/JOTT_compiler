@@ -276,7 +276,18 @@ public class IfStmt {
             for (ElseifStmt elif : elseIfStatements) {
                 System.out.println(elif.expr.validateTree());
                 elif.expr.validateTree();
+
+                if(elif.body!=null){
+                    elif.body.validateTree();
+                }
             }
+        }
+
+        if(body1!=null){
+            body1.validateTree();
+        }
+        if(body2!=null){
+            body2.validateTree();
         }
         return true;
     }

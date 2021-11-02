@@ -48,7 +48,10 @@ public class FunctionList {
         for (FunctionDef func : this.listOfFunctionDefs) {
             if (func.id.convertToJott().equals("main")) {
                 if (!func.returnType.type.equals("Integer")) {
-                    throw new ParsingException("MAIN DOES NOT RETURN INT");
+                    String msg = "function main should return Integer";
+                    String fileName = func.id.id.getFilename();
+                    int lineNum = func.id.id.getLineNum();
+                    throw new ParsingException(String.format(String.format("SemanticError:\n%s\n%s:%d",msg,fileName,lineNum)));
                 }
                 return true;
             }
