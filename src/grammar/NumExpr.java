@@ -196,7 +196,21 @@ public class NumExpr extends Expr {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        StringBuilder javaString = new StringBuilder();
+
+        for (NumExpr n : finalExpr) {
+            if (n.numType != null && n.mathOp != null) {
+            	javaString.append(String.format("%s%s", n.numType.convertToJava(), n.mathOp.getToken()));
+            } else if (n.functionCall != null && n.mathOp != null) {
+            	javaString.append(String.format("%s%s", n.functionCall.convertToJava(), n.mathOp.getToken()));
+            } else if (n.functionCall == null && n.mathOp == null && n.numType != null) {
+            	javaString.append(n.numType.convertToJava());
+            } else if (n.functionCall != null) {
+            	javaString.append(n.functionCall.convertToJava());
+            }
+        }
+
+        return javaString.toString();
     }
 
     /**

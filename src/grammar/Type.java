@@ -112,7 +112,19 @@ public class Type {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+    	if (type.equals("Integer")) {
+    		return "int";
+    	}
+    	if (type.equals("Double")) {
+    		return "double";
+    	}
+    	if (type.equals("Boolean")) {
+    		return "boolean";
+    	}
+    	if (type.equals("Void")) {
+    		return "void";
+    	}
+        return type;
     }
 
     /**

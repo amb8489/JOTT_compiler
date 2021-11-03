@@ -227,7 +227,26 @@ public class IfStmt {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        StringBuilder javaString = new StringBuilder();
+        String space = "\t".repeat(this.nestLevel - 1);
+
+        javaString.append("if ( ");
+        javaString.append(String.format("%s ) { \n", this.expr.convertToJava()));
+        javaString.append(String.format("%s%s}", body1.convertToJava(), space));
+
+        if (elseIfStatements != null) {
+            for (ElseifStmt elseifStmt : elseIfStatements) {
+            	javaString.append(elseifStmt.convertToJava());
+            }
+        }
+
+        if (body2 != null) {
+        	javaString.append("else{\n");
+        	javaString.append(String.format("%s%s}\n", body2.convertToJava(), space));
+
+        }
+
+        return javaString.toString();
     }
 
     /**

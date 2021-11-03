@@ -85,7 +85,7 @@ public class VarDec {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        return String.format("%s%s %s;", "\t".repeat(0), type.convertToJava(), identifier.convertToJava());
     }
 
     /**

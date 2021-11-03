@@ -73,7 +73,7 @@ public class JottParserTester {
 
     private boolean parserTest(TestCase test, String orginalJottCode){
         try {
-            ArrayList<Token> tokens = JottTokenizer.tokenize("/Users/aaron/IdeaProjects/JOTT_compiler/src/main/" + test.fileName);
+            ArrayList<Token> tokens = JottTokenizer.tokenize("src/main/" + test.fileName);
 
             if (tokens == null) {
                 System.err.println("\tFailed Test: " + test.testName);

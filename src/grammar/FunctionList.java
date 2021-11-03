@@ -79,7 +79,12 @@ public class FunctionList {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        StringBuilder javaString = new StringBuilder();
+
+        for (FunctionDef fd : listOfFunctionDefs) {
+        	javaString.append(String.format("%s\n", fd.convertToJava()));
+        }
+        return javaString.toString();
     }
 
     /**

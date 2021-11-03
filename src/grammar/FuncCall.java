@@ -97,7 +97,22 @@ public class FuncCall {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        StringBuilder javaString = new StringBuilder();
+
+        String func_name = name.getToken();
+        if (func_name.equals("print")) {
+        	func_name = "System.out.println";
+        }
+        
+        javaString.append(String.format("%s(", func_name));
+
+        if (parameters == null) {
+        	javaString.append(")");
+            return javaString.toString();
+        }
+        javaString.append(String.format("%s)", parameters.convertToJava()));
+
+        return javaString.toString();
     }
 
     /**

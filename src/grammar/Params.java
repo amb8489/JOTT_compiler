@@ -114,7 +114,16 @@ public class Params {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        StringBuilder javaString = new StringBuilder();
+
+        for (Params param : paramsList) {
+            if (param.hasComma) {
+            	javaString.append(",");
+            }
+            javaString.append(param.expr.convertToJava());
+        }
+
+        return javaString.toString();
     }
 
     /**

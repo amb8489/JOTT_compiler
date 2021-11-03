@@ -119,7 +119,9 @@ public class WhileLoop {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        String space = "\t".repeat(this.nestLevel - 1);
+        return String.format("%swhile ( %s ) { \n%s%s}\n",
+                "\t".repeat(0), this.expr.convertToJava(), body.convertToJava(), space);
     }
 
     /**

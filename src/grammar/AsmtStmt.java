@@ -50,6 +50,20 @@ public class AsmtStmt {
 
         return jottString.toString();
     }
+    
+    public String convertToJava() {
+    	StringBuilder javaString = new StringBuilder();
+    	
+    	javaString.append("\t".repeat(0));
+        if (type != null) {
+        	javaString.append(String.format("%s ", type.convertToJava()));
+        }
+
+        javaString.append(String.format("%s = ", identifier.convertToJava()));
+        javaString.append(String.format("%s;\n", expr.convertToJava()));
+        
+    	return javaString.toString();
+    }
 
     /**
      * Parse an assignment statement.

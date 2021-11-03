@@ -118,7 +118,19 @@ public class Body {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        String space = "\t".repeat(this.nestLevel);
+
+        StringBuilder javaString = new StringBuilder();
+
+        for (BodyStmt body : bodies) {
+        	javaString.append(String.format("%s%s\n", space, body.convertToJava()));
+        }
+
+        if (hasReturn != null) {
+        	javaString.append(String.format("%s%s\n", space, hasReturn.convertToJava()));
+        }
+
+        return javaString.toString();
     }
 
     /**

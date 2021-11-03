@@ -94,7 +94,13 @@ public class SExpr extends Expr {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        if (stringLiteral != null) {
+            return stringLiteral.getToken();
+        }
+        if (token != null) {
+            return token.getToken();
+        }
+        return funcCall.convertToJava();
     }
 
     /**

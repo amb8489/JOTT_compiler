@@ -135,7 +135,8 @@ public class ElseifStmt {
      * @return TODO
      */
     public String convertToJava() {
-        return null;
+        String space = "    ".repeat(this.nestLevel - 1);
+        return String.format("else if( %s){ \n%s%s}", expr.convertToJava(), body.convertToJava(), space);
     }
 
     /**

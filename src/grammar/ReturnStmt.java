@@ -65,7 +65,7 @@ public class ReturnStmt {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        return "\t".repeat(0) + "return " + expr.convertToJava() + ";\n";
     }
 
     /**

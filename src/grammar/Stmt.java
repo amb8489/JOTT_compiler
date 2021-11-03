@@ -115,6 +115,15 @@ public class Stmt {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
+        if (asmtStmt != null) {
+            return asmtStmt.convertToJava();
+        }
+        if (varDec != null) {
+            return varDec.convertToJava();
+        }
+        if (funcCall != null) {
+            return funcCall.convertToJava() + ";";
+        }
         return null;
     }
 

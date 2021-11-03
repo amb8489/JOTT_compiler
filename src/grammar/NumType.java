@@ -75,7 +75,7 @@ public class NumType {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        return number.getToken();
     }
 
     /**

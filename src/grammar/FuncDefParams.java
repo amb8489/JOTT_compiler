@@ -137,7 +137,19 @@ public class FuncDefParams {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        StringBuilder javaString = new StringBuilder();
+
+        StringBuilder functionParameterList = new StringBuilder();
+
+        if (this.functionParameterList != null) {
+            for (FuncDefParams FDP : this.functionParameterList) {
+                functionParameterList.append(FDP.convertToJava());
+            }
+            return functionParameterList.substring(0, functionParameterList.length() - 1);
+        } else {
+        	javaString.append(String.format("%s %s,", type.getToken(), identifier.convertToJava()));
+            return javaString.toString();
+        }
     }
 
     /**

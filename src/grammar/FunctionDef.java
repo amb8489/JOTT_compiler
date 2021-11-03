@@ -119,7 +119,41 @@ public class FunctionDef {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+    	
+        StringBuilder javaString = new StringBuilder();
+
+        String funcP = (funcDefParams == null) ? "" : funcDefParams.convertToJava();
+
+        String body = (this.body == null) ? "" : this.body.convertToJava();
+
+        if (id.convertToJava().equals("main")) {
+        	String[] arr = body.split("\n");
+        	if (arr != null) {
+        		if (arr[arr.length - 1].contains("return")) {
+                	String return_insides = arr[arr.length - 1];
+                	String before_return = return_insides.substring(0, return_insides.indexOf("return"));
+                	return_insides = return_insides.substring(return_insides.indexOf("return") + 6);
+                	return_insides = return_insides.substring(0, return_insides.indexOf(";"));
+                	StringBuilder main_thing = new StringBuilder();
+                	for (int i = 0; i < arr.length - 1; i++) {
+                		main_thing.append(arr[i] + "\n");
+                	}
+            		main_thing.append(before_return + "System.exit(" + return_insides + ");");
+                	body = main_thing.toString();
+        		}
+        	}
+        }
+
+        String space = "    ".repeat(this.nestLevel);
+        if (id.convertToJava().equals("main")) {
+            javaString.append(String.format(" public static void main(String[] args) "));
+        }
+        else {
+            javaString.append(String.format("%spublic static %s %s ( %s ) ", space, returnType.convertToJava(), id.convertToJava(), funcP));
+        }
+        javaString.append(String.format("{ \n%s%s}", body, space));
+
+        return javaString.toString();
     }
 
     /**

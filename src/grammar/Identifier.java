@@ -52,7 +52,7 @@ public class Identifier {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        return id.getToken();
     }
 
     /**

@@ -98,6 +98,16 @@ public class BodyStmt {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
+        if (this.possibleIf != null) {
+            return this.possibleIf.convertToJava();
+        }
+        if (this.possibleWhile != null) {
+            return this.possibleWhile.convertToJava();
+        }
+        if (this.possibleStmt != null) {
+            return this.possibleStmt.convertToJava();
+        }
+
         return null;
     }
 

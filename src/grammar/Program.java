@@ -52,7 +52,7 @@ public class Program implements JottTree {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        return "public class Name{\n" + functionList.convertToJava() + "\n}";
     }
 
     /**

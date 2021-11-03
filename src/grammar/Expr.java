@@ -95,7 +95,7 @@ public class Expr {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return null;
+        return expr.convertToJava();
     }
 
     /**
