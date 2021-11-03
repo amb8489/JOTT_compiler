@@ -232,9 +232,11 @@ public class NumExpr extends Expr {
 
         for (NumExpr n : finalExpr) {
             if (n.numType != null && n.mathOp != null) {
-                PyString.append(n.mathOp.getToken());
+                PyString.append(String.format("%s%s", n.numType.convertToPython(), n.mathOp.getToken()));
             } else if (n.functionCall != null && n.mathOp != null) {
                 PyString.append(String.format("%s%s", n.functionCall.convertToPython(), n.mathOp.getToken()));
+            } else if (n.functionCall == null && n.mathOp == null && n.numType != null) {
+                PyString.append(n.numType.convertToJava());
             } else if (n.functionCall != null) {
                 PyString.append(n.functionCall.convertToPython());
             }
@@ -273,8 +275,12 @@ public class NumExpr extends Expr {
             isSingleFunctionCall++;
             // getting that functions real return type from table
 
+
+            // TODO MAKE BUILT IN FUNCTIOS WORK WITH EXPR
             // makes sure function exits
-            if (!ValidateTable.getScope(scope).functions.containsKey(n.functionCall.name.getToken())) {
+            if (!ValidateTable.getScope(scope).functions.containsKey(n.functionCall.name.getToken())
+                && !ValidateTable.builtInFunctions.containsKey(n.functionCall.name.getToken()) ) {
+
                 String msg = "call to undefined function: " + n.functionCall.name.getToken();
                 String fileName = n.functionCall.name.getFilename();
                 int lineNum = n.functionCall.name.getLineNum();

@@ -167,7 +167,19 @@ public class FuncDefParams {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
-        return null;
+        StringBuilder PyString = new StringBuilder();
+
+        StringBuilder functionParameterList = new StringBuilder();
+
+        if (this.functionParameterList != null) {
+            for (FuncDefParams FDP : this.functionParameterList) {
+                functionParameterList.append(FDP.convertToPython());
+            }
+            return functionParameterList.substring(0, functionParameterList.length() - 1);
+        } else {
+            PyString.append(String.format("%s,", identifier.convertToPython()));
+            return PyString.toString();
+        }
     }
 
     /**

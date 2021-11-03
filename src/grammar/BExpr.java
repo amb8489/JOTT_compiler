@@ -268,7 +268,31 @@ public class BExpr extends Expr {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
-        return null;
+        StringBuilder PyString = new StringBuilder();
+
+        for (BExpr n : finalExpr) {
+            // bool relOp
+            if (n.bool != null && n.relOp != null) {
+                PyString.append(String.format("%s %s", n.bool.getToken(), n.relOp.getToken()));
+            }
+
+            // bool
+            if (n.bool != null && n.relOp == null) {
+                PyString.append(String.format("%s ", n.bool.getToken()));
+            }
+
+            // exp relOp
+            if (n.expr != null && n.relOp != null) {
+                PyString.append(String.format("%s%s ", n.expr.convertToPython(), n.relOp.getToken()));
+            }
+
+            // exp
+            if (n.expr != null && n.relOp == null) {
+                PyString.append(String.format("%s ", n.expr.convertToPython()));
+            }
+        }
+
+        return PyString.toString();
     }
 
     /**

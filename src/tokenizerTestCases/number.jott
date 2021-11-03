@@ -1,8 +1,45 @@
-#should pass phase 2 but fail phase 3
-#while is a keyword
+#this will pass phase 3
+
+foo[x:Integer]:Void{
+    print[x];
+}
+
+baz[]:Void{
+    print["Hello World"];
+}
+bar2[x:Double,x:Double]:String{
+    if[x > 5.1]{
+        return "bar";
+    }
+    baz[];
+    return "foo";
+}
+
+bar[x:Double]:String{
+    if[x > 5.1]{
+        return "bar";
+    }
+    baz[];
+    return "foo";
+}
 
 main[]:Integer{
-    Integer b = 5;
-	print["hi"];
-	return 4;
+        Double y = 1.0;
+        Integer x = 5;
+
+        String a = "big";
+        String b = "dog";
+        concat[a,b];
+        length[a];
+        print[a];
+
+    while[x + 1 >0]{
+        foo[x];
+        print[bar[y]];
+        x = x-1;
+        y= y + 1.1;
+    }
+    baz[];
+
+    return 1;
 }

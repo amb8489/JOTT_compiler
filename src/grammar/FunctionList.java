@@ -118,11 +118,12 @@ public class FunctionList {
             if(idx !=  main_idx_in_lst) {
                 PyString.append(String.format("%s\n", fd.convertToPython()));
             }
+            idx++;
         }
 
 
 
-        PyString.append("if __name__ == '__main__':"+"\n\t");
+        PyString.append("if __name__ == '__main__':"+"\n");
         PyString.append(listOfFunctionDefs.get(main_idx_in_lst).convertToPython());
         return PyString.toString();
     }

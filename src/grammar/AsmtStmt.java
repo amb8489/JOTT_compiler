@@ -66,13 +66,13 @@ public class AsmtStmt {
     }
 
     public String convertToPython() {
-        StringBuilder javaString = new StringBuilder();
+        StringBuilder PyString = new StringBuilder();
 
-        javaString.append("\t".repeat(0));
-        javaString.append(String.format("%s = ", identifier.convertToJava()));
-        javaString.append(String.format("%s;\n", expr.convertToJava()));
+        PyString.append("\t".repeat(0));
+        PyString.append(String.format("%s = ", identifier.convertToPython()));
+        PyString.append(String.format("%s\n", expr.convertToPython()));
 
-        return javaString.toString();
+        return PyString.toString();
     }
 
     /**

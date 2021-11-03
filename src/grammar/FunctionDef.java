@@ -171,7 +171,34 @@ public class FunctionDef {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
-        return null;
+
+        StringBuilder PyString = new StringBuilder();
+
+        String funcP = (funcDefParams == null) ? "" : funcDefParams.convertToPython();
+
+        String body = (this.body == null) ? "" : this.body.convertToPython();
+        String space = "    ".repeat(this.nestLevel);
+
+        if (this.id.id.getToken().equals("main")){
+
+
+            PyString.append(String.format("%s", body, space));
+
+        }else {
+            PyString.append(String.format("%sdef %s(%s):", space, id.convertToPython(), funcP));
+            PyString.append(String.format("\n%s", body, space));
+        }
+        return PyString.toString();
+
+
+
+
+
+
+
+
+
+
     }
 
     /**

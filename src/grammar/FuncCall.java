@@ -130,7 +130,26 @@ public class FuncCall {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
-        return null;
+        StringBuilder PyString = new StringBuilder();
+
+        String func_name = name.getToken();
+
+        if (func_name.equals("length")) {
+            func_name = "len";
+        }
+        if (func_name.equals("concat")) {
+            return  "("+"TODO"+" + "+"TODO"+")";
+        }
+
+        PyString.append(String.format("%s(", func_name));
+
+        if (parameters == null) {
+            PyString.append(")");
+            return PyString.toString();
+        }
+        PyString.append(String.format("%s)", parameters.convertToPython()));
+
+        return PyString.toString();
     }
 
     /**

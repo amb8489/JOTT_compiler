@@ -141,7 +141,7 @@ public class WhileLoop {
     public String convertToPython() {
 
         String space = "\t".repeat(this.nestLevel - 1);
-        return String.format("%swhile %s: \n%s%s}\n",
+        return String.format("%swhile %s: \n%s%s\n",
                 "\t".repeat(0), this.expr.convertToPython(), body.convertToPython(), space);
 
 

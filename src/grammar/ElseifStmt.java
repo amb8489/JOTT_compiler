@@ -154,7 +154,8 @@ public class ElseifStmt {
      * @return TODO
      */
     public String convertToPython() {
-        return null;
+        String space = "    ".repeat(this.nestLevel - 1);
+        return String.format("elif %s : \n%s%s", expr.convertToPython(), body.convertToPython(), space);
     }
 
     /**

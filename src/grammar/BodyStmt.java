@@ -126,6 +126,16 @@ public class BodyStmt {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
+        if (this.possibleIf != null) {
+            return this.possibleIf.convertToPython();
+        }
+        if (this.possibleWhile != null) {
+            return this.possibleWhile.convertToPython();
+        }
+        if (this.possibleStmt != null) {
+            return this.possibleStmt.convertToPython();
+        }
+
         return null;
     }
 

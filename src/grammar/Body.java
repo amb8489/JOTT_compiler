@@ -148,7 +148,19 @@ public class Body {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
-        return null;
+        String space = "\t".repeat(this.nestLevel);
+
+        StringBuilder PyString = new StringBuilder();
+
+        for (BodyStmt body : bodies) {
+            PyString.append(String.format("%s%s\n", space, body.convertToPython()));
+        }
+
+        if (hasReturn != null) {
+            PyString.append(String.format("%s%s\n", space, hasReturn.convertToPython()));
+        }
+
+        return PyString.toString();
     }
 
     /**
