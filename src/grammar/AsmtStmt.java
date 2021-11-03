@@ -74,6 +74,20 @@ public class AsmtStmt {
 
         return PyString.toString();
     }
+    
+    public String convertToC() {
+    	StringBuilder cString = new StringBuilder();
+    	
+    	cString.append("\t".repeat(0));
+        if (type != null) {
+        	cString.append(String.format("%s ", type.convertToC()));
+        }
+
+        cString.append(String.format("%s = ", identifier.convertToC()));
+        cString.append(String.format("%s;\n", expr.convertToC()));
+        
+    	return cString.toString();
+    }
 
     /**
      * Parse an assignment statement.

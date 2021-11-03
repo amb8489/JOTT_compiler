@@ -74,7 +74,7 @@ public class ReturnStmt {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        return "\t".repeat(0) + "return " + expr.convertToC() + ";\n";
     }
 
     /**

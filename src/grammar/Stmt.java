@@ -133,6 +133,15 @@ public class Stmt {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
+        if (asmtStmt != null) {
+            return asmtStmt.convertToC();
+        }
+        if (varDec != null) {
+            return varDec.convertToC();
+        }
+        if (funcCall != null) {
+            return funcCall.convertToC() + ";";
+        }
         return null;
     }
 

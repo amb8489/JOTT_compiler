@@ -130,7 +130,9 @@ public class WhileLoop {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        String space = "\t".repeat(this.nestLevel - 1);
+        return String.format("%swhile ( %s ) { \n%s%s}\n",
+                "\t".repeat(0), this.expr.convertToC(), body.convertToC(), space);
     }
 
     /**

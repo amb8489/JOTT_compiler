@@ -94,7 +94,7 @@ public class VarDec {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        return String.format("%s%s %s;", "\t".repeat(0), type.convertToC(), identifier.convertToC());
     }
 
     /**

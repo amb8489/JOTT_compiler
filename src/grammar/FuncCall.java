@@ -103,6 +103,15 @@ public class FuncCall {
         if (func_name.equals("print")) {
         	func_name = "System.out.println";
         }
+        else if (func_name.equals("input")) {
+        	func_name = "Helper.input";
+        }
+        else if (func_name.equals("concat")) {
+            return  "("+parameters.paramsList.get(0).expr.convertToJava()+" + "+parameters.paramsList.get(1).expr.convertToJava()+")";
+        }
+        else if  (func_name.equals("length")) {
+        	return parameters.paramsList.get(0).expr.convertToJava() + ".length()";
+        }
         
         javaString.append(String.format("%s(", func_name));
 
@@ -121,7 +130,25 @@ public class FuncCall {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        StringBuilder cString = new StringBuilder();
+
+        String func_name = name.getToken();
+        if (func_name.equals("print")) {
+        	func_name = "printf";
+        }
+        
+        cString.append(String.format("%s(", func_name));
+
+        if (parameters == null) {
+        	cString.append(")");
+            return cString.toString();
+        }
+        
+        String parameters_string = parameters.convertToC();
+        //TODO do this later
+        cString.append(String.format("%s)", parameters_string));
+
+        return cString.toString();
     }
 
     /**

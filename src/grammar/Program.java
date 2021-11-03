@@ -52,7 +52,20 @@ public class Program implements JottTree {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
-        return "public class Name{\n" + functionList.convertToJava() + "\n}";
+        StringBuilder javaString = new StringBuilder();
+        javaString.append(String.format("public class %s {\n", "Name"));
+        javaString.append("private class Helper {\n");
+        javaString.append("\tpublic static String input(String message, int amount) {\n");
+        javaString.append("\t\tSystem.out.print(message);\n");
+        javaString.append("\t\tString read_line = System.console().readLine();\n");
+        javaString.append("\t\tif (read_line.length() < amount) {;\n");
+        javaString.append("\t\t\treturn read_line;\n");
+        javaString.append("\t\t}\n");
+        javaString.append("\t\treturn read_line.substring(0, amount);\n");
+        javaString.append("\t}\n}\n");
+        javaString.append(functionList.convertToJava());
+        javaString.append("\n}");
+        return javaString.toString();
     }
 
     /**

@@ -117,6 +117,16 @@ public class BodyStmt {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
+        if (this.possibleIf != null) {
+            return this.possibleIf.convertToC();
+        }
+        if (this.possibleWhile != null) {
+            return this.possibleWhile.convertToC();
+        }
+        if (this.possibleStmt != null) {
+            return this.possibleStmt.convertToC();
+        }
+
         return null;
     }
 

@@ -139,7 +139,19 @@ public class Body {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        String space = "\t".repeat(this.nestLevel);
+
+        StringBuilder cString = new StringBuilder();
+
+        for (BodyStmt body : bodies) {
+        	cString.append(String.format("%s%s\n", space, body.convertToC()));
+        }
+
+        if (hasReturn != null) {
+        	cString.append(String.format("%s%s\n", space, hasReturn.convertToC()));
+        }
+
+        return cString.toString();
     }
 
     /**

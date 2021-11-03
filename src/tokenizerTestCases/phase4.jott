@@ -1,0 +1,27 @@
+#this will pass phase 3
+
+foo[x:Integer]:Void{
+    print[x];
+}
+
+baz[]:Void{
+    print["Hello World"];
+}
+
+main[]:Integer{
+	
+	Integer x = 1;
+	
+	String a = "hello";
+	String b = "world";
+	
+    String c = concat[a,b];
+    Integer d = length[a];
+    Integer dother = length["helllllo"];
+    
+    String thing = input["hello I", 5];
+    print[thing];
+    print[c];
+	
+    return x;
+}

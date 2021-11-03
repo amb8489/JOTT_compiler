@@ -147,7 +147,20 @@ public class FuncDefParams {
             }
             return functionParameterList.substring(0, functionParameterList.length() - 1);
         } else {
-        	javaString.append(String.format("%s %s,", type.getToken(), identifier.convertToJava()));
+        	String token_type = type.getToken();
+        	if (token_type.equals("Integer")) {
+        		token_type = "int";
+        	}
+        	else if (token_type.equals("Double")) {
+        		token_type = "double";
+        	}
+        	else if (token_type.equals("Boolean")) {
+        		token_type = "boolean";
+        	}
+        	else if (token_type.equals("Void")) {
+        		token_type = "void";
+        	}
+        	javaString.append(String.format("%s %s,", token_type, identifier.convertToJava()));
             return javaString.toString();
         }
     }
@@ -158,7 +171,19 @@ public class FuncDefParams {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        StringBuilder cString = new StringBuilder();
+
+        StringBuilder functionParameterList = new StringBuilder();
+
+        if (this.functionParameterList != null) {
+            for (FuncDefParams FDP : this.functionParameterList) {
+                functionParameterList.append(FDP.convertToC());
+            }
+            return functionParameterList.substring(0, functionParameterList.length() - 1);
+        } else {
+        	cString.append(String.format("%s %s,", type.getToken(), identifier.convertToC()));
+            return cString.toString();
+        }
     }
 
     /**

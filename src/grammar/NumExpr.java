@@ -219,7 +219,21 @@ public class NumExpr extends Expr {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        StringBuilder cString = new StringBuilder();
+
+        for (NumExpr n : finalExpr) {
+            if (n.numType != null && n.mathOp != null) {
+            	cString.append(String.format("%s%s", n.numType.convertToC(), n.mathOp.getToken()));
+            } else if (n.functionCall != null && n.mathOp != null) {
+            	cString.append(String.format("%s%s", n.functionCall.convertToC(), n.mathOp.getToken()));
+            } else if (n.functionCall == null && n.mathOp == null && n.numType != null) {
+            	cString.append(n.numType.convertToC());
+            } else if (n.functionCall != null) {
+            	cString.append(n.functionCall.convertToC());
+            }
+        }
+
+        return cString.toString();
     }
 
     /**

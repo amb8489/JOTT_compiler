@@ -255,7 +255,26 @@ public class IfStmt {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        StringBuilder cString = new StringBuilder();
+        String space = "\t".repeat(this.nestLevel - 1);
+
+        cString.append("if ( ");
+        cString.append(String.format("%s ) { \n", this.expr.convertToC()));
+        cString.append(String.format("%s%s}", body1.convertToC(), space));
+
+        if (elseIfStatements != null) {
+            for (ElseifStmt elseifStmt : elseIfStatements) {
+            	cString.append(elseifStmt.convertToC());
+            }
+        }
+
+        if (body2 != null) {
+        	cString.append("else{\n");
+        	cString.append(String.format("%s%s}\n", body2.convertToC(), space));
+
+        }
+
+        return cString.toString();
     }
 
     /**

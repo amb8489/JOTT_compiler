@@ -84,7 +84,7 @@ public class NumType {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        return number.getToken();
     }
 
     /**

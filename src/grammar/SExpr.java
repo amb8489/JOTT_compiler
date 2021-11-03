@@ -109,7 +109,13 @@ public class SExpr extends Expr {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        if (stringLiteral != null) {
+            return stringLiteral.getToken();
+        }
+        if (token != null) {
+            return token.getToken();
+        }
+        return funcCall.convertToC();
     }
 
     /**

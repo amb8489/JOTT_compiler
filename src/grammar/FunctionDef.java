@@ -162,7 +162,19 @@ public class FunctionDef {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+
+        StringBuilder cString = new StringBuilder();
+
+        String funcP = (funcDefParams == null) ? "" : funcDefParams.convertToC();
+
+        String body = (this.body == null) ? "" : this.body.convertToC();
+
+
+        String space = "    ".repeat(this.nestLevel);
+        cString.append(String.format("%s%s %s ( %s ) ", space, returnType.convertToC(), id.convertToC(), funcP));
+        cString.append(String.format("{ \n%s%s}", body, space));
+
+        return cString.toString();
     }
 
     /**

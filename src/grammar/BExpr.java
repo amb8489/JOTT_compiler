@@ -259,7 +259,31 @@ public class BExpr extends Expr {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        StringBuilder cString = new StringBuilder();
+
+        for (BExpr n : finalExpr) {
+            // bool relOp
+            if (n.bool != null && n.relOp != null) {
+            	cString.append(String.format("%s %s", n.bool.getToken(), n.relOp.getToken()));
+            }
+
+            // bool
+            if (n.bool != null && n.relOp == null) {
+            	cString.append(String.format("%s ", n.bool.getToken()));
+            }
+
+            // exp relOp
+            if (n.expr != null && n.relOp != null) {
+            	cString.append(String.format("%s%s ", n.expr.convertToC(), n.relOp.getToken()));
+            }
+
+            // exp
+            if (n.expr != null && n.relOp == null) {
+            	cString.append(String.format("%s ", n.expr.convertToC()));
+            }
+        }
+
+        return cString.toString();
     }
 
     /**

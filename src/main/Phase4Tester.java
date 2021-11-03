@@ -9,16 +9,13 @@ public class Phase4Tester {
 		
 		Program program = null;
 		try {
-			program = Program.parseProgram(JottTokenizer.tokenize("src/main/largerValid.jott"));
+			program = Program.parseProgram(JottTokenizer.tokenize("src/tokenizerTestCases/phase4.jott"));
 		} catch (ParsingException e) {
 			e.printStackTrace();
 		}
-		System.out.println("starts here");
-
-
+		
+		
 		System.out.println(program.convertToJava());
-
-		System.out.println("ends here");
 		
 	}
 	

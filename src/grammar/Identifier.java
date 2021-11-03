@@ -61,7 +61,7 @@ public class Identifier {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        return id.getToken();
     }
 
     /**

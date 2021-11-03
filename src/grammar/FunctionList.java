@@ -93,7 +93,12 @@ public class FunctionList {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        StringBuilder cString = new StringBuilder();
+
+        for (FunctionDef fd : listOfFunctionDefs) {
+        	cString.append(String.format("%s\n", fd.convertToC()));
+        }
+        return cString.toString();
     }
 
     /**

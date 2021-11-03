@@ -132,7 +132,16 @@ public class Params {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        StringBuilder cString = new StringBuilder();
+
+        for (Params param : paramsList) {
+            if (param.hasComma) {
+            	cString.append(",");
+            }
+            cString.append(param.expr.convertToC());
+        }
+
+        return cString.toString();
     }
 
     /**
