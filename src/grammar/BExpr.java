@@ -142,7 +142,7 @@ public class BExpr extends Expr {
                     throw new ParsingException(message);
                 }
             }
-            System.out.println(exprType);
+//            System.out.println(exprType);
 
         }
         Token possibleRelOp = tokens.get(TokenIndex.currentTokenIndex);

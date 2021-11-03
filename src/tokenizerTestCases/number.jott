@@ -41,5 +41,5 @@ main[]:Integer{
     }
     baz[];
 
-    return 1;
+    return x;
 }
