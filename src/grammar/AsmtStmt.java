@@ -65,6 +65,16 @@ public class AsmtStmt {
     	return javaString.toString();
     }
 
+    public String convertToPython() {
+        StringBuilder javaString = new StringBuilder();
+
+        javaString.append("\t".repeat(0));
+        javaString.append(String.format("%s = ", identifier.convertToJava()));
+        javaString.append(String.format("%s;\n", expr.convertToJava()));
+
+        return javaString.toString();
+    }
+
     /**
      * Parse an assignment statement.
      *

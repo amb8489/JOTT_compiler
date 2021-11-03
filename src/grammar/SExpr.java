@@ -118,7 +118,14 @@ public class SExpr extends Expr {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
-        return null;
+
+        if (stringLiteral != null) {
+            return stringLiteral.getToken();
+        }
+        if (token != null) {
+            return token.getToken();
+        }
+        return funcCall.convertToPython();
     }
 
     /**

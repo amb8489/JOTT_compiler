@@ -28,35 +28,48 @@ public class TEST {
         Program p = Program.parseProgram(tokens);
         p.validateTree();
 
+        System.out.println("---------------------JOTT----------------------------------------------------");
+
         System.out.print(p.convertToJott());
-        System.out.println("---------------------------------------------------------------------------------------------------");
+        System.out.println("---------------------JAVA----------------------------------------------------");
 
-        System.out.println("-----final var table-----");
+        System.out.println(p.convertToJava());
+        System.out.println("---------------------PYTHON----------------------------------------------------");
 
-        for (String scope : ValidateTable.scopes.keySet()) {
-            System.out.println("    >>>>>>scope "+scope+"<<<<<<");
-            for (String key : ValidateTable.getScope(scope).variables.keySet()) {
-                String type = ValidateTable.getScope(scope).variables.get(key).get(0);
-                String val = ValidateTable.getScope(scope).variables.get(key).get(1);
-                System.out.println("        "+type + " " + key + " = " + val);
-            }
-        }
+        System.out.println(p.convertToPython());
+        System.out.println("---------------------C----------------------------------------------------");
 
-        System.out.println();
+        System.out.println(p.convertToC());
 
 
-        System.out.println("-----final func table-----");
-
-
-            for (String key : ValidateTable.functions.keySet()) {
-                String type = ValidateTable.functions.get(key).get(0);
-
-                System.out.print(key + " returns " + type + " with args: [ ");
-                for (String s : ValidateTable.functions.get(key).subList(1, ValidateTable.functions.get(key).size())) {
-                    System.out.print(s + " ");
-                }
-                System.out.println(" ]");
-
-            }
-    }
+//        System.out.println("-----final var table-----");
+//
+//        for (String scope : ValidateTable.scopes.keySet()) {
+//            System.out.println("    >>>>>>scope "+scope+"<<<<<<");
+//            for (String key : ValidateTable.getScope(scope).variables.keySet()) {
+//                String type = ValidateTable.getScope(scope).variables.get(key).get(0);
+//                String val = ValidateTable.getScope(scope).variables.get(key).get(1);
+//                System.out.println("        "+type + " " + key + " = " + val);
+//            }
+//        }
+//
+//        System.out.println();
+//
+//
+//        System.out.println("-----final func table-----");
+//
+//
+//            for (String key : ValidateTable.functions.keySet()) {
+//                String type = ValidateTable.functions.get(key).get(0);
+//
+//                System.out.print(key + " returns " + type + " with args: [ ");
+//                for (String s : ValidateTable.functions.get(key).subList(1, ValidateTable.functions.get(key).size())) {
+//                    System.out.print(s + " ");
+//                }
+//                System.out.println(" ]");
+//
+//            }
+//    }
 }
+}
+

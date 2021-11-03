@@ -141,7 +141,16 @@ public class Params {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
-        return null;
+        StringBuilder PyString = new StringBuilder();
+
+        for (Params param : paramsList) {
+            if (param.hasComma) {
+                PyString.append(",");
+            }
+            PyString.append(param.expr.convertToPython());
+        }
+
+        return PyString.toString();
     }
 
     /**

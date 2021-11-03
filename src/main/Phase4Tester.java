@@ -14,7 +14,10 @@ public class Phase4Tester {
 			e.printStackTrace();
 		}
 		System.out.println("starts here");
+
+
 		System.out.println(program.convertToJava());
+
 		System.out.println("ends here");
 		
 	}

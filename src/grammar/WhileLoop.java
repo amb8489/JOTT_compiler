@@ -139,7 +139,12 @@ public class WhileLoop {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
-        return null;
+
+        String space = "\t".repeat(this.nestLevel - 1);
+        return String.format("%swhile %s: \n%s%s}\n",
+                "\t".repeat(0), this.expr.convertToPython(), body.convertToPython(), space);
+
+
     }
 
     /**

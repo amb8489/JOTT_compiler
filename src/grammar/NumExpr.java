@@ -228,7 +228,18 @@ public class NumExpr extends Expr {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
-        return null;
+        StringBuilder PyString = new StringBuilder();
+
+        for (NumExpr n : finalExpr) {
+            if (n.numType != null && n.mathOp != null) {
+                PyString.append(n.mathOp.getToken());
+            } else if (n.functionCall != null && n.mathOp != null) {
+                PyString.append(String.format("%s%s", n.functionCall.convertToPython(), n.mathOp.getToken()));
+            } else if (n.functionCall != null) {
+                PyString.append(n.functionCall.convertToPython());
+            }
+        }
+        return PyString.toString();
     }
 
     /**

@@ -264,7 +264,26 @@ public class IfStmt {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
-        return null;
+        StringBuilder PyString = new StringBuilder();
+        String space = "\t".repeat(this.nestLevel - 1);
+
+        PyString.append("if ");
+        PyString.append(String.format("%s : \n", this.expr.convertToPython()));
+        PyString.append(String.format("%s%s", body1.convertToPython(), space));
+
+        if (elseIfStatements != null) {
+            for (ElseifStmt elseifStmt : elseIfStatements) {
+                PyString.append(elseifStmt.convertToPython());
+            }
+        }
+
+        if (body2 != null) {
+            PyString.append("else:\n");
+            PyString.append(String.format("%s%s\n", body2.convertToPython(), space));
+
+        }
+
+        return PyString.toString();
     }
 
     /**

@@ -102,7 +102,29 @@ public class FunctionList {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
-        return null;
+        StringBuilder PyString = new StringBuilder();
+
+        int main_idx_in_lst = 0;
+
+        for (FunctionDef fd : listOfFunctionDefs) {
+            if (fd.id.id.getToken().equals("main")){
+                break;
+            }
+            main_idx_in_lst++;
+        }
+
+        int idx = 0;
+        for (FunctionDef fd : listOfFunctionDefs) {
+            if(idx !=  main_idx_in_lst) {
+                PyString.append(String.format("%s\n", fd.convertToPython()));
+            }
+        }
+
+
+
+        PyString.append("if __name__ == '__main__':"+"\n\t");
+        PyString.append(listOfFunctionDefs.get(main_idx_in_lst).convertToPython());
+        return PyString.toString();
     }
 
     /**

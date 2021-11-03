@@ -142,6 +142,16 @@ public class Stmt {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
+
+        if (asmtStmt != null) {
+            return asmtStmt.convertToPython();
+        }
+        if (varDec != null) {
+            return varDec.convertToPython();
+        }
+        if (funcCall != null) {
+            return funcCall.convertToPython();
+        }
         return null;
     }
 

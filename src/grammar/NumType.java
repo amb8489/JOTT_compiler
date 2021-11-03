@@ -93,6 +93,6 @@ public class NumType {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
-        return null;
+        return number.getToken();
     }
 }

@@ -83,7 +83,7 @@ public class ReturnStmt {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
-        return null;
+        return "\t".repeat(0) + "return " + expr.convertToPython() + "\n";
     }
 
     /**

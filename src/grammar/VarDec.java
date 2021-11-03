@@ -103,7 +103,12 @@ public class VarDec {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
-        return null;
+
+        StringBuilder javaString = new StringBuilder();
+
+        javaString.append("\t".repeat(0));
+        javaString.append(String.format("%s = None", identifier.convertToPython()));
+        return javaString.toString();
     }
 
     /**
