@@ -29,8 +29,8 @@ main[]:Integer{
 
         String a = "big";
         String b = "dog";
-        concat[a,b];
-        length[a];
+        String c = concat[a,b];
+        Integer d = length[a];
         print[a];
 
     while[x + 1 >0]{

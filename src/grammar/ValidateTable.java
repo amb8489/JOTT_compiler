@@ -16,7 +16,27 @@ import java.util.Map;
  */
 public class ValidateTable {
     public static HashMap<String, ValidateTable> scopes = new HashMap<>();
-    public static HashMap<String, ArrayList<String>> functions = new HashMap<>();
+    public static HashMap<String, ArrayList<String>> functions = new HashMap<>() {{
+        put("print", new ArrayList<>() {{
+            add("Void");
+            add("any");
+        }});
+        put("input", new ArrayList<>() {{
+            add("String");
+            add("String");
+            add("Integer");
+        }});
+        put("concat", new ArrayList<>() {{
+            add("String");
+            add("String");
+            add("String");
+        }});
+        put("length", new ArrayList<>() {{
+            add("Integer");
+
+            add("String");
+        }});
+    }};
 
     // ----------------------- all built in function defs -----------------------------------
     public static Map<String, ArrayList<String>> builtInFunctions = new HashMap<>() {{

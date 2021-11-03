@@ -138,7 +138,7 @@ public class FuncCall {
             func_name = "len";
         }
         if (func_name.equals("concat")) {
-            return  "("+"TODO"+" + "+"TODO"+")";
+            return  "("+parameters.paramsList.get(0).expr.convertToPython()+" + "+parameters.paramsList.get(1).expr.convertToPython()+")";
         }
 
         PyString.append(String.format("%s(", func_name));
