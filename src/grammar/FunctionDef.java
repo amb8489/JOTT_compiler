@@ -188,10 +188,15 @@ public class FunctionDef {
 
         String funcP = (funcDefParams == null) ? "" : funcDefParams.convertToPython();
 
-        String body = (this.body == null) ? "" : this.body.convertToPython();
+        String body = (this.body == null) ? "   pass" : this.body.convertToPython();
         String space = "    ".repeat(this.nestLevel);
 
         if (this.id.id.getToken().equals("main")){
+            if (this.body != null){
+                this.body.hasReturn = null;
+            }
+
+            body = (this.body == null) ? "   pass" : this.body.convertToPython();
 
 
             PyString.append(String.format("%s", body, space));

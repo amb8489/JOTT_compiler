@@ -110,7 +110,7 @@ public class FunctionList {
         StringBuilder PyString = new StringBuilder();
 
         int main_idx_in_lst = 0;
-
+        PyString.append("import sys\nimport math\n\n");
         for (FunctionDef fd : listOfFunctionDefs) {
             if (fd.id.id.getToken().equals("main")){
                 break;
