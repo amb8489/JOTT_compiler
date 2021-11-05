@@ -92,9 +92,13 @@ public class Program implements JottTree {
      * @return whether code is valid or not
      * @throws ParsingException throw an error if the code is not valid
      */
-    public boolean validateTree() throws ParsingException {
-        functionList.ListHasMain();
+    public boolean validateTree()  {
+        try {
+            functionList.ListHasMain();
 
-        return functionList.validateTree();
+            return functionList.validateTree();
+        }catch (ParsingException p){
+            return false;
+        }
     }
 }

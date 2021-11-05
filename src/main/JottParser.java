@@ -29,7 +29,10 @@ public class JottParser {
             Program tree = Program.parseProgram(tokens);
 
             ValidateTable.clearAll();
-            tree.validateTree();
+
+            if(!tree.validateTree()){
+                return null;
+            }
             return tree;
         } catch (Exception | ParsingException e) {
             return null;

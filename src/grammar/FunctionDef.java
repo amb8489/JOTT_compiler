@@ -194,6 +194,7 @@ public class FunctionDef {
         if (this.id.id.getToken().equals("main")){
             if (this.body != null){
                 this.body.hasReturn = null;
+                //sys.exit(value)
             }
 
             body = (this.body == null) ? "   pass" : this.body.convertToPython();
