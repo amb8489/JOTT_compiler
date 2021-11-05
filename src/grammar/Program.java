@@ -95,8 +95,8 @@ public class Program implements JottTree {
     public boolean validateTree()  {
         try {
             functionList.ListHasMain();
-
-            return functionList.validateTree();
+            functionList.validateTree();
+            return true;
         }catch (ParsingException p){
             return false;
         }
