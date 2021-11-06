@@ -26,13 +26,7 @@ public class JottParser {
     public static JottTree parse(ArrayList<Token> tokens){
 
         try {
-            Program tree = Program.parseProgram(tokens);
-
-            ValidateTable.clearAll();
-
-            if(!tree.validateTree()){
-                return null;
-            }
+            JottTree tree = Program.parseProgram(tokens);
             return tree;
         } catch (Exception | ParsingException e) {
             return null;

@@ -23,25 +23,32 @@ public class TEST {
      */
     public static void main(String[] args) throws ParsingException {
         String filename = "src/tokenizerTestCases/number.jott";
+
+        // step 1 tokenize
         ArrayList<Token> tokens = JottTokenizer.tokenize(filename);
 
-        Program p = Program.parseProgram(tokens);
-        p.validateTree();
+        // step 2 parse tree
+        JottTree tree = Program.parseProgram(tokens);
 
-        System.out.println("---------------------JOTT----------------------------------------------------");
-
-        System.out.print(p.convertToJott());
-        System.out.println("---------------------JAVA----------------------------------------------------");
-
-        System.out.println(p.convertToJava());
-        System.out.println("---------------------PYTHON----------------------------------------------------");
-
-        System.out.println(p.convertToPython());
-        System.out.println("---------------------C----------------------------------------------------");
-
-        System.out.println(p.convertToC());
+        //step 3 validate
+        if (tree.validateTree()) {
+            System.out.println(tree.convertToJava());
 
 
+            System.out.println("---------------------JOTT----------------------------------------------------");
+
+            System.out.print(tree.convertToJott());
+            System.out.println("---------------------JAVA----------------------------------------------------");
+
+            System.out.println(tree.convertToJava());
+            System.out.println("---------------------PYTHON----------------------------------------------------");
+
+            System.out.println(tree.convertToPython());
+            System.out.println("---------------------C----------------------------------------------------");
+
+            System.out.println(tree.convertToC());
+
+        }
 //        System.out.println("-----final var table-----");
 //
 //        for (String scope : ValidateTable.scopes.keySet()) {

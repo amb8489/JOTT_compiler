@@ -31,7 +31,7 @@ public class Program implements JottTree {
      * @return a Program object with a list of functions
      * @throws ParsingException TODO
      */
-    public static Program parseProgram(ArrayList<Token> tokens) throws ParsingException {
+    public static JottTree parseProgram(ArrayList<Token> tokens) throws ParsingException {
         TokenIndex.reset();
         ValidateTable.clearAll();
         return new Program(FunctionList.parseFunctionList(tokens, 0));
@@ -93,6 +93,8 @@ public class Program implements JottTree {
      * @throws ParsingException throw an error if the code is not valid
      */
     public boolean validateTree()  {
+        ValidateTable.clearAll();
+
         try {
             functionList.ListHasMain();
             functionList.validateTree();

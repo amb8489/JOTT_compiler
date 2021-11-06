@@ -167,6 +167,9 @@ public class FuncCall {
         if (func_name.equals("concat")) {
             return  "("+parameters.paramsList.get(0).expr.convertToPython()+" + "+parameters.paramsList.get(1).expr.convertToPython()+")";
         }
+        if (func_name.equals("input")) {
+            return  "input("+parameters.paramsList.get(0).expr.convertToPython()+")";
+        }
 
         PyString.append(String.format("%s(", func_name));
 
