@@ -32,21 +32,21 @@ public class TEST {
 
         //step 3 validate
         if (tree.validateTree()) {
-            System.out.println(tree.convertToJava());
-
-
-            System.out.println("---------------------JOTT----------------------------------------------------");
-
-            System.out.print(tree.convertToJott());
-            System.out.println("---------------------JAVA----------------------------------------------------");
-
-            System.out.println(tree.convertToJava());
-            System.out.println("---------------------PYTHON----------------------------------------------------");
-
-            System.out.println(tree.convertToPython());
-            System.out.println("---------------------C----------------------------------------------------");
-
-            System.out.println(tree.convertToC());
+//            System.out.println(tree.convertToJava());
+//
+//
+//            System.out.println("---------------------JOTT----------------------------------------------------");
+//
+//            System.out.print(tree.convertToJott());
+//            System.out.println("---------------------JAVA----------------------------------------------------");
+//
+//            System.out.println(tree.convertToJava());
+//            System.out.println("---------------------PYTHON----------------------------------------------------");
+//
+//            System.out.println(tree.convertToPython());
+//            System.out.println("---------------------C----------------------------------------------------");
+//
+//            System.out.println(tree.convertToC());
 
         }
 //        System.out.println("-----final var table-----");

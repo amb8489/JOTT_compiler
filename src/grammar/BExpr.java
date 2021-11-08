@@ -120,12 +120,13 @@ public class BExpr extends Expr {
         boolean isBool = false;
         Expr possibleExpr = null;
 
-        if ("true false".contains(possibleBool.getToken())) {
+        if ("True False".contains(possibleBool.getToken())) {
             TokenIndex.currentTokenIndex++;
             isBool = true;
             exprType = "bool";
 
         } else {
+//            System.out.println(tokens.get(TokenIndex.getCurrentTokenIndex()).getToken());
             NumExpr possibleNumExpr = NumExpr.parseNumExpr(tokens, nestLevel, scope);
             exprType = possibleNumExpr.exprType;
 

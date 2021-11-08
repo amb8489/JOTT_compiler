@@ -69,6 +69,10 @@ public class Phase3Tester {
                 ArrayList<Token> cpyTokens = new ArrayList<>(tokens);
                 JottTree root = JottParser.parse(tokens);
 
+                if (!root.validateTree()){
+                    root = null;
+                }
+
                 if (!test.error && root == null) {
                     System.err.println("\tFailed Test: " + test.testName);
                     System.err.println("\t\tExpected a JottTree and got null");

@@ -33,7 +33,7 @@ public class JottTokenizer {
 			{F, ER, ER, ER, ER, ER, ER, 8, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},					// 7  = state
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 8  relOp state
 			{F, ER, ER, ER, ER, ER, ER, 8, ER, ER, ER, ER,  F, F, F, F, F, F, F, ER, F, ER, F},				// 9  < > state
-			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F,23},							// 10  /+-* state
+			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 10  /+-* state
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},     					// 11  ; state
 			{ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, ER, 22, ER, ER, ER, ER, ER, ER, ER, ER, F},	// 12  . state
 			{F, F, F, F, F, F, F, F, F, F, F, F, 12, 13, F, F, F, F, F, F, F, ER, F},     					// 13  0123456789 state
@@ -46,7 +46,7 @@ public class JottTokenizer {
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, ER, F},							// 20  string state
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, 0, F},     						// 21  error state
 			{F, F, F, F, F, F, F, F, F, F, F, F, F, 22, F, F, F, F, F, F, F, 0, F,22},							// 22  bad state
-			{F, F, F, F, F, F, F, F, F, F, F, F, 12, 13, F, F, F, F, F, F, F, ER,22}};     					// 23  helper
+			{F, F, F, F, F, F, F, F, F, F, F, F, 12, 13, F, F, F, F, F, F, F, ER,23}};     					// 23  helper
 
 	// look up table is used to map chars to their respective class in the dfa
 	private static final Map<String, Integer> lookUpTable =
@@ -89,7 +89,7 @@ public class JottTokenizer {
 	 * @return blah
 	 */
 	private static Token tokenClass(String tokenString, String file, int stateFinishedAt, int lineNumber){
-//		System.out.printf("token: (%s)%n", tokenString);
+		System.out.printf("token: (%s)%n", tokenString);
 
 		return switch (stateFinishedAt) {
 			case 2 			-> new Token(tokenString, file, lineNumber, TokenType.COMMA);
@@ -128,6 +128,11 @@ public class JottTokenizer {
 			int currentState;
 
 			// for each line in file
+			int LastNonSpaceState = -1;
+			boolean firstMinusSeen = true;
+
+
+
 			while ((line = br.readLine()) != null) {
 
 				line += "\n"; 					// adding  new line char for help in the DFA
@@ -142,6 +147,12 @@ public class JottTokenizer {
 
 					if (classifyCharacter(character) != -1) {
 						currentState = DFA[currentState][classifyCharacter(character)]; // updating state based on input ch
+//						System.out.println(currentState);
+
+						if (currentState != 0 && currentState != 23){
+							LastNonSpaceState = currentState;
+						}
+
 
 						// if moved into error state
 						if (currentState == ER) {
@@ -150,6 +161,7 @@ public class JottTokenizer {
 							System.err.printf("%s:%s%n", filename, currentLineNumber);
 							return null;
 						}
+
 
 						// if not a comment
 						if (currentState != 1) {
@@ -173,40 +185,34 @@ public class JottTokenizer {
 								char nextCharacter = line.charAt(i + 1);
 								int next = DFA[currentState][classifyCharacter(nextCharacter)];
 
-								if (character == '-' && nextCharacter == '-') {
-									Token token = tokenClass(tokenString.toString(), filename, currentState, currentLineNumber);
-									if (token != null) {
-										tokens.add(token);
+
+
+								if(currentState == 23){
+//									System.out.println("last non space state :"+LastNonSpaceState);
+
+
+									if (firstMinusSeen && !(LastNonSpaceState == 7 || LastNonSpaceState == 10 || LastNonSpaceState == 9) ){
+//										System.out.println("first - seen  prev non s ste: "+LastNonSpaceState);
+
+										Token token = tokenClass(tokenString.toString(), filename, currentState, currentLineNumber);
+										if (token != null) {
+											tokens.add(token);
+										}
+										tokenString = new StringBuilder(); // restart tokenString
+										LastNonSpaceState = currentState;
+
+										currentState = 0; // restart the state machine on finish of tokenString
+										firstMinusSeen = false;
+
+									}else {
+//										System.out.println("appart of neg   prev non s ste: "+LastNonSpaceState);
+										firstMinusSeen = true;
+										LastNonSpaceState = currentState;
+
 									}
-									tokenString = new StringBuilder(); // restart tokenString
-//									currentState = 0; // restart the state machine on finish of tokenString
-//									i++;
-								} else if ( currentState == 10 && nextCharacter == '-') {
-									Token token = tokenClass(tokenString.toString(), filename, currentState, currentLineNumber);
 
-									if (token != null) {
-										tokens.add(token);
-									}
-									tokenString = new StringBuilder(); // restart tokenString
-
-									tokenString.append(nextCharacter);
-									i++;
-
-
-//									currentState = 0; // restart the state machine on finish of tokenString
-								}else if (character == '-' && (next == 12 || next == 13)) {
-									Token token = tokenClass(tokenString.toString(), filename, currentState, currentLineNumber);
-
-									if (token != null) {
-										tokens.add(token);
-									}
-									tokenString = new StringBuilder(); // restart tokenString
-
-//									tokenString.append(nextCharacter);
-
-
-//									currentState = 0; // restart the state machine on finish of tokenString
-								}else {
+								}
+								else{
 									// if the next char will cause a finish
 									if (next == F) {
 										// if the token is not the empty token
@@ -226,6 +232,12 @@ public class JottTokenizer {
 						}
 					}
 					i++;
+					if (currentState != 0 && currentState != 23){
+						LastNonSpaceState = currentState;
+					}
+					if (currentState != 0 && currentState != 23){
+						firstMinusSeen = true;
+					}
 				}
 			}
 		}
