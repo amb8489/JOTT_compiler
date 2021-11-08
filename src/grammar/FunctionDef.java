@@ -272,7 +272,7 @@ public class FunctionDef {
             if (this.body != null && this.body.hasReturn == null && !this.body.hasGuaranteedReturnFromIf) {
                 return true;
             } else {
-                String msg = "function " + this.id.convertToJott() + " should return VOID ";
+                String msg = "function " + this.id.convertToJott() + ": void function with a return ";
                 String fileName = this.id.id.getFilename();
                 int lineNum = this.id.id.getLineNum();
                 throw new ParsingException(String.format("SemanticError:\n %s\n%s:%d", msg, fileName, lineNum));
