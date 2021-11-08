@@ -175,6 +175,7 @@ public class AsmtStmt {
                 if (expr.expr.type != null) {
                     expr.type = expr.expr.type;
                 }
+
                 // see that type of left = type of right for function
 
                 if (type.type.equals(expr.type)) {
@@ -215,6 +216,7 @@ public class AsmtStmt {
             String varType = ValidateTable.getScope(scope).variables.get(identifier.convertToJott()).get(0);
 
             expr.validateTree();
+
             if (expr.expr.type != null) {
                 expr.type = expr.expr.type;
             }

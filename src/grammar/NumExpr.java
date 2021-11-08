@@ -322,7 +322,6 @@ public class NumExpr extends Expr {
             this.setType(prevFunctionType);
             return true;
         }
-
         // this will verify that function return types match the expr type
         prevFunctionType = null;
 
@@ -397,6 +396,20 @@ public class NumExpr extends Expr {
                     int lineNum = n.numType.number.getLineNum();
                     throw new ParsingException(String.format("SemanticError:\n%s\n%s:%d",
                             msg, fileName, lineNum));
+                }
+                // is a number like 1 or .3
+            }else{
+                if (n.numType != null) {
+                    ///2) var type matches expr type
+                    if (prevFunctionType == null) {
+                        prevFunctionType = n.numType.numType;
+                    }
+                    if (!n.numType.numType.equals(prevFunctionType)) {
+                        String msg = "mis match types in expr: " + this.convertToJott();
+                        String fileName = n.numType.number.getFilename();
+                        int lineNum = n.numType.number.getLineNum();
+                        throw new ParsingException(String.format("SemanticError:\n%s\n%s:%d", msg, fileName, lineNum));
+                    }
                 }
             }
         }

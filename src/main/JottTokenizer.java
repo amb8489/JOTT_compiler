@@ -89,7 +89,7 @@ public class JottTokenizer {
 	 * @return blah
 	 */
 	private static Token tokenClass(String tokenString, String file, int stateFinishedAt, int lineNumber){
-		System.out.printf("token: (%s)%n", tokenString);
+//		System.out.printf("token: (%s)%n", tokenString);
 
 		return switch (stateFinishedAt) {
 			case 2 			-> new Token(tokenString, file, lineNumber, TokenType.COMMA);
