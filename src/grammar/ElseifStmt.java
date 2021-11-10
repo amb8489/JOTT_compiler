@@ -156,7 +156,7 @@ public class ElseifStmt {
      */
     public String convertToPython() {
         String space = "    ".repeat(this.nestLevel - 1);
-        return String.format("elif %s : \n%s%s", expr.convertToPython(), body.convertToPython(), space);
+        return String.format("elif %s: \n%s%s", expr.convertToPython(), body.convertToPython(), space);
     }
 
     /**

@@ -1,5 +1,11 @@
+#this will pass phase 2 but fail phase 3 for missing return;
+
+foo[x:String]:String{
+    print[x];
+    return "hi";
+}
+
 main[]:Integer{
-    Integer x = 5;
-    x =  -.1;
-    return 1;
+    print["hi"];
+    return 5;
 }

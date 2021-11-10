@@ -191,21 +191,10 @@ public class FunctionDef {
         String body = (this.body == null) ? "   pass" : this.body.convertToPython();
         String space = "    ".repeat(this.nestLevel);
 
-        if (this.id.id.getToken().equals("main")){
-            if (this.body != null){
-                this.body.hasReturn = null;
-                //sys.exit(value)
-            }
 
-            body = (this.body == null) ? "   pass" : this.body.convertToPython();
+        PyString.append(String.format("%sdef %s(%s):", space, id.convertToPython(), funcP));
+        PyString.append(String.format("\n%s", body, space));
 
-
-            PyString.append(String.format("%s", body, space));
-
-        }else {
-            PyString.append(String.format("%sdef %s(%s):", space, id.convertToPython(), funcP));
-            PyString.append(String.format("\n%s", body, space));
-        }
         return PyString.toString();
 
 

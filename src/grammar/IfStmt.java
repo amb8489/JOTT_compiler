@@ -287,7 +287,7 @@ public class IfStmt {
         String space = "\t".repeat(this.nestLevel - 1);
 
         PyString.append("if ");
-        PyString.append(String.format("%s : \n", this.expr.convertToPython()));
+        PyString.append(String.format("%s: \n", this.expr.convertToPython()));
         PyString.append(String.format("%s%s", body1.convertToPython(), space));
 
         if (elseIfStatements != null) {

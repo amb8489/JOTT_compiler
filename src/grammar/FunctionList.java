@@ -109,27 +109,16 @@ public class FunctionList {
     public String convertToPython() {
         StringBuilder PyString = new StringBuilder();
 
-        int main_idx_in_lst = 0;
         PyString.append("import sys\nimport math\n\n");
-        for (FunctionDef fd : listOfFunctionDefs) {
-            if (fd.id.id.getToken().equals("main")){
-                break;
-            }
-            main_idx_in_lst++;
-        }
 
         int idx = 0;
         for (FunctionDef fd : listOfFunctionDefs) {
-            if(idx !=  main_idx_in_lst) {
                 PyString.append(String.format("%s\n", fd.convertToPython()));
-            }
-            idx++;
         }
 
 
 
-        PyString.append("if __name__ == '__main__':"+"\n");
-        PyString.append(listOfFunctionDefs.get(main_idx_in_lst).convertToPython());
+        PyString.append("sys.exit(main())");
         return PyString.toString();
     }
 
