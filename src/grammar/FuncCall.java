@@ -154,7 +154,7 @@ public class FuncCall {
                 printType = "%f";
             }
 
-            cString.append(String.format("%s ( %s,", func_name, printType));
+            cString.append(String.format("%s ( %s\\n,", func_name, printType));
             cString.append(String.format("%s)", parameters_string));
 
         }else if(func_name.equals("concat")) {
