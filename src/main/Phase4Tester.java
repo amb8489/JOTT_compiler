@@ -35,7 +35,8 @@ public class Phase4Tester {
 			}
 
 		} catch (ParsingException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+			System.out.println("program failed to compile :'(");
 		}
 		
 		

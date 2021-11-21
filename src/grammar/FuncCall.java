@@ -133,22 +133,49 @@ public class FuncCall {
         StringBuilder cString = new StringBuilder();
 
         String func_name = name.getToken();
-        if (func_name.equals("print")) {
-        	func_name = "printf";
-        }
-        
-        cString.append(String.format("%s(", func_name));
 
         if (parameters == null) {
-        	cString.append(")");
+            cString.append(")");
             return cString.toString();
         }
-        
-        String parameters_string = parameters.convertToC();
-        //TODO do this later
-        cString.append(String.format("%s)", parameters_string));
 
+        String parameters_string = parameters.convertToC();
+
+
+        if (func_name.equals("print")) {
+            func_name = "printf";
+
+
+            String printType = "%d";
+            if (parameters.paramsList.get(0).expr.type.equals("String") || parameters.paramsList.get(0).expr.type.equals("Boolean")) {
+                printType = "%s";
+            }
+            if (parameters.paramsList.get(0).expr.type.equals("Double")) {
+                printType = "%f";
+            }
+
+            cString.append(String.format("%s ( %s,", func_name, printType));
+            cString.append(String.format("%s)", parameters_string));
+
+        }else if(func_name.equals("concat")) {
+            func_name = "strcat";
+
+            cString.append(String.format("%s ( %s)", func_name, parameters_string));
+        }else if(func_name.equals("length")) {
+            func_name = "strlen";
+
+            cString.append(String.format("%s( %s)", func_name, parameters_string));
+        }else {
+
+            cString.append(String.format("%s( ", func_name));
+
+
+            //TODO do this later
+            cString.append(String.format("%s)", parameters_string));
+
+        }
         return cString.toString();
+
     }
 
     /**

@@ -133,7 +133,20 @@ public class Type {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        if (type.equals("Integer")) {
+            return "int";
+        }
+        if (type.equals("Double")) {
+            return "double";
+        }
+        if (type.equals("Boolean")) {
+            return "bool";
+        }
+        if (type.equals("Void")) {
+            return "void";
+        }else{
+            return"char";
+        }
     }
 
     /**

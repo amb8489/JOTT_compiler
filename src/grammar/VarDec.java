@@ -94,6 +94,10 @@ public class VarDec {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
+        if (type.convertToC().equals("char")){
+            return "char "+identifier.convertToC()+"[ ];";
+
+        }
         return String.format("%s%s %s;", "\t".repeat(0), type.convertToC(), identifier.convertToC());
     }
 

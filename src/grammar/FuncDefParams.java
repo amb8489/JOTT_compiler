@@ -181,7 +181,25 @@ public class FuncDefParams {
             }
             return functionParameterList.substring(0, functionParameterList.length() - 1);
         } else {
-        	cString.append(String.format("%s %s,", type.getToken(), identifier.convertToC()));
+
+            String token_type = type.getToken();
+            if (token_type.equals("Integer")) {
+                token_type = "int";
+            }
+            else if (token_type.equals("Double")) {
+                token_type = "double";
+            }
+            else if (token_type.equals("Boolean")) {
+                token_type = "bool";
+            }
+            else if (token_type.equals("Void")) {
+                token_type = "void";
+            }else{
+                token_type = "char[]";
+
+            }
+
+        	cString.append(String.format("%s %s,", token_type, identifier.convertToC()));
             return cString.toString();
         }
     }

@@ -80,8 +80,35 @@ public class AsmtStmt {
     	
     	cString.append("\t".repeat(0));
         if (type != null) {
-        	cString.append(String.format("%s ", type.convertToC()));
+
+            if (type.convertToC().equals("char")){
+
+                if (expr.convertToC().startsWith("strcat")){
+
+                    String strings = expr.convertToC().substring(6);
+                    strings = strings.substring(3,strings.length()-1);
+                    String strs[] = strings.split(",");
+
+
+                    cString.append( "char "+identifier.convertToC() +"["+(ValidateTable.getScope(scope).variables.get(strs[0]).get(1).length()+ValidateTable.getScope(scope).variables.get(strs[1]).get(1).length()-5)+"];\n");
+                    cString.append( "\tstrcat("+identifier.convertToC()+","+strs[0]+");");
+                    cString.append( "strcat("+identifier.convertToC()+","+strs[1]+");");
+
+                    return cString.toString();
+
+                }
+
+
+                cString.append( "char "+identifier.convertToC()+"[ ] = ");
+                cString.append(String.format("%s;\n", expr.convertToC()));
+                return  cString.toString();
+
+            }else {
+                cString.append(String.format("%s ", type.convertToC()));
+            }
         }
+
+
 
         cString.append(String.format("%s = ", identifier.convertToC()));
         cString.append(String.format("%s;\n", expr.convertToC()));

@@ -74,7 +74,10 @@ public class Program implements JottTree {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
-        return null;
+        StringBuilder cString = new StringBuilder();
+        cString.append("#include <stdio.h>\n#include <string.h>\n");
+        cString.append(functionList.convertToC());
+        return cString.toString();
     }
 
     /**
