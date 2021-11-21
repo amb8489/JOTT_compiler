@@ -20,7 +20,6 @@ public class Jott {
 
         // step 2
         JottTree program = JottParser.parse(tokens);
-
         if (program == null){
             System.exit(0);
         }
