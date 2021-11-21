@@ -166,6 +166,7 @@ public class FunctionDef {
         StringBuilder cString = new StringBuilder();
 
         String funcP = (funcDefParams == null) ? "" : funcDefParams.convertToC();
+        funcP = (funcP == "") ? (id.id.getToken().equals("main")) ? "void": funcP : funcP;
 
         String body = (this.body == null) ? "" : this.body.convertToC();
 

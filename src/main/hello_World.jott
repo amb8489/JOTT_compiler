@@ -36,16 +36,16 @@ fibRec[x:Integer]:Integer{
     }
 }
 main[]:Integer{
-	
+
 	Integer x = 1;
-	
+
 	String a = "hello";
 	String b = "world";
-	
+
     String c = concat[a,b];
     Integer d = length[c];
     Integer dother = length["helllllo"];
-    
+
     String thing = input["hello I", 5];
     print[thing];
     print[fib[fib[fib[fib[fib[10]]]]]];
