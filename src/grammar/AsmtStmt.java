@@ -106,7 +106,7 @@ public class AsmtStmt {
                     System.out.println(strs[1]);
 
 
-                    cString.append("printf(\"%s\","+strs[0]+");\n");
+                    cString.append("printf(\"%s\\n\","+strs[0]+");\n");
                     cString.append("    char "+identifier.convertToC()+"["+strs[1]+"];\n");
                     cString.append("    fgets("+identifier.convertToC()+","+ strs[1]+", stdin);\n");
 
