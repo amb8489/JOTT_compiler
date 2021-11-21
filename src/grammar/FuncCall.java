@@ -165,6 +165,12 @@ public class FuncCall {
             func_name = "strlen";
 
             cString.append(String.format("%s( %s)", func_name, parameters_string));
+        } else if (func_name.equals("input")){
+            func_name = "fgets";
+            cString.append("printf(\"%s\","+parameters.paramsList.get(0).expr.convertToC()+");\n");
+            cString.append("    char __STR_IN__["+parameters.paramsList.get(1).expr.convertToC()+"];\n");
+            cString.append("    fgets(__STR_IN__,"+ parameters.paramsList.get(1).expr.convertToC()+", stdin);\n");
+
         }else {
 
             cString.append(String.format("%s( ", func_name));

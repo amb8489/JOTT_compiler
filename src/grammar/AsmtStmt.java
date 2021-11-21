@@ -97,6 +97,23 @@ public class AsmtStmt {
                     return cString.toString();
 
                 }
+                if (expr.convertToJott().startsWith("input")){
+
+                    String strings = expr.convertToJott().substring(6);
+                    strings = strings.substring(0,strings.length()-1);
+                    String strs[] = strings.split(",");
+                    System.out.println(strs[0]);
+                    System.out.println(strs[1]);
+
+
+                    cString.append("printf(\"%s\","+strs[0]+");\n");
+                    cString.append("    char "+identifier.convertToC()+"["+strs[1]+"];\n");
+                    cString.append("    fgets("+identifier.convertToC()+","+ strs[1]+", stdin);\n");
+
+                    return cString.toString();
+                }
+
+
 
 
                 cString.append( "char "+identifier.convertToC()+"[ ] = ");
