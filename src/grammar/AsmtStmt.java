@@ -101,7 +101,7 @@ public class AsmtStmt {
                     String strs[] = strings.split(",");
 
 
-                    cString.append( "char "+identifier.convertToC() +"["+(ValidateTable.getScope(scope).variables.get(strs[0]).get(1).length()+ValidateTable.getScope(scope).variables.get(strs[1]).get(1).length()-5)+"];\n");
+                    cString.append( "char "+identifier.convertToC() +"["+2+"];\n");
                     cString.append( "\tstrcat("+identifier.convertToC()+","+strs[0]+");");
                     cString.append( "strcat("+identifier.convertToC()+","+strs[1]+");");
 

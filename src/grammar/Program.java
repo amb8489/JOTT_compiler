@@ -75,7 +75,7 @@ public class Program implements JottTree {
      */
     public String convertToC() {
         StringBuilder cString = new StringBuilder();
-        cString.append("#include <stdio.h>\n#include <string.h>\n#include <stdlib.h>\n");
+        cString.append("#include <stdio.h>\n#include <string.h>\n#include <stdlib.h>\n#include <stdbool.h>\n");
         cString.append(functionList.convertToC());
         return cString.toString();
     }

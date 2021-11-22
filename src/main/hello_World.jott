@@ -45,7 +45,7 @@ btest [b:Boolean]: Boolean{
     return b;
 }
 
-btest [b:Boolean]: Boolean{
+btest1 [b:Boolean]: Boolean{
 
     if[b]{
       return True;
