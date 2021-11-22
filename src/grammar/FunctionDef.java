@@ -184,10 +184,10 @@ public class FunctionDef {
         funcP = (funcP == "") ? (id.id.getToken().equals("main")) ? "void": funcP : funcP;
 
         String body = (this.body == null) ? "" : this.body.convertToC();
-
+        String returnTpe = (returnType.type.equals("String")) ? "const char *" : returnType.convertToC();
 
         String space = "    ".repeat(this.nestLevel);
-        cString.append(String.format("%s%s %s ( %s ) ", space, returnType.convertToC(), id.convertToC(), funcP));
+        cString.append(String.format("%s%s %s ( %s ) ", space, returnTpe, id.convertToC(), funcP));
         cString.append(String.format("{ \n%s%s}", body, space));
 
         return cString.toString();

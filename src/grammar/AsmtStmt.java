@@ -81,7 +81,7 @@ public class AsmtStmt {
     	cString.append("\t".repeat(0));
         if (type != null) {
 
-            if (type.convertToC().equals("char")){
+            if (type.convertToC().equals("char *")){
 
                 if (expr.convertToC().startsWith("strcat")){
 
@@ -116,7 +116,7 @@ public class AsmtStmt {
 
 
 
-                cString.append( "char "+identifier.convertToC()+"[ ] = ");
+                cString.append( "const char *"+identifier.convertToC()+" = ");
                 cString.append(String.format("%s;\n", expr.convertToC()));
                 return  cString.toString();
 

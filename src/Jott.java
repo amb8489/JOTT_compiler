@@ -11,9 +11,9 @@ import java.util.ArrayList;
 public class Jott {
     public static void main(String[] args) {
 
-        String jottFileName = args[1];
-        String convertedFileName = args[2];
-        String convertType = args[3];
+        String jottFileName = args[0];
+        String convertedFileName = args[1];
+        String convertType = args[2];
         System.out.println("converting :"+jottFileName+" to "+convertType+" located in file:" +convertedFileName);
 
         // step 1

@@ -145,7 +145,7 @@ public class Type {
         if (type.equals("Void")) {
             return "void";
         }else{
-            return"char";
+            return"char *";
         }
     }
 

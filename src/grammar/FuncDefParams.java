@@ -195,7 +195,7 @@ public class FuncDefParams {
             else if (token_type.equals("Void")) {
                 token_type = "void";
             }else{
-                token_type = "char[]";
+                token_type = "char* ";
 
             }
 
