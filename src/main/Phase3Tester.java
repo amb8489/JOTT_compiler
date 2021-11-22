@@ -86,12 +86,12 @@ public class Phase3Tester {
                     return false;
                 }
 
-//                System.out.println("Orginal Jott Code:\n");
+//                System.out.println("Orginal convert.Jott Code:\n");
 //                System.out.println(orginalJottCode);
 //                System.out.println();
 
                 String jottCode = root.convertToJott();
-//                System.out.println("Resulting Jott Code:\n");
+//                System.out.println("Resulting convert.Jott Code:\n");
 //                System.out.println(jottCode);
 
                 try {

@@ -1,7 +1,7 @@
 package main;
 
 /**
- * Class representing a token string for the Jott translator
+ * Class representing a token string for the convert.Jott translator
  *
  * @author Scott C. Johnson
  */

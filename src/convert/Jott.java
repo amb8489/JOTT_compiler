@@ -1,3 +1,5 @@
+package convert;
+
 import grammar.JottTree;
 import grammar.Program;
 import main.JottParser;
@@ -9,10 +11,12 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class Jott {
+    public static String FileName = null;
     public static void main(String[] args) {
 
         String jottFileName = args[0];
         String convertedFileName = args[1];
+        FileName = convertedFileName.split("\\.")[0];
         String convertType = args[2];
         System.out.println("converting :"+jottFileName+" to "+convertType+" located in file:" +convertedFileName);
 
@@ -33,13 +37,14 @@ public class Jott {
         // step 4 write to outfile
         String Converted_program = null;
 
-        if (convertType.equals("Jott")) {
+        if (convertType.equals("convert.Jott")) {
              Converted_program = program.convertToJott();
         }else
         if (convertType.equals("C")) {
              Converted_program = program.convertToC();
         }else
         if (convertType.equals("Java")) {
+
              Converted_program = program.convertToJava();
         }else
         if (convertType.equals("Python")) {

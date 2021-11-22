@@ -1,7 +1,7 @@
 package main;
 
 /**
- * This represents the types of tokens that can be in Jott.
+ * This represents the types of tokens that can be in convert.Jott.
  */
 public enum TokenType {
     COMMA,

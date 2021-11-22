@@ -30,7 +30,10 @@ ter[x:Integer,y:Double]: Double{
                 if[x>4]{
                     while[x <1]{
                     if[x>4]{
-                                            return tester[1,1.0];
+                        # return tester2[1,1.0]; will return void?? will not care if function does not exits
+
+
+                        return 1.0;
                     }
                     }
                 }
@@ -71,7 +74,7 @@ rstr3 [str:String]: String{
     # return passed in
     return str;
 }
-tester[x:Integer,y:Double]: Void{
+tester2[x:Integer,y:Double]: Void{
 
     print[rstr3["hi"]];
 }

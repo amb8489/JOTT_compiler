@@ -1,5 +1,5 @@
 package main;/*
- * Tester for phase 1 of the Jott Translator
+ * Tester for phase 1 of the convert.Jott Translator
  *
  * This is not an all-inclusive tester. This tests a few of the common cases.
  *
