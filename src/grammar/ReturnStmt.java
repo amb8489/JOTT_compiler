@@ -65,15 +65,34 @@ public class ReturnStmt {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
+        if(expr.convertToJott().equals("True")){
+
+            return "return true;";
+        }
+
+        if(expr.convertToJott().equals("False")){
+
+            return "return false;";
+        }
+
+
         return "\t".repeat(0) + "return " + expr.convertToJava() + ";\n";
     }
-
     /**
      * Return this object as a C code.
      *
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
+        if(expr.convertToJott().equals("True")){
+
+            return "return true;";
+        }
+
+        if(expr.convertToJott().equals("False")){
+
+            return "return false;";
+        }
         return "\t".repeat(0) + "return " + expr.convertToC() + ";\n";
     }
 
@@ -83,6 +102,8 @@ public class ReturnStmt {
      * @return a stringified version of this object as Python code
      */
     public String convertToPython() {
+
+
         return "\t".repeat(0) + "return " + expr.convertToPython() + "\n";
     }
 

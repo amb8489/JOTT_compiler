@@ -265,22 +265,30 @@ public class BExpr extends Expr {
         for (BExpr n : finalExpr) {
             // bool relOp
             if (n.bool != null && n.relOp != null) {
-            	cString.append(String.format("%s %s", n.bool.getToken(), n.relOp.getToken()));
+
+                cString.append(String.format("%s %s", n.bool.getToken(), n.relOp.getToken()));
             }
 
             // bool
             if (n.bool != null && n.relOp == null) {
-            	cString.append(String.format("%s ", n.bool.getToken()));
+
+                cString.append(String.format("%s ", n.bool.getToken()));
             }
 
             // exp relOp
             if (n.expr != null && n.relOp != null) {
-            	cString.append(String.format("%s%s ", n.expr.convertToC(), n.relOp.getToken()));
+                String bool = n.expr.convertToC();
+
+                cString.append(String.format("%s%s ", bool, n.relOp.getToken()));
             }
 
             // exp
             if (n.expr != null && n.relOp == null) {
-            	cString.append(String.format("%s ", n.expr.convertToC()));
+
+                String bool = n.expr.convertToC();
+
+
+                cString.append(String.format("%s ", bool));
             }
         }
 
@@ -303,6 +311,7 @@ public class BExpr extends Expr {
 
             // bool
             if (n.bool != null && n.relOp == null) {
+
                 PyString.append(String.format("%s ", n.bool.getToken()));
             }
 

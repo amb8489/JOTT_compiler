@@ -266,7 +266,11 @@ public class ValidateTable {
     }
 
     public static void newScope(String functionName) {
+
         scopes.put(functionName, new ValidateTable(functionName));
+        addVarToScope(functionName, "True", "Boolean", "1 == 1");
+        addVarToScope(functionName, "False", "Boolean", "1 == 0");
+
     }
 
     public static boolean isVarDefinedInScope(String scopeName, String varName) {

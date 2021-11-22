@@ -56,7 +56,7 @@ public class Jott {
             writer.close();
 
         }catch (Exception e){
-            System.err.println("error writting to file");
+            System.err.println("error writing to file");
         }
     }
 }

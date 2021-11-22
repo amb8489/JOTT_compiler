@@ -52,6 +52,12 @@ public class Identifier {
      * @return a stringified version of this object as Java code
      */
     public String convertToJava() {
+        if(id.getToken().equals("True")){
+            return "true";
+        }
+        if(id.getToken().equals("False")){
+            return "false";
+        }
         return id.getToken();
     }
 
@@ -61,6 +67,12 @@ public class Identifier {
      * @return a stringified version of this object as C code
      */
     public String convertToC() {
+        if(id.getToken().equals("True")){
+            return "true";
+        }
+        if(id.getToken().equals("False")){
+            return "false";
+        }
         return id.getToken();
     }
 

@@ -60,7 +60,18 @@ public class AsmtStmt {
         }
 
         javaString.append(String.format("%s = ", identifier.convertToJava()));
-        javaString.append(String.format("%s;\n", expr.convertToJava()));
+
+
+        String bool = expr.convertToJava();
+
+        if(bool.equals("True")){
+            bool = "true";
+        }
+        if(bool.equals("False")){
+            bool = "false";
+        }
+
+        javaString.append(String.format("%s;\n", bool));
         
     	return javaString.toString();
     }
@@ -102,8 +113,6 @@ public class AsmtStmt {
                     String strings = expr.convertToJott().substring(6);
                     strings = strings.substring(0,strings.length()-1);
                     String strs[] = strings.split(",");
-                    System.out.println(strs[0]);
-                    System.out.println(strs[1]);
 
 
                     cString.append("printf(\"%s\\n\","+strs[0]+");\n");
@@ -128,7 +137,16 @@ public class AsmtStmt {
 
 
         cString.append(String.format("%s = ", identifier.convertToC()));
-        cString.append(String.format("%s;\n", expr.convertToC()));
+        String bool = expr.convertToC();
+
+        if(bool.equals("True")){
+            bool = "true";
+        }
+        if(bool.equals("False")){
+            bool = "false";
+        }
+
+        cString.append(String.format("%s;\n", bool));
         
     	return cString.toString();
     }

@@ -41,6 +41,19 @@ ter[x:Integer,y:Double]: Double{
     return y;
 }
 
+btest [b:Boolean]: Boolean{
+    return b;
+}
+
+btest [b:Boolean]: Boolean{
+
+    if[b]{
+      return True;
+    }
+        return False;
+
+}
+
 
 rstr [str:String]: String{
     # retunrn string lit
@@ -60,7 +73,7 @@ rstr3 [str:String]: String{
 }
 tester[x:Integer,y:Double]: Void{
 
-    print[rstr["hi"]];
+    print[rstr3["hi"]];
 }
 
 main[]: Integer{
@@ -96,6 +109,6 @@ main[]: Integer{
 
     print[fib[fib[10]]];
 
-
+    Boolean boo = True;
     return a;
 }
