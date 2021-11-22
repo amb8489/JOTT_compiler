@@ -147,8 +147,12 @@ public class FuncCall {
 
 
             String printType = "%d";
-            if (parameters.paramsList.get(0).expr.type.equals("String") || parameters.paramsList.get(0).expr.type.equals("Boolean")) {
+            if (parameters.paramsList.get(0).expr.type.equals("String")){
                 printType = "%s";
+            }
+            if(parameters.paramsList.get(0).expr.type.equals("Boolean")){
+                return "printf(\"%s\\n\","+ parameters_string +"? \"true\" : \"false\");";
+
             }
             if (parameters.paramsList.get(0).expr.type.equals("Double")) {
                 printType = "%f";

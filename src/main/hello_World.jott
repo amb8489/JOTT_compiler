@@ -48,9 +48,9 @@ btest [b:Boolean]: Boolean{
 btest1 [b:Boolean]: Boolean{
 
     if[b]{
-      return True;
+      return False;
     }
-        return False;
+        return True;
 
 }
 
@@ -110,5 +110,10 @@ main[]: Integer{
     print[fib[fib[10]]];
 
     Boolean boo = True;
+    print[boo];
+    print[btest1[boo]];
+    print[btest[boo]];
+
+
     return a;
 }
