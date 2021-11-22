@@ -53,7 +53,10 @@ public class FunctionDef {
         TokenIndex.currentTokenIndex++;
         // look for [
         Token leftBracketToken = tokens.get(TokenIndex.currentTokenIndex);
-
+        if (leftBracketToken.getTokenType() != TokenType.L_BRACKET) {
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected [. Got: %s\n%s:%s",
+                    id.getTokenType(), id.getFilename(), id.getLineNum()));
+        }
         TokenIndex.currentTokenIndex++;
 
         // look for funcDefParams
@@ -62,12 +65,18 @@ public class FunctionDef {
 
         // look for ]
         Token rightBracketToken = tokens.get(TokenIndex.currentTokenIndex);
-
+        if (rightBracketToken.getTokenType() != TokenType.R_BRACKET) {
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected ]. Got: %s\n%s:%s",
+                    id.getTokenType(), id.getFilename(), id.getLineNum()));
+        }
         TokenIndex.currentTokenIndex++;
 
         // look for :
         Token colonToken = tokens.get(TokenIndex.currentTokenIndex);
-
+        if (colonToken.getTokenType() != TokenType.COLON) {
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected :. Got: %s\n%s:%s",
+                    id.getTokenType(), id.getFilename(), id.getLineNum()));
+        }
         TokenIndex.currentTokenIndex++;
 
 
@@ -76,7 +85,10 @@ public class FunctionDef {
 
         // look for {
         Token L_BRACE = tokens.get(TokenIndex.currentTokenIndex);
-
+        if (L_BRACE.getTokenType() != TokenType.L_BRACE) {
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected {. Got: %s\n%s:%s",
+                    id.getTokenType(), id.getFilename(), id.getLineNum()));
+        }
         TokenIndex.currentTokenIndex++;
 
         // look for body statement
@@ -84,7 +96,10 @@ public class FunctionDef {
 
         // look for }
         Token R_BRACE = tokens.get(TokenIndex.currentTokenIndex);
-
+        if (R_BRACE.getTokenType() != TokenType.R_BRACE) {
+            throw new ParsingException(String.format("Syntax error\nInvalid token. Expected }. Got: %s\n%s:%s",
+                    id.getTokenType(), id.getFilename(), id.getLineNum()));
+        }
         //System.out.println("TODO ERROR 7");
         //System.out.println("Found } --> " + R_BRACE.getToken());
         TokenIndex.currentTokenIndex++;

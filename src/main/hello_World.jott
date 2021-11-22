@@ -1,11 +1,4 @@
 
-foo[x:Integer]:Void{
-    print[x];
-}
-
-baz[]:Void{
-    print["Hello World"];
-}
 fib[x:Integer]:Integer{
 
     Integer a = 0;
@@ -20,45 +13,60 @@ fib[x:Integer]:Integer{
     return c;
 }
 
-fibRec[x:Integer]:Integer{
-    String hi = "hi";
-    if[x == 0]{
-        hi = "a";
-    }else{
-        hi = "b";
-    }
-    if[x == 0]{
-        return 0;
-    }elseif[x == 1]{
-        return 1;
-    }else{
-        return fibRec[x-1] + fibRec[x-2];
-    }
-}
-main[]:Integer{
+tester[x:Integer,y:Double]: Double{
+    while [x < 0]{
+        if[x == 1]{
+            return y;
+        }else{
+            if[x + 1 < 10]{
+                while[x<0]{
+                    x = x +1;
+                }
+            }elseif[x <8]{
+                return .5;
+            }else{
+                if[x>4]{
+                    while[x <1]{
+                        return .0001;
+                    }
+                }
+            }
 
-	Integer x = 1;
-
-	String a = "hello";
-	String b = "world";
-
-    String c = concat[a,b];
-    Integer d = length[c];
-    Integer dother = length["helllllo"];
-
-    String thing = input["hello I", 5];
-    print[thing];
-    print[fib[fib[fib[fib[fib[10]]]]]];
-    print[.5];
-    while[1 < x]{
-    while[2 < x]{
-    while[3 < x]{
-    while[4 < x]{
-
-            return 6;
         }
-       }
-       }
-       }
-    return x;
+        return .8;
+    }
+    return y;
+}
+
+rstr [str:String]: String{
+    return "string";
+}
+tester[x:Integer,y:Double]: Void{
+
+    print[rstr["hi"]];
+}
+
+main[]: Integer{
+
+	Integer a = 1;
+	Double  b = .1;
+    String c = "con";
+    String d = "cat";
+
+    String con = concat[c,d];
+    print[con];
+    print[a];
+    print[b];
+    print[1];
+    print[.2];
+    print["STTTR"];
+    print[length[con]];
+
+    String in = input["enter a number", 2];
+    print["echo"];
+    print[in];
+    print[fib[fib[10]]];
+
+
+    return a;
 }

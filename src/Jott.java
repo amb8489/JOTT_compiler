@@ -1,7 +1,8 @@
-package main;
-
 import grammar.JottTree;
 import grammar.Program;
+import main.JottParser;
+import main.JottTokenizer;
+import main.Token;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -44,7 +45,7 @@ public class Jott {
         if (convertType.equals("Python")) {
              Converted_program = program.convertToPython();
         }else{
-            System.out.println("convert to:"+convertType+" is not suported");
+            System.err.println("convert to:"+convertType+" is not suported");
             System.exit(0);
         }
 
