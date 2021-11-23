@@ -98,17 +98,17 @@ main[]: Integer{
     String inp = input["enter a number", 256];
 
     print["echo in"];
-    print[in];
+    print[inp];
 
 
     print["echo string"];
-    print[rstr[in]];
+    print[rstr[inp]];
 
     print["echo hello"];
-    print[rstr2["in"]];
+    print[rstr2["inp"]];
 
     print["echo in"];
-    print[rstr3[in]];
+    print[rstr3[inp]];
 
     print[fib[fib[10]]];
 
