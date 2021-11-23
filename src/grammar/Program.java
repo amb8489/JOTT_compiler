@@ -1,7 +1,6 @@
 package grammar;
 
 import main.Token;
-import convert.Jott;
 import java.util.ArrayList;
 
 /**
@@ -38,9 +37,9 @@ public class Program implements JottTree {
     }
 
     /**
-     * Return this object as a convert.Jott code.
+     * Return this object as a Jott code.
      *
-     * @return a stringified version of this object as convert.Jott code
+     * @return a stringified version of this object as Jott code
      */
     public String convertToJott() {
         return functionList.convertToJott();
@@ -55,7 +54,7 @@ public class Program implements JottTree {
     public String convertToJava() {
         StringBuilder javaString = new StringBuilder();
 
-        javaString.append(String.format("public class %s {\n", Jott.FileName));
+        javaString.append(String.format("public class %s {\n", ValidateTable.FileName));
         javaString.append("private class Helper {\n");
         javaString.append("\tpublic static String input(String message, int amount) {\n");
         javaString.append("\t\tSystem.out.print(message);\n");

@@ -1,4 +1,4 @@
-#this is hello world in convert.Jott
+#this is hello world in Jott
 
 main[]:Integer{
     print["Hello World"];

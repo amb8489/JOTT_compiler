@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * This class is responsible for tokenizing convert.Jott code.
+ * This class is responsible for tokenizing Jott code.
  *
  * @author Aaron Berghash (amb8489@rit.edu)
  * @author Connor Switenky (cs4331@rit.edu)
@@ -110,9 +110,9 @@ public class JottTokenizer {
 	}
 
 	/**
-	 * Takes in a filename and tokenizes that file into token based on the rules of the convert.Jott Language.
+	 * Takes in a filename and tokenizes that file into token based on the rules of the Jott Language.
 	 * @param filename the name oF the file to tokenize; can be relative or absolute path
-	 * @return an ArrayList oF convert.Jott Tokens
+	 * @return an ArrayList oF Jott Tokens
 	 */
 	public static ArrayList<Token> tokenize(String filename) {
 		// final tokens list

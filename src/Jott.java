@@ -1,7 +1,6 @@
-package convert;
-
 import grammar.JottTree;
 import grammar.Program;
+import grammar.ValidateTable;
 import main.JottParser;
 import main.JottTokenizer;
 import main.Token;
@@ -16,7 +15,9 @@ public class Jott {
 
         String jottFileName = args[0];
         String convertedFileName = args[1];
-        FileName = convertedFileName.split("\\.")[0];
+
+
+        ValidateTable.FileName = convertedFileName.split("\\.")[0];
         String convertType = args[2];
         System.out.println("converting :"+jottFileName+" to "+convertType+" located in file:" +convertedFileName);
 
@@ -37,7 +38,7 @@ public class Jott {
         // step 4 write to outfile
         String Converted_program = null;
 
-        if (convertType.equals("convert.Jott")) {
+        if (convertType.equals("Jott")) {
              Converted_program = program.convertToJott();
         }else
         if (convertType.equals("C")) {

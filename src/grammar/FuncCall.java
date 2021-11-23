@@ -75,7 +75,7 @@ public class FuncCall {
     /**
      * Ensure the code in the function call is valid.
      *
-     * @return a stringified version of this object as convert.Jott code
+     * @return a stringified version of this object as Jott code
      */
     public String convertToJott() {
         StringBuilder jottString = new StringBuilder();
@@ -220,7 +220,7 @@ public class FuncCall {
     }
 
     /**
-     * Return this object as a convert.Jott code.
+     * Return this object as a Jott code.
      *
      * @return whether code is valid or not
      */

@@ -104,6 +104,7 @@ main[]: Integer{
     print["echo string"];
     print[rstr[inp]];
 
+
     print["echo hello"];
     print[rstr2["inp"]];
 

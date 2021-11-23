@@ -1,16 +1,16 @@
 package grammar;
 
 /**
- * Interface for all convert.Jott parse tree nodes
+ * Interface for all Jott parse tree nodes
  *
  * @author Scott C Johnson
  */
 public interface JottTree {
 
     /**
-     * Will output a string of this tree in convert.Jott
+     * Will output a string of this tree in Jott
      *
-     * @return a string representing the convert.Jott code of this tree
+     * @return a string representing the Jott code of this tree
      */
     public String convertToJott();
 
@@ -36,10 +36,10 @@ public interface JottTree {
     public String convertToPython();
 
     /**
-     * This will validate that the tree follows the semantic rules of convert.Jott
+     * This will validate that the tree follows the semantic rules of Jott
      * Errors validating will be reported to System.err
      *
-     * @return true if valid convert.Jott code; false otherwise
+     * @return true if valid Jott code; false otherwise
      */
     public boolean validateTree();
 }

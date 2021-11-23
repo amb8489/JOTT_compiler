@@ -111,9 +111,9 @@ public class FuncDefParams {
     }
 
     /**
-     * Return this object as a convert.Jott code.
+     * Return this object as a Jott code.
      *
-     * @return a stringified version of this object as convert.Jott code
+     * @return a stringified version of this object as Jott code
      */
     public String convertToJott() {
         StringBuilder jottString = new StringBuilder();

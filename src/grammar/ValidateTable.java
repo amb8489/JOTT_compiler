@@ -15,6 +15,8 @@ import java.util.Map;
  * @author Kaitlyn DeCola (kmd8594@rit.edu)
  */
 public class ValidateTable {
+    public static String FileName = null;
+
     public static HashMap<String, ValidateTable> scopes = new HashMap<>();
     public static HashMap<String, ArrayList<String>> functions = new HashMap<>() {{
         put("print", new ArrayList<>() {{
