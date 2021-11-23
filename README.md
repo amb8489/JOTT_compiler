@@ -9,7 +9,7 @@ Download the source code and unzip it. Then open a command line in the root fold
 Then run the following command:
 
 ```bash
-javac -d bin -sourcepath src src/convert/Jott.java
+javac -d bin -sourcepath src src/Jott.java
 ```
 
 ## Usage
@@ -17,23 +17,23 @@ javac -d bin -sourcepath src src/convert/Jott.java
 Open a command line in the bin folder and run one of the following commands to convert your Jott file to your language of choice:
 ```bash
 # Jott
-java convert/Jott <input_file.jott> <output_file.jott> Jott
+java Jott <input_file.jott> <output_file.jott> Jott
 
 # C
-java convert/Jott <input_file.jott> <output_file.c> C
+java Jott <input_file.jott> <output_file.c> C
 # compiling & running C code
 gcc -o <output_file> <output_file.c>
 <output_file>
 
 # Java
-java convert/Jott <input_file.jott> <output_file.java> Java
+java Jott <input_file.jott> <output_file.java> Java
 # compiling & running Java code
 javac <output_file.java>
 java <output_file>
 
 
 # Python
-java convert/Jott <input_file.jott> <output_file.py> Python
+java Jott <input_file.jott> <output_file.py> Python
 # running Python code
 python3 <output_file.py>
 ```
