@@ -52,3 +52,7 @@ python3 <output_file.py>
 * Aaron Berghash (amb8489)
 
 * Connor Switenky (cs4331)
+
+* Jake Peverly (jzp7326)
+
+* Kaitlyn DeCola (kmd8594)
