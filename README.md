@@ -21,13 +21,31 @@ java convert/Jott <input_file.jott> <output_file.jott> Jott
 
 # C
 java convert/Jott <input_file.jott> <output_file.c> C
+# compiling & running C code
+gcc -o <output_file> <output_file.c>
+<output_file>
 
 # Java
 java convert/Jott <input_file.jott> <output_file.java> Java
+# compiling & running Java code
+javac <output_file.java>
+java <output_file>
+
 
 # Python
 java convert/Jott <input_file.jott> <output_file.py> Python
+# running Python code
+python3 <output_file.py>
 ```
+
+
+
+
+
+
+
+
+
 
 ## Credits
 
