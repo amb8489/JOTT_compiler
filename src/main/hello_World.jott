@@ -95,7 +95,7 @@ main[]: Integer{
     print["STTTR"];
     print[length[con]];
 
-    String in = input["enter a number", 256];
+    String inp = input["enter a number", 256];
 
     print["echo in"];
     print[in];
